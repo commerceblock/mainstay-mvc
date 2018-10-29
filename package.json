@@ -1,0 +1,19 @@
+{
+  "name": "mainstay-api",
+  "version": "0.0.0",
+  "description": "mainstay-api",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/commerceblock/Mainstay-API.git"
+  },
+  "author": "Nikolaii Lodenos @ CommerceBlock",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/commerceblock/Mainstay-API/issues"
+  },
+  "homepage": "https://github.com/commerceblock/Mainstay-API#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
