@@ -45,8 +45,7 @@ position | commitment
 2 | "client 2 latest commitment"
 3 | "client 3 latest commitment"
 
-
-### columns
+### columns
 - id: int
 - client_position: int
 - txid: 64 char / 32 byte
@@ -54,7 +53,7 @@ position | commitment
 - commitment: 64 char / 32 byte
 - proof: variable char / json / ?
 
-## API Routes
+## API routes
 
 - **/api/latestcommitment GET**
 
