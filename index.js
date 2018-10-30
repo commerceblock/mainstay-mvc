@@ -1,7 +1,7 @@
-var api = require('./lib/apiroutes')
+var api = require('./lib/controllers')
 var express = require('express');
 var app = express();
-
+// MACRO
 const API_INDEX = '/'
 const API_LATEST_ATTESTATION = '/api/latestattestation'
 const API_LATEST_COMMITMENT = '/api/latestcommitment'
@@ -18,5 +18,5 @@ app.get(API_COMMITMENT_VERIFY, api.commitment_verify);
 app.get(API_COMMITMENT_PROOF, api.commitment_proof);
 // Get Routes for METHOD POST
 app.post(API_COMMITMENT_SEND, api.commitment_send);
-//
+// Main Listening port of the app
 app.listen(9000);
