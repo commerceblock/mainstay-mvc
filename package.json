@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "mainstay-api",
   "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/commerceblock/Mainstay-API.git"
@@ -14,6 +17,11 @@
   },
   "homepage": "https://github.com/commerceblock/Mainstay-API#readme",
   "dependencies": {
-    "express": "^4.16.4"
+    "assert": "^1.4.1",
+    "express": "^4.16.4",
+    "node-mocks-http": "^1.7.3"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
   }
 }
