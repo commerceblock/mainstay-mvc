@@ -1,6 +1,6 @@
-var api = require('./lib/controllers')
 var express = require('express');
 var mongoose = require('mongoose');
+var api = require('./lib/controllers')
 var app = express();
 // MACRO
 const API_INDEX = '/'
@@ -11,9 +11,16 @@ const API_COMMITMENT_PROOF = '/api/commitment/proof'
 const API_COMMITMENT_SEND = '/api/commitment/send'
 const API_COMMITMENT_VERIFY = '/api/commitment/verify'
 // Connect to MongoBD
-mongoose.connect('mongodb://localhost/mainstay', function(err) {
-  if (err) { throw err; }
+var dbConnect = 'mongodb://localhost/mainstay'
+mongoose.connect(dbConnect, (error) => {
+  if (error) {
+    console.log('Can\'t connect');
+    exit();
+  }
+  console.log('Connected');
 });
+
+
 // Get Routes for METHOD GET
 app.get(API_INDEX, api.index);
 app.get(API_LATEST_ATTESTATION, api.latest_attestation);
