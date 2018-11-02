@@ -3,38 +3,38 @@
 ## Database Models
 
 ### Attestation (API READ ONLY)
-id  | txid | merkle_root
---- | --- | ---
-0 | txid0 | 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
-1 | txid1 | 2234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
-2 | txid2 | 3234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
-3 | txid3 | 4234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+txid | merkle_root | confirmed | inserted_at
+--- | --- | --- | ---
+txid0 | 12345... | true | 2018-11-02 16:59:19.000
+txid1 | 22345... | true | 2018-11-03 16:59:19.000
+txid2 | 32345... | true | 2018-11-04 16:59:19.000
+txid3 | 42345... | false | 2018-11-05 16:59:19.000
 ...
 
 ### MerkleCommitment (API READ ONLY)
 merkle_root | client_position | commitment
 --- | --- | ---
-1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 0 | "client0 commitment"
-1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 1 | "client1 commitment"
-1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 2 | "client2 commitment"
-1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 3 | "client3 commitment"
-2234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 0 | ...
-2234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 1 | ...
-2234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 2 | ...
-2234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 3 | ...
+12345... | 0 | "client0 commitment"
+12345... | 1 | "client1 commitment"
+12345... | 2 | "client2 commitment"
+12345... | 3 | "client3 commitment"
+22345... | 0 | ...
+22345... | 1 | ...
+22345... | 2 | ...
+22345... | 3 | ...
 ...
 
 ### MerkleProof (API READ ONLY)
 merkle_root | client_position | proof
 --- | --- | ---
-1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 0 | "client 0 proof"
-1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 1 | "client 1 proof"
-1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 2 | "client 2 proof"
-1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 3 | "client 3 proof"
-2234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 0 | ...
-2234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 1 | ...
-2234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 2 | ...
-2234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef | 3 | ...
+12345... | 0 | "client 0 proof"
+12345... | 1 | "client 1 proof"
+12345... | 2 | "client 2 proof"
+12345... | 3 | "client 3 proof"
+22345... | 0 | ...
+22345... | 1 | ...
+22345... | 2 | ...
+22345... | 3 | ...
 ...
 
 ### LatestCommitment (API WRITE)
@@ -45,15 +45,17 @@ position | commitment
 2 | "client 2 latest commitment"
 3 | "client 3 latest commitment"
 
-### columns
-- id: int
-- client_position: int
-- txid: 64 char / 32 byte
-- merkle_root: 64 char / 32 byte
-- commitment: 64 char / 32 byte
-- proof: variable char / json / ?
 
-## API routes
+### columns
+- confirmed: bool
+- inserted_at: Date
+- client_position: int
+- txid: string (64 char / 32 byte)
+- merkle_root: string (64 char / 32 byte)
+- commitment: string (64 char / 32 byte)
+- proof: Object
+
+## API Routes
 
 - **/api/latestcommitment GET**
 
