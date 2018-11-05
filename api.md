@@ -14,10 +14,10 @@ txid3 | 42345... | false | 2018-11-05 16:59:19.000
 ### MerkleCommitment (API READ ONLY)
 merkle_root | client_position | commitment
 --- | --- | ---
-12345... | 0 | "client0 commitment"
-12345... | 1 | "client1 commitment"
-12345... | 2 | "client2 commitment"
-12345... | 3 | "client3 commitment"
+12345... | 0 | 6789a...
+12345... | 1 | 7789a...
+12345... | 2 | 8789a...
+12345... | 3 | 9789a...
 22345... | 0 | ...
 22345... | 1 | ...
 22345... | 2 | ...
@@ -27,33 +27,34 @@ merkle_root | client_position | commitment
 ### MerkleProof (API READ ONLY)
 merkle_root | client_position | commitment | ops
 --- | --- | --- | ---
-12345... | 0 | "client0 commitment" | "client 0 ops"
-12345... | 1 | "client1 commitment" | "client 1 ops"
-12345... | 2 | "client2 commitment" | "client 2 ops"
-12345... | 3 | "client3 commitment" | "client 3 ops"
-22345... | 0 | ...
-22345... | 1 | ...
-22345... | 2 | ...
-22345... | 3 | ...
+12345... | 0 | 6789a... | [{}, {}, ...]
+12345... | 1 | 7789a... | [{}, {}, ...]
+12345... | 2 | 8789a... | [{}, {}, ...]
+12345... | 3 | 9789a... | [{}, {}, ...]
+22345... | 0 | ... | ...
+22345... | 1 | ... | ...
+22345... | 2 | ... | ...
+22345... | 3 | ... | ...
 ...
 
 ### LatestCommitment (API WRITE)
 client_position | commitment
 --- | ---
-0 | "client 0 latest commitment"
-1 | "client 1 latest commitment"
-2 | "client 2 latest commitment"
-3 | "client 3 latest commitment"
+0 | 9abcd...
+1 | 0abcd...
+2 | 1abcd...
+3 | 2abcd...
 
 
 ### columns
 - confirmed: bool
 - inserted_at: Date
-- client_position: int
+- client_position: int32
 - txid: string (64 char / 32 byte)
 - merkle_root: string (64 char / 32 byte)
 - commitment: string (64 char / 32 byte)
-- ops: Array (of Objects)
+- ops: Array of ProofObject
+- ProofObject: {append: bool, commitment: string(64char / 32 byte)}
 
 ## API Routes
 
@@ -61,9 +62,9 @@ client_position | commitment
 
 *params*: client_position
 
-*read*: MerkleCommitment
+*read*: Attestation, MerkleCommitment
 
-*return*: client commitment in latest attestation
+*return*: txid, merkle_root, commitment
 
 - **/api/latestattestation GET**
 
@@ -71,7 +72,7 @@ client_position | commitment
 
 *read*: Attestation
 
-*return*: latest attestation
+*return*: txid, merkle_root
 
 - **/api/commitment/latestproof GET**
 
@@ -79,13 +80,13 @@ client_position | commitment
 
 *read*: MerkleProof
 
-*return*: client proof in latest attestation
+*return*: merkle_root, commitment, ops
 
 - **/api/commitment/verify GET**
 
 *params*: commitment, client_position
 
-*read*: Attestation/MerkleCommitment
+*read*: Attestation, MerkleCommitment
 
 *return*: commitment verified or not
 
@@ -93,9 +94,9 @@ client_position | commitment
 
 *params*: commitment, client_position
 
-*read*: MerkleProof
+*read*: MerkleCommitment, MerkleProof
 
-*return*: proof for commitment
+*return*: merkle_root, commitment, ops
 
 - **/api/commitment/send POST**
 
