@@ -12,91 +12,91 @@ describe("Test Controllers", () => {
     controllers.index(req, res);
     console.log(res._getData())
   });
-  it("Route: /api/latestattestation Good Parameter", () => {
+  it("Route: /api/v1/latestattestation Good Parameter", () => {
     const req = mockHttp.createRequest({
       method: "GET",
-      url: "/api/latestattestation?position=0"
+      url: "/api/v1/latestattestation?position=0"
     });
     const res = mockHttp.createResponse();
     controllers.latest_attestation(req, res);
     console.log(res._getData())
   });
-  it("Route: /api/latestattestation Wrong Parameter 1", () => {
+  it("Route: /api/v1/latestattestation Wrong Parameter 1", () => {
     const req = mockHttp.createRequest({
       method: "GET",
-      url: "/api/latestattestation"
+      url: "/api/v1/latestattestation"
     });
     const res = mockHttp.createResponse();
     controllers.latest_attestation(req, res);
     console.log(res._getData())
   });
-  it("Route: /api/latestattestation Wrong Parameter 2", () => {
+  it("Route: /api/v1/latestattestation Wrong Parameter 2", () => {
     const req = mockHttp.createRequest({
       method: "GET",
-      url: "/api/latestattestation?position"
+      url: "/api/v1/latestattestation?position"
     });
     const res = mockHttp.createResponse();
     controllers.latest_attestation(req, res);
     console.log(res._getData())
   });
-  it("Route: /api/latestattestation Wrong Parameter 3", () => {
+  it("Route: /api/v1/latestattestation Wrong Parameter 3", () => {
     const req = mockHttp.createRequest({
       method: "GET",
-      url: "/api/latestattestation?position="
+      url: "/api/v1/latestattestation?position="
     });
     const res = mockHttp.createResponse();
     controllers.latest_attestation(req, res);
     console.log(res._getData())
   });
-  it("Route: /api/latestattestation Wrong Parameter 4", () => {
+  it("Route: /api/v1/latestattestation Wrong Parameter 4", () => {
     const req = mockHttp.createRequest({
       method: "GET",
-      url: "/api/latestattestation?position=FAKE"
+      url: "/api/v1/latestattestation?position=FAKE"
     });
     const res = mockHttp.createResponse();
     controllers.latest_attestation(req, res);
     console.log(res._getData())
   });
-  it("Route: /api/latestcommitment", () => {
+  it("Route: /api/v1/latestcommitment", () => {
     const req = mockHttp.createRequest({
       method: "GET",
-      url: "/api/latestcommitment"
+      url: "/api/v1/latestcommitment"
     });
     const res = mockHttp.createResponse();
     controllers.latest_commitment(req, res);
     console.log(res._getData())
   });
-  it("Route: /api/commitment/latestproof", () => {
+  it("Route: /api/v1/commitment/latestproof", () => {
     const req = mockHttp.createRequest({
       method: "GET",
-      url: "/api/commitment/latestproof"
+      url: "/api/v1/commitment/latestproof"
     });
     const res = mockHttp.createResponse();
     controllers.commitment_latest_proof(req, res);
     console.log(res._getData())
   });
-  it("Route: /api/commitment/proof", () => {
+  it("Route: /api/v1/commitment/proof", () => {
     const req = mockHttp.createRequest({
       method: "GET",
-      url: "/api/commitment/proof"
+      url: "/api/v1/commitment/proof"
     });
     const res = mockHttp.createResponse();
     controllers.commitment_proof(req, res);
     console.log(res._getData())
   });
-  it("Route: /api/commitment/verify", () => {
+  it("Route: /api/v1/commitment/verify", () => {
     const req = mockHttp.createRequest({
       method: "GET",
-      url: "/api/commitment/verify"
+      url: "/api/v1/commitment/verify"
     });
     const res = mockHttp.createResponse();
     controllers.commitment_verify(req, res);
     console.log(res._getData());
   });
-  it("Route: /api/commitment/send", () => {
+  it("Route: /api/v1/commitment/send", () => {
     const req = mockHttp.createRequest({
       method: "GET",
-      url: "/api/commitment/send"
+      url: "/api/v1/commitment/send"
     });
     const res = mockHttp.createResponse();
     controllers.commitment_send(req, res);
