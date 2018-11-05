@@ -56,8 +56,7 @@ client_position | commitment
 - ops: Array of ProofObject
 - ProofObject: {append: bool, commitment: string(64char / 32 byte)}
 
-## API Routes
-
+## API Routes
 - **/api/latestcommitment GET**
 
 *params*: client_position
