@@ -25,12 +25,12 @@ merkle_root | client_position | commitment
 ...
 
 ### MerkleProof (API READ ONLY)
-merkle_root | client_position | proof
---- | --- | ---
-12345... | 0 | "client 0 proof"
-12345... | 1 | "client 1 proof"
-12345... | 2 | "client 2 proof"
-12345... | 3 | "client 3 proof"
+merkle_root | client_position | commitment | ops
+--- | --- | --- | ---
+12345... | 0 | "client0 commitment" | "client 0 ops"
+12345... | 1 | "client1 commitment" | "client 1 ops"
+12345... | 2 | "client2 commitment" | "client 2 ops"
+12345... | 3 | "client3 commitment" | "client 3 ops"
 22345... | 0 | ...
 22345... | 1 | ...
 22345... | 2 | ...
@@ -46,14 +46,14 @@ client_position | commitment
 3 | "client 3 latest commitment"
 
 
-### columns
+### columns
 - confirmed: bool
 - inserted_at: Date
 - client_position: int
 - txid: string (64 char / 32 byte)
 - merkle_root: string (64 char / 32 byte)
 - commitment: string (64 char / 32 byte)
-- proof: Object
+- ops: Array (of Objects)
 
 ## API Routes
 
