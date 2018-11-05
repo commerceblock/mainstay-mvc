@@ -4,12 +4,12 @@ var api = require('./lib/controllers')
 var app = express();
 // MACRO
 const API_INDEX = '/'
-const API_LATEST_ATTESTATION = '/api/latestattestation'
-const API_LATEST_COMMITMENT = '/api/latestcommitment'
-const API_COMMITMENT_LATEST_PROOF = '/api/commitment/latestproof'
-const API_COMMITMENT_PROOF = '/api/commitment/proof'
-const API_COMMITMENT_SEND = '/api/commitment/send'
-const API_COMMITMENT_VERIFY = '/api/commitment/verify'
+const API_LATEST_ATTESTATION = '/api/v1/latestattestation'
+const API_LATEST_COMMITMENT = '/api/v1/latestcommitment'
+const API_COMMITMENT_LATEST_PROOF = '/api/v1/commitment/latestproof'
+const API_COMMITMENT_PROOF = '/api/v1/commitment/proof'
+const API_COMMITMENT_SEND = '/api/v1/commitment/send'
+const API_COMMITMENT_VERIFY = '/api/v1/commitment/verify'
 // Connect to MongoBD
 var dbConnect = 'mongodb://localhost/mainstay'
 mongoose.connect(dbConnect, (error) => {
@@ -19,8 +19,6 @@ mongoose.connect(dbConnect, (error) => {
   }
   console.log('Connected');
 });
-
-
 // Get Routes for METHOD GET
 app.get(API_INDEX, api.index);
 app.get(API_LATEST_ATTESTATION, api.latest_attestation);
