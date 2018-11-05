@@ -38,7 +38,7 @@ merkle_root | client_position | proof
 ...
 
 ### LatestCommitment (API WRITE)
-position | commitment
+client_position | commitment
 --- | ---
 0 | "client 0 latest commitment"
 1 | "client 1 latest commitment"
