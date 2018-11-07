@@ -1,8 +1,8 @@
 # Documentation Mainstay API
 
-##_REST_
+_REST_
 
-###_Public Endpoints_
+_Public Endpoints_
 ```js
 const request = require('request');
 const url = "https://localhost:9000/api/v1";
@@ -11,7 +11,7 @@ request.get(url + "Endpoint/address", (error, response, body) => {
   console.log(body);
 });
 ```
-- ####_latest attestation_
+- _latest attestation_
 ```js
 // Exemple Request
 const request = require('request');
@@ -36,7 +36,7 @@ request.get(url + '/latestattestation', (error, response, body) => {
   }
 }
 ```
-- ####_latest commitment_
+- _latest commitment_
 ```js
 // Exemple Request
 const request = require('request')
@@ -58,8 +58,9 @@ request.get(url + '/latestcommitment?position=0', (error, response, body) => {
   }
 }
 ```
-- ####_commitment latest proof_
+- _commitment latest proof_
 ```js
+// Exemple Request
 const request = require('request')
 const url = "https://localhost:9000/api/v1";
 
@@ -79,8 +80,9 @@ request.get(url + '/commitment/latestproof', (error, response, body) => {
   }
 }
 ```
-- ####_commitment proof_
+- _commitment proof_
 ```js
+// Exemple Request
 const request = require('request')
 const url = "https://localhost:9000/api/v1";
 
@@ -100,8 +102,9 @@ request.get(url + '/commitment/proof', (error, response, body) => {
   }
 }
 ```
-- ####_commitment verify_
+- _commitment verify_
 ```js
+// Exemple Request
 const request = require('request')
 const url = "https://localhost:9000/api/v1";
 
@@ -109,7 +112,6 @@ request.get(url + '/commitment/verify', (error, response, body) => {
   console.log(body);
 });
 ```
-
 ```js
 // Exemple Response
 {
@@ -122,8 +124,6 @@ request.get(url + '/commitment/verify', (error, response, body) => {
   }
 }
 ```
-
-
 ###_Authenticated Endpoints_
 
-- ####_commitment send_
+- _commitment send_
