@@ -6,14 +6,18 @@ const controllers = require('../lib/controllers');
 /// Connect to MongoBD fot Test                                              ///
 ////////////////////////////////////////////////////////////////////////////////
 var dbConnect = 'mongodb://localhost/mainstay1'
+
 mongoose.connect(dbConnect, (error) => {
   if (error) {
     console.log('Can\'t connect');
     exit();
   }
-  console.log('Connected');
 });
-///
+
+before((done) => {
+  mongoose.connection.on('open', done)
+});
+
 describe('Test Controllers', () => {
   //////////////////////////////////////////////////////////////////////////////
   /// Test                                                                   ///
@@ -219,7 +223,7 @@ describe('Test Controllers', () => {
   //////////////////////////////////////////////////////////////////////////////
   /// Test Commitment Proof                                                  ///
   //////////////////////////////////////////////////////////////////////////////
-  it('Route: /api/v1/commitment/proof?position=0&commitment='
+  it('Route: /api/v1/commitment/proof?position=0&commitment=' +
      '1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7', () => {
     const req = mockHttp.createRequest(
         { method: 'GET', url: '/api/v1/commitment/proof'});
@@ -241,11 +245,11 @@ describe('Test Controllers', () => {
   //////////////////////////////////////////////////////////////////////////////
   /// Test Commitment Verify                                                 ///
   //////////////////////////////////////////////////////////////////////////////
-  it('Route: /api/v1/commitment/verify?position=0&commitment='
+  it('Route: /api/v1/commitment/verify?position=0&commitment=' +
      '1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8442666127f98ada3b7', () => {
-    const position = 'position=0'
-    const commitment = 'commitment='
-        '1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8442666127f98ada3b7'
+    const position = 'position=0';
+    const commitment = 'commitment=' +
+        '1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8442666127f98ada3b7';
     const req = mockHttp.createRequest(
         { method: 'GET',
           url: '/api/v1/commitment/verify?' + position + '&' + commitment});
@@ -262,9 +266,16 @@ describe('Test Controllers', () => {
   //////////////////////////////////////////////////////////////////////////////
   it('Route: /api/v1/commitment/send', () => {
     const req = mockHttp.createRequest(
-        {method : 'GET', url : '/api/v1/commitment/send'});
+      { method: 'POST',
+        url: '/api/v1/commitment/send',
+        headers: {
+          'X-MAINSTAY-APIKEY': 'a',
+          'X-MAINSTAY-PLAYLOAD': 'b',
+          'X-MAINSTAY-SIGNATURE-APIKEY': 'c',
+          'X-MAINSTAY-SIGNATURE-COMMITMENT': 'd'
+        }
+      });
     const res = mockHttp.createResponse();
     controllers.commitment_send(req, res);
   });
-  mongoose.disconnect();
 });

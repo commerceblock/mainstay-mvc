@@ -10,14 +10,16 @@ const API_COMMITMENT_LATEST_PROOF = '/api/v1/commitment/latestproof'
 const API_COMMITMENT_PROOF = '/api/v1/commitment/proof'
 const API_COMMITMENT_SEND = '/api/v1/commitment/send'
 const API_COMMITMENT_VERIFY = '/api/v1/commitment/verify'
+const PORT = 9000
 // Connect to MongoBD
-var dbConnect = 'mongodb://localhost/mainstay1'
-mongoose.connect(dbConnect, (error) => {
+var dbConnect = 'mongodb://localhost/mainstay'
+
+mongoose.connect(dbConnect, { useNewUrlParser: true }, (error) => {
   if (error) {
-    console.log('Can\'t connect');
+    console.log('\033[1;31mCan\'t connect\033[0m');
     exit();
   }
-  console.log('Connected');
+  console.log('\033[0;32mConnected.\033[0m');
 });
 // Get Routes for METHOD GET
 app.get(API_INDEX, api.index);
@@ -29,4 +31,4 @@ app.get(API_COMMITMENT_PROOF, api.commitment_proof);
 // Get Routes for METHOD POST
 app.post(API_COMMITMENT_SEND, api.commitment_send);
 // Main Listening port of the app
-app.listen(9000);
+app.listen(PORT);
