@@ -11,7 +11,7 @@ request.get(url + "Endpoint/address", (error, response, body) => {
   console.log(body);
 });
 ```
-- _latest attestation_
+- _Latest Attestation_
 ```js
 // Exemple Request
 const request = require('request');
@@ -25,18 +25,16 @@ request.get(url + '/latestattestation', (error, response, body) => {
 // Exemple Response
 {
   "response": {
-    "txid": "e7532847a21affdaf6421788b4ad7ac77dd2be8f90a3ef567beda6652a4c5f69",
-    "merkle_root": "163174b3729c593f3b6e7d4ea119a4c5b13008c6fce3794a27af75cf3b56e6f6",
-    "confirmation": true,
-    "commit": 1541411923448
+    "merkle_root": "7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090",
+    "txid": "6a855c1c70849ed28eb51cffd808ccd4e45c4cdddfa17495ccf98856b2421b8e",
   },
-  "timestamp": 1541411923448,
+  "timestamp": 1541762949142,
   "allowance": {
-    "cost": 1544035
+    "cost": 15107449
   }
 }
 ```
-- _latest commitment_
+- _Latest Commitment_
 ```js
 // Exemple Request
 const request = require('request')
@@ -50,21 +48,23 @@ request.get(url + '/latestcommitment?position=0', (error, response, body) => {
 // Exemple Response
 {
   "response": {
-    "commitment": "6a19f0fb4be54511524bcd5b0c98b38da1ee049a39735c39311e10336024436f"
+    "commitment": "1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7",
+    "merkle_root": "7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090",
+    "txid": "6a855c1c70849ed28eb51cffd808ccd4e45c4cdddfa17495ccf98856b2421b8e"
   },
-  "timestamp": 1541411923448,
+  "timestamp": 1541763110233,
   "allowance": {
-    "cost": 1544035
+    "cost": 1944359
   }
 }
 ```
-- _commitment latest proof_
+- _Commitment Latest Proof_
 ```js
 // Exemple Request
 const request = require('request')
 const url = "https://localhost:9000/api/v1";
 
-request.get(url + '/commitment/latestproof', (error, response, body) => {
+request.get(url + '/commitment/latestproof?position=0', (error, response, body) => {
   console.log(body);
 });
 ```
@@ -72,7 +72,18 @@ request.get(url + '/commitment/latestproof', (error, response, body) => {
 // Exemple Response
 {
   "response": {
-    "proof": "c1cda26362828b69266512052b97cb3729e3b052e4ade47c0a1e3383defe73c7"
+    "commitment": "1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7",
+    "merkle_root": "7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090",
+    "ops": [
+      {
+        "append": true,
+        "commitment": "2a39e34e883d9a1e6cdc3418b54aa57747106bc75e3e84426661f37f48ada3b7"
+      },
+      {
+        "append": true,
+        "commitment":"91ffafe62866dd95ea1ed7a56907ddc59ea495b477c3e8f853ee2d1b55a24d47"
+      }
+    ]
   },
   "timestamp": 1541411923448,
   "allowance": {
@@ -80,13 +91,17 @@ request.get(url + '/commitment/latestproof', (error, response, body) => {
   }
 }
 ```
-- _commitment proof_
+- _Commitment Proof_
 ```js
 // Exemple Request
 const request = require('request')
 const url = "https://localhost:9000/api/v1";
 
-request.get(url + '/commitment/proof', (error, response, body) => {
+const route = '/commitment/proof'
+const position = 'position=0'
+const commitment = 'commitment=1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7'
+
+request.get(url + route + '?' + position + '&' + commitment, (error, response, body) => {
   console.log(body);
 });
 ```
@@ -94,21 +109,35 @@ request.get(url + '/commitment/proof', (error, response, body) => {
 // Exemple Response
 {
   "response": {
-    "confirmation": true
+    "merkle_root": "0849d03563d6d7e7d2d0063a5dae944bfcfd4d56d149ffbe73ccead275b2762e",
+    "ops": [
+      {
+        "append": true,
+        "commitment": "2a39e34e883d9a1e6cdc3418b54aa57747106bc75e3e84426661f27f98ada3b7"
+      },
+      {
+        "append": true,
+        "commitment":"91ffafe62866dd95ea1ed7a56907ddc59ea495b477c3e8f853ee2d1b55a24d47"
+      }
+    ]
   },
-  "timestamp": 1541411923448,
+  "timestamp": 1541764083449,
   "allowance": {
-    "cost": 1544035
+    "cost": 2938583
   }
 }
 ```
-- _commitment verify_
+- _Commitment Verify_
 ```js
 // Exemple Request
 const request = require('request')
 const url = "https://localhost:9000/api/v1";
 
-request.get(url + '/commitment/verify', (error, response, body) => {
+const route = '/commitment/verify'
+const position = 'position=0'
+const commitment = 'commitment=1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7'
+
+request.get(url + route + '?' + position + '&' + commitment, (error, response, body) => {
   console.log(body);
 });
 ```
@@ -116,7 +145,7 @@ request.get(url + '/commitment/verify', (error, response, body) => {
 // Exemple Response
 {
   "response": {
-    ...................
+    "confirmed":true
   },
   "timestamp": 1541411923448,
   "allowance": {
@@ -126,4 +155,13 @@ request.get(url + '/commitment/verify', (error, response, body) => {
 ```
 ###_Authenticated Endpoints_
 
-- _commitment send_
+- _Commitment Send_
+
+Curl
+```perl
+curl --header "Content-Type: application/json" --request POST --data '{"X-MAINSTAY-APIKEY":"a","X-MAINSTAY-PLAYLOAD":{"position":0,"commitment":"F01111111111111111111111111111111111111111111111111111111111110F"},"X-MAINSTAY-SIGNATURE-APIKEY":"c","X-MAINSTAY-SIGNATURE-COMMITMENT":"d"}
+```
+response
+```perl
+{"response":"feedback","timestamp":1541761540171,"allowance":{"cost":4832691}}
+```

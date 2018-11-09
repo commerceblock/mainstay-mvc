@@ -12,7 +12,7 @@ const API_COMMITMENT_SEND = '/api/v1/commitment/send'
 const API_COMMITMENT_VERIFY = '/api/v1/commitment/verify'
 const PORT = 9000
 // Connect to MongoBD
-var dbConnect = 'mongodb://localhost/mainstay'
+var dbConnect = 'mongodb://localhost/mainstay1'
 
 mongoose.connect(dbConnect, { useNewUrlParser: true }, (error) => {
   if (error) {

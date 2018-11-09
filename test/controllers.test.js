@@ -264,6 +264,9 @@ describe('Test Controllers', () => {
   //////////////////////////////////////////////////////////////////////////////
   /// Commitment Send                                                        ///
   //////////////////////////////////////////////////////////////////////////////
+  ///
+  /// Test Not Completed
+  ///
   it('Route: /api/v1/commitment/send', () => {
     const req = mockHttp.createRequest(
       { method: 'POST',
