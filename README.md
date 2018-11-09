@@ -1,2 +1,2 @@
-# Mainstay-API
-Mainstay-API
+# mainstay-view
+mainstay-view
