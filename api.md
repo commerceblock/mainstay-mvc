@@ -45,6 +45,13 @@ client_position | commitment
 2 | 1abcd...
 3 | 2abcd...
 
+### ClientDetails (API READ ONLY)
+client_position | auth_token | pubkey
+--- | --- | ---
+0 | ... | ...
+1 | ... | ...
+2 | ... | ...
+3 | ... | ...
 
 ### columns
 - confirmed: bool
@@ -55,6 +62,8 @@ client_position | commitment
 - commitment: string (64 char / 32 byte)
 - ops: Array of ProofObject
 - ProofObject: {append: bool, commitment: string(64char / 32 byte)}
+- auth_token: base64 string
+- pubkey: 33 byte (compressed), 65 byte (uncompressed)
 
 ## API Routes
 - **/api/latestcommitment GET**
