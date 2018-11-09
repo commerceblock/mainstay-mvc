@@ -1,12 +1,12 @@
 module.exports = {
   db: {
-    user: null,
-    password: null,
-    database: 'mainstay',
-    address: '127.0.0.1',
-    port: '27017'
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    address: process.env.DB_HOST,
+    port: process.env.DB_PORT
   },
   server: {
-    port: 9000
+    port: process.env.LISTEN_API
   }
 }
