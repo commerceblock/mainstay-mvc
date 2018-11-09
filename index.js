@@ -1,4 +1,5 @@
 var express = require('express');
+var env = require('./config/env');
 var mongoose = require('mongoose');
 var api = require('./lib/controllers')
 var app = express();
@@ -10,9 +11,15 @@ const API_COMMITMENT_LATEST_PROOF = '/api/v1/commitment/latestproof'
 const API_COMMITMENT_PROOF = '/api/v1/commitment/proof'
 const API_COMMITMENT_SEND = '/api/v1/commitment/send'
 const API_COMMITMENT_VERIFY = '/api/v1/commitment/verify'
-const PORT = 9000
 // Connect to MongoBD
-var dbConnect = 'mongodb://localhost/mainstay1'
+let dbConnect = 'mongodb://';
+
+if (env.db.user && env.db.password)
+    dbConnect += env.db.user + ':' + env.db.password
+
+dbConnect = dbConnect + '@' + env.db.address;
+dbConnect = dbConnect + ':' + env.db.port;
+dbConnect = dbConnect + '/' + env.db.database;
 
 mongoose.connect(dbConnect, { useNewUrlParser: true }, (error) => {
   if (error) {
@@ -31,4 +38,4 @@ app.get(API_COMMITMENT_PROOF, api.commitment_proof);
 // Get Routes for METHOD POST
 app.post(API_COMMITMENT_SEND, api.commitment_send);
 // Main Listening port of the app
-app.listen(PORT);
+app.listen(env.server.port || 80);

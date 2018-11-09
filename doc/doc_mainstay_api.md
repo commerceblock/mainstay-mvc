@@ -2,6 +2,20 @@
 
 _REST_
 
+
+timestamp = timestamp in milli second
+
+allowance = allocation des ressource "cont" est le coup du processuse en nano second
+
+merkle root =
+
+commitment =
+
+txid = Id Transaction
+
+
+ops
+
 _Public Endpoints_
 ```js
 const request = require('request');
