@@ -267,6 +267,9 @@ describe('Test Controllers', () => {
   ///
   /// Test Not Completed
   ///
+  /// pubKey = 1CsSceq9GWnmozaky3DGa24UER6gRDgibf
+  /// pvtKey = bac52bbea2194e7ea1cd3da6585b66d28f1a7a3683eca91af4ba6373d323d24f
+  ///
   it('Route: /api/v1/commitment/send', () => {
     const req = mockHttp.createRequest(
       { method: 'POST',
