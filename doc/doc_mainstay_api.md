@@ -171,7 +171,45 @@ request.get(url + route + '?' + position + '&' + commitment, (error, response, b
 
 - _Commitment Send_
 
-Curl
+_Node.js example_
+```js
+var Bitcore = require('bitcore-lib');
+var Message = require('bitcore-message');
+const request = require('request');
+
+const pubKey = '1CsSceq9GWnmozaky3DGa24UER6gRDgibf';
+const pvtKey =
+    'bac52bbea2194e7ea1cd3da6585b66d28f1a7a3683eca91af4ba6373d323d24f';
+const commitment =
+    'F01111111111111111111111111111111111111111111111111111111111110F';
+
+var message = new Message(commitment);
+var privateKey = new Bitcore.PrivateKey(pvtKey);
+var signature = message.sign(privateKey);
+
+var payload = {
+  commitment: commitment,
+  position: 0,
+  token: '4c8c006d-4cee-4fef-8e06-bb8112db6314',
+};
+
+payload = new Buffer(JSON.stringify(payload)).toString('base64');
+
+const options = {
+  url: '/api/v1/commitment/send',
+  headers: {
+    'X-MAINSTAY-PAYLOAD': payload,
+    'X-MAINSTAY-SIGNATURE': signature
+  }
+};
+
+request.post(options, (error, response, body) => {
+  if (error)
+    return console.log(error);
+  ...
+});
+```
+_Curl example_
 ```perl
 curl --header "Content-Type: application/json" --request POST --data '{"X-MAINSTAY-APIKEY":"a","X-MAINSTAY-PLAYLOAD":"eyJwb3NpdGlvbiI6MCwiY29tbWl0bWVudCI6IkYwMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMEYifQ==","X-MAINSTAY-SIGNATURE-APIKEY":"apiKey","X-MAINSTAY-SIGNATURE-COMMITMENT":"IJbqe50XtfZbQ1b0jr+J1tswSPfZlWwZugXCpYbwYMPuRl+htqSb7wTLYY9RtQ6Bw9Ym5dw0vMNRaDwR8pked2Y="}' http://localhost:9000/api/v1/commitment/send
 ```
