@@ -177,6 +177,8 @@ var Bitcore = require('bitcore-lib');
 var Message = require('bitcore-message');
 const request = require('request');
 
+const url = "https://localhost:9000/api/v1";
+const route = '/commitment/send'
 const pubKey = '1CsSceq9GWnmozaky3DGa24UER6gRDgibf';
 const pvtKey =
     'bac52bbea2194e7ea1cd3da6585b66d28f1a7a3683eca91af4ba6373d323d24f';
@@ -196,7 +198,7 @@ var payload = {
 payload = new Buffer(JSON.stringify(payload)).toString('base64');
 
 const options = {
-  url: '/api/v1/commitment/send',
+  url: url + route,
   headers: {
     'X-MAINSTAY-PAYLOAD': payload,
     'X-MAINSTAY-SIGNATURE': signature
