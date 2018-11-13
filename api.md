@@ -11,6 +11,15 @@ txid2 | 32345... | true | 2018-11-04 16:59:19.000
 txid3 | 42345... | false | 2018-11-05 16:59:19.000
 ...
 
+### AttestationInfo (API READ ONLY)
+txid | blockhash | amount | time
+--- | --- | --- | ---
+txid0 | 12345... | 100 | 1542121293
+txid1 | 22345... | 99 | 1542121294
+txid2 | 32345... | 98 | 1542121295
+txid3 | 42345... | 97 | 1542121296
+...
+
 ### MerkleCommitment (API READ ONLY)
 merkle_root | client_position | commitment
 --- | --- | ---
@@ -60,10 +69,13 @@ client_position | auth_token | pubkey
 - txid: string (64 char / 32 byte)
 - merkle_root: string (64 char / 32 byte)
 - commitment: string (64 char / 32 byte)
+- blockhash: string (64 char / 32 byte)
 - ops: Array of ProofObject
 - ProofObject: {append: bool, commitment: string(64char / 32 byte)}
 - auth_token: base64 string
 - pubkey: 33 byte (compressed), 65 byte (uncompressed)
+- amount: int64
+- time: int64
 
 ## API Routes
 - **/api/latestcommitment GET**
