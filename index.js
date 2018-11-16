@@ -37,5 +37,11 @@ app.get(API_COMMITMENT_VERIFY, api.commitment_verify);
 app.get(API_COMMITMENT_PROOF, api.commitment_proof);
 // Get Routes for METHOD POST
 app.post(API_COMMITMENT_SEND, api.commitment_send);
+
+app.get('*', (req, res) => {
+  res.status(404).send('404 Not Found');
+})
+
+
 // Main Listening port of the app
 app.listen(env.server.port || 80);

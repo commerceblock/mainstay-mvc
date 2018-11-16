@@ -19,12 +19,16 @@
   "dependencies": {
     "assert": "^1.4.1",
     "bitcore-message": "^1.0.4",
+    "create-react-app": "^2.1.1",
     "elliptic": "^6.4.1",
     "express": "^4.16.4",
     "mongodb": "^3.1.8",
     "mongoose": "^5.3.8",
     "node-mocks-http": "^1.7.3",
-    "nodejs-base64": "^1.0.3"
+    "nodejs-base64": "^1.0.3",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-script": "^2.0.5"
   },
   "devDependencies": {
     "mocha": "^5.2.0"
