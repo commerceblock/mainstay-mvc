@@ -83,8 +83,8 @@ const MarketcapCBT = () => {
 }
 
 class PriceCBT extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       channel: 0,
       priceCBT: 0,
@@ -104,7 +104,7 @@ class PriceCBT extends React.Component {
   message(data) {
     data = JSON.parse(data);
     if (data.event === "info")
-      this.state.ws.send('{"event":"subscribe","channel":"trades","symbol":"tCBTUSD"}');
+      this.state.ws.send('{"event":"subscribe","channel":"trades","symbol":"tBTCUSD"}');
     if (data.event === "subscribed" && data.channel === "trades")
       this.setState({channel: data.chanId});
     if (Array.isArray(data)) {
@@ -181,43 +181,14 @@ const MainstayInfo = () => {
   );
 }
 
-const listAttestation = {
-  data:
-  [
-    {
-      txid: 'b5c4571e98e869f67592b4ef57cce97988ed8fcf3de041c8b6a13034e94e91c7',
-      merkleRoot: 'b5c4571e98e869f67592b4ef57cce97988ed8fcf3de041c8b6a13034e94e91c7',
-      confirmed: false,
-      age: 123
-    },
-    {
-      txid: '06c0873b85b66a13416944ea88f79520cbbb672fbd990430e91f2dbedc67020c',
-      merkleRoot: '06c0873b85b66a13416944ea88f79520cbbb672fbd990430e91f2dbedc67020c',
-      confirmed: true,
-      age: 123
-    },
-    {
-      txid: '63390d97ffcea85df0082122e9c169412e57e59fb698944c1761603a235d94d0',
-      merkleRoot: '63390d97ffcea85df0082122e9c169412e57e59fb698944c1761603a235d94d0',
-      confirmed: true,
-      age: 123
-    },
-    {
-      txid: 'fe9a6b8c95ceace48e1a72ea17ee37e980b3cf365e21a9ce72296c4b12721f46',
-      merkleRoot: 'fe9a6b8c95ceace48e1a72ea17ee37e980b3cf365e21a9ce72296c4b12721f46',
-      confirmed: true,
-      age: 123
-    },
-    {
-      txid: 'f194b14efd7f70e1902d7454fe9ccafe27fadb7fa14de71f3a97310ec941a45e',
-      merkleRoot: 'f194b14efd7f70e1902d7454fe9ccafe27fadb7fa14de71f3a97310ec941a45e',
-      confirmed: true,
-      age: 123
-    }
-  ]
-}
-
 class LatestAttestation extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      data: []
+    }
+  }
+
   render() {
   return (
     <div>
@@ -234,18 +205,18 @@ class LatestAttestation extends React.Component {
           <span class="lh1rem mr-auto">Confirmed</span>
           <span class="lh1rem mr-auto">Age</span>
         </div>
-      <div class="transactions md-height-rows rows">
-        { listAttestation.data.map((data) =>
-        <div class="d-flex flex-table-row">
-          <a class="hash truncate-hash keyboard-target" href={`/tx/${data.txid}`} title={data.txid}>{data.txid}</a>
-          <a class="hash truncate-hash keyboard-target" href={`/tx/${data.merkleRoot}`} title={data.merkleRoot}>{data.merkleRoot}</a>
-          <span class="mono text-right ml-1">{(data.confirmed)?"true":"false"}</span>
-          <span class="mono text-right ml-1">{data.age}</span>
+        <div class="transactions md-height-rows rows">
+          { this.state.data.map((data) =>
+          <div class="d-flex flex-table-row">
+            <a class="hash truncate-hash keyboard-target" href={`/tx/${data.txid}`} title={data.txid}>{data.txid}</a>
+            <a class="hash truncate-hash keyboard-target" href={`/tx/${data.merkleRoot}`} title={data.merkleRoot}>{data.merkleRoot}</a>
+            <span class="mono text-right ml-1">{(data.confirmed)?"true":"false"}</span>
+            <span class="mono text-right ml-1">{data.age}</span>
+            </div>
+          )}
         </div>
-        )}
       </div>
     </div>
-  </div>
     );
   }
 }
@@ -307,7 +278,7 @@ const FooterPage = () => {
   );
 }
 
-class App extends React.Component {
+class Home extends React.Component {
   render() {
     return (
       <div className="top-nav">
@@ -333,4 +304,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default Home;

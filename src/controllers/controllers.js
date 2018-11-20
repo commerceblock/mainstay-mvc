@@ -1,5 +1,5 @@
 const message = require('bitcore-message');
-const models = require('./models')
+const models = require('../models/models')
 const mongoose = require('mongoose');
 const { base64encode, base64decode } = require('nodejs-base64');
 // All Constants

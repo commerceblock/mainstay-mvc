@@ -1,7 +1,7 @@
 var express = require('express');
-var env = require('./config/env');
+var env = require('../config/env');
 var mongoose = require('mongoose');
-var api = require('./lib/controllers')
+var api = require('../src/controllers/controllers');
 var app = express();
 // MACRO
 const API_INDEX = '/api/v1'
