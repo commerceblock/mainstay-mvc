@@ -99,6 +99,46 @@ function reply_msg(res, message, startTime) {
 }
 
 module.exports = {
+  ctrl_latest_attestation: (req, res) => {
+    let response = [];
+    models.attestation.find().sort({ inserted_at: -1 }).limit(5)
+                      .exec((error, data) => {
+      if (error)
+        return ; // TODO Add message error
+      res.header("Access-Control-Allow-Origin", "*");
+      for (let itr = 0; itr < data.length; ++itr)
+        response.push({
+          txid: data[itr].txid,
+          merkle_root: data[itr].merkle_root,
+          confirmed: data[itr].confirmed,
+          age: data[itr].inserted_at
+        });
+      res.json(response);
+    });
+  },
+  ctrl_latest_commitment: (req, res) => {
+    let response = [];
+    models.attestation.find().sort({ inserted_at: -1 }).limit(1)
+                      .exec((error, data) => {
+      if (error)
+        return ; // TODO Add message error
+      models.merkleCommitment.find({ merkle_root: data[0].merkle_root })
+                             .limit(5)
+                             .exec((error, data) => {
+        if (error)
+          return ; // TODO Add message error
+        res.header("Access-Control-Allow-Origin", "*");
+        for (let itr = 0; itr < data.length; ++itr) {
+          response.push({
+            position: data[itr].client_position,
+            merkle_root: data[itr].merkle_root,
+            commitment: data[itr].commitment,
+          });
+        }
+        res.json(response);
+      });
+    });
+  },
   // Function METHOD GET
   index: (req, res) => {
     startTime = start_time();

@@ -22,7 +22,7 @@ var schemaClientDetails = new Schema({
 var schemaMerkleCommitment = new Schema({
   commitment: String,
   merkle_root: String,
-  position: Number
+  client_position: Number
 }, { collection: 'MerkleCommitment' });
 
 var schemaMerkleProof = new Schema({

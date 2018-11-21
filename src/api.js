@@ -1,7 +1,7 @@
 var express = require('express');
 var env = require('../src/env');
 var mongoose = require('mongoose');
-var api = require('../src/controllers/controllers');
+var api = require('./controllers/controllers');
 var app = express();
 // MACRO
 const API_INDEX = '/api/v1'
@@ -13,11 +13,13 @@ const API_COMMITMENT_LATEST_PROOF = '/api/v1/commitment/latestproof'
 const API_COMMITMENT_PROOF = '/api/v1/commitment/proof'
 const API_COMMITMENT_SEND = '/api/v1/commitment/send'
 const API_COMMITMENT_VERIFY = '/api/v1/commitment/verify'
+const CTRL_LATEST_ATTESTATION = '/ctrl/latestattestation'
+const CTRL_LATEST_COMMITMENT = '/ctrl/latestcommitment'
 // Connect to MongoBD
 let dbConnect = 'mongodb://';
 
 if (env.db.user && env.db.password)
-    dbConnect += env.db.user + ':' + env.db.password
+  dbConnect += env.db.user + ':' + env.db.password
 
 dbConnect = dbConnect + '@' + env.db.address;
 dbConnect = dbConnect + ':' + env.db.port;
@@ -41,7 +43,10 @@ app.get(API_COMMITMENT_VERIFY, api.commitment_verify);
 app.get(API_COMMITMENT_PROOF, api.commitment_proof);
 // Get Routes for METHOD POST
 app.post(API_COMMITMENT_SEND, api.commitment_send);
-
+// Get Routes for Controllers METHOD GET
+app.get(CTRL_LATEST_ATTESTATION, api.ctrl_latest_attestation);
+app.get(CTRL_LATEST_COMMITMENT, api.ctrl_latest_commitment);
+// Manages Non-Existent Routes
 app.get('*', (req, res) => {
   res.status(404).send('404 Not Found');
 })
