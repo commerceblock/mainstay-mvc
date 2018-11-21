@@ -3,9 +3,12 @@ const models = require('../models/models')
 const mongoose = require('mongoose');
 const { base64encode, base64decode } = require('nodejs-base64');
 // All Constants
+const ARG_TXID = 'txid'
 const ARG_POSITION = 'position'
 const ARG_COMMITMENT = 'commitment'
-const ARG_MERKLE_ROOT = 'markle_root'
+const ARG_MERKLE_ROOT = 'merkle_root'
+const BAD_LENGTH_TXID =
+    'txid string parameter must contain 64 characters'
 const BAD_LENGTH_COMMITMENT =
     'commitment string parameter must contain 64 characters'
 const BAD_LENGTH_MERKLE_ROOT = BAD_LENGTH_COMMITMENT
@@ -14,6 +17,7 @@ const COMMITMENT_POSITION_UNKNOWN =
     'your commitment or position is unknown to us'
 const INTERNAL_ERROR_API = 'an error occurred in the API'
 const MERKLEROOT_UNKNOWN = 'your merkle root is unknown to us'
+const MISSING_ARG_TXID = 'missing txid parameter'
 const MISSING_ARG_APIKEY = 'missing X-MAINSTAY-APIKEY'
 const MISSING_ARG_COMMITMENT = 'missing commitment parameter'
 const MISSING_ARG_MERKLE_ROOT = 'missing merkle_root parameter'
@@ -25,9 +29,22 @@ const MISSING_PAYLOAD_TOKEN = 'missing token parameter in payload'
 const NS_PER_SEC = 1000000000
 const PAYLOAD_TOKEN_ERROR = 'your token is wrong'
 const POSITION_UNKNOWN = 'your position is unknown to us'
+const TXID_UNKNOWN = 'attestation could not be found for the txid provided'
 const SIGNATURE_INVALID = 'your signature is incorrect'
+const SIZE_TXID = 64
 const SIZE_COMMITMENT = 64
+const SIZE_MERKLE_ROOT = 64
 const VERSION_API_V1 = 'Mainstay-API-v1'
+
+function get_txid_arg(req, res, startTime) {
+  const time = new Date();
+  let paramTxid = req.query[ARG_TXID];
+  if (paramTxid === undefined)
+    return reply_err(res, MISSING_ARG_TXID, startTime);
+  if (paramTxid.length != SIZE_TXID)
+    return reply_err(res, BAD_LENGTH_TXID, startTime);
+  return paramTxid;
+}
 
 function get_commitment_arg(req, res, startTime) {
   const time = new Date();
@@ -97,6 +114,21 @@ module.exports = {
                 startTime);
     });
   },
+  attestation: (req, res) => {
+    startTime = start_time();
+    let txid = get_txid_arg(req, res, startTime);
+    if (txid === undefined)
+        return ;
+    models.attestation.find({txid: txid})
+                      .exec((error, data) => {
+      if (error)
+        return reply_err(res, INTERNAL_ERROR_API, startTime);
+      if (data.length == 0)
+        return reply_err(res, TXID_UNKNOWN, startTime)
+      reply_msg(res, { merkle_root: data[0].merkle_root, txid: data[0].txid },
+                startTime);
+    });
+  },
   latest_commitment: (req, res) => {
     startTime = start_time();
     let position = get_position_arg(req, res, startTime);
@@ -119,6 +151,27 @@ module.exports = {
                          merkle_root: merkle_root, txid: txid },
                   startTime);
       });
+    });
+  },
+  commitment: (req, res) => {
+    startTime = start_time();
+    let position = get_position_arg(req, res, startTime);
+    if (position === undefined)
+      return ;
+    let merkle_root = get_merkle_root_arg(req, res, startTime);
+    if (merkle_root === undefined)
+      return ;
+    models.merkleCommitment.find({ client_position: position,
+                                   merkle_root: merkle_root },
+                                 (error, data) => {
+      if (error)
+        return reply_err(res, INTERNAL_ERROR_API, startTime);
+      if (data.length == 0)
+        return reply_err(res, COMMITMENT_POSITION_UNKNOWN, startTime);
+
+      reply_msg(res, { commitment: data[0].commitment,
+                         merkle_root: merkle_root, client_position: position },
+                  startTime);
     });
   },
   commitment_latest_proof: (req, res) => {
