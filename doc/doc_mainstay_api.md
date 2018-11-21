@@ -95,6 +95,29 @@ request.get(url + '/latestcommitment?position=0', (error, response, body) => {
   }
 }
 ```
+- _Commitment_
+```js
+// Example Request
+const request = require('request')
+const url = "https://localhost:9000/api/v1";
+
+request.get(url + '/commitment?merkle_root=7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090=&position=0', (error, response, body) => {
+  console.log(body);
+});
+```
+```js
+// Example Response
+{
+  "response": {
+    "commitment": "1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7",
+    "merkle_root": "7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090"
+  },
+  "timestamp": 1541763110233,
+  "allowance": {
+    "cost": 1944359
+  }
+}
+```
 - _Commitment Latest Proof_
 ```js
 // Example Request

@@ -1,10 +1,10 @@
 module.exports = {
   db: {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    address: process.env.DB_HOST,
-    port: process.env.DB_PORT
+    user: "",
+    password: "",
+    database: "mainstay",
+    address: "localhost",
+    port: "27017"
   },
   server: {
     port: process.env.LISTEN_API

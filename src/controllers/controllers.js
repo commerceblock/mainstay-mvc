@@ -170,7 +170,7 @@ module.exports = {
         return reply_err(res, COMMITMENT_POSITION_UNKNOWN, startTime);
 
       reply_msg(res, { commitment: data[0].commitment,
-                         merkle_root: merkle_root, client_position: position },
+                         merkle_root: merkle_root},
                   startTime);
     });
   },
