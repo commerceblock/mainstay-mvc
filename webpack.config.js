@@ -1,6 +1,10 @@
-const Webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const HtmlWebPackPlugin = require("html-webpack-plugin");
+const webpack = require('webpack');
+const path = require("path");
+const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+
+const htmlWebPackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: './src/view.jsx',
@@ -18,6 +22,44 @@ module.exports = {
             loader: "html-loader"
           }
         ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader
+          },
+          "css-loader"
+        ]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: "style-loader"
+          },
+          {
+            loader: "css-loader",
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              sourceMap: true
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(gif|png|jpe?g|svg)$/i,
+        use: [
+          'file-loader',
+          {
+            loader: 'image-webpack-loader',
+          }
+        ]
       }
     ]
   },
@@ -25,17 +67,23 @@ module.exports = {
     extensions: ['*', '.js', '.jsx']
   },
   output: {
-    path: __dirname + '/dist',
-    publicPath: '/',
-    filename: 'bundle.js'
+    path: path.resolve(__dirname, "./public"),
+    filename: './bundle.js'
   },
   plugins: [
-    new HtmlWebPackPlugin({template: "./public/index.html",filename: "./index.html"}),
-    new UglifyJsPlugin(),
-    new Webpack.HotModuleReplacementPlugin()
+
+    new MiniCssExtractPlugin({filename: "[name].css", chunkFilename: "[id].css"}),
+
+    new UglifyJSPlugin(),
+    new htmlWebPackPlugin({template: "./public/index.html",filename: "./index.html"}),
+    new webpack.HotModuleReplacementPlugin()
   ],
   devServer: {
-    contentBase: './dist',
+    contentBase: path.resolve(__dirname, "./public"),
+    historyApiFallback: true,
+    inline: true,
+    open: true,
     hot: true
-  }
+  },
+  devtool: "eval-source-map"
 };

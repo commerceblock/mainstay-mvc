@@ -3,6 +3,13 @@ import { BrowserRouter, Route } from 'react-router-dom'
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import '../css/main.css'
+import '../css/bootstrap.css'
+import '../css/charts.css'
+import '../css/nexthome.css'
+
+
+
 const Main = () => (
   <BrowserRouter>
     <div>

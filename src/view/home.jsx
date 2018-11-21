@@ -1,11 +1,16 @@
+import axios from 'axios'
 import React from 'react';
 import Sockette from 'sockette'
 
+const URL = 'http://127.0.0.1'
+const CTRL_LATEST_ATTESTATION = '/ctrl/latestattestation'
+const CTRL_LATEST_COMMITMENT = '/ctrl/latestcommitment'
+
 const FaviconAddrBar = () => {
   return (
-    <div className="d-flex align-items-center">
-      <div className="col-sm-auto">
-        <a href="/" className="dcricon-decred no-underline"></a>
+    <div class="d-flex align-items-center">
+      <div class="col-sm-auto">
+        <a href="/" class="dcricon-decred no-underline"></a>
       </div>
     </div>
   );
@@ -13,15 +18,15 @@ const FaviconAddrBar = () => {
 
 const Navbar = () => {
   return (
-    <div className="col pl-2">
-      <form className="navbar-form" role="search" id="search-form" action="/search">
-        <div className="input-group">
+    <div class="col pl-2">
+      <form class="navbar-form" role="search" id="search-form" action="/search">
+        <div class="input-group">
           <input
             tabindex="0"
             type="text"
             name="search"
             id="search"
-            className="form-control top-search mousetrap"
+            class="form-control top-search mousetrap"
             placeholder="Search for blocks, addresses or transactions"
           />
         </div>
@@ -41,7 +46,7 @@ const Menu = () => {
       <a data-keynav-skip href="/agendas" title="Agendas">Agendas</a>
       <a data-keynav-skip href="/decodetx" title="Decode or send a raw transaction">Decode/Broadcast Tx</a>
       <a data-keynav-skip href="http://testnet.dcrdata.org/" title="Home">Switch To Testnet</a>
-      <a data-keynav-skip data-turbolinks="false" href="javascript:toggleSun()" className="jsonly"><span id="sun-icon" className="dcricon-sun-fill no-underline pr-2"></span> Night Mode</a>
+      <a data-keynav-skip data-turbolinks="false" href="javascript:toggleSun()" class="jsonly"><span id="sun-icon" class="dcricon-sun-fill no-underline pr-2"></span> Night Mode</a>
     </div>
   );
 }
@@ -51,9 +56,9 @@ const HamburgerMenu = () => {
     <nav role="navigation" id="hamburger-menu" data-turbolinks-permanent>
       <div id="menuToggle">
         <input type="checkbox" id="menuToggleCheckbox"/>
-        <span className="patty"></span>
-        <span className="patty"></span>
-        <span className="patty short"></span>
+        <span class="patty"></span>
+        <span class="patty"></span>
+        <span class="patty short"></span>
         <Menu/>
       </div>
     </nav>
@@ -186,7 +191,13 @@ class LatestAttestation extends React.Component {
     super();
     this.state = {
       data: []
-    }
+    };
+    this.requestCtlrLatestAttestation();
+  }
+
+  requestCtlrLatestAttestation() {
+    axios.get(URL + CTRL_LATEST_ATTESTATION)
+      .then(response => this.setState({data: response.data}));
   }
 
   render() {
@@ -209,7 +220,7 @@ class LatestAttestation extends React.Component {
           { this.state.data.map((data) =>
           <div class="d-flex flex-table-row">
             <a class="hash truncate-hash keyboard-target" href={`/tx/${data.txid}`} title={data.txid}>{data.txid}</a>
-            <a class="hash truncate-hash keyboard-target" href={`/tx/${data.merkleRoot}`} title={data.merkleRoot}>{data.merkleRoot}</a>
+            <a class="hash truncate-hash keyboard-target" href={`/tx/${data.merkle_root}`} title={data.merkle_root}>{data.merkle_root}</a>
             <span class="mono text-right ml-1">{(data.confirmed)?"true":"false"}</span>
             <span class="mono text-right ml-1">{data.age}</span>
             </div>
@@ -221,18 +232,20 @@ class LatestAttestation extends React.Component {
   }
 }
 
-const listCommitment = {
-  data:
-  [
-    {
-      position: 0,
-      merkleRoot: 'b5c4571e98e869f67592b4ef57cce97988ed8fcf3de041c8b6a13034e94e91c7',
-      commitment: 'b5c4571e98e869f67592b4ef57cce97988ed8fcf3de041c8b6a13034e94e91c7'
-    }
-  ]
-}
-
 class LatestCommitment extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      data: []
+    };
+    this.requestCtlrLatestCommitment();
+  }
+
+  requestCtlrLatestCommitment() {
+    axios.get(URL + CTRL_LATEST_COMMITMENT)
+      .then(response => this.setState({data: response.data}));
+  }
+
   render() {
   return (
     <div>
@@ -249,10 +262,10 @@ class LatestCommitment extends React.Component {
           <span class="lh1rem mr-auto">Confirmed</span>
         </div>
       <div class="transactions md-height-rows rows">
-        { listCommitment.data.map((data) =>
+        { this.state.data.map((data) =>
         <div class="d-flex flex-table-row">
           <span class="mono text-right ml-1">{data.position}</span>
-          <a class="hash truncate-hash keyboard-target" href={`/tx/${data.merkleRoot}`} title={data.merkleRoot}>{data.merkleRoot}</a>
+          <a class="hash truncate-hash keyboard-target" href={`/tx/${data.merkle_root}`} title={data.merkle_root}>{data.merkle_root}</a>
           <a class="hash truncate-hash keyboard-target" href={`/tx/${data.commitment}`} title={data.commitment}>{data.commitment}</a>
         </div>
         )}
@@ -281,9 +294,9 @@ const FooterPage = () => {
 class Home extends React.Component {
   render() {
     return (
-      <div className="top-nav">
-        <div className="container">
-          <div className="d-flex align-items-center flex-wrap">
+      <div class="top-nav">
+        <div class="container">
+          <div class="d-flex align-items-center flex-wrap">
             <FaviconAddrBar/>
             <Navbar/>
             <HamburgerMenu/>
