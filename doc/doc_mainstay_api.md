@@ -27,7 +27,7 @@ request.get(url + "Endpoint/address", (error, response, body) => {
 ```
 - _Latest Attestation_
 ```js
-// Exemple Request
+// Example Request
 const request = require('request');
 const url = "https://localhost:9000/api/v1";
 
@@ -36,7 +36,30 @@ request.get(url + '/latestattestation', (error, response, body) => {
 });
 ```
 ```js
-// Exemple Response
+// Example Response
+{
+  "response": {
+    "merkle_root": "7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090",
+    "txid": "6a855c1c70849ed28eb51cffd808ccd4e45c4cdddfa17495ccf98856b2421b8e",
+  },
+  "timestamp": 1541762949142,
+  "allowance": {
+    "cost": 15107449
+  }
+}
+```
+- _Attestation_
+```js
+// Example Request
+const request = require('request');
+const url = "https://localhost:9000/api/v1";
+
+request.get(url + '/attestation?txid=bb1f2dea9205666786fc54469db1090f9c0976068c00e7e7ebfa5d1e5916e250', (error, response, body) => {
+  console.log(body);
+});
+```
+```js
+// Example Response
 {
   "response": {
     "merkle_root": "7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090",
@@ -50,7 +73,7 @@ request.get(url + '/latestattestation', (error, response, body) => {
 ```
 - _Latest Commitment_
 ```js
-// Exemple Request
+// Example Request
 const request = require('request')
 const url = "https://localhost:9000/api/v1";
 
@@ -59,7 +82,7 @@ request.get(url + '/latestcommitment?position=0', (error, response, body) => {
 });
 ```
 ```js
-// Exemple Response
+// Example Response
 {
   "response": {
     "commitment": "1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7",
@@ -72,9 +95,32 @@ request.get(url + '/latestcommitment?position=0', (error, response, body) => {
   }
 }
 ```
+- _Commitment_
+```js
+// Example Request
+const request = require('request')
+const url = "https://localhost:9000/api/v1";
+
+request.get(url + '/commitment?merkle_root=7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090=&position=0', (error, response, body) => {
+  console.log(body);
+});
+```
+```js
+// Example Response
+{
+  "response": {
+    "commitment": "1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7",
+    "merkle_root": "7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090"
+  },
+  "timestamp": 1541763110233,
+  "allowance": {
+    "cost": 1944359
+  }
+}
+```
 - _Commitment Latest Proof_
 ```js
-// Exemple Request
+// Example Request
 const request = require('request')
 const url = "https://localhost:9000/api/v1";
 
@@ -83,7 +129,7 @@ request.get(url + '/commitment/latestproof?position=0', (error, response, body) 
 });
 ```
 ```js
-// Exemple Response
+// Example Response
 {
   "response": {
     "commitment": "1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7",
@@ -107,7 +153,7 @@ request.get(url + '/commitment/latestproof?position=0', (error, response, body) 
 ```
 - _Commitment Proof_
 ```js
-// Exemple Request
+// Example Request
 const request = require('request')
 const url = "https://localhost:9000/api/v1";
 
@@ -120,7 +166,7 @@ request.get(url + route + '?' + position + '&' + commitment, (error, response, b
 });
 ```
 ```js
-// Exemple Response
+// Example Response
 {
   "response": {
     "merkle_root": "0849d03563d6d7e7d2d0063a5dae944bfcfd4d56d149ffbe73ccead275b2762e",
@@ -143,7 +189,7 @@ request.get(url + route + '?' + position + '&' + commitment, (error, response, b
 ```
 - _Commitment Verify_
 ```js
-// Exemple Request
+// Example Request
 const request = require('request')
 const url = "https://localhost:9000/api/v1";
 
@@ -156,7 +202,7 @@ request.get(url + route + '?' + position + '&' + commitment, (error, response, b
 });
 ```
 ```js
-// Exemple Response
+// Example Response
 {
   "response": {
     "confirmed":true
