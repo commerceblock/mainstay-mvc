@@ -14,6 +14,7 @@ const API_COMMITMENT_PROOF = '/api/v1/commitment/proof'
 const API_COMMITMENT_SEND = '/api/v1/commitment/send'
 const API_COMMITMENT_VERIFY = '/api/v1/commitment/verify'
 const CTRL_LATEST_ATTESTATION = '/ctrl/latestattestation'
+const CTRL_LATEST_ATTESTATION_INFO = '/ctrl/latestattestationinfo'
 const CTRL_LATEST_COMMITMENT = '/ctrl/latestcommitment'
 // Connect to MongoBD
 let dbConnect = 'mongodb://';
@@ -45,6 +46,7 @@ app.get(API_COMMITMENT_PROOF, api.commitment_proof);
 app.post(API_COMMITMENT_SEND, api.commitment_send);
 // Get Routes for Controllers METHOD GET
 app.get(CTRL_LATEST_ATTESTATION, api.ctrl_latest_attestation);
+app.get(CTRL_LATEST_ATTESTATION_INFO, api.ctrl_latest_attestation_info);
 app.get(CTRL_LATEST_COMMITMENT, api.ctrl_latest_commitment);
 // Manages Non-Existent Routes
 app.get('*', (req, res) => {

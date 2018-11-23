@@ -8,6 +8,13 @@ var schemaAttestation = new Schema({
   inserted_at: Date
 }, { collection: 'Attestation' });
 
+var schemaAttestationInfo = new Schema({
+  txid: String,
+  amount: Number,
+  blockhash: String,
+  time: Number
+}, { collection: 'AttestationInfo' });
+
 var schemaClientCommitment = new Schema({
   commitment: String,
   client_position: Number
@@ -33,12 +40,14 @@ var schemaMerkleProof = new Schema({
 }, { collection: 'MerkleProof' });
 
 var attestation = mongoose.model('Attestation', schemaAttestation);
+var attestationInfo = mongoose.model('AttestationInfo', schemaAttestationInfo);
 var clientCommitment = mongoose.model('ClientCommitment', schemaClientCommitment);
 var clientDetails = mongoose.model('ClientDetails', schemaClientDetails);
 var merkleCommitment = mongoose.model('MerkleCommitment', schemaMerkleCommitment);
 var merkleProof = mongoose.model('MerkleProof', schemaMerkleProof);
 
 module.exports.attestation = attestation;
+module.exports.attestationInfo = attestationInfo;
 module.exports.clientCommitment = clientCommitment;
 module.exports.clientDetails = clientDetails;
 module.exports.merkleCommitment = merkleCommitment;
