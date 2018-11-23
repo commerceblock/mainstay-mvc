@@ -116,6 +116,23 @@ module.exports = {
       res.json(response);
     });
   },
+  ctrl_latest_attestation_info: (req, res) => {
+    let response = [];
+    models.attestationInfo.find().sort({ time: -1 }).limit(5)
+                      .exec((error, data) => {
+      if (error)
+        return ; // TODO Add message error
+      res.header("Access-Control-Allow-Origin", "*");
+      for (let itr = 0; itr < data.length; ++itr)
+        response.push({
+          txid: data[itr].txid,
+          blockhash: data[itr].blockhash,
+          amount: data[itr].amount,
+          time: data[itr].time
+        });
+      res.json(response);
+    });
+  },
   ctrl_latest_commitment: (req, res) => {
     let response = [];
     models.attestation.find().sort({ inserted_at: -1 }).limit(1)
