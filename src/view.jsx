@@ -1,10 +1,12 @@
 import Home from './view/home';
-import { BrowserRouter, Route } from 'react-router-dom'
+import {
+  BrowserRouter,
+  Route
+} from 'react-router-dom'
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import '../css/bootstrap.css'
-import '../css/charts.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/stylesheets/styles.scss'
 
 const Main = () => (
