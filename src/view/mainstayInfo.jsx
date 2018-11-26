@@ -1,7 +1,3 @@
-import InfoFees from './infoFees';
-import InfoLatestTxid from './infoLatestTxid';
-// import MarketcapCBT from './marketcapCBT';
-// import PriceBTC from './priceBTC';
 import PriceCBT from './priceCBT';
 import React from 'react';
 import TotalSupplyCBT from './totalSupplyCBT';
