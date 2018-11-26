@@ -74,7 +74,7 @@ html {
   font-family: 'inconsolata-v15-latin-regular';
 }
 body {
-  font-family: 'source-sans-pro-v9-latin-regular';
+  font-family: 'Roboto', sans-serif;
   padding-bottom: 2.1rem;
   background: #F3F5F6;
 }
@@ -694,10 +694,16 @@ body.darkBG .keynav-target {
 
 /*responsive*/
 @media only screen and (max-width: 992px)  {
-  .container {
-    max-width: 100% !important;
-  }
+  // .container {
+  //   max-width: 100% !important;
+  // }
 }
+
+.container {
+  max-width: 100% !important;
+}
+
+
 @media only screen and (max-width: 768px)  {
   .table {
     margin-bottom: 0;

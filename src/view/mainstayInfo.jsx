@@ -1,4 +1,7 @@
-import MarketcapCBT from './marketcapCBT';
+import InfoFees from './infoFees';
+import InfoLatestTxid from './infoLatestTxid';
+// import MarketcapCBT from './marketcapCBT';
+// import PriceBTC from './priceBTC';
 import PriceCBT from './priceCBT';
 import React from 'react';
 import TotalSupplyCBT from './totalSupplyCBT';
@@ -14,7 +17,6 @@ class MainstayInfo extends React.Component {
         <div>
           <table class="mb-3 col">
             <TotalSupplyCBT/>
-            <MarketcapCBT/>
             <PriceCBT/>
             <LatestAttestationInfo/>
           </table>
