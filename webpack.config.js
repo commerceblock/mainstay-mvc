@@ -84,10 +84,10 @@ module.exports = {
     inline: true,
     open: true,
     hot: true,
-    port: 5000,
+    port: (parseInt(process.env.PORT)|| 80),
     proxy: {
-      "/api": "http://localhost:3000",
-      "/ctrl": "http://localhost:3000",
+      "/api": "http://" + (process.env.HOST_API || "localhost") + ":" + (process.env.PORT_API || "3000"),
+      "/ctrl": "http://" + (process.env.HOST_API || "localhost") + ":" + (process.env.PORT_API || "3000")
     }
   },
   devtool: "eval-source-map"

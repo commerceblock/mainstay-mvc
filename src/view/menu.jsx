@@ -30,8 +30,7 @@ class Menu extends React.Component {
         <Button color="muted" onClick={this.toggle}>Send Commitment {this.props.buttonLabel}</Button>
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Send Commitment</ModalHeader>
-
-          <Form action="ctrl" method="POST">
+          <Form action="ctrl">
             <ModalBody>
               <FormGroup>
                 <Label>Position</Label>
@@ -55,7 +54,6 @@ class Menu extends React.Component {
               <Button color="danger" onClick={this.toggle}>Cancel</Button>
             </ModalFooter>
           </Form>
-
         </Modal>
       </div>
     );
