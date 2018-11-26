@@ -5,6 +5,7 @@ import InfoLatestTxid from './infoLatestTxid';
 import PriceCBT from './priceCBT';
 import React from 'react';
 import TotalSupplyCBT from './totalSupplyCBT';
+import LatestAttestationInfo from './latestAttestationInfo';
 
 class MainstayInfo extends React.Component {
   render() {
@@ -17,8 +18,7 @@ class MainstayInfo extends React.Component {
           <table class="mb-3 col">
             <TotalSupplyCBT/>
             <PriceCBT/>
-            <InfoLatestTxid/>
-            <InfoFees/>
+            <LatestAttestationInfo/>
           </table>
         </div>
       </div>
