@@ -53,4 +53,4 @@ app.get('*', (req, res) => {
   res.status(404).send('404 Not Found');
 })
 // Main Listening port of the app
-app.listen(env.server.port || 8080);
+app.listen(env.server.port || 80);

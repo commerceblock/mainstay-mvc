@@ -1,7 +1,6 @@
 import Axios from 'axios';
 import React from 'react';
 
-const URL = 'http://127.0.0.1';
 const CTRL_LATEST_ATTESTATION = '/ctrl/latestattestation'
 
 class LatestAttestation extends React.Component {
@@ -14,7 +13,7 @@ class LatestAttestation extends React.Component {
   }
 
   requestCtlrLatestAttestation() {
-    Axios.get(URL + CTRL_LATEST_ATTESTATION)
+    Axios.get(CTRL_LATEST_ATTESTATION)
       .then(response => this.setState({data: response.data}));
   }
 

@@ -83,7 +83,12 @@ module.exports = {
     historyApiFallback: true,
     inline: true,
     open: true,
-    hot: true
+    hot: true,
+    port: 5000,
+    proxy: {
+      "/api": "http://localhost:3000",
+      "/ctrl": "http://localhost:3000",
+    }
   },
   devtool: "eval-source-map"
 };

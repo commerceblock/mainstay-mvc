@@ -1,7 +1,6 @@
 import Axios from 'axios';
 import React from 'react';
 
-const URL = 'http://127.0.0.1';
 const CTRL_LATEST_COMMITMENT = '/ctrl/latestcommitment';
 
 class LatestCommitment extends React.Component {
@@ -14,7 +13,7 @@ class LatestCommitment extends React.Component {
   }
 
   requestCtlrLatestCommitment() {
-    Axios.get(URL + CTRL_LATEST_COMMITMENT)
+    Axios.get(CTRL_LATEST_COMMITMENT)
       .then(response => this.setState({data: response.data}));
   }
 
