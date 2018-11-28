@@ -1,7 +1,7 @@
 import Menu from './menu';
-import React from 'React';
+import { Component } from 'React'
 
-class HamburgerMenu extends React.Component {
+class HamburgerMenu extends Component {
   render() {
     return (
       <nav role="navigation" id="hamburger-menu" data-turbolinks-permanent>

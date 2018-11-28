@@ -156,7 +156,39 @@ module.exports = {
       });
     });
   },
-  // Function METHOD GET
+  ctrl_send_commitment: (req, res) => {
+    req.on('data', chunk => {
+
+      console.log(JSON.parse(chunk.toString()));
+
+      const payload = JSON.parse(chunk.toString());
+      if (payload.position !== String)
+        return res.json({error: 'position'});
+      if (payload.token !== String)
+        return res.json({error: 'token'});
+      if (payload.commitment !== String)
+        return res.json({error: 'commitment'});
+      if (payload.signature !== String)
+        return res.json({error: 'signature'});
+      models.clientDetails.find({client_position: payload.position},
+                                (error, data) => {
+        if (error)
+          return res.json({error: 'api'});
+        if (data[0].auth_token != payload.token)
+          return res.json({error: 'token'});
+        let msg = new message(payload.commitment);
+        if (msg.verify(data[0].pubkey, payload.signature) != true)
+          return res.json({error: 'signature'});
+        models.clientCommitment.findOneAndUpdate(
+            { client_position: payload.position },
+            { commitment: payload.commitment }, { upsert: true }, (error) => {
+          if (error)
+            return res.json({error: 'api'});
+          return res.send();
+        });
+      });
+    });
+  },
   index: (req, res) => {
     startTime = start_time();
     reply_msg(res, VERSION_API_V1, startTime);

@@ -1,5 +1,4 @@
-import Axios from 'axios';
-import React from 'react';
+import { Component } from 'React'
 
 const CTRL_LATEST_ATTESTATION = '/ctrl/latestattestation'
 
@@ -13,8 +12,10 @@ class LatestAttestation extends React.Component {
   }
 
   requestCtlrLatestAttestation() {
-    Axios.get(CTRL_LATEST_ATTESTATION)
-      .then(response => this.setState({data: response.data}));
+    fetch(CTRL_LATEST_ATTESTATION, {
+      method: "GET"
+    })
+    .then(response => this.setState({data: response.data}));
   }
 
   render() {

@@ -1,6 +1,6 @@
-import React from 'react';
+import { Component } from 'React'
 
-class FaviconAddrBar extends React.Component {
+class FaviconAddrBar extends Component {
   render() {
     return (
       <div class="d-flex align-items-center">
