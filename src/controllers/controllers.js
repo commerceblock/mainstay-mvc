@@ -157,6 +157,9 @@ module.exports = {
     });
   },
   ctrl_send_commitment: (req, res) => {
+
+    console.log("=> Call Send Commitment");
+
     req.on('data', chunk => {
 
       console.log(JSON.parse(chunk.toString()));

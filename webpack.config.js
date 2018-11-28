@@ -80,7 +80,7 @@ module.exports = {
     contentBase: path.resolve(__dirname, "./public"),
     historyApiFallback: true,
     inline: true,
-    open: true,
+    open: false,
     hot: true,
     port: (parseInt(process.env.PORT)|| 80),
     proxy: {

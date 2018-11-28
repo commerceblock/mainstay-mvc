@@ -1,6 +1,5 @@
-import { Component } from 'react';
-
-const CTRL_LATEST_COMMITMENT = '/ctrl/latestcommitment';
+import Axios from 'axios';
+import React, { Component } from 'react';
 
 class LatestCommitment extends Component {
   constructor() {
@@ -8,13 +7,11 @@ class LatestCommitment extends Component {
     this.state = {
       data: []
     };
-    this.requestCtlrLatestCommitment();
+    this.request();
   }
 
-  requestCtlrLatestCommitment() {
-    fetch(CTRL_LATEST_COMMITMENT, {
-      method: "GET"
-    })
+  request() {
+    Axios.get('/ctrl/latestcommitment')
     .then(response => this.setState({data: response.data}));
   }
 

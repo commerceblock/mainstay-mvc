@@ -1,9 +1,9 @@
 import PriceCBT from './priceCBT';
-import React from 'react';
 import TotalSupplyCBT from './totalSupplyCBT';
 import LatestAttestationInfo from './latestAttestationInfo';
+import React, { Component } from 'react';
 
-class MainstayInfo extends React.Component {
+class MainstayInfo extends Component {
   render() {
     return (
       <div class="col-md-6">

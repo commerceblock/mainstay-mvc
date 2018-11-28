@@ -1,11 +1,11 @@
-// import FaviconAddrBar from './faviconAddrBar';
-// import FooterPage from './footerPage';
-// import HamburgerMenu from './hamburgerMenu';
-// import LatestAttestation from './latestAttestation';
-// import LatestCommitment from './latestCommitment';
-// import MainstayInfo from './mainstayInfo';
-// import Navbar from './navbar';
-import { Component } from 'react';
+import FaviconAddrBar from './faviconAddrBar';
+import FooterPage from './footerPage';
+import HamburgerMenu from './hamburgerMenu';
+import LatestAttestation from './latestAttestation';
+import LatestCommitment from './latestCommitment';
+import MainstayInfo from './mainstayInfo';
+import Navbar from './navbar';
+import React, { Component } from 'react';
 
 class Home extends Component {
   render() {
@@ -13,32 +13,24 @@ class Home extends Component {
       <div class="top-nav">
         <div class="container">
           <div class="d-flex align-items-center flex-wrap">
-            <strong> looooooool </strong>
+            <FaviconAddrBar/>
+            <Navbar/>
+            <HamburgerMenu/>
           </div>
         </div>
         <div class="container main" data-controller="main">
           <div class="row" data-controller="homepageMempool">
-
+            <MainstayInfo/>
             <div class="col-md-6">
-
-              </div>
+              <LatestAttestation/>
+              <LatestCommitment/>
+            </div>
           </div>
         </div>
-
+        <FooterPage/>
       </div>
     );
   }
 }
-//
-// <FaviconAddrBar/>
-// <Navbar/>
-// <HamburgerMenu/>
-
-// <MainstayInfo/>
-
-// <LatestAttestation/>
-// <LatestCommitment/>
-
-// <FooterPage/>
 
 export default Home;

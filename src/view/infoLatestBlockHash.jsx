@@ -1,4 +1,4 @@
-import { Component } from 'React'
+import React, { Component } from 'react';
 
 class InfoLatestBlockHash extends Component {
   render() {

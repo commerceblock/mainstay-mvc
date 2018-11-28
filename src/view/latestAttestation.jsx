@@ -1,20 +1,17 @@
-import { Component } from 'React'
+import Axios from 'axios';
+import React, { Component } from 'react';
 
-const CTRL_LATEST_ATTESTATION = '/ctrl/latestattestation'
-
-class LatestAttestation extends React.Component {
+class LatestAttestation extends Component {
   constructor() {
     super();
     this.state = {
       data: []
     };
-    this.requestCtlrLatestAttestation();
+    this.request();
   }
 
-  requestCtlrLatestAttestation() {
-    fetch(CTRL_LATEST_ATTESTATION, {
-      method: "GET"
-    })
+  request() {
+    Axios.get('/ctrl/latestattestation')
     .then(response => this.setState({data: response.data}));
   }
 

@@ -1,6 +1,5 @@
-import {
-  Component
-} from 'React'
+import Axios from 'axios';
+import React, { Component } from 'react';
 import {
   Button,
   Form,
@@ -33,18 +32,12 @@ class Menu extends Component {
   }
 
   handleSubmit(event) {
-    fetch('/ctrl/sendcommitment', {
-      method: "POST",
-      headers: JSON.stringify({
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }),
-      body: JSON.stringify({
-        position: this.state.position,
-        token: this.state.token,
-        commitment: this.state.commitment,
-        signature: this.state.signature
-      })
+    event.preventDefault();
+    Axios.post('/ctrl/sendcommitment', {
+      position: this.state.position,
+      token: this.state.token,
+      commitment: this.state.commitment,
+      signature: this.state.signature
     });
   }
 
