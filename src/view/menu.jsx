@@ -39,6 +39,7 @@ class Menu extends Component {
       commitment: this.state.commitment,
       signature: this.state.signature
     });
+    this.toggle();
   }
 
   toggle() {
@@ -71,7 +72,7 @@ class Menu extends Component {
               </FormGroup>
             </ModalBody>
             <ModalFooter>
-              <Input color="success" type="submit">Send</Input>
+              <Button color="success" type="submit">Send</Button>
               <Button color="danger" onClick={this.toggle}>Cancel</Button>
             </ModalFooter>
           </Form>
