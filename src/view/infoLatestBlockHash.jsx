@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-class InfoLatestBlockHash extends React.Component {
+class InfoLatestBlockHash extends Component {
   render() {
     return (
       <div class="mb-3 flex-table">

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Sockette from 'sockette'
 
-class PriceCBT extends React.Component {
+class PriceCBT extends Component {
   constructor() {
     super();
     this.state = {

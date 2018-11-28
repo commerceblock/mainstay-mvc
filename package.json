@@ -34,7 +34,8 @@
     "react-popup": "^0.9.3",
     "react-router-dom": "^4.3.1",
     "reactstrap": "^6.5.0",
-    "sockette": "^2.0.3"
+    "sockette": "^2.0.3",
+    "yarn": "^1.12.3"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",

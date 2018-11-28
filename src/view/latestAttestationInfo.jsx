@@ -1,28 +1,25 @@
-import React from 'react';
 import Axios from 'axios';
+import React, { Component } from 'react';
 
-const CTRL_LATEST_ATTESTATION_INFO = '/ctrl/latestattestationinfo';
-
-class LatestAttestationInfo extends React.Component {
+class LatestAttestationInfo extends Component {
   constructor() {
     super();
     this.state = {
       data: null,
       fee: 0
     };
-    this.requestCtlrLatestAttestationInfo();
+    this.request();
   }
 
-  requestCtlrLatestAttestationInfo() {
-    Axios.get(CTRL_LATEST_ATTESTATION_INFO)
-      .then(response => {
-        var dataLength = response.data.length
-        var feeSum = 0
-        for (var i=1; i<dataLength; i++) {
-        feeSum += response.data[i].amount - response.data[i-1].amount
-        }
-        this.setState({data: response.data[0], fee: feeSum/(dataLength-1)})
-      });
+  request() {
+    Axios.get('/ctrl/latestattestationinfo')
+    .then(response => {
+      var dataLength = response.data.length;
+      var feeSum = 0;
+      for (var i = 1; i < dataLength; ++i)
+        feeSum += response.data[i].amount - response.data[i - 1].amount;
+      this.setState({data: response.data[0], fee: feeSum / (dataLength - 1)})
+    });
   }
 
   render() {

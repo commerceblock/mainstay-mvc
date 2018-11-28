@@ -71,9 +71,7 @@ module.exports = {
     filename: './bundle.js'
   },
   plugins: [
-
     new MiniCssExtractPlugin({filename: "[name].css", chunkFilename: "[id].css"}),
-
     new UglifyJSPlugin(),
     new htmlWebPackPlugin({template: "./public/index.html",filename: "./index.html"}),
     new webpack.HotModuleReplacementPlugin()
@@ -82,7 +80,7 @@ module.exports = {
     contentBase: path.resolve(__dirname, "./public"),
     historyApiFallback: true,
     inline: true,
-    open: true,
+    open: false,
     hot: true,
     port: (parseInt(process.env.PORT)|| 80),
     proxy: {

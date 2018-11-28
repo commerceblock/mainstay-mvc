@@ -5,9 +5,9 @@ import LatestAttestation from './latestAttestation';
 import LatestCommitment from './latestCommitment';
 import MainstayInfo from './mainstayInfo';
 import Navbar from './navbar';
-import React from 'react';
+import React, { Component } from 'react';
 
-class Home extends React.Component {
+class Home extends Component {
   render() {
     return (
       <div class="top-nav">
@@ -27,7 +27,7 @@ class Home extends React.Component {
             </div>
           </div>
         </div>
-          <FooterPage/>
+        <FooterPage/>
       </div>
     );
   }

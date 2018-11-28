@@ -1,20 +1,18 @@
 import Axios from 'axios';
-import React from 'react';
+import React, { Component } from 'react';
 
-const CTRL_LATEST_COMMITMENT = '/ctrl/latestcommitment';
-
-class LatestCommitment extends React.Component {
+class LatestCommitment extends Component {
   constructor() {
     super();
     this.state = {
       data: []
     };
-    this.requestCtlrLatestCommitment();
+    this.request();
   }
 
-  requestCtlrLatestCommitment() {
-    Axios.get(CTRL_LATEST_COMMITMENT)
-      .then(response => this.setState({data: response.data}));
+  request() {
+    Axios.get('/ctrl/latestcommitment')
+    .then(response => this.setState({data: response.data}));
   }
 
   render() {

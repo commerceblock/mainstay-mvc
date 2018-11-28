@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-class FooterPage extends React.Component {
+class FooterPage extends Component {
   render() {
     return (
       <footer class="navbar-fixed-bottom">

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-class TotalSupplyCBT extends React.Component {
+class TotalSupplyCBT extends Component {
   render() {
     return (
       <div class="mb-3 flex-table">
