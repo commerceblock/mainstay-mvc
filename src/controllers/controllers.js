@@ -159,13 +159,13 @@ module.exports = {
   ctrl_send_commitment: (req, res) => {
     req.on('data', chunk => {
       const payload = JSON.parse(chunk.toString());
-      if (payload.position !== String)
+      if (payload.position === undefined)
         return res.json({error: 'position'});
-      if (payload.token !== String)
+      if (payload.token === undefined)
         return res.json({error: 'token'});
-      if (payload.commitment !== String)
+      if (payload.commitment === undefined)
         return res.json({error: 'commitment'});
-      if (payload.signature !== String)
+      if (payload.signature === undefined)
         return res.json({error: 'signature'});
       models.clientDetails.find({client_position: payload.position},
                                 (error, data) => {

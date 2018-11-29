@@ -17,10 +17,10 @@ class Menu extends Component {
     super(props);
     this.state = {
       modal: false,
-      position: null,
-      token: null,
-      commitment: null,
-      signature: null
+      position: undefined,
+      token: undefined,
+      commitment: undefined,
+      signature: undefined
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -38,6 +38,11 @@ class Menu extends Component {
       token: this.state.token,
       commitment: this.state.commitment,
       signature: this.state.signature
+    })
+    .then((res) => {
+
+      console.log(res);
+
     });
     this.toggle();
   }
