@@ -39,11 +39,6 @@ class Menu extends Component {
       commitment: this.state.commitment,
       signature: this.state.signature
     })
-    .then((res) => {
-
-      console.log(res);
-
-    });
     this.toggle();
   }
 
