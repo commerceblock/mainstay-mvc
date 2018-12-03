@@ -21,33 +21,107 @@ function originIsAllowed(origin) {
 
 var connection = undefined;
 
-function subscribe(data) {
+function unsubscribe_channel_attestation() {
+  connection.sendUTF(JSON.stringify({
+    event: "unsubscribed",
+    id: 0
+  }));
+}
 
+function unsubscribe_channel_attestationinfo() {
+  connection.sendUTF(JSON.stringify({
+    event: "unsubscribed",
+    id: 0
+  }));
+}
+
+function unsubscribe_channel_merklecommitment() {
+  connection.sendUTF(JSON.stringify({
+    event: "unsubscribed",
+    id: 0
+  }));
+}
+
+function unsubscribe_channel_merkleproof() {
+  connection.sendUTF(JSON.stringify({
+    event: "unsubscribed",
+    id: 0
+  }));
+}
+
+function subscribe_channel_attestation() {
+  connection.sendUTF(JSON.stringify({
+    event: "subscribed",
+    channel: "attestation",
+    id: 0
+  }));
+}
+
+function subscribe_channel_attestationinfo() {
+  connection.sendUTF(JSON.stringify({
+    event: "subscribed",
+    channel: "attestationinfo",
+    id: 0
+  }));
+}
+
+function subscribe_channel_merklecommitment() {
+  connection.sendUTF(JSON.stringify({
+    event: "subscribed",
+    channel: "merklecommitment",
+    id: 0
+  }));
+}
+
+function subscribe_channel_merkleproof() {
+  connection.sendUTF(JSON.stringify({
+    event: "subscribed",
+    channel: "merkleproof",
+    id: 0
+  }));
+}
+
+function unsubscribe(data) {
   if (data.channel === 'attestation')
-    ;
+    channel_attestation();
   else if (data.channel === 'attestationinfo')
-    ;
+    channel_attestationinfo();
   else if (data.channel === 'merklecommitment')
-    ;
+    channel_merklecommitment();
   else if (data.channel === 'merkleproof')
-    ;
+    channel_merkleproof();
   else
-    ;
+    console.log("ERROR FDP");
+}
+
+function subscribe(data) {
+  if (data.channel === 'attestation')
+    console.log('attestation');
+  else if (data.channel === 'attestationinfo')
+    console.log('attestationinfo');
+  else if (data.channel === 'merklecommitment')
+    console.log('merklecommitment');
+  else if (data.channel === 'merkleproof')
+    console.log('merkleproof');
+  else
+    console.log("ERROR FDP");
 }
 
 function api_websocket(message) {
   if (message.type === 'utf8') {
     var data = JSON.parse(message.utf8Data);
     if (data.event === 'ping')
-      return connection.sendUTF("pong");
+      return connection.sendUTF(JSON.stringify({event: "pong"}));
     else if (data.event === 'subscribe')
-      return subscribe();
+      return subscribe(data);
+    else if (data.event === 'unsubscribe')
+      return subscribe(data);
     else
-      return connection.sendUTF({error: ERROR_OPTION_NOT_VALID});
+      return connection.sendUTF(JSON.stringify({event: "error"}));
   } else if (message.type === 'binary') {
     // message.binaryData.length
     // message.binaryData
-    connection.sendBytes({error: ERROR_BINARY});
+    connection.sendBytes(JSON.stringify({error: ERROR_BINARY}));
   }
 }
 

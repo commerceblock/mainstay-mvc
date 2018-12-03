@@ -20,19 +20,47 @@ client.on('connect', (connection) => {
       console.log("Received: '" + message.utf8Data + "'");
   });
 
+  //////////////////////////////////////////////////////////////////////////////
+  ///
+  //////////////////////////////////////////////////////////////////////////////
+
   function ping(connection) {
     if (connection.connected) {
       connection.sendUTF(JSON.stringify({event: "ping"}));
     }
   }
 
-  ping(connection);
-  ping(connection);
-  ping(connection);
-  ping(connection);
-  ping(connection);
-  ping(connection);
+  function channel_attestation(connection) {
+    if (connection.connected) {
+      connection.sendUTF(JSON.stringify({event: "subscribe", channel: "attestation"}));
+    }
+  }
 
+  function channel_attestationinfo(connection) {
+    if (connection.connected) {
+      connection.sendUTF(JSON.stringify({event: "subscribe", channel: "attestationinfo"}));
+    }
+  }
+
+  function channel_merklecommitment(connection) {
+    if (connection.connected) {
+      connection.sendUTF(JSON.stringify({event: "subscribe", channel: "merklecommitment"}));
+    }
+  }
+
+  function channel_merkleproof(connection) {
+    if (connection.connected) {
+      connection.sendUTF(JSON.stringify({event: "subscribe", channel: "merkleproof"}));
+    }
+  }
+
+  ping(connection);
+  channel_attestation(connection);
+  channel_attestationinfo(connection);
+  channel_merklecommitment(connection);
+  channel_merkleproof(connection);
+
+  //////////////////////////////////////////////////////////////////////////////
 });
 
 client.connect('ws://localhost:8080');
