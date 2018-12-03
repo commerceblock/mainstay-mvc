@@ -1,8 +1,12 @@
+#!/usr/bin/env node
 var express = require('express');
 var env = require('../src/env');
 var mongoose = require('mongoose');
 var api = require('./controllers/controllers');
 var app = express();
+
+require('./websocket/api_websocket');
+
 // MACRO
 const API_INDEX = '/api/v1'
 const API_LATEST_ATTESTATION = '/api/v1/latestattestation'
