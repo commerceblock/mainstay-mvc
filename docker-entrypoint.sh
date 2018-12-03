@@ -8,7 +8,7 @@ case "$1" in
             ;;
         webpack)
             echo "Running webpack dev server"
-            webpack-dev-server
+            ./node_modules/webpack-dev-server/bin/webpack-dev-server.js
             ;;
         shell)
             bash
