@@ -28,7 +28,8 @@ RUN set -x \
         webpack-dev-server \
 	html-webpack-plugin \
 	uglifyjs-webpack-plugin \
-        mini-css-extract-plugin
+        mini-css-extract-plugin \
+	mongoose
 	
 
 ENTRYPOINT ["/usr/src/mainstay-mvc/docker-entrypoint.sh"]
