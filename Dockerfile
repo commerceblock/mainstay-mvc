@@ -21,16 +21,8 @@ COPY . /usr/src/mainstay-mvc
 WORKDIR /usr/src/mainstay-mvc
 
 RUN set -x \
-    && yarn \
-    && yarn add \
-        webpack \
-	webpack-cli \
-        webpack-dev-server \
-	html-webpack-plugin \
-	uglifyjs-webpack-plugin \
-        mini-css-extract-plugin \
-	mongoose
-	
+    && cd /usr/src/mainstay-mvc \
+    && yarn install
 
 ENTRYPOINT ["/usr/src/mainstay-mvc/docker-entrypoint.sh"]
 CMD ["node", "/src/api.js"]
