@@ -1,38 +1,38 @@
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema;
 
-var schemaAttestation = new Schema({
+const schemaAttestation = new Schema({
   merkle_root: String,
   txid: String,
   confirmed: Boolean,
   inserted_at: Date
 }, { collection: 'Attestation' });
 
-var schemaAttestationInfo = new Schema({
+const schemaAttestationInfo = new Schema({
   txid: String,
   amount: Number,
   blockhash: String,
   time: Number
 }, { collection: 'AttestationInfo' });
 
-var schemaClientCommitment = new Schema({
+const schemaClientCommitment = new Schema({
   commitment: String,
   client_position: Number
 }, { collection: 'ClientCommitment', versionKey: false });
 
-var schemaClientDetails = new Schema({
+const schemaClientDetails = new Schema({
   client_position: Number,
   auth_token: String,
   pubkey: String,
 }, { collection: 'ClientDetails' });
 
-var schemaMerkleCommitment = new Schema({
+const schemaMerkleCommitment = new Schema({
   commitment: String,
   merkle_root: String,
   client_position: Number
 }, { collection: 'MerkleCommitment' });
 
-var schemaMerkleProof = new Schema({
+const schemaMerkleProof = new Schema({
   client_position: Number,
   merkle_root: String,
   commitment: String,

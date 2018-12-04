@@ -5,6 +5,7 @@
     "mini-css-extract-plugin": "^0.4.5",
     "mongoose": "^5.3.14",
     "nodejs-base64": "^1.0.3",
+    "pusher": "^2.2.0",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "webpack": "^4.26.1",
     "webpack-cli": "^3.1.2",
