@@ -16,8 +16,15 @@ class LatestAttestationInfo extends Component {
     .then(response => {
       var dataLength = response.data.length;
       var feeSum = 0;
-      for (var i = 1; i < dataLength; ++i)
-        feeSum += response.data[i].amount - response.data[i - 1].amount;
+      for (var i = 1; i < dataLength; ++i) {
+        var feeDiff = response.data[i].amount - response.data[i - 1].amount;
+
+        // check for diffs larger than zero so that fee sum
+        // is not negative when there is a topup transaction
+        if (feeDiff > 0)
+            feeSum += feeDiff;
+      }
+
       this.setState({data: response.data[0], fee: feeSum / (dataLength - 1)})
     });
   }
