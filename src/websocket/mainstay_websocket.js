@@ -212,21 +212,51 @@ function watch_mongo() {
   const streamAttestationInfo = models.attestationInfo.watch();
   const streamMerkleCommitment = models.merkleCommitment.watch();
   const streamMerkleProof = models.merkleProof.watch();
-
   streamAttestation.on('change', (change) => {
-    console.log(change);
+    let message = JSON.stringify([0, [
+      change.fullDocument.merkle_root,
+      change.fullDocument.txid,
+      change.fullDocument.confirmed,
+      change.fullDocument.inserted_at
+    ]]);
+    for (let itr = 0; itr < channelAttestation.length; ++itr)
+      channelAttestation[itr].client.sendUTF(message);
   });
-
   streamAttestationInfo.on('change', (change) => {
-    console.log(change);
+    let message = JSON.stringify([1, [
+      change.fullDocument.client_position,
+      change.fullDocument.commitment
+    ]]);
+    for (let itr = 0; itr < channelAttestationInfo.length; ++itr)
+      channelAttestationInfo[itr].client.sendUTF(message);
   });
-
   streamMerkleCommitment.on('change', (change) => {
-    console.log(change);
+    let message = JSON.stringify([2, [
+      change.fullDocument.client_position,
+      change.fullDocument.merkle_root,
+      change.fullDocument.commitment
+    ]]);
+    for (let itr = 0; itr < channelAttestationInfo.length; ++itr)
+      channelAttestationInfo[itr].client.sendUTF(message);
   });
-
   streamMerkleProof.on('change', (change) => {
-    console.log(change);
+    let message = JSON.stringify([3, [
+      change.fullDocument.client_position,
+      change.fullDocument.merkle_root,
+      change.fullDocument.commitment,
+      [
+        [
+          change.fullDocument.ops[0].append,
+          change.fullDocument.ops[0].commitment
+        ],
+        [
+          change.fullDocument.ops[1].append,
+          change.fullDocument.ops[1].commitment
+        ]
+      ]
+    ]]);
+    for (let itr = 0; itr < channelMerkleProof.length; ++itr)
+      channelMerkleProof[itr].client.sendUTF(message);
   });
 }
 
