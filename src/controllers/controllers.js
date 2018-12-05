@@ -118,7 +118,7 @@ module.exports = {
   },
   ctrl_latest_attestation_info: (req, res) => {
     let response = [];
-    models.attestationInfo.find().sort({ time: -1 }).limit(5)
+    models.attestationInfo.find().sort({ time: -1 }).limit(10)
                       .exec((error, data) => {
       if (error)
         return ; // TODO Add message error
