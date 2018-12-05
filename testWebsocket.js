@@ -30,35 +30,37 @@ client.on('connect', (connection) => {
     }
   }
 
-  function channel_attestation(connection) {
+  function channel_subscribe_attestation(connection) {
     if (connection.connected) {
       connection.sendUTF(JSON.stringify({event: "subscribe", channel: "attestation"}));
     }
   }
 
-  function channel_attestationinfo(connection) {
+  function channel_subscribe_attestationinfo(connection) {
     if (connection.connected) {
       connection.sendUTF(JSON.stringify({event: "subscribe", channel: "attestationinfo"}));
     }
   }
 
-  function channel_merklecommitment(connection) {
+  function channel_subscribe_merklecommitment(connection) {
     if (connection.connected) {
       connection.sendUTF(JSON.stringify({event: "subscribe", channel: "merklecommitment"}));
     }
   }
 
-  function channel_merkleproof(connection) {
+  function channel_subscribe_merkleproof(connection) {
     if (connection.connected) {
       connection.sendUTF(JSON.stringify({event: "subscribe", channel: "merkleproof"}));
     }
   }
 
   ping(connection);
-  channel_attestation(connection);
-  channel_attestationinfo(connection);
-  channel_merklecommitment(connection);
-  channel_merkleproof(connection);
+  channel_subscribe_attestation(connection);
+  channel_subscribe_attestation(connection);
+
+  channel_subscribe_attestationinfo(connection);
+  channel_subscribe_merklecommitment(connection);
+  channel_subscribe_merkleproof(connection);
 
   //////////////////////////////////////////////////////////////////////////////
 });

@@ -6,27 +6,32 @@ const CHANNEL_ATTESTATION = 'attestation';
 const CHANNEL_ATTESTATION_INFO = 'attestationinfo';
 const CHANNEL_MERKLE_COMMITMENT = 'merklecommitment';
 const CHANNEL_MERKLE_PROOF = 'merkleproof';
+const ERROR = 'error';
 const ERROR_BINARY = "websocket support in binary is not support";
 const ERROR_OPTION_NOT_VALID = "the argument is missing or wrong";
 const EVENT_PING = "ping";
 const EVENT_SUBSCRIBE = 'subscribe';
 const EVENT_UNSUBSCRIBE = 'unsubscribe';
+const NOT_SUBSCRIBED = 'Not Subscribed';
 const SUBSCRIBE = 'subscribe';
 const SUBSCRIBED = 'subscribed';
 const UTF8 = 'utf8';
 const UNSUBSCRIBE = 'unsubscribe';
 const UNSUBSCRIBED = 'unsubscribed';
 
-var channelAll = [];
 var channelAttestation = [];
 var channelAttestationInfo = [];
 var channelMerkleCommitment = [];
 var channelMerkleProof = [];
 
 function subscribe_channel_attestation(client) {
-  const id = channelAll.push(client);
-  channelAttestation.push(client);
-
+  for (var itr = 0; itr < channelAttestation.length; ++itr)
+    if (channelAttestation[itr].client === client)
+      return client.sendUTF(JSON.stringify({
+        event: ERROR,
+        msg: NOT_SUBSCRIBED
+      }));
+  channelAttestation.push({ client: client });
   client.sendUTF(JSON.stringify({
     event: SUBSCRIBED,
     channel: CHANNEL_ATTESTATION,
@@ -35,68 +40,111 @@ function subscribe_channel_attestation(client) {
 }
 
 function subscribe_channel_attestationinfo(client) {
-  const id = channelAll.push(client);
-  channelAttestationInfo.push(client);
-
-
+  for (var itr = 0; itr < channelAttestationInfo.length; ++itr)
+    if (channelAttestationInfo[itr].client === client)
+      return client.sendUTF(JSON.stringify({
+        event: ERROR,
+        msg: NOT_SUBSCRIBED
+      }));
+  channelAttestationInfo.push({ client: client });
   client.sendUTF(JSON.stringify({
     event: SUBSCRIBED,
     channel: CHANNEL_ATTESTATION_INFO,
-    id: 0
+    id: 1
   }));
 }
 
 function subscribe_channel_merklecommitment(client) {
-  const id = channelAll.push(client);
-  channelMerkleCommitment.push(client);
-
+  for (var itr = 0; itr < channelMerkleCommitment.length; ++itr)
+    if (channelMerkleCommitment[itr].client === client)
+      return client.sendUTF(JSON.stringify({
+        event: ERROR,
+        msg: NOT_SUBSCRIBED
+      }));
+  channelMerkleCommitment.push({ client: client });
   client.sendUTF(JSON.stringify({
     event: SUBSCRIBED,
     channel: CHANNEL_MERKLE_COMMITMENT,
-    id: 0
+    id: 2
   }));
 }
 
 function subscribe_channel_merkleproof(client) {
-  const id = channelAll.push(client);
-  channelMerkleProof.push(client);
-
+  for (var itr = 0; itr < channelMerkleProof.length; ++itr)
+    if (channelMerkleProof[itr].client === client)
+      return client.sendUTF(JSON.stringify({
+        event: ERROR,
+        msg: NOT_SUBSCRIBED
+      }));
+  channelMerkleProof.push({ client: client });
   client.sendUTF(JSON.stringify({
     event: SUBSCRIBED,
     channel: CHANNEL_MERKLE_PROOF,
-    id: 0
+    id: 3
   }));
 }
 
 function unsubscribe_channel_attestation(client) {
-
+  for (var itr = 0; itr < channelAttestation.length; ++itr)
+    if (channelAttestation[itr].client === client) {
+      delete channelAttestation.splice(itr);
+      return client.sendUTF(JSON.stringify({
+        event: UNSUBSCRIBED,
+        status: "OK",
+        id: 0
+      }));
+    }
   client.sendUTF(JSON.stringify({
-    event: UNSUBSCRIBED,
-    id: 0
+    event: ERROR,
+    msg: NOT_SUBSCRIBED
   }));
 }
 
 function unsubscribe_channel_attestationinfo(client) {
-
+  for (var itr = 0; itr < channelAttestationInfo.length; ++itr)
+    if (channelAttestationInfo[itr].client === client) {
+      delete channelAttestationInfo.splice(itr);
+      return client.sendUTF(JSON.stringify({
+        event: UNSUBSCRIBED,
+        status: "OK",
+        id: 1
+      }));
+    }
   client.sendUTF(JSON.stringify({
-    event: UNSUBSCRIBED,
-    id: 0
+    event: ERROR,
+    msg: NOT_SUBSCRIBED
   }));
 }
 
 function unsubscribe_channel_merklecommitment(client) {
-
+  for (var itr = 0; itr < channelMerkleCommitment.length; ++itr)
+    if (channelMerkleCommitment[itr].client === client) {
+      delete channelMerkleCommitment.splice(itr);
+      return client.sendUTF(JSON.stringify({
+        event: UNSUBSCRIBED,
+        status: "OK",
+        id: 2
+      }));
+    }
   client.sendUTF(JSON.stringify({
-    event: UNSUBSCRIBED,
-    id: 0
+    event: ERROR,
+    msg: NOT_SUBSCRIBED
   }));
 }
 
 function unsubscribe_channel_merkleproof(client) {
-
+  for (var itr = 0; itr < channelMerkleProof.length; ++itr)
+    if (channelMerkleProof[itr].client === client) {
+      delete channelMerkleProof.splice(itr);
+      return client.sendUTF(JSON.stringify({
+        event: UNSUBSCRIBED,
+        status: "OK",
+        id: 3
+      }));
+    }
   client.sendUTF(JSON.stringify({
-    event: UNSUBSCRIBED,
-    id: 0
+    event: ERROR,
+    msg: NOT_SUBSCRIBED
   }));
 }
 
@@ -115,13 +163,13 @@ function subscribe(client, data) {
 
 function unsubscribe(client, data) {
   if (data.channel === CHANNEL_ATTESTATION)
-    unsubscribe_channel_attestation(client);
+    unsubscribe_channel_attestation(client, data.id);
   else if (data.channel === CHANNEL_ATTESTATION_INFO)
-    unsubscribe_channel_attestationinfo(client);
+    unsubscribe_channel_attestationinfo(client, data.id);
   else if (data.channel === CHANNEL_MERKLE_COMMITMENT)
-    unsubscribe_channel_merklecommitment(client);
+    unsubscribe_channel_merklecommitment(client, data.id);
   else if (data.channel === CHANNEL_MERKLE_PROOF)
-    unsubscribe_channel_merkleproof(client);
+    unsubscribe_channel_merkleproof(client, data.id);
   else
     console.log("ERROR FDP");
 }
@@ -134,7 +182,7 @@ function listen(message) {
     else if (data.event === EVENT_SUBSCRIBE)
       return subscribe(this, data);
     else if (data.event === EVENT_UNSUBSCRIBE)
-      return subscribe(this, data);
+      return unsubscribe(this, data);
     else
       return connection.sendUTF(JSON.stringify({event: "error"}));
   } else if (message.type === 'binary') {
@@ -145,12 +193,19 @@ function listen(message) {
 }
 
 function close(reasonCode, description) {
-  console.log(
-    (new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+  for (let itr = 0; itr < channelAttestation.length; ++itr)
+    if (channelAttestation[itr].client === this)
+      delete channelAttestation.splice(itr);
+  for (let itr = 0; itr < channelAttestationInfo.length; ++itr)
+    if (channelAttestationInfo[itr].client === this)
+      delete channelAttestationInfo.splice(itr);
+  for (let itr = 0; itr < channelMerkleCommitment.length; ++itr)
+    if (channelMerkleCommitment[itr].client === this)
+      delete channelMerkleCommitment.splice(itr);
+  for (let itr = 0; itr < channelMerkleProof.length; ++itr)
+    if (channelMerkleProof[itr].client === this)
+      delete channelMerkleProof.splice(itr);
 }
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
 
 function watch_mongo() {
   const streamAttestation = models.attestation.watch();
@@ -159,19 +214,19 @@ function watch_mongo() {
   const streamMerkleProof = models.merkleProof.watch();
 
   streamAttestation.on('change', (change) => {
-
+    console.log(change);
   });
 
   streamAttestationInfo.on('change', (change) => {
-
+    console.log(change);
   });
 
   streamMerkleCommitment.on('change', (change) => {
-
+    console.log(change);
   });
 
   streamMerkleProof.on('change', (change) => {
-
+    console.log(change);
   });
 }
 
