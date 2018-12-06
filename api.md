@@ -124,6 +124,6 @@ client_position | auth_token | pubkey
 
 *authentication*: authenticate client
 
-*write*: update commitment for client on LatestCommitment
+*write*: update commitment for client on ClientCommitment
 
 *return*: acknowledgement
