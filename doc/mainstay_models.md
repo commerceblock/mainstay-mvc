@@ -1,26 +1,54 @@
-# mainstay API
+# mainstay models
 
-## Database Models
+## Mongo DB Collections
 
-### Attestation (API READ ONLY)
+### Attestation
+
+#### sample table
+
 txid | merkle_root | confirmed | inserted_at
 --- | --- | --- | ---
 txid0 | 12345... | true | 2018-11-02 16:59:19.000
 txid1 | 22345... | true | 2018-11-03 16:59:19.000
 txid2 | 32345... | true | 2018-11-04 16:59:19.000
 txid3 | 42345... | false | 2018-11-05 16:59:19.000
-...
 
-### AttestationInfo (API READ ONLY)
+
+#### columns
+
+- txid: 64 char String
+- merkle_root: 64 char String
+- confirmed: Boolean
+- inserted_at: Date
+
+#### permissions
+*read only*
+
+### AttestationInfo
+
+#### sample table
+
 txid | blockhash | amount | time
 --- | --- | --- | ---
 txid0 | 12345... | 100 | 1542121293
 txid1 | 22345... | 99 | 1542121294
 txid2 | 32345... | 98 | 1542121295
 txid3 | 42345... | 97 | 1542121296
-...
 
-### MerkleCommitment (API READ ONLY)
+#### columns
+
+- txid: 64 char String
+- blockhash: 64 char String
+- amount: Int64
+- time: Int64
+
+#### permissions
+*read only*
+
+### MerkleCommitment
+
+#### sample table
+
 merkle_root | client_position | commitment
 --- | --- | ---
 12345... | 0 | 6789a...
@@ -31,9 +59,20 @@ merkle_root | client_position | commitment
 22345... | 1 | ...
 22345... | 2 | ...
 22345... | 3 | ...
-...
 
-### MerkleProof (API READ ONLY)
+#### columns
+
+- merkle_root: 64 char String
+- client_position: int32
+- commitment: 64 char string
+
+#### permissions
+*read only*
+
+### MerkleProof
+
+#### sample table
+
 merkle_root | client_position | commitment | ops
 --- | --- | --- | ---
 12345... | 0 | 6789a... | [{}, {}, ...]
@@ -44,9 +83,21 @@ merkle_root | client_position | commitment | ops
 22345... | 1 | ... | ...
 22345... | 2 | ... | ...
 22345... | 3 | ... | ...
-...
 
-### ClientCommitment (API WRITE)
+#### columns
+
+- merkle_root: 64 char String
+- client_position: Int32
+- commitment: 64 char String
+- ops: []ProofObject
+- ProofObject: {append: bool, commitment: 64 char String}
+
+#### permissions
+*read only*
+
+### ClientCommitment
+
+#### sample table
 client_position | commitment
 --- | ---
 0 | 9abcd...
@@ -54,7 +105,17 @@ client_position | commitment
 2 | 1abcd...
 3 | 2abcd...
 
+#### columns
+
+- client_position: Int32
+- commitment: 64 char String
+
+#### permissions
+*read/write*
+
 ### ClientDetails (API READ ONLY)
+
+#### sample table
 client_position | auth_token | pubkey
 --- | --- | ---
 0 | ... | ...
@@ -62,20 +123,14 @@ client_position | auth_token | pubkey
 2 | ... | ...
 3 | ... | ...
 
-### columns
-- confirmed: bool
-- inserted_at: Date
-- client_position: int32
-- txid: string (64 char / 32 byte)
-- merkle_root: string (64 char / 32 byte)
-- commitment: string (64 char / 32 byte)
-- blockhash: string (64 char / 32 byte)
-- ops: Array of ProofObject
-- ProofObject: {append: bool, commitment: string(64char / 32 byte)}
-- auth_token: base64 string
-- pubkey: 33 byte (compressed), 65 byte (uncompressed)
-- amount: int64
-- time: int64
+#### columns
+
+- client_position: Int32
+- auth_token: base64 String
+- pubkey: 66 char String (compressed), 130 char String (uncompressed)
+
+#### permissions
+*read only*
 
 ## API Routes
 - **/api/latestcommitment GET**
