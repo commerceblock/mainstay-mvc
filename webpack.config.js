@@ -82,6 +82,7 @@ module.exports = {
     inline: true,
     open: false,
     hot: true,
+    host: (process.env.HOST || "0.0.0.0"),
     port: (parseInt(process.env.PORT)|| 80),
     proxy: {
       "/api": "http://" + (process.env.HOST_API || "localhost") + ":" + (process.env.PORT_API || "3000"),
