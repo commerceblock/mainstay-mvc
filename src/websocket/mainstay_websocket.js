@@ -15,9 +15,10 @@ const EVENT_UNSUBSCRIBE = 'unsubscribe';
 const NOT_SUBSCRIBED = 'Not Subscribed';
 const SUBSCRIBE = 'subscribe';
 const SUBSCRIBED = 'subscribed';
-const UTF8 = 'utf8';
+const UPDATE = 'change';
 const UNSUBSCRIBE = 'unsubscribe';
 const UNSUBSCRIBED = 'unsubscribed';
+const UTF8 = 'utf8';
 
 var channelAttestation = [];
 var channelAttestationInfo = [];
@@ -84,6 +85,17 @@ function subscribe_channel_merkleproof(client) {
   }));
 }
 
+function subscribe_channel_price_BTC(client) {
+
+}
+
+function subscribe_channel_price_CBT(client) {
+
+}
+
+
+
+
 function unsubscribe_channel_attestation(client) {
   for (var itr = 0; itr < channelAttestation.length; ++itr)
     if (channelAttestation[itr].client === client) {
@@ -148,6 +160,15 @@ function unsubscribe_channel_merkleproof(client) {
   }));
 }
 
+function unsubscribe_channel_price_BTC(client) {
+
+}
+
+function unsubscribe_channel_price_CBT(client) {
+
+}
+
+
 function subscribe(client, data) {
   if (data.channel === CHANNEL_ATTESTATION)
     subscribe_channel_attestation(client)
@@ -157,6 +178,10 @@ function subscribe(client, data) {
     subscribe_channel_merklecommitment(client);
   else if (data.channel === CHANNEL_MERKLE_PROOF)
     subscribe_channel_merkleproof(client);
+  else if (data.channel === CHANNEL_PRICE_BTC)
+    subscribe_channel_price_BTC(client);
+  else if (data.channel === CHANNEL_PRICE_CBT)
+    subscribe_channel_price_CBT(client);
   else
     console.log("ERROR FDP");
 }
@@ -170,6 +195,10 @@ function unsubscribe(client, data) {
     unsubscribe_channel_merklecommitment(client, data.id);
   else if (data.channel === CHANNEL_MERKLE_PROOF)
     unsubscribe_channel_merkleproof(client, data.id);
+  else if (data.channel === CHANNEL_PRICE_BTC)
+    unsubscribe_channel_price_BTC(client);
+  else if (data.channel === CHANNEL_PRICE_CBT)
+    unsubscribe_channel_price_CBT(client);
   else
     console.log("ERROR FDP");
 }
@@ -212,46 +241,46 @@ function watch_mongo() {
   const streamAttestationInfo = models.attestationInfo.watch();
   const streamMerkleCommitment = models.merkleCommitment.watch();
   const streamMerkleProof = models.merkleProof.watch();
-  streamAttestation.on('change', (change) => {
+  streamAttestation.on(UPDATE, (data) => {
     let message = JSON.stringify([0, [
-      change.fullDocument.merkle_root,
-      change.fullDocument.txid,
-      change.fullDocument.confirmed,
-      change.fullDocument.inserted_at
+      data.fullDocument.merkle_root,
+      data.fullDocument.txid,
+      data.fullDocument.confirmed,
+      data.fullDocument.inserted_at
     ]]);
     for (let itr = 0; itr < channelAttestation.length; ++itr)
       channelAttestation[itr].client.sendUTF(message);
   });
-  streamAttestationInfo.on('change', (change) => {
+  streamAttestationInfo.on(UPDATE, (data) => {
     let message = JSON.stringify([1, [
-      change.fullDocument.client_position,
-      change.fullDocument.commitment
+      data.fullDocument.client_position,
+      data.fullDocument.commitment
     ]]);
     for (let itr = 0; itr < channelAttestationInfo.length; ++itr)
       channelAttestationInfo[itr].client.sendUTF(message);
   });
-  streamMerkleCommitment.on('change', (change) => {
+  streamMerkleCommitment.on(UPDATE, (data) => {
     let message = JSON.stringify([2, [
-      change.fullDocument.client_position,
-      change.fullDocument.merkle_root,
-      change.fullDocument.commitment
+      data.fullDocument.client_position,
+      data.fullDocument.merkle_root,
+      data.fullDocument.commitment
     ]]);
     for (let itr = 0; itr < channelAttestationInfo.length; ++itr)
       channelAttestationInfo[itr].client.sendUTF(message);
   });
-  streamMerkleProof.on('change', (change) => {
+  streamMerkleProof.on(UPDATE, (data) => {
     let message = JSON.stringify([3, [
-      change.fullDocument.client_position,
-      change.fullDocument.merkle_root,
-      change.fullDocument.commitment,
+      data.fullDocument.client_position,
+      data.fullDocument.merkle_root,
+      data.fullDocument.commitment,
       [
         [
-          change.fullDocument.ops[0].append,
-          change.fullDocument.ops[0].commitment
+          data.fullDocument.ops[0].append,
+          data.fullDocument.ops[0].commitment
         ],
         [
-          change.fullDocument.ops[1].append,
-          change.fullDocument.ops[1].commitment
+          data.fullDocument.ops[1].append,
+          data.fullDocument.ops[1].commitment
         ]
       ]
     ]]);
