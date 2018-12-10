@@ -1,9 +1,14 @@
-# mainstay-view
+# Mainstay-MVC
+
+## Technologie Used
 
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-v4.1.3-blue.svg)](https://github.com/twbs/bootstrap/tree/v4.1.3)
 [![Reactstrap](https://img.shields.io/badge/Reactstrap-v6.5.0-blue.svg)](https://github.com/reactstrap/reactstrap/releases/tag/6.5.0)
 [![React](https://img.shields.io/badge/React-v16.6.3-blue.svg)](https://github.com/facebook/react/releases/tag/v16.6.3)
 [![Webpack](https://img.shields.io/badge/Webpack-v4.27.1-blue.svg)](https://github.com/webpack/webpack/releases/tag/v4.27.1)
+
+
+## Install
 
 For install all dependency use [![Yarn](https://img.shields.io/badge/Yarn-v1.12.3-blue.svg)](https://github.com/yarnpkg/yarn/releases/tag/v1.12.3)
 
