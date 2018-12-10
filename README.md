@@ -19,6 +19,12 @@ Create replication Mongodb [![Mongodb](https://img.shields.io/badge/Mongodb-r4.1
 $ sudo mongod --replSet "rs"
 ```
 
+Launch mongo in another terminal
+
+```perl
+$ mongo
+```
+
 Import db for testing
 ```perl
 $ mongorestore -d "mainstayX" ./dbTest
