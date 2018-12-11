@@ -1,6 +1,6 @@
 # Mainstay-MVC
 
-## Technologie Used
+## Technologies Used
 
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-v4.1.3-blue.svg)](https://github.com/twbs/bootstrap/tree/v4.1.3)
 [![Reactstrap](https://img.shields.io/badge/Reactstrap-v6.5.0-blue.svg)](https://github.com/reactstrap/reactstrap/releases/tag/6.5.0)
