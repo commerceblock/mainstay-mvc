@@ -4,7 +4,7 @@ case "$1" in
         nodejs)
             echo "Running node"
             sleep 12
-            node ./src/api.js
+            node ./src/app.js
             ;;
         webpack)
             echo "Running webpack dev server"
