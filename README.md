@@ -30,6 +30,12 @@ Launch mongo in another terminal
 $ mongo
 ```
 
+In mongo
+
+```perl
+rs.initiate()
+```
+
 Import db for testing
 ```perl
 $ mongorestore -d "mainstayX" ./dbTest
