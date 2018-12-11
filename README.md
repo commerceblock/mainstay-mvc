@@ -10,7 +10,7 @@
 
 ## Install
 
-For install all dependency use [![Yarn](https://img.shields.io/badge/Yarn-v1.12.3-blue.svg)](https://github.com/yarnpkg/yarn/releases/tag/v1.12.3)
+To install all dependencies use [![Yarn](https://img.shields.io/badge/Yarn-v1.12.3-blue.svg)](https://github.com/yarnpkg/yarn/releases/tag/v1.12.3)
 
 
 ```perl
