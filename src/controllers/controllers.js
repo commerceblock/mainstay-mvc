@@ -97,7 +97,8 @@ function reply_msg(res, message, startTime) {
   res.json({ response: message, timestamp: time.getTime(),
              allowance: { cost: endTime - startTime }});
 }
-
+var dateFormat = require('dateformat');
+var now = new Date();
 module.exports = {
   ctrl_latest_attestation: (req, res) => {
     let response = [];
@@ -111,7 +112,7 @@ module.exports = {
           txid: data[itr].txid,
           merkle_root: data[itr].merkle_root,
           confirmed: data[itr].confirmed,
-          age: data[itr].inserted_at
+          age: (now.toDateString() === data[itr].inserted_at.toDateString()) ? dateFormat(data[itr].inserted_at, "HH:MM:ss") : dateFormat(data[itr].inserted_at, "HH:MM:ss dd/MM/yy")
         });
       res.json(response);
     });

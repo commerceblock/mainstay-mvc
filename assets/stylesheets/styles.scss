@@ -911,3 +911,56 @@ body.darkBG .keynav-target {
 .upcoming-vote {
   background: #0078ff1c;
 }
+
+
+
+html {
+  background-color: #fff;
+}
+
+.logo img {
+  width: 30px;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+table td a {
+  padding: 5px;
+  width: 13vw;
+  margin-left: 10px;
+  margin-right: 10px !important;
+}
+td .lastCommitement {
+  width:40vw !important;
+}
+table th span {
+  margin-left: 10px;
+  margin-right: 10px !important;
+}
+.latestAttestation {
+  margin-top: 0.2rem;
+  height: 40vh;
+  overflow: auto;
+}
+.mb-3, .my-3 {
+  margin-bottom: 0.7rem !important;
+}
+.LatestCommitment {
+  height: 40vh;
+  overflow: auto;
+}
+
+.column {
+  height: 50vh;
+}
+
+.input-group>.custom-file, .input-group>.custom-select, .input-group>.form-control {
+  font-style: italic;
+}
+.form-control:focus {
+
+  box-shadow:none !important;
+}

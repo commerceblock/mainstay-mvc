@@ -17,32 +17,36 @@ class LatestAttestation extends Component {
 
   render() {
     return (
-      <div>
-        <div class="d-flex align-items-center">
-          <h4>Latest Attestation</h4>
-          <a href="/mempool" class="pl-2 keyboard-target" data-keynav-priority>
-            <small>see more ...</small>
-          </a>
-        </div>
-        <div class="mb-3 flex-table">
-          <div class="d-flex justify-content-end header">
-            <span class="lh1rem mr-auto">Txid</span>
-            <span class="lh1rem mr-auto">MerkleRoot</span>
-            <span class="lh1rem mr-auto">Confirmed</span>
-            <span class="lh1rem mr-auto">Age</span>
+        <div class="column">
+          <div class="d-flex align-items-center">
+            <h4>Latest Attestation</h4>
+            <a href="/mempool" class="pl-2 keyboard-target" data-keynav-priority>
+              <small>see more ...</small>
+            </a>
           </div>
-          <div class="transactions md-height-rows rows">
-            { this.state.data.map((data) =>
-            <div class="d-flex flex-table-row">
-              <a class="hash truncate-hash keyboard-target" href={`/tx/${data.txid}`} title={data.txid}>{data.txid}</a>
-              <a class="hash truncate-hash keyboard-target" href={`/tx/${data.merkle_root}`} title={data.merkle_root}>{data.merkle_root}</a>
-              <span class="mono text-right ml-1">{(data.confirmed)?"true":"false"}</span>
-              <span class="mono text-right ml-1">{data.age}</span>
-            </div>
-            )}
+          <div class="mb-3 flex-table latestAttestation">
+            <table width="100%">
+              <thead>
+              <th><span class="lh1rem mr-auto">Txid</span></th>
+              <th><span class="lh1rem mr-auto">MerkleRoot</span></th>
+              <th><span class="lh1rem ">Confirmed</span></th>
+              <th><span class="lh1rem mr-auto">Age</span></th>
+              </thead>
+              <tbody>
+              {this.state.data.map((data) =>
+                  <tr>
+                    <td><a class="hash truncate-hash keyboard-target" href={`/tx/${data.txid}`}
+                           title={data.txid}>{data.txid}</a></td>
+                    <td><a class="hash truncate-hash keyboard-target" href={`/tx/${data.merkle_root}`}
+                           title={data.merkle_root}>{data.merkle_root}</a></td>
+                    <td><span class="mono text-right ml-1">{(data.confirmed) ? "true" : "false"}</span></td>
+                    <td><span class="mono text-right ml-1">{data.age}</span></td>
+                  </tr>
+              )}
+              </tbody>
+            </table>
           </div>
         </div>
-      </div>
     );
   }
 }

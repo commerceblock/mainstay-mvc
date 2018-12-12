@@ -5,7 +5,9 @@ class FaviconAddrBar extends Component {
     return (
       <div class="d-flex align-items-center">
         <div class="col-sm-auto">
-          <a href="/" class="dcricon-decred no-underline"></a>
+          <a href="/" class="logo">
+              <img src="favicon.png" alt="favicon"/>
+          </a>
         </div>
       </div>
     );
