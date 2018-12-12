@@ -93,9 +93,6 @@ function subscribe_channel_price_CBT(client) {
 
 }
 
-
-
-
 function unsubscribe_channel_attestation(client) {
   for (var itr = 0; itr < channelAttestation.length; ++itr)
     if (channelAttestation[itr].client === client) {

@@ -1,40 +1,43 @@
 const message = require('bitcore-message');
-const models = require('../models/models')
+const models = require('../models/models');
 const mongoose = require('mongoose');
 const { base64encode, base64decode } = require('nodejs-base64');
 // All Constants
-const ARG_TXID = 'txid'
-const ARG_POSITION = 'position'
-const ARG_COMMITMENT = 'commitment'
-const ARG_MERKLE_ROOT = 'merkle_root'
+const ARG_TXID = 'txid';
+const ARG_POSITION = 'position';
+const ARG_COMMITMENT = 'commitment';
+const ARG_MERKLE_ROOT = 'merkle_root';
 const BAD_LENGTH_TXID =
-    'txid string parameter must contain 64 characters'
+    'txid string parameter must contain 64 characters';
 const BAD_LENGTH_COMMITMENT =
-    'commitment string parameter must contain 64 characters'
-const BAD_LENGTH_MERKLE_ROOT = BAD_LENGTH_COMMITMENT
-const BAD_TYPE_POSITION = 'position expects a int'
+    'commitment string parameter must contain 64 characters';
+const BAD_LENGTH_MERKLE_ROOT = BAD_LENGTH_COMMITMENT;
+const BAD_TYPE_POSITION = 'position expects a int';
 const COMMITMENT_POSITION_UNKNOWN =
-    'your commitment or position is unknown to us'
-const INTERNAL_ERROR_API = 'an error occurred in the API'
-const MERKLEROOT_UNKNOWN = 'your merkle root is unknown to us'
-const MISSING_ARG_TXID = 'missing txid parameter'
-const MISSING_ARG_APIKEY = 'missing X-MAINSTAY-APIKEY'
-const MISSING_ARG_COMMITMENT = 'missing commitment parameter'
-const MISSING_ARG_MERKLE_ROOT = 'missing merkle_root parameter'
-const MISSING_ARG_PAYLOAD = 'missing X-MAINSTAY-PAYLOAD'
-const MISSING_ARG_POSITION = 'missing position parameter'
-const MISSING_ARG_SIGNATURE_APIKEY = 'missing X-MAINSTAY-SIGNATURE-APIKEY'
-const MISSING_ARG_SIGNATURE = 'missing X-MAINSTAY-SIGNATURE'
-const MISSING_PAYLOAD_TOKEN = 'missing token parameter in payload'
-const NS_PER_SEC = 1000000000
-const PAYLOAD_TOKEN_ERROR = 'your token is wrong'
-const POSITION_UNKNOWN = 'your position is unknown to us'
-const TXID_UNKNOWN = 'attestation could not be found for the txid provided'
-const SIGNATURE_INVALID = 'your signature is incorrect'
-const SIZE_TXID = 64
-const SIZE_COMMITMENT = 64
-const SIZE_MERKLE_ROOT = 64
-const VERSION_API_V1 = 'Mainstay-API-v1'
+    'your commitment or position is unknown to us';
+const INTERNAL_ERROR_API = 'an error occurred in the API';
+const HEXA = /[0-9A-Fa-f]{64}/g;
+const MERKLEROOT_UNKNOWN = 'your merkle root is unknown to us';
+const MISSING_ARG_TXID = 'missing txid parameter';
+const MISSING_ARG_APIKEY = 'missing X-MAINSTAY-APIKEY';
+const MISSING_ARG_COMMITMENT = 'missing commitment parameter';
+const MISSING_ARG_MERKLE_ROOT = 'missing merkle_root parameter';
+const MISSING_ARG_PAYLOAD = 'missing X-MAINSTAY-PAYLOAD';
+const MISSING_ARG_POSITION = 'missing position parameter';
+const MISSING_ARG_SIGNATURE_APIKEY = 'missing X-MAINSTAY-SIGNATURE-APIKEY';
+const MISSING_ARG_SIGNATURE = 'missing X-MAINSTAY-SIGNATURE';
+const MISSING_PAYLOAD_TOKEN = 'missing token parameter in payload';
+const NUMBER = /^\d+$/;
+const NS_PER_SEC = 1000000000;
+const PAYLOAD_TOKEN_ERROR = 'your token is wrong';
+const POSITION_UNKNOWN = 'your position is unknown to us';
+const SIGNATURE_INVALID = 'your signature is incorrect';
+const SIZE_TXID = 64;
+const SIZE_COMMITMENT = 64;
+const SIZE_MERKLE_ROOT = 64;
+const TXID_UNKNOWN = 'attestation could not be found for the txid provided';
+const TYPE_UNKNOWN = 'type unknown';
+const VERSION_API_V1 = 'Mainstay-API-v1';
 
 function get_txid_arg(req, res, startTime) {
   const time = new Date();
@@ -366,5 +369,38 @@ module.exports = {
         });
       });
     });
+  },
+  type: (req, res) => {
+    startTime = start_time();
+    let paramHash = req.query['hash'];
+    if (paramHash === undefined)
+      return reply_err(res, "It's not valid Hash", startTime);
+    else if (!HEXA.test(paramHash))
+      return reply_err(res, "It's not valid Hash", startTime);
+    models.merkleProof.find({ commitment: paramHash }, (error, data) => {
+      if (error)
+        return reply_err(res, INTERNAL_ERROR_API, startTime);
+      if (data.length != 0)
+        return reply_msg();
+    });
+    models.merkleProof.find({ merkle_root: paramHash }, (error, data) => {
+      if (error)
+        return reply_err(res, INTERNAL_ERROR_API, startTime);
+      if (data.length != 0)
+        return reply_msg();
+    });
+    models.attestationInfo.find({ txid: paramHash }, (error, data) => {
+      if (error)
+        return reply_err(res, INTERNAL_ERROR_API, startTime);
+      if (data.length != 0)
+        return reply_msg();
+    });
+    models.attestationInfo.find({ blockhash: paramHash }, (error, data) => {
+      if (error)
+        return reply_err(res, INTERNAL_ERROR_API, startTime);
+      if (data.length != 0)
+        return reply_msg();
+    });
+    reply_err(res, TYPE_UNKNOWN, startTime);
   }
 };

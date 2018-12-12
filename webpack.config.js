@@ -78,6 +78,7 @@ module.exports = {
   ],
   devServer: {
     contentBase: path.resolve(__dirname, "./public"),
+    disableHostCheck: true,
     historyApiFallback: true,
     inline: true,
     open: false,
