@@ -28,7 +28,7 @@ class Search extends Component {
       return ; /// ERROR
 
     if (HEXA.test(value.query))
-      Axios.get("/api/v1/type?hash=" + value.query)
+      Axios.get("/api/v1/type?value=" + value.query)
       .then(response => { console.log(response) });
     else if (NUMBER.test(value.query))
       Axios.get()

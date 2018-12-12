@@ -29,6 +29,7 @@ const MISSING_ARG_SIGNATURE = 'missing X-MAINSTAY-SIGNATURE';
 const MISSING_PAYLOAD_TOKEN = 'missing token parameter in payload';
 const NUMBER = /^\d+$/;
 const NS_PER_SEC = 1000000000;
+const PARAM_UNDEFINED = 'parameter undefined';
 const PAYLOAD_TOKEN_ERROR = 'your token is wrong';
 const POSITION_UNKNOWN = 'your position is unknown to us';
 const SIGNATURE_INVALID = 'your signature is incorrect';
@@ -36,6 +37,7 @@ const SIZE_TXID = 64;
 const SIZE_COMMITMENT = 64;
 const SIZE_MERKLE_ROOT = 64;
 const TXID_UNKNOWN = 'attestation could not be found for the txid provided';
+const TYPE_ERROR = 'an error is present in your type';
 const TYPE_UNKNOWN = 'type unknown';
 const VERSION_API_V1 = 'Mainstay-API-v1';
 
@@ -99,6 +101,40 @@ function reply_msg(res, message, startTime) {
   endTime = endTime[0] * NS_PER_SEC + endTime[1];
   res.json({ response: message, timestamp: time.getTime(),
              allowance: { cost: endTime - startTime }});
+}
+
+function find_type_hash(res, paramValue, startTime) {
+  models.merkleProof.find({ commitment: paramValue }, (error, data) => {
+    if (error)
+      return reply_err(res, INTERNAL_ERROR_API, startTime);
+    if (data.length != 0)
+      return reply_msg(res, 'commitment', startTime);
+  });
+  models.merkleProof.find({ merkle_root: paramValue }, (error, data) => {
+    if (error)
+      return reply_err(res, INTERNAL_ERROR_API, startTime);
+    if (data.length != 0)
+      return reply_msg(res, 'merkle_root', startTime);
+  });
+  models.attestationInfo.find({ txid: paramValue }, (error, data) => {
+    if (error)
+      return reply_err(res, INTERNAL_ERROR_API, startTime);
+    if (data.length != 0)
+      return reply_msg(res, 'txid', startTime);
+  });
+  models.attestationInfo.find({ blockhash: paramValue }, (error, data) => {
+    if (error)
+      return reply_err(res, INTERNAL_ERROR_API, startTime);
+    if (data.length != 0)
+      return reply_msg(res, 'blockhash', startTime);
+  });
+  reply_err(res, TYPE_UNKNOWN, startTime);
+}
+
+function find_type_number(res, paramValue, startTime) {
+  models.clientDetails.find({ client_position: paramValue }, (error, data) => {
+
+  });
 }
 
 module.exports = {
@@ -372,35 +408,13 @@ module.exports = {
   },
   type: (req, res) => {
     startTime = start_time();
-    let paramHash = req.query['hash'];
-    if (paramHash === undefined)
-      return reply_err(res, "It's not valid Hash", startTime);
-    else if (!HEXA.test(paramHash))
-      return reply_err(res, "It's not valid Hash", startTime);
-    models.merkleProof.find({ commitment: paramHash }, (error, data) => {
-      if (error)
-        return reply_err(res, INTERNAL_ERROR_API, startTime);
-      if (data.length != 0)
-        return reply_msg();
-    });
-    models.merkleProof.find({ merkle_root: paramHash }, (error, data) => {
-      if (error)
-        return reply_err(res, INTERNAL_ERROR_API, startTime);
-      if (data.length != 0)
-        return reply_msg();
-    });
-    models.attestationInfo.find({ txid: paramHash }, (error, data) => {
-      if (error)
-        return reply_err(res, INTERNAL_ERROR_API, startTime);
-      if (data.length != 0)
-        return reply_msg();
-    });
-    models.attestationInfo.find({ blockhash: paramHash }, (error, data) => {
-      if (error)
-        return reply_err(res, INTERNAL_ERROR_API, startTime);
-      if (data.length != 0)
-        return reply_msg();
-    });
-    reply_err(res, TYPE_UNKNOWN, startTime);
+    let paramValue = req.query['value'];
+    if (paramValue === undefined)
+      return reply_err(res, PARAM_UNDEFINED, startTime);
+    else if (HEXA.test(paramValue))
+      find_type_hash(req, res, startTime);
+    else if (NUMBER.test(paramValue))
+      find_type_number(req, res, startTime);
+    reply_err(res, TYPE_ERROR, startTime);
   }
 };
