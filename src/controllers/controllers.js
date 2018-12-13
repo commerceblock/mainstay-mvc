@@ -112,7 +112,7 @@ module.exports = {
           txid: data[itr].txid,
           merkle_root: data[itr].merkle_root,
           confirmed: data[itr].confirmed,
-          age: (now.toDateString() === data[itr].inserted_at.toDateString()) ? dateFormat(data[itr].inserted_at, "HH:MM:ss") : dateFormat(data[itr].inserted_at, "HH:MM:ss dd/MM/yy")
+          age: (now.toDateString() === data[itr].inserted_at.toDateString()) ? dateFormat(data[itr].inserted_at, "HH:MM:ss") : dateFormat(data[itr].inserted_at, "HH:MM:ss dd/mm/yy")
         });
       res.json(response);
     });
