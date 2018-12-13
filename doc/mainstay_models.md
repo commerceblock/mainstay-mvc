@@ -167,7 +167,7 @@ client_position | auth_token | pubkey
 
 - **/api/commitment/proof GET**
 
-*params*: commitment, client_position
+*params*: merkle_root, client_position
 
 *read*: MerkleCommitment, MerkleProof
 
