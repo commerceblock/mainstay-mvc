@@ -102,7 +102,7 @@ var now = new Date();
 module.exports = {
   ctrl_latest_attestation: (req, res) => {
     let response = [];
-    models.attestation.find().sort({ inserted_at: -1 }).limit(5)
+    models.attestation.find().sort({ inserted_at: -1 }).limit(10)
                       .exec((error, data) => {
       if (error)
         return ; // TODO Add message error
@@ -141,7 +141,6 @@ module.exports = {
       if (error)
         return ; // TODO Add message error
       models.merkleCommitment.find({ merkle_root: data[0].merkle_root })
-                             .limit(5)
                              .exec((error, data) => {
         if (error)
           return ; // TODO Add message error

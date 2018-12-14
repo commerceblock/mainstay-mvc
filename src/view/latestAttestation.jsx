@@ -30,7 +30,7 @@ class LatestAttestation extends Component {
               <th><span class="lh1rem mr-auto">Txid</span></th>
               <th><span class="lh1rem mr-auto">MerkleRoot</span></th>
               <th><span class="lh1rem ">Confirmed</span></th>
-              <th><span class="lh1rem mr-auto">Age</span></th>
+              <th><span class="lh1rem mr-auto">Date</span></th>
               </thead>
               <tbody>
               {this.state.data.map((data) =>

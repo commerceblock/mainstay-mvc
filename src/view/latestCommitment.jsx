@@ -28,7 +28,7 @@ class LatestCommitment extends Component {
             <table width="100%">
               <thead>
                 <th><span class="lh1rem ">Position</span></th>
-                <th><span class="lh1rem ">Commitment in LatestCommitment</span></th>
+                <th><span class="lh1rem ">Commitment</span></th>
               </thead>
               <tbody>
               {this.state.data.map((data) =>
