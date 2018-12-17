@@ -223,8 +223,8 @@ describe('Test Controllers', () => {
   //////////////////////////////////////////////////////////////////////////////
   /// Test Commitment Proof                                                  ///
   //////////////////////////////////////////////////////////////////////////////
-  it('Route: /api/v1/commitment/proof?position=0&commitment=' +
-     '1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7', () => {
+  it('Route: /api/v1/commitment/proof?position=0&merkle_root=' +
+     '0849d03563d6d7e7d2d0063a5dae944bfcfd4d56d149ffbe73ccead275b2762e', () => {
     const req = mockHttp.createRequest(
         { method: 'GET', url: '/api/v1/commitment/proof'});
     const res = mockHttp.createResponse();
@@ -232,6 +232,8 @@ describe('Test Controllers', () => {
     let json = JSON.parse(res._getData());
     assert(json.response.merkle_root ===
         '0849d03563d6d7e7d2d0063a5dae944bfcfd4d56d149ffbe73ccead275b2762e');
+    assert(json.response.commitment ===
+        '1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7');
     assert(json.response.ops[0].append === true);
     assert(json.response.ops[0].commitment ===
         '2a39e34e883d9a1e6cdc3418b54aa57747106bc75e3e84426661f27f98ada3b7');
