@@ -12,29 +12,62 @@ import QueryString from 'query-string';
 const HEXA = /[0-9A-Fa-f]{64}/g;
 const NUMBER = /^\d+$/;
 
+const page_waiting = () => {
+  return (<div>Wait</div>);
+}
+
+const page_commitment = () => {
+  return (<div>Commitment</div>);
+}
+
+const page_merkle_root = () => {
+  return (<div>Merkle Root</div>);
+}
+
+const page_txid = () => {
+  return (<div>txid</div>);
+}
+
+const page_type_unknown = () => {
+  return (<div>Type Unknown</div>);
+}
+
+const page_undefined = () => {
+  return (<div>Undefined</div>);
+}
+
 class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: undefined
+      page: page_waiting()
     };
-    this.request();
   }
 
-  request() {
+  componentWillMount() {
     const value = QueryString.parse(this.props.location.search);
-
     if (value.query == undefined)
-      return ; /// ERROR
-
-    if (HEXA.test(value.query))
+      return this.setState({page: 'undefined'});
+    if (HEXA.test(value.query) || NUMBER.test(value.query))
       Axios.get("/api/v1/type?value=" + value.query)
-      .then(response => { console.log(response) });
-    else if (NUMBER.test(value.query))
-      Axios.get()
-      .then(response => { console.log(response) });
+      .then(res => this.setState({page: res.data.response}));
+  }
+
+  componentDidUpdate(prevProps, prevState) {}
+
+  componentDidMount() {
+    if (this.state.page === 'commitment')
+      this.setState((prevState, props) => {page: page_commitment()});
+    else if (this.state.page === 'merkle_root')
+      this.setState((prevState, props) => {page: page_merkle_root()});
+    else if (this.state.page === 'txid')
+      this.setState((prevState, props) => {page: page_txid()});
+    else if (this.state.page === 'type unknown')
+      this.setState((prevState, props) => {page: page_type_unknown()});
+    else if (this.state.page === 'undefined')
+      this.setState((prevState, props) => {page: page_undefined()});
     else
-      ;
+      this.setState((prevState, props) => {page: <div>RIP The missing DATA</div>});
   }
 
   render() {
@@ -49,7 +82,7 @@ class Search extends Component {
         </div>
         <div class="container main" data-controller="main">
           <div class="row" data-controller="homepageMempool">
-            <h1>{ this.state.data }</h1>
+            { this.state.page }
           </div>
         </div>
         <FooterPage/>

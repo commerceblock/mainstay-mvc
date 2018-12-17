@@ -41,6 +41,11 @@ const TYPE_ERROR = 'an error is present in your type';
 const TYPE_UNKNOWN = 'type unknown';
 const VERSION_API_V1 = 'Mainstay-API-v1';
 
+const MAINSTAY_PAYLOAD = 'X-MAINSTAY-PAYLOAD';
+const MAINSTAY_SIGNATURE = 'X-MAINSTAY-SIGNATURE';
+const DATA = 'data';
+const VALUE = 'value';
+
 function get_txid_arg(req, res, startTime) {
   const time = new Date();
   let paramTxid = req.query[ARG_TXID];
@@ -109,26 +114,27 @@ function find_type_hash(res, paramValue, startTime) {
       return reply_err(res, INTERNAL_ERROR_API, startTime);
     if (data.length != 0)
       return reply_msg(res, 'commitment', startTime);
+    models.merkleProof.find({ merkle_root: paramValue }, (error, data) => {
+      if (error)
+        return reply_err(res, INTERNAL_ERROR_API, startTime);
+      if (data.length != 0)
+        return reply_msg(res, 'merkle_root', startTime);
+      models.attestationInfo.find({ txid: paramValue }, (error, data) => {
+        if (error)
+          return reply_err(res, INTERNAL_ERROR_API, startTime);
+        if (data.length != 0)
+          return reply_msg(res, 'txid', startTime);
+        models.attestationInfo.find({ blockhash: paramValue },
+            (error, data) => {
+          if (error)
+            return reply_err(res, INTERNAL_ERROR_API, startTime);
+          if (data.length != 0)
+            return reply_msg(res, 'blockhash', startTime);
+          reply_err(res, TYPE_UNKNOWN, startTime);
+        });
+      });
+    });
   });
-  models.merkleProof.find({ merkle_root: paramValue }, (error, data) => {
-    if (error)
-      return reply_err(res, INTERNAL_ERROR_API, startTime);
-    if (data.length != 0)
-      return reply_msg(res, 'merkle_root', startTime);
-  });
-  models.attestationInfo.find({ txid: paramValue }, (error, data) => {
-    if (error)
-      return reply_err(res, INTERNAL_ERROR_API, startTime);
-    if (data.length != 0)
-      return reply_msg(res, 'txid', startTime);
-  });
-  models.attestationInfo.find({ blockhash: paramValue }, (error, data) => {
-    if (error)
-      return reply_err(res, INTERNAL_ERROR_API, startTime);
-    if (data.length != 0)
-      return reply_msg(res, 'blockhash', startTime);
-  });
-  reply_err(res, TYPE_UNKNOWN, startTime);
 }
 
 function find_type_number(res, paramValue, startTime) {
@@ -373,12 +379,12 @@ module.exports = {
   // Function METHOD POST
   commitment_send: (req, res) => {
     startTime = start_time();
-    req.on('data', chunk => {
+    req.on(DATA, chunk => {
       let data = JSON.parse(chunk.toString());
-      let payload = JSON.parse(base64decode(data['X-MAINSTAY-PAYLOAD']));
+      let payload = JSON.parse(base64decode(data[MAINSTAY_PAYLOAD]));
       if (payload === undefined)
         return reply_err(res, MISSING_ARG_PAYLOAD, startTime);
-      signatureCommitment = data['X-MAINSTAY-SIGNATURE'];
+      signatureCommitment = data[MAINSTAY_SIGNATURE];
       if (signatureCommitment === undefined)
         return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
       if (payload.commitment === undefined)
@@ -407,14 +413,19 @@ module.exports = {
     });
   },
   type: (req, res) => {
+    console.log(">>> 1");
+
     startTime = start_time();
-    let paramValue = req.query['value'];
+    let paramValue = req.query[VALUE];
     if (paramValue === undefined)
       return reply_err(res, PARAM_UNDEFINED, startTime);
     else if (HEXA.test(paramValue))
-      find_type_hash(req, res, startTime);
+      return find_type_hash(res, paramValue, startTime);
     else if (NUMBER.test(paramValue))
-      find_type_number(req, res, startTime);
+      return find_type_number(res, paramValue, startTime);
+
+    console.log(">>> 2");
+
     reply_err(res, TYPE_ERROR, startTime);
   }
 };
