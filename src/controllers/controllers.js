@@ -108,6 +108,9 @@ function reply_msg(res, message, startTime) {
              allowance: { cost: endTime - startTime }});
 }
 
+var dateFormat = require('dateformat');
+var now = new Date();
+
 function find_type_hash(res, paramValue, startTime) {
   models.merkleProof.find({ commitment: paramValue }, (error, data) => {
     if (error)
@@ -146,7 +149,7 @@ function find_type_number(res, paramValue, startTime) {
 module.exports = {
   ctrl_latest_attestation: (req, res) => {
     let response = [];
-    models.attestation.find().sort({ inserted_at: -1 }).limit(5)
+    models.attestation.find().sort({ inserted_at: -1 }).limit(10)
                       .exec((error, data) => {
       if (error)
         return ; // TODO Add message error
@@ -156,7 +159,7 @@ module.exports = {
           txid: data[itr].txid,
           merkle_root: data[itr].merkle_root,
           confirmed: data[itr].confirmed,
-          age: data[itr].inserted_at
+          age: (now.toDateString() === data[itr].inserted_at.toDateString()) ? dateFormat(data[itr].inserted_at, "HH:MM:ss") : dateFormat(data[itr].inserted_at, "HH:MM:ss dd/mm/yy")
         });
       res.json(response);
     });
@@ -185,7 +188,6 @@ module.exports = {
       if (error)
         return ; // TODO Add message error
       models.merkleCommitment.find({ merkle_root: data[0].merkle_root })
-                             .limit(5)
                              .exec((error, data) => {
         if (error)
           return ; // TODO Add message error
