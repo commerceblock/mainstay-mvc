@@ -1,4 +1,5 @@
-import Home from './view/home';
+import Home from './view/home/home';
+import Search from './view/search/search'
 import {
   BrowserRouter,
   Route
@@ -13,6 +14,7 @@ const Main = () => (
   <BrowserRouter>
     <div>
       <Route path="/" exact component={Home}/>
+      <Route path="/search" exact component={Search}/>
     </div>
   </BrowserRouter>
 );

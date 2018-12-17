@@ -1,10 +1,10 @@
-import FaviconAddrBar from './faviconAddrBar';
-import FooterPage from './footerPage';
-import HamburgerMenu from './hamburgerMenu';
-import LatestAttestation from './latestAttestation';
-import LatestCommitment from './latestCommitment';
-import MainstayInfo from './mainstayInfo';
-import Navbar from './navbar';
+import FaviconAddrBar from '../faviconAddrBar';
+import FooterPage from '../footerPage';
+import HamburgerMenu from '../hamburgerMenu';
+import LatestAttestation from '../latestAttestation';
+import LatestCommitment from '../latestCommitment';
+import MainstayInfo from '../mainstayInfo';
+import Navbar from '../navbar';
 import React, { Component } from 'react';
 
 class Home extends Component {

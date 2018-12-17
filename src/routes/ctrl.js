@@ -1,9 +1,9 @@
 const controllers = require('../controllers/controllers');
 
-const CTRL_LATEST_ATTESTATION = '/ctrl/latestattestation'
-const CTRL_LATEST_ATTESTATION_INFO = '/ctrl/latestattestationinfo'
-const CTRL_LATEST_COMMITMENT = '/ctrl/latestcommitment'
-const CTRL_SEND_COMMITMENT = '/ctrl/sendcommitment'
+const CTRL_LATEST_ATTESTATION = '/ctrl/latestattestation';
+const CTRL_LATEST_ATTESTATION_INFO = '/ctrl/latestattestationinfo';
+const CTRL_LATEST_COMMITMENT = '/ctrl/latestcommitment';
+const CTRL_SEND_COMMITMENT = '/ctrl/sendcommitment';
 
 function ctrl_get(app) {
   app.get(CTRL_LATEST_ATTESTATION, controllers.ctrl_latest_attestation);

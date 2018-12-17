@@ -1,40 +1,50 @@
 const message = require('bitcore-message');
-const models = require('../models/models')
+const models = require('../models/models');
 const mongoose = require('mongoose');
 const { base64encode, base64decode } = require('nodejs-base64');
 // All Constants
-const ARG_TXID = 'txid'
-const ARG_POSITION = 'position'
-const ARG_COMMITMENT = 'commitment'
-const ARG_MERKLE_ROOT = 'merkle_root'
+const ARG_TXID = 'txid';
+const ARG_POSITION = 'position';
+const ARG_COMMITMENT = 'commitment';
+const ARG_MERKLE_ROOT = 'merkle_root';
 const BAD_LENGTH_TXID =
-    'txid string parameter must contain 64 characters'
+    'txid string parameter must contain 64 characters';
 const BAD_LENGTH_COMMITMENT =
-    'commitment string parameter must contain 64 characters'
-const BAD_LENGTH_MERKLE_ROOT = BAD_LENGTH_COMMITMENT
-const BAD_TYPE_POSITION = 'position expects a int'
+    'commitment string parameter must contain 64 characters';
+const BAD_LENGTH_MERKLE_ROOT = BAD_LENGTH_COMMITMENT;
+const BAD_TYPE_POSITION = 'position expects a int';
 const COMMITMENT_POSITION_UNKNOWN =
-    'your commitment or position is unknown to us'
-const INTERNAL_ERROR_API = 'an error occurred in the API'
-const MERKLEROOT_UNKNOWN = 'your merkle root is unknown to us'
-const MISSING_ARG_TXID = 'missing txid parameter'
-const MISSING_ARG_APIKEY = 'missing X-MAINSTAY-APIKEY'
-const MISSING_ARG_COMMITMENT = 'missing commitment parameter'
-const MISSING_ARG_MERKLE_ROOT = 'missing merkle_root parameter'
-const MISSING_ARG_PAYLOAD = 'missing X-MAINSTAY-PAYLOAD'
-const MISSING_ARG_POSITION = 'missing position parameter'
-const MISSING_ARG_SIGNATURE_APIKEY = 'missing X-MAINSTAY-SIGNATURE-APIKEY'
-const MISSING_ARG_SIGNATURE = 'missing X-MAINSTAY-SIGNATURE'
-const MISSING_PAYLOAD_TOKEN = 'missing token parameter in payload'
-const NS_PER_SEC = 1000000000
-const PAYLOAD_TOKEN_ERROR = 'your token is wrong'
-const POSITION_UNKNOWN = 'your position is unknown to us'
-const TXID_UNKNOWN = 'attestation could not be found for the txid provided'
-const SIGNATURE_INVALID = 'your signature is incorrect'
-const SIZE_TXID = 64
-const SIZE_COMMITMENT = 64
-const SIZE_MERKLE_ROOT = 64
-const VERSION_API_V1 = 'Mainstay-API-v1'
+    'your commitment or position is unknown to us';
+const INTERNAL_ERROR_API = 'an error occurred in the API';
+const HEXA = /[0-9A-Fa-f]{64}/g;
+const MERKLEROOT_UNKNOWN = 'your merkle root is unknown to us';
+const MISSING_ARG_TXID = 'missing txid parameter';
+const MISSING_ARG_APIKEY = 'missing X-MAINSTAY-APIKEY';
+const MISSING_ARG_COMMITMENT = 'missing commitment parameter';
+const MISSING_ARG_MERKLE_ROOT = 'missing merkle_root parameter';
+const MISSING_ARG_PAYLOAD = 'missing X-MAINSTAY-PAYLOAD';
+const MISSING_ARG_POSITION = 'missing position parameter';
+const MISSING_ARG_SIGNATURE_APIKEY = 'missing X-MAINSTAY-SIGNATURE-APIKEY';
+const MISSING_ARG_SIGNATURE = 'missing X-MAINSTAY-SIGNATURE';
+const MISSING_PAYLOAD_TOKEN = 'missing token parameter in payload';
+const NUMBER = /^\d+$/;
+const NS_PER_SEC = 1000000000;
+const PARAM_UNDEFINED = 'parameter undefined';
+const PAYLOAD_TOKEN_ERROR = 'your token is wrong';
+const POSITION_UNKNOWN = 'your position is unknown to us';
+const SIGNATURE_INVALID = 'your signature is incorrect';
+const SIZE_TXID = 64;
+const SIZE_COMMITMENT = 64;
+const SIZE_MERKLE_ROOT = 64;
+const TXID_UNKNOWN = 'attestation could not be found for the txid provided';
+const TYPE_ERROR = 'an error is present in your type';
+const TYPE_UNKNOWN = 'type unknown';
+const VERSION_API_V1 = 'Mainstay-API-v1';
+
+const MAINSTAY_PAYLOAD = 'X-MAINSTAY-PAYLOAD';
+const MAINSTAY_SIGNATURE = 'X-MAINSTAY-SIGNATURE';
+const DATA = 'data';
+const VALUE = 'value';
 
 function get_txid_arg(req, res, startTime) {
   const time = new Date();
@@ -96,6 +106,41 @@ function reply_msg(res, message, startTime) {
   endTime = endTime[0] * NS_PER_SEC + endTime[1];
   res.json({ response: message, timestamp: time.getTime(),
              allowance: { cost: endTime - startTime }});
+}
+
+function find_type_hash(res, paramValue, startTime) {
+  models.merkleProof.find({ commitment: paramValue }, (error, data) => {
+    if (error)
+      return reply_err(res, INTERNAL_ERROR_API, startTime);
+    if (data.length != 0)
+      return reply_msg(res, 'commitment', startTime);
+    models.merkleProof.find({ merkle_root: paramValue }, (error, data) => {
+      if (error)
+        return reply_err(res, INTERNAL_ERROR_API, startTime);
+      if (data.length != 0)
+        return reply_msg(res, 'merkle_root', startTime);
+      models.attestationInfo.find({ txid: paramValue }, (error, data) => {
+        if (error)
+          return reply_err(res, INTERNAL_ERROR_API, startTime);
+        if (data.length != 0)
+          return reply_msg(res, 'txid', startTime);
+        models.attestationInfo.find({ blockhash: paramValue },
+            (error, data) => {
+          if (error)
+            return reply_err(res, INTERNAL_ERROR_API, startTime);
+          if (data.length != 0)
+            return reply_msg(res, 'blockhash', startTime);
+          reply_err(res, TYPE_UNKNOWN, startTime);
+        });
+      });
+    });
+  });
+}
+
+function find_type_number(res, paramValue, startTime) {
+  models.clientDetails.find({ client_position: paramValue }, (error, data) => {
+
+  });
 }
 
 module.exports = {
@@ -327,12 +372,12 @@ module.exports = {
   // Function METHOD POST
   commitment_send: (req, res) => {
     startTime = start_time();
-    req.on('data', chunk => {
+    req.on(DATA, chunk => {
       let data = JSON.parse(chunk.toString());
-      let payload = JSON.parse(base64decode(data['X-MAINSTAY-PAYLOAD']));
+      let payload = JSON.parse(base64decode(data[MAINSTAY_PAYLOAD]));
       if (payload === undefined)
         return reply_err(res, MISSING_ARG_PAYLOAD, startTime);
-      signatureCommitment = data['X-MAINSTAY-SIGNATURE'];
+      signatureCommitment = data[MAINSTAY_SIGNATURE];
       if (signatureCommitment === undefined)
         return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
       if (payload.commitment === undefined)
@@ -359,5 +404,21 @@ module.exports = {
         });
       });
     });
+  },
+  type: (req, res) => {
+    console.log(">>> 1");
+
+    startTime = start_time();
+    let paramValue = req.query[VALUE];
+    if (paramValue === undefined)
+      return reply_err(res, PARAM_UNDEFINED, startTime);
+    else if (HEXA.test(paramValue))
+      return find_type_hash(res, paramValue, startTime);
+    else if (NUMBER.test(paramValue))
+      return find_type_number(res, paramValue, startTime);
+
+    console.log(">>> 2");
+
+    reply_err(res, TYPE_ERROR, startTime);
   }
 };
