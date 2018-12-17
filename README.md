@@ -1,6 +1,6 @@
 # Mainstay-MVC
 
-## Technologie Used
+## Technologies Used
 
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-v4.1.3-blue.svg)](https://github.com/twbs/bootstrap/tree/v4.1.3)
 [![Reactstrap](https://img.shields.io/badge/Reactstrap-v6.5.0-blue.svg)](https://github.com/reactstrap/reactstrap/releases/tag/6.5.0)
@@ -10,7 +10,7 @@
 
 ## Install
 
-For install all dependency use [![Yarn](https://img.shields.io/badge/Yarn-v1.12.3-blue.svg)](https://github.com/yarnpkg/yarn/releases/tag/v1.12.3)
+To install all dependencies use [![Yarn](https://img.shields.io/badge/Yarn-v1.12.3-blue.svg)](https://github.com/yarnpkg/yarn/releases/tag/v1.12.3)
 
 
 ```perl
@@ -28,6 +28,12 @@ Launch mongo in another terminal
 
 ```perl
 $ mongo
+```
+
+In mongo
+
+```perl
+rs.initiate()
 ```
 
 Import db for testing

@@ -355,26 +355,19 @@ module.exports = {
     let position = get_position_arg(req, res, startTime);
     if (position === undefined)
       return ;
-    let commitment = get_commitment_arg(req, res, startTime);
-    if (commitment === undefined)
+    let merkle_root = get_merkle_root_arg(req, res, startTime);
+    if (merkle_root === undefined)
       return ;
-    models.merkleCommitment.find({ client_position: position,
-                                   commitment: commitment},
-                                 (error, data) => {
+    models.merkleProof.find({ client_position: position,
+                              merkle_root: merkle_root },
+                            (error, data) => {
       if (error)
         return reply_err(res, INTERNAL_ERROR_API, startTime);
       if (data.length == 0)
-        return reply_err(res, COMMITMENT_POSITION_UNKNOWN, startTime);
-      let merkle_root = data[0].merkle_root;
-      models.merkleProof.find({ client_position: position,
-                                merkle_root: merkle_root },
-                              (error, data) => {
-        if (error)
-          return reply_err(res, INTERNAL_ERROR_API, startTime);
-        reply_msg(res, { merkle_root: merkle_root, ops: data[0].ops },
-                  startTime);
-      });
-    });
+        return reply_err(res, POSITION_UNKNOWN, startTime);
+      reply_msg(res, { merkle_root: merkle_root, commitment: data[0].commitment, ops: data[0].ops },
+                startTime);
+  });
   },
   // Function METHOD POST
   commitment_send: (req, res) => {
