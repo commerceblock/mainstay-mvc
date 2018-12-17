@@ -929,7 +929,7 @@ table, th, td {
 
 table td a {
   padding: 5px;
-  width: 110px;
+  width: 11vw;
 
 }
 td .lastCommitement {
@@ -941,7 +941,7 @@ table th span {
 }
 .latestAttestation {
   margin-top: 0;
-  height: 40vh;
+  height: 35vh;
   overflow: auto;
 }
 .mb-3, .my-3 {
@@ -963,11 +963,14 @@ table th span {
 
   box-shadow:none !important;
 }
-table th {
+.latestAttestation table th,
+.LatestCommitment table th {
   width: 13vw;
   border: none;
 }
-table td {
+
+.LatestCommitment table td,
+.latestAttestation table td  {
   width: 11vw;
 }
 .head-table {
@@ -981,6 +984,10 @@ table td {
   position: relative;
   top: 10px;
 
+}
+
+.LatestCommitment.head-table table th:nth-child(2) {
+  width: 100vw;
 }
 /* width */
 ::-webkit-scrollbar {
@@ -1002,10 +1009,4 @@ table td {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #787878;
-}
-
-
-.LatestCommitment.head-table th{
-  text-align: left !important;
-  width: auto;
 }
