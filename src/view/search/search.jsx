@@ -9,65 +9,82 @@ import Navbar from '../navbar';
 import React, { Component } from 'react';
 import QueryString from 'query-string';
 
-const HEXA = /[0-9A-Fa-f]{64}/g;
-const NUMBER = /^\d+$/;
+const waiting = (<div>Page - Wait ...</div>);
 
-const page_waiting = () => {
-  return (<div>Wait</div>);
+const commitment = () => {
+  return (
+    <div>
+      <table width="100%">
+        <tr>
+          <td>
+            Info Commitment
+          </td>
+        </tr>
+      </table>
+    </div>
+  );
 }
 
-const page_commitment = () => {
-  return (<div>Commitment</div>);
+const merkle_root = () => {
+  return (
+    <div>
+      <table width="100%">
+        <tr>
+          <td>
+            Info Merkle Root
+          </td>
+        </tr>
+      </table>
+    </div>
+  );
 }
 
-const page_merkle_root = () => {
-  return (<div>Merkle Root</div>);
+const txid = () => {
+  return (
+    <div>
+      <table width="100%">
+        <tr>
+          <td>
+            Transaction ID
+          </td>
+        </tr>
+      </table>
+    </div>
+  );
 }
 
-const page_txid = () => {
-  return (<div>txid</div>);
-}
+const type_unknown = (<div>Page - Type Unknown</div>);
 
-const page_type_unknown = () => {
-  return (<div>Type Unknown</div>);
-}
+const undefined = (<div>Page - Undefined</div>);
 
-const page_undefined = () => {
-  return (<div>Undefined</div>);
-}
+const position = (<div>Page - Position</div>);
 
 class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: page_waiting()
+      page: page_waiting,
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const value = QueryString.parse(this.props.location.search);
     if (value.query == undefined)
-      return this.setState({page: 'undefined'});
-    if (HEXA.test(value.query) || NUMBER.test(value.query))
+      return this.setState({page: page_undefined});
+    if (/[0-9A-Fa-f]{64}/g.test(value.query))
       Axios.get("/api/v1/type?value=" + value.query)
-      .then(res => this.setState({page: res.data.response}));
-  }
-
-  componentDidUpdate(prevProps, prevState) {}
-
-  componentDidMount() {
-    if (this.state.page === 'commitment')
-      this.setState((prevState, props) => {page: page_commitment()});
-    else if (this.state.page === 'merkle_root')
-      this.setState((prevState, props) => {page: page_merkle_root()});
-    else if (this.state.page === 'txid')
-      this.setState((prevState, props) => {page: page_txid()});
-    else if (this.state.page === 'type unknown')
-      this.setState((prevState, props) => {page: page_type_unknown()});
-    else if (this.state.page === 'undefined')
-      this.setState((prevState, props) => {page: page_undefined()});
-    else
-      this.setState((prevState, props) => {page: <div>RIP The missing DATA</div>});
+      .then(response => {
+        if (response.data.response === 'commitment')
+          this.setState({page: commitment()});
+        else if (response.data.response === 'merkle_root')
+          this.setState({page: merkle_root()});
+        else if (response.data.response === 'txid')
+          this.setState({page: page_txid()});
+        else if (response.data.response === 'type unknown')
+          this.setState({page: type_unknown()});
+        else
+          this.setState({page: undefined()});
+      });
   }
 
   render() {

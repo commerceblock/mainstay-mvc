@@ -16,7 +16,6 @@ const BAD_TYPE_POSITION = 'position expects a int';
 const COMMITMENT_POSITION_UNKNOWN =
     'your commitment or position is unknown to us';
 const INTERNAL_ERROR_API = 'an error occurred in the API';
-const HEXA = /[0-9A-Fa-f]{64}/g;
 const MERKLEROOT_UNKNOWN = 'your merkle root is unknown to us';
 const MISSING_ARG_TXID = 'missing txid parameter';
 const MISSING_ARG_APIKEY = 'missing X-MAINSTAY-APIKEY';
@@ -27,7 +26,6 @@ const MISSING_ARG_POSITION = 'missing position parameter';
 const MISSING_ARG_SIGNATURE_APIKEY = 'missing X-MAINSTAY-SIGNATURE-APIKEY';
 const MISSING_ARG_SIGNATURE = 'missing X-MAINSTAY-SIGNATURE';
 const MISSING_PAYLOAD_TOKEN = 'missing token parameter in payload';
-const NUMBER = /^\d+$/;
 const NS_PER_SEC = 1000000000;
 const PARAM_UNDEFINED = 'parameter undefined';
 const PAYLOAD_TOKEN_ERROR = 'your token is wrong';
@@ -159,7 +157,9 @@ module.exports = {
           txid: data[itr].txid,
           merkle_root: data[itr].merkle_root,
           confirmed: data[itr].confirmed,
-          age: (now.toDateString() === data[itr].inserted_at.toDateString()) ? dateFormat(data[itr].inserted_at, "HH:MM:ss") : dateFormat(data[itr].inserted_at, "HH:MM:ss dd/mm/yy")
+          age: (now.toDateString() === data[itr].inserted_at.toDateString())
+            ? dateFormat(data[itr].inserted_at, "HH:MM:ss")
+            : dateFormat(data[itr].inserted_at, "HH:MM:ss dd/mm/yy")
         });
       res.json(response);
     });
@@ -367,7 +367,8 @@ module.exports = {
         return reply_err(res, INTERNAL_ERROR_API, startTime);
       if (data.length == 0)
         return reply_err(res, POSITION_UNKNOWN, startTime);
-      reply_msg(res, { merkle_root: merkle_root, commitment: data[0].commitment, ops: data[0].ops },
+      reply_msg(res, { merkle_root: merkle_root,
+                       commitment: data[0].commitment, ops: data[0].ops },
                 startTime);
   });
   },
@@ -408,19 +409,14 @@ module.exports = {
     });
   },
   type: (req, res) => {
-    console.log(">>> 1");
-
     startTime = start_time();
     let paramValue = req.query[VALUE];
     if (paramValue === undefined)
       return reply_err(res, PARAM_UNDEFINED, startTime);
-    else if (HEXA.test(paramValue))
+    else if (/[0-9A-Fa-f]{64}/g.test(paramValue))
       return find_type_hash(res, paramValue, startTime);
-    else if (NUMBER.test(paramValue))
+    else if (/^\d+$/.test(paramValue))
       return find_type_number(res, paramValue, startTime);
-
-    console.log(">>> 2");
-
     reply_err(res, TYPE_ERROR, startTime);
   }
 };
