@@ -216,6 +216,10 @@ module.exports = {
         return res.json({error: 'signature'});
       models.clientDetails.find({client_position: payload.position},
                                 (error, data) => {
+
+        if (data === undefined || data.length == 0) {
+          return res.json({error: 'undefined'});
+        }
         if (error)
           return res.json({error: 'api'});
         if (data[0].auth_token != payload.token)

@@ -38,7 +38,14 @@ class Menu extends Component {
       token: this.state.token,
       commitment: this.state.commitment,
       signature: this.state.signature
-    })
+    }).then(res => {
+      if(res.data && "error" in res.data){
+        alert("error")
+      }
+      else {
+        alert("success")
+      }
+    });
     this.toggle();
   }
 
