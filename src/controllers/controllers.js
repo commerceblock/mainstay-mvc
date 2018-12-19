@@ -394,7 +394,6 @@ module.exports = {
                 startTime);
   });
   },
-  // Function METHOD POST
   commitment_send: (req, res) => {
     let startTime = start_time();
     req.on(DATA, chunk => {
@@ -427,6 +426,32 @@ module.exports = {
             return reply_err(res, INTERNAL_ERROR_API, startTime);
           reply_msg(res, 'feedback', startTime);
         });
+      });
+    });
+  },
+  merkleroot: (req, res) => {
+    let startTime = start_time();
+    let merkle_root = get_merkle_root_arg(req, res, startTime);
+    if (merkle_root === undefined)
+      return ;
+    models.merkleCommitment.find({ merkle_root: merkle_root },
+                                 (error, data) => {
+      if (error)
+        return reply_err(res, INTERNAL_ERROR_API, startTime);
+      if (data.length == 0)
+        return reply_err(res, 'BLA BLA', startTime);
+      let response = data[0];
+      models.attestation.find({ merkle_root: response.merkle_root },
+                              (error, data) => {
+        if (error)
+          return reply_err(res, INTERNAL_ERROR_API, startTime);
+        if (data.length == 0)
+          return reply_err(res, 'BLA BLA', startTime);
+        reply_msg(res, { attestation: { merkle_root: data[0].merkle_root,
+          txid: data[0].txid, confirmed: data[0].confirmed,
+          inserted_at: data[0].inserted_at }, merkle_commitment: {
+          position: response.client_position, merkle_root: response.merkle_root,
+          commitment: response.commitment}}, startTime);
       });
     });
   },

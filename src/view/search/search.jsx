@@ -35,22 +35,19 @@ import QueryString from 'query-string';
 // | client_position | merkle_root | commitment | ops [{append,commitment},{append,commitment}]}
 //
 
-const waiting = (<div>Page - Wait ...</div>);
-
-// Attestation(1 row), MerkleProof(1 row)
-
 class Commitment extends Component {
   constructor(props) {
     super(props);
     this.state = {
       response: ''
-    }
+    };
   }
 
   show() {
     if (this.state.response === '')
       return 'Fail';
-      console.log(this.state.response);
+    const attestation = this.state.response.response.attestation;
+    const merkleproof = this.state.response.response.merkleproof;
     return (
       <td>
         <tr>
@@ -61,53 +58,53 @@ class Commitment extends Component {
         </tr>
         <tr>
           <td>MerkleRoot</td>
-          <td>{this.state.response.response.attestation.merkle_root}</td>
+          <td>{attestation.merkle_root}</td>
         </tr>
         <tr>
-          <td>Transaction ID</td>
-          <td>{this.state.response.response.attestation.txid}</td>
+          <td>Transaction_ID</td>
+          <td>{attestation.txid}</td>
         </tr>
         <tr>
           <td>Confirmed</td>
-          <td>{(this.state.response.response.attestation.confirmed) ? 'true': 'false'}</td>
+          <td>{(attestation.confirmed) ? 'true': 'false'}</td>
         </tr>
         <tr>
           <td>Inserted at</td>
-          <td>{this.state.response.response.attestation.inserted_at}</td>
+          <td>{attestation.inserted_at}</td>
         </tr>
         <tr>
           <td>MerkleProof</td>
         </tr>
         <tr>
           <td>Position</td>
-          <td>{this.state.response.response.merkleproof.position}</td>
+          <td>{merkleproof.position}</td>
         </tr>
         <tr>
           <td>MerkleRoot</td>
-          <td>{this.state.response.response.merkleproof.merkle_root}</td>
+          <td>{merkleproof.merkle_root}</td>
         </tr>
         <tr>
           <td>Commitment</td>
-          <td>{this.state.response.response.merkleproof.commitment}</td>
+          <td>{merkleproof.commitment}</td>
         </tr>
         <tr>
           <td>ops</td>
         </tr>
         <tr>
           <td>Append</td>
-          <td>{(this.state.response.response.merkleproof.ops[0].append) ? 'true': 'false'}</td>
+          <td>{(merkleproof.ops[0].append) ? 'true': 'false'}</td>
         </tr>
         <tr>
           <td>Commitment</td>
-          <td>{this.state.response.response.merkleproof.ops[0].commitment}</td>
+          <td>{merkleproof.ops[0].commitment}</td>
         </tr>
         <tr>
           <td>Append</td>
-          <td>{(this.state.response.response.merkleproof.ops[1].append) ? 'true': 'false'}</td>
+          <td>{(merkleproof.ops[1].append) ? 'true': 'false'}</td>
         </tr>
         <tr>
           <td>Commitment</td>
-          <td>{this.state.response.response.merkleproof.ops[1].commitment}</td>
+          <td>{merkleproof.ops[1].commitment}</td>
         </tr>
       </td>
     );
@@ -127,52 +124,139 @@ class Commitment extends Component {
   }
 }
 
-// Attestation(1 row), MerkleCommitment(all rows) data
+class MerkleRoot extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      response: ''
+    };
+  }
 
-const merkle_root = () => {
-  return (
-    <div>
-      <table width="100%">
+  show() {
+    if (this.state.response === '')
+      return 'Fail';
+    const attestation = this.state.response.response.attestation;
+    const merkle_commitment =
+    return (
+      <td>
         <tr>
-          <td>
-            Info Merkle Root
-          </td>
+          <td>MerkleRoot</td>
         </tr>
-      </table>
-    </div>
-  );
+        <tr>
+          <td>Attestation</td>
+        </tr>
+        <tr>
+          <td>MerkleRoot</td>
+          <td>{attestation.merkle_root}</td>
+        </tr>
+        <tr>
+          <td>Transaction_ID</td>
+          <td>{attestation.txid}</td>
+        </tr>
+        <tr>
+          <td>Confirmed</td>
+          <td>{(attestation.confirmed) ? 'true': 'false'}</td>
+        </tr>
+        <tr>
+          <td>Inserted at</td>
+          <td>{attestation.inserted_at}</td>
+        </tr>
+        <tr>
+          <td>MerkleCommitment </td>
+        </tr>
+        <tr>
+          <td>Position </td>
+          <td>{merkle_commitment.position}</td>
+        </tr>
+        <tr>
+          <td>MerkleRoot</td>
+          <td>{merkle_commitment.merkle_root}</td>
+        </tr>
+        <tr>
+          <td>Commitment</td>
+          <td>{merkle_commitment.commitment}</td>
+        </tr>
+      </td>
+    );
+  }
+
+  componentWillMount() {
+    Axios.get("/api/v1/merkleroot?merkle_root=" + this.props.query)
+    .then(response => { this.setState({ response: response.data }) });
+  }
+
+  render() {
+    return (
+      <div>
+        <table width="100%">{this.show()}</table>
+      </div>
+    );
+  }
+}
+
+class Position extends Component {
+  constructor(props) {
+    super(props)
+  }
+
+  show() {
+    return "Position TEST";
+  }
+
+  componentWillMount() {}
+
+  render() {
+    return (
+      <div>
+        <table width="100%">{this.show()}</table>
+      </div>
+    );
+  }
 }
 
 // txid: Attestation(1 row), AttestationInfo(1 row) data
 
-const txid = () => {
-  return (
-    <div>
-      <table width="100%">
-        <tr>
-          <td>
-            Transaction ID
-          </td>
-        </tr>
-      </table>
-    </div>
-  );
+class TransactionId extends Component {
+  constructor(props){
+    super(props);
+  }
+
+  show() {
+    return "Transaction Id TEST";
+  }
+
+  componentWillMount() {}
+
+  render() {
+    return (
+      <div>
+        <table width="100%">{this.show()}</table>
+      </div>
+    );
+  }
 }
 
-const position = (<div>Page - Position</div>);
+class Waiting extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-
+  render() {
+    return (
+      <div>Page - Wait ...</div>
+    );
+  }
+}
 
 const type_unknown = (<div>Page - Type Unknown</div>);
 
 const undefined = (<div>Page - Undefined</div>);
 
-
 class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: waiting,
+      page: <Waiting/>,
     };
   }
 
@@ -180,15 +264,15 @@ class Search extends Component {
     const value = QueryString.parse(this.props.location.search);
     if (value.query == undefined)
       return this.setState({page: page_undefined});
-    if (/[0-9A-Fa-f]{64}/g.test(value.query))
+    if (/[0-9A-Fa-f]{64}/g.test(value.query) || /^\d+$/.test(value.query))
       Axios.get("/api/v1/type?value=" + value.query)
       .then(response => {
         if (response.data.response === 'commitment')
           this.setState({page: <Commitment query={value.query}/> });
         else if (response.data.response === 'merkle_root')
-          this.setState({page: merkle_root()});
+          this.setState({page: <MerkleRoot query={value.query}/> });
         else if (response.data.response === 'txid')
-          this.setState({page: page_txid()});
+          this.setState({page: <TransactionId query={value.query}/> });
         else if (response.data.response === 'type unknown')
           this.setState({page: type_unknown()});
         else
