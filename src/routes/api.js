@@ -26,6 +26,7 @@ function api_get(app) {
   app.get(API_COMMITMENT_VERIFY, controllers.commitment_verify);
   app.get(API_COMMITMENT_PROOF, controllers.commitment_proof);
 
+  app.get('/api/v1/commitment/commitment', controllers.commitment_commitment);
 
   app.get(API_TYPE, controllers.type);
 

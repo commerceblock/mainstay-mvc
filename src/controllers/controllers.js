@@ -234,11 +234,11 @@ module.exports = {
     });
   },
   index: (req, res) => {
-    startTime = start_time();
+    let startTime = start_time();
     reply_msg(res, VERSION_API_V1, startTime);
   },
   latest_attestation: (req, res) => {
-    startTime = start_time();
+    let startTime = start_time();
     models.attestation.find().sort({ inserted_at: -1 }).limit(1)
                       .exec((error, data) => {
       if (error)
@@ -248,7 +248,7 @@ module.exports = {
     });
   },
   attestation: (req, res) => {
-    startTime = start_time();
+    let startTime = start_time();
     let txid = get_txid_arg(req, res, startTime);
     if (txid === undefined)
         return ;
@@ -263,7 +263,7 @@ module.exports = {
     });
   },
   latest_commitment: (req, res) => {
-    startTime = start_time();
+    let startTime = start_time();
     let position = get_position_arg(req, res, startTime);
     if (position === undefined)
       return ;
@@ -281,13 +281,12 @@ module.exports = {
         if (data.length == 0)
           return reply_err(res, POSITION_UNKNOWN, startTime);
         reply_msg(res, { commitment: data[0].commitment,
-                         merkle_root: merkle_root, txid: txid },
-                  startTime);
+                         merkle_root: merkle_root, txid: txid }, startTime);
       });
     });
   },
   commitment: (req, res) => {
-    startTime = start_time();
+    let startTime = start_time();
     let position = get_position_arg(req, res, startTime);
     if (position === undefined)
       return ;
@@ -301,14 +300,37 @@ module.exports = {
         return reply_err(res, INTERNAL_ERROR_API, startTime);
       if (data.length == 0)
         return reply_err(res, COMMITMENT_POSITION_UNKNOWN, startTime);
-
       reply_msg(res, { commitment: data[0].commitment,
-                         merkle_root: merkle_root},
-                  startTime);
+                       merkle_root: merkle_root}, startTime);
+    });
+  },
+  commitment_commitment: (req, res) => {
+    let startTime = start_time();
+    let commitment = get_commitment_arg(req, res, startTime);
+    if (commitment === undefined)
+      return ;
+    models.merkleProof.find({ commitment:  commitment }, (error, data) => {
+      if (error)
+        return reply_err(res, INTERNAL_ERROR_API, startTime);
+      if (data.length == 0)
+        return reply_err(res, 'BLA BLA', startTime);
+      let response = data[0];
+      models.attestation.find({ merkle_root: response.merkle_root },
+                              (error, data) => {
+        if (error)
+          return reply_err(res, INTERNAL_ERROR_API, startTime);
+        if (data.length == 0)
+          return reply_err(res, 'BLA BLA', startTime);
+        reply_msg(res, { attestation: { merkle_root: data[0].merkle_root,
+          txid: data[0].txid, confirmed: data[0].confirmed,
+          inserted_at: data[0].inserted_at }, merkleproof: {
+          position: response.client_position, merkle_root: response.merkle_root,
+          commitment: response.commitment, ops: response.ops }}, startTime);
+      });
     });
   },
   commitment_latest_proof: (req, res) => {
-    startTime = start_time();
+    let startTime = start_time();
     let position = get_position_arg(req, res, startTime);
     if (position === undefined)
       return ;
@@ -328,7 +350,7 @@ module.exports = {
     });
   },
   commitment_verify: (req, res) => {
-    startTime = start_time();
+    let startTime = start_time();
     let position = get_position_arg(req, res, startTime);
     if (position === undefined)
       return ;
@@ -353,7 +375,7 @@ module.exports = {
     });
   },
   commitment_proof: (req, res) => {
-    startTime = start_time();
+    let startTime = start_time();
     let position = get_position_arg(req, res, startTime);
     if (position === undefined)
       return ;
@@ -374,7 +396,7 @@ module.exports = {
   },
   // Function METHOD POST
   commitment_send: (req, res) => {
-    startTime = start_time();
+    let startTime = start_time();
     req.on(DATA, chunk => {
       let data = JSON.parse(chunk.toString());
       let payload = JSON.parse(base64decode(data[MAINSTAY_PAYLOAD]));
@@ -409,7 +431,7 @@ module.exports = {
     });
   },
   type: (req, res) => {
-    startTime = start_time();
+    let startTime = start_time();
     let paramValue = req.query[VALUE];
     if (paramValue === undefined)
       return reply_err(res, PARAM_UNDEFINED, startTime);
