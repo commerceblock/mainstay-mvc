@@ -136,7 +136,7 @@ class MerkleRoot extends Component {
     if (this.state.response === '')
       return 'Fail';
     const attestation = this.state.response.response.attestation;
-    const merkle_commitment =
+    const merkle_commitment = this.state.response.response.merkle_commitment;
     return (
       <td>
         <tr>
