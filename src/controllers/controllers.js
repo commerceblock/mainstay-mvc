@@ -44,6 +44,16 @@ const MAINSTAY_SIGNATURE = 'X-MAINSTAY-SIGNATURE';
 const DATA = 'data';
 const VALUE = 'value';
 
+function get_hash_arg(req, res, startTime) {
+  const time = new Date();
+  let paramTxid = req.query['hash'];
+  if (paramTxid === undefined)
+    return reply_err(res, MISSING_ARG_TXID, startTime);
+  if (paramTxid.length != SIZE_TXID)
+    return reply_err(res, BAD_LENGTH_TXID, startTime);
+  return paramTxid;
+}
+
 function get_txid_arg(req, res, startTime) {
   const time = new Date();
   let paramTxid = req.query[ARG_TXID];
@@ -140,11 +150,29 @@ function find_type_hash(res, paramValue, startTime) {
 
 function find_type_number(res, paramValue, startTime) {
   models.clientDetails.find({ client_position: paramValue }, (error, data) => {
-
+    if (error)
+      return reply_err(res, INTERNAL_ERROR_API, startTime);
+    if (data.length != 0)
+      return reply_msg(res, 'position', startTime);
+    reply_err(res, 'BLA BLA', startTime);
   });
 }
 
 module.exports = {
+  blockhash: (req, res) => {
+    let startTime = start_time();
+    let hash = get_hash_arg(req, res, startTime);
+    if (hash === undefined)
+      return ; // TODO add message error
+    models.attestationInfo.find({blockhash: hash}, (error, data) => {
+      if (error)
+        return reply_err(res, INTERNAL_ERROR_API, startTime);
+      if (data.length == 0)
+        return reply_err(res, 'Bla Bla', startTime);
+      reply_msg(res, { blockhash: { txid: data[0].txid, amount: data[0].amount,
+        blockhash: data[0].blockhash, time: data[0].time }}, startTime);
+    });
+  },
   ctrl_latest_attestation: (req, res) => {
     let response = [];
     models.attestation.find().sort({ inserted_at: -1 }).limit(10)
@@ -452,6 +480,49 @@ module.exports = {
           inserted_at: data[0].inserted_at }, merkle_commitment: {
           position: response.client_position, merkle_root: response.merkle_root,
           commitment: response.commitment}}, startTime);
+      });
+    });
+  },
+  position: (req, res) => {
+    let startTime = start_time();
+    let position = get_position_arg(req, res, startTime);
+    if (position === undefined)
+      return ; // TODO add message error
+    models.merkleProof.find({client_position: position}).limit(5)
+                      .exec((error, data) => {
+      if (error)
+        return reply_err(res, INTERNAL_ERROR_API, startTime);
+      if (data.length == 0)
+        return reply_err(res, 'BLA BLA', startTime);
+      let array = [];
+      for (let index in data)
+        array.push({ position: data[index].client_position,
+          merkle_root: data[index].merkle_root,
+          commitment: data[index].commitment, ops: data[index].ops});
+      reply_msg(res, { position: array }, startTime);
+    });
+  },
+  transaction: (req, res) => {
+    let startTime = start_time();
+    let hash = get_hash_arg(req, res, startTime);
+    if (hash === undefined)
+      return ; // TODO add message error
+    models.attestation.find({txid: hash}, (error, data) => {
+      if (error)
+        return reply_err(res, INTERNAL_ERROR_API, startTime);
+      if (data.length == 0)
+        return reply_err(res, 'BLA BLA', startTime);
+      let response = data[0];
+      models.attestationInfo.find({}, (error, data) => {
+        if (error)
+          return reply_err(res, INTERNAL_ERROR_API, startTime);
+        if (data.length == 0)
+          return reply_err(res, 'BLA BLA', startTime);
+        reply_msg(res, { attestation: { merkle_root: response.merkle_root,
+          txid: response.txid, confirmed: response.confirmed,
+          inserted_at: response.inserted_at }, attestationInfo: {
+          txid: data[0].txid, amount: data[0].amount,
+          blockhash: data[0].blockhash, time: data[0].time }}, startTime);
       });
     });
   },

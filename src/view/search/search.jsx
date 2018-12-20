@@ -9,31 +9,55 @@ import Navbar from '../navbar';
 import React, { Component } from 'react';
 import QueryString from 'query-string';
 
+class Blockhash extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      response: ''
+    }
+  }
 
-// Attestation
-//
-// | merkle_root | txid | confirmed | inserted_at |
-//
-// AttestationInfo
-//
-// | txid | amount | blockhash | time |
-//
-// ClientCommitment
-//
-// | client_position | commitment |
-//
-// ClientDetails
-//
-// | client_position | auth_token | pubkey |
-//
-// MerkleCommitment
-//
-// | client_position | merkle_root | commitment |
-//
-// MerkleProof
-//
-// | client_position | merkle_root | commitment | ops [{append,commitment},{append,commitment}]}
-//
+  show() {
+    if (this.state.response === '')
+      return 'Fail';
+    const blockhash = this.state.response.response.blockhash;
+    return (
+      <td>
+        <tr>Blockhash</tr>
+        <tr>
+          <td>Transaction_ID</td>
+          <td>{blockhash.txid}</td>
+        </tr>
+        <tr>
+          <td>Amount</td>
+          <td>{blockhash.amount}</td>
+        </tr>
+        <tr>
+          <td>Blockhash</td>
+          <td>{blockhash.blockhash}</td>
+        </tr>
+        <tr>
+          <td>Time</td>
+          <td>{blockhash.time}</td>
+        </tr>
+      </td>
+    );
+  }
+
+  componentWillMount() {
+    Axios.get("/api/v1/blockhash?hash=" + this.props.query)
+    .then(response => { this.setState({ response: response.data }) });
+  }
+
+  render() {
+    return (
+      <div>
+        <table width="100%">{this.show()}</table>
+      </div>
+    );
+  }
+}
+
 
 class Commitment extends Component {
   constructor(props) {
@@ -197,13 +221,47 @@ class MerkleRoot extends Component {
 class Position extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      response: ''
+    };
   }
 
   show() {
-    return "Position TEST";
+    if (this.state.response === '')
+      return 'Fail';
+    return (
+      <td>
+        <tbody>
+          {this.state.response.response.position.map((data) =>
+            <tr>
+              <tr>
+                <td>Position</td>
+                <td>{data.position}</td>
+              </tr>
+              <tr>
+                <td>Commitment</td>
+                <td>{data.commitment}</td>
+              </tr>
+              <tr>
+                <td>MerkleRoot</td>
+                <td>{data.merkle_root}</td>
+              </tr>
+              <tr>
+                <td>ops 0</td>
+                <td>{(data.ops[0].append) ? 'true': 'false'}</td>
+                <td>{data.ops[0].commitment}</td>
+              </tr>
+            </tr>
+          )}
+        </tbody>
+      </td>
+    );
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+    Axios.get("/api/v1/position?position=" + this.props.query)
+    .then(response => { this.setState({ response: response.data }) });
+  }
 
   render() {
     return (
@@ -214,18 +272,69 @@ class Position extends Component {
   }
 }
 
-// txid: Attestation(1 row), AttestationInfo(1 row) data
-
 class TransactionId extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      response: ''
+    }
   }
 
   show() {
-    return "Transaction Id TEST";
+    if (this.state.response === '')
+      return 'Fail';
+
+    console.log(this.state.response);
+
+    const attestation = this.state.response.response.attestation;
+    const attestationInfo = this.state.response.response.attestationInfo;
+    return (
+      <td>
+        <tr>TransactionID</tr>
+        <tbody>
+          <tr>Attestation</tr>
+          <tr>
+            <td>Merkle_root</td>
+            <td>{attestation.merkle_root}</td>
+          </tr>
+          <tr>
+            <td>Transaction_ID</td>
+            <td>{attestation.txid}</td>
+          </tr>
+          <tr>
+            <td>Confirmed</td>
+            <td>{(attestation.confirmed) ? 'true': 'false'}</td>
+          </tr>
+          <tr>
+            <td>Inserted_at</td>
+            <td>{attestation.inserted_at}</td>
+          </tr>
+          <tr>AttestationInfo</tr>
+          <tr>
+            <td>Transaction_ID</td>
+            <td>{attestationInfo.txid}</td>
+          </tr>
+          <tr>
+            <td>Amount</td>
+            <td>{attestationInfo.amount}</td>
+          </tr>
+          <tr>
+            <td>Blockhash</td>
+            <td>{attestationInfo.blockhash}</td>
+          </tr>
+          <tr>
+            <td>Time</td>
+            <td>{attestationInfo.time}</td>
+          </tr>
+        </tbody>
+      </td>
+    );
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+    Axios.get("/api/v1/transaction?hash=" + this.props.query)
+    .then(response => { this.setState({ response: response.data }) });
+  }
 
   render() {
     return (
@@ -271,8 +380,12 @@ class Search extends Component {
           this.setState({page: <Commitment query={value.query}/> });
         else if (response.data.response === 'merkle_root')
           this.setState({page: <MerkleRoot query={value.query}/> });
+        else if (response.data.response === 'position')
+          this.setState({page: <Position query={value.query}/> });
         else if (response.data.response === 'txid')
           this.setState({page: <TransactionId query={value.query}/> });
+        else if (response.data.response === 'blockhash')
+          this.setState({page: <Blockhash query={value.query}/> });
         else if (response.data.response === 'type unknown')
           this.setState({page: type_unknown()});
         else
