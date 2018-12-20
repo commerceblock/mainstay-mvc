@@ -20,5 +20,3 @@ const Main = () => (
 );
 
 ReactDOM.render(<Main/>, document.getElementById('root'));
-
-module.hot.accept();

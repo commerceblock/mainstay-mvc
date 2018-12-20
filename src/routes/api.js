@@ -26,6 +26,11 @@ function api_get(app) {
   app.get(API_COMMITMENT_VERIFY, controllers.commitment_verify);
   app.get(API_COMMITMENT_PROOF, controllers.commitment_proof);
 
+  app.get('/api/v1/commitment/commitment', controllers.commitment_commitment);
+  app.get('/api/v1/merkleroot', controllers.merkleroot);
+  app.get('/api/v1/position', controllers.position);
+  app.get('/api/v1/transaction', controllers.transaction);
+  app.get('/api/v1/blockhash', controllers.blockhash);
 
   app.get(API_TYPE, controllers.type);
 
