@@ -989,3 +989,48 @@ table th span {
 .LatestCommitment.head-table table th:nth-child(2) {
   width: 100vw;
 }
+
+.massages {
+  position: absolute;
+  top: 5px;
+  background: #Fff;
+  height: 50px;
+  font-size: 20px;
+  line-height: 43px;
+  z-index: 100;
+  border:1px solid #ddd;
+}
+
+
+
+.error {
+  /*color: #b84442;
+  background-color: #f2dede;
+  border: 1px solid #b84442;*/
+}
+.success{
+  /*color: #3c763d;
+  background-color: #dff0d8;
+  border:1px solid #3c763d;*/
+
+
+
+}
+
+.success .swal-button {
+  background-color: #fff;
+  border:1px solid #3c763d;
+  color:#3c763d;
+}
+.success .swal-button:hover {
+  background-color: #dff0d8;
+}
+
+.error .swal-button {
+  color: #b84442;
+  background-color: #fff;
+  border: 1px solid #b84442;
+}
+.error .swal-button:hover {
+  background-color: #f2dede;
+}
