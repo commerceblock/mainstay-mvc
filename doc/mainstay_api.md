@@ -159,9 +159,9 @@ const url = "https://localhost:9000/api/v1";
 
 const route = '/commitment/proof'
 const position = 'position=0'
-const commitment = 'commitment=1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7'
+const merkle_root = 'merkle_root=0849d03563d6d7e7d2d0063a5dae944bfcfd4d56d149ffbe73ccead275b2762e'
 
-request.get(url + route + '?' + position + '&' + commitment, (error, response, body) => {
+request.get(url + route + '?' + position + '&' + merkle_root, (error, response, body) => {
   console.log(body);
 });
 ```
@@ -170,6 +170,7 @@ request.get(url + route + '?' + position + '&' + commitment, (error, response, b
 {
   "response": {
     "merkle_root": "0849d03563d6d7e7d2d0063a5dae944bfcfd4d56d149ffbe73ccead275b2762e",
+    "commitment": "1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7",
     "ops": [
       {
         "append": true,

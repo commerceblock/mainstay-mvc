@@ -9,10 +9,10 @@ class Navbar extends Component {
             <input
               tabindex="0"
               type="text"
-              name="search"
+              name="query"
               id="search"
               class="form-control top-search mousetrap"
-              placeholder="Search for blocks, addresses or transactions"
+              placeholder="Search for position, commitment, txid, ..."
             />
           </div>
         </form>
