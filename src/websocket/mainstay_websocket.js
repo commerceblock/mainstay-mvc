@@ -239,12 +239,18 @@ function watch_mongo() {
   const streamMerkleCommitment = models.merkleCommitment.watch();
   const streamMerkleProof = models.merkleProof.watch();
   streamAttestation.on(UPDATE, (data) => {
+
+    console.log(data);
+
     let message = JSON.stringify([0, [
       data.fullDocument.merkle_root,
       data.fullDocument.txid,
       data.fullDocument.confirmed,
       data.fullDocument.inserted_at
     ]]);
+
+    console.log("> Debug ........... ");
+
     for (let itr = 0; itr < channelAttestation.length; ++itr)
       channelAttestation[itr].client.sendUTF(message);
   });

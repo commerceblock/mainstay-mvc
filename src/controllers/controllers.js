@@ -1,7 +1,10 @@
-const message = require('bitcore-message');
 const models = require('../models/models');
 const mongoose = require('mongoose');
+const elliptic = require('elliptic');
 const { base64encode, base64decode } = require('nodejs-base64');
+//
+const ec = new elliptic.ec('secp256k1');
+//
 // All Constants
 const ARG_TXID = 'txid';
 const ARG_POSITION = 'position';
@@ -130,7 +133,7 @@ function find_type_hash(res, paramValue, startTime) {
         return reply_err(res, INTERNAL_ERROR_API, startTime);
       if (data.length != 0)
         return reply_msg(res, 'merkle_root', startTime);
-      models.attestationInfo.find({ txid: paramValue }, (error, data) => {
+      models.Info.find({ txid: paramValue }, (error, data) => {
         if (error)
           return reply_err(res, INTERNAL_ERROR_API, startTime);
         if (data.length != 0)
@@ -240,20 +243,19 @@ module.exports = {
         return res.json({error: 'token'});
       if (payload.commitment === undefined)
         return res.json({error: 'commitment'});
-      if (payload.signature === undefined)
+      if (payload.signature === undefined ||
+          !/[0-9A-Fa-f]{75}/g.test(payload.signature))
         return res.json({error: 'signature'});
       models.clientDetails.find({client_position: payload.position},
                                 (error, data) => {
-
-        if (data === undefined || data.length == 0) {
+        if (data === undefined || data.length == 0)
           return res.json({error: 'undefined'});
-        }
         if (error)
           return res.json({error: 'api'});
         if (data[0].auth_token != payload.token)
           return res.json({error: 'token'});
-        let msg = new message(payload.commitment);
-        if (msg.verify(data[0].pubkey, payload.signature) != true)
+        let pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
+        if (!ec.verify(payload.commitment, payload.signature, pubkey)) {
           return res.json({error: 'signature'});
         models.clientCommitment.findOneAndUpdate(
             { client_position: payload.position },
