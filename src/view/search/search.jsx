@@ -232,12 +232,14 @@ class Position extends Component {
     return (
       <td>
         <tbody>
+            <tr>
+              <td>Client Name: {this.state.response.response.client_name}</td>
+            </tr>
+            <tr>
+              <td>Position: {this.state.response.response.position[0].position}</td>
+            </tr>
           {this.state.response.response.position.map((data) =>
             <tr>
-              <tr>
-                <td>Position</td>
-                <td>{data.position}</td>
-              </tr>
               <tr>
                 <td>Commitment</td>
                 <td>{data.commitment}</td>
@@ -246,11 +248,14 @@ class Position extends Component {
                 <td>MerkleRoot</td>
                 <td>{data.merkle_root}</td>
               </tr>
-              <tr>
-                <td>ops 0</td>
-                <td>{(data.ops[0].append) ? 'true': 'false'}</td>
-                <td>{data.ops[0].commitment}</td>
-              </tr>
+              {data.ops.map((op, i) =>
+                <tr>
+                  <td>ops {i}</td>
+                  <td>{(op.append) ? 'true': 'false'}</td>
+                  <td>{op.commitment}</td>
+                </tr>
+              )}
+              <tr><td></td></tr>
             </tr>
           )}
         </tbody>

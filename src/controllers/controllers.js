@@ -503,7 +503,15 @@ module.exports = {
         array.push({ position: data[index].client_position,
           merkle_root: data[index].merkle_root,
           commitment: data[index].commitment, ops: data[index].ops});
-      reply_msg(res, { position: array }, startTime);
+
+      models.clientDetails.findOne({ client_position: position }, (error, client) => {
+        if (error)
+          return reply_err(res, INTERNAL_ERROR_API, startTime);
+        if (client.length == 0)
+          return reply_err(res, 'BLA BLA', startTime);
+
+        reply_msg(res, { position: array, client_name: client.client_name }, startTime);
+      });
     });
   },
   transaction: (req, res) => {
