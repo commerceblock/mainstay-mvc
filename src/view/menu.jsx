@@ -1,6 +1,7 @@
 import Axios from 'axios';
 import React, { Component } from 'react';
 import swal from 'sweetalert';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import {
   Button,
   Form,
@@ -39,9 +40,9 @@ class Menu extends Component {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  // isShow() {
-  //   this.setState({showMassage: !this.state.showMassage});
-  // }
+  isShow() {
+    this.setState({showMassage: !this.state.showMassage});
+  }
 
   handleSubmit(event) {
     event.preventDefault();
@@ -52,12 +53,8 @@ class Menu extends Component {
       signature: this.state.signature
     }).then(res => {
       if(res.data && "error" in res.data){
-          let error_message = "Incorrect " + res.data.error;
-          if (res.data.error === 'undefined'){
-              error_message = "Something went wrong";
-          }
         swal({
-          text: error_message,
+          text: "Error!",
           icon: "error",
           className: "error",
           closeOnClickOutside: true

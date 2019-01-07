@@ -24,6 +24,7 @@ const schemaClientDetails = new Schema({
   client_position: Number,
   auth_token: String,
   pubkey: String,
+  client_name: String,
 }, { collection: 'ClientDetails' });
 
 const schemaMerkleCommitment = new Schema({
