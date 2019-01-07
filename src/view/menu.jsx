@@ -96,21 +96,21 @@ class Menu extends Component {
                 <Input name="token"
                        bsSize="sm"
                        onChange={this.handleChange}
-                       placeholder=TOKEN/>
+                       placeholder={TOKEN}/>
               </FormGroup>
               <FormGroup>
                 <Label>Commitment</Label>
                 <Input name="commitment"
                        bsSize="sm"
                        onChange={this.handleChange}
-                       placeholder=COMMITMENT/>
+                       placeholder={COMMITMENT}/>
               </FormGroup>
               <FormGroup>
                 <Label>Signature</Label>
                 <Input name="signature"
                        bsSize="sm"
                        onChange={this.handleChange}
-                       placeholder=SIGNATURE/>
+                       placeholder={SIGNATURE}/>
               </FormGroup>
             </ModalBody>
             <ModalFooter>

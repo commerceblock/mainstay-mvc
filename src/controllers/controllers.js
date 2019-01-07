@@ -277,11 +277,11 @@ module.exports = {
         if (data[0].auth_token != payload.token)
           return res.json({error: 'token'});
         let pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
-        if (!ec.verify(payload.commitment, payload.signature, pubkey)) {
+        if (!ec.verify(payload.commitment, payload.signature, pubkey))
           return res.json({error: 'signature'});
         models.clientCommitment.findOneAndUpdate(
-            { client_position: payload.position },
-            { commitment: payload.commitment }, { upsert: true }, (error) => {
+          { client_position: payload.position },
+          { commitment: payload.commitment }, { upsert: true }, (error) => {
           if (error)
             return res.json({error: 'api'});
           return res.send();
