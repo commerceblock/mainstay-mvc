@@ -2,6 +2,8 @@ import Axios from 'axios';
 import React, { Component } from 'react';
 import swal from 'sweetalert';
 
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
 import {
   Button,
   Form,
@@ -34,9 +36,9 @@ class Menu extends Component {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  // isShow() {
-  //   this.setState({showMassage: !this.state.showMassage});
-  // }
+  isShow() {
+    this.setState({showMassage: !this.state.showMassage});
+  }
 
   handleSubmit(event) {
     event.preventDefault();
@@ -47,12 +49,8 @@ class Menu extends Component {
       signature: this.state.signature
     }).then(res => {
       if(res.data && "error" in res.data){
-          let error_message = "Incorrect " + res.data.error;
-          if (res.data.error === 'undefined'){
-              error_message = "Something went wrong";
-          }
         swal({
-          text: error_message,
+          text: "Error!",
           icon: "error",
           className: "error",
           closeOnClickOutside: true
@@ -78,7 +76,11 @@ class Menu extends Component {
   render() {
     return (
         <div id="menu">
-          <Button color="muted" onClick={this.toggle}>Send Commitment {this.props.buttonLabel}</Button>
+          <Link  to="/" className="menu" color="muted" >Home {this.props.buttonLabel}</Link>
+          <Link to="/attestation" className="menu" color="muted" >Attestations {this.props.buttonLabel}</Link>
+          <Button className="menu" color="muted" >Clients/Slots {this.props.buttonLabel}</Button>
+          <Button className="menu" color="muted" onClick={this.toggle}>Send Commitment {this.props.buttonLabel}</Button>
+          <Button className="menu" color="muted" >API information {this.props.buttonLabel}</Button>
           <Modal isOpen={this.state.modal} toggle={this.toggle}>
             <ModalHeader toggle={this.toggle}>Send Commitment</ModalHeader>
             <Form onSubmit={this.handleSubmit}>
@@ -106,6 +108,7 @@ class Menu extends Component {
               </ModalFooter>
             </Form>
           </Modal>
+
         </div>
     );
   }

@@ -173,24 +173,46 @@ module.exports = {
         blockhash: data[0].blockhash, time: data[0].time }}, startTime);
     });
   },
+
   ctrl_latest_attestation: (req, res) => {
-    let response = [];
-    models.attestation.find().sort({ inserted_at: -1 }).limit(10)
-                      .exec((error, data) => {
-      if (error)
-        return ; // TODO Add message error
-      res.header("Access-Control-Allow-Origin", "*");
-      for (let itr = 0; itr < data.length; ++itr)
-        response.push({
-          txid: data[itr].txid,
-          merkle_root: data[itr].merkle_root,
-          confirmed: data[itr].confirmed,
-          age: (now.toDateString() === data[itr].inserted_at.toDateString())
-            ? dateFormat(data[itr].inserted_at, "HH:MM:ss")
-            : dateFormat(data[itr].inserted_at, "HH:MM:ss dd/mm/yy")
+
+    let response = {};
+    models.attestation.find().sort({inserted_at: -1})
+        .exec((error, data) => {
+
+          let page = parseInt(req.query.page);
+          let limit = 20;
+          let start = limit * (page - 1);
+
+          if (!page) {
+              limit = 10;
+              start = 0;
+          }
+
+          let end = start + limit;
+          if (end > data.length) {
+            end = data.length;
+          }
+
+          response['total'] = data.length;
+          response['pages'] = data.length / limit;
+          response['data'] = [];
+
+          if (error)
+            return; // TODO Add message error
+          res.header("Access-Control-Allow-Origin", "*");
+
+          for (let itr = start; itr < end; ++itr)
+            response['data'].push({
+              txid: data[itr].txid,
+              merkle_root: data[itr].merkle_root,
+              confirmed: data[itr].confirmed,
+              age: (now.toDateString() === data[itr].inserted_at.toDateString())
+                  ? dateFormat(data[itr].inserted_at, "HH:MM:ss")
+                  : dateFormat(data[itr].inserted_at, "HH:MM:ss dd/mm/yy")
+            });
+          res.json(response);
         });
-      res.json(response);
-    });
   },
   ctrl_latest_attestation_info: (req, res) => {
     let response = [];
