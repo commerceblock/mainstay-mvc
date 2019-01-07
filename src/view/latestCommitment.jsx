@@ -20,7 +20,7 @@ class LatestCommitment extends Component {
       <div class="column">
         <div class="d-flex align-items-center">
           <h4>Latest Commitment</h4>
-          <a href="/mempool" class="pl-2 keyboard-target" data-keynav-priority>
+          <a href="/" class="pl-2 keyboard-target" data-keynav-priority>
             <small>see more ...</small>
           </a>
         </div>
