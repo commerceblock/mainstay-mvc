@@ -240,20 +240,22 @@ module.exports = {
                       .exec((error, data) => {
       if (error)
         return ; // TODO Add message error
-      models.merkleCommitment.find({ merkle_root: data[0].merkle_root })
+      if (data.length > 0) {
+        models.merkleCommitment.find({ merkle_root: data[0].merkle_root })
                              .exec((error, data) => {
-        if (error)
-          return ; // TODO Add message error
-        res.header("Access-Control-Allow-Origin", "*");
-        for (let itr = 0; itr < data.length; ++itr) {
-          response.push({
-            position: data[itr].client_position,
-            merkle_root: data[itr].merkle_root,
-            commitment: data[itr].commitment,
-          });
-        }
-        res.json(response);
-      });
+          if (error)
+            return ; // TODO Add message error
+          res.header("Access-Control-Allow-Origin", "*");
+          for (let itr = 0; itr < data.length; ++itr) {
+            response.push({
+              position: data[itr].client_position,
+              merkle_root: data[itr].merkle_root,
+              commitment: data[itr].commitment,
+            });
+          }
+          res.json(response);
+        });
+      }
     });
   },
   ctrl_send_commitment: (req, res) => {
