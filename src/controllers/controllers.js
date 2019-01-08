@@ -455,8 +455,12 @@ module.exports = {
   commitment_send: (req, res) => {
     let startTime = start_time();
     req.on(DATA, chunk => {
+      console.log(chunk)
       let data = JSON.parse(chunk.toString());
+      console.log(chunk.toString())
+      console.log(data)
       let payload = JSON.parse(base64decode(data[MAINSTAY_PAYLOAD]));
+      console.log(payload)
       if (payload === undefined)
         return reply_err(res, MISSING_ARG_PAYLOAD, startTime);
       signatureCommitment = data[MAINSTAY_SIGNATURE];
@@ -472,6 +476,8 @@ module.exports = {
                                 (error, data) => {
         if (error)
           return reply_err(res, INTERNAL_ERROR_API, startTime);
+        if (data.length == 0)
+          return reply_err(res, POSITION_UNKNOWN, startTime);
         if (data[0].auth_token != payload.token)
           return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
         let msg = new message(payload.commitment);
