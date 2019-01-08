@@ -79,7 +79,11 @@ class Menu extends Component {
   render() {
     return (
       <div id="menu">
-        <Button color="muted" onClick={this.toggle}>Send Commitment {this.props.buttonLabel}</Button>
+        <Link  to="/" className="menu" color="muted" >Home {this.props.buttonLabel}</Link>
+        <Link to="/attestation" className="menu" color="muted" >Attestations {this.props.buttonLabel}</Link>
+        <Button className="menu" color="muted" >Clients/Slots {this.props.buttonLabel}</Button>
+        <Button className="menu" color="muted" onClick={this.toggle}>Send Commitment {this.props.buttonLabel}</Button>
+        <Button className="menu" color="muted" >API information {this.props.buttonLabel}</Button>
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Send Commitment</ModalHeader>
           <Form onSubmit={this.handleSubmit}>
