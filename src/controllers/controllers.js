@@ -133,7 +133,7 @@ function find_type_hash(res, paramValue, startTime) {
         return reply_err(res, INTERNAL_ERROR_API, startTime);
       if (data.length != 0)
         return reply_msg(res, 'merkle_root', startTime);
-      models.Info.find({ txid: paramValue }, (error, data) => {
+      models.attestationInfo.find({ txid: paramValue }, (error, data) => {
         if (error)
           return reply_err(res, INTERNAL_ERROR_API, startTime);
         if (data.length != 0)
