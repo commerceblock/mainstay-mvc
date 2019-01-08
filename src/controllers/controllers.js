@@ -457,9 +457,10 @@ module.exports = {
     let startTime = start_time();
     req.on(DATA, chunk => {
       // test payload in base64 format and defined
-      let data = JSON.parse(chunk.toString());
+      let data;
       let payload;
       try {
+        data = JSON.parse(chunk.toString());
         payload = JSON.parse(base64decode(data[MAINSTAY_PAYLOAD]));
       } catch (e) {
         return reply_err(res, BAD_ARG_PAYLOAD, startTime);
@@ -477,6 +478,8 @@ module.exports = {
         return reply_err(res, MISSING_PAYLOAD_POSITION, startTime);
       if (payload.token === undefined)
         return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
+
+      // try get client details
       models.clientDetails.find({ client_position: payload.position },
                                 (error, data) => {
         if (error)
@@ -485,16 +488,26 @@ module.exports = {
           return reply_err(res, POSITION_UNKNOWN, startTime);
         if (data[0].auth_token != payload.token)
           return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
-        let msg = new message(payload.commitment);
-        if (msg.verify(data[0].pubkey, signatureCommitment) != true)
-          return reply_err(res, SIGNATURE_INVALID, startTime);
-        models.clientCommitment.findOneAndUpdate(
+
+        try {
+          // get pubkey hex
+          let pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
+
+          // get base64 signature
+          let sig = Buffer.from(signatureCommitment, 'base64')
+
+          if (!ec.verify(payload.commitment, sig, pubkey))
+            return reply_err(res, SIGNATURE_INVALID, startTime);
+          models.clientCommitment.findOneAndUpdate(
             { client_position: payload.position },
             { commitment: payload.commitment }, { upsert: true }, (error) => {
-          if (error)
-            return reply_err(res, INTERNAL_ERROR_API, startTime);
-          reply_msg(res, 'feedback', startTime);
-        });
+            if (error)
+              return reply_err(res, INTERNAL_ERROR_API, startTime);
+            reply_msg(res, 'feedback', startTime);
+          });
+        } catch (e) {
+          return reply_err(res, SIGNATURE_INVALID, startTime);
+        }
       });
     });
   },
