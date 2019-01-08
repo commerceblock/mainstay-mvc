@@ -25,6 +25,7 @@ const MISSING_ARG_APIKEY = 'missing X-MAINSTAY-APIKEY';
 const MISSING_ARG_COMMITMENT = 'missing commitment parameter';
 const MISSING_ARG_MERKLE_ROOT = 'missing merkle_root parameter';
 const MISSING_ARG_PAYLOAD = 'missing X-MAINSTAY-PAYLOAD';
+const BAD_ARG_PAYLOAD = 'X-MAINSTAY-PAYLOAD not in base64 format'
 const MISSING_ARG_POSITION = 'missing position parameter';
 const MISSING_ARG_SIGNATURE_APIKEY = 'missing X-MAINSTAY-SIGNATURE-APIKEY';
 const MISSING_ARG_SIGNATURE = 'missing X-MAINSTAY-SIGNATURE';
@@ -455,14 +456,18 @@ module.exports = {
   commitment_send: (req, res) => {
     let startTime = start_time();
     req.on(DATA, chunk => {
-      console.log(chunk)
+      // test payload in base64 format and defined
       let data = JSON.parse(chunk.toString());
-      console.log(chunk.toString())
-      console.log(data)
-      let payload = JSON.parse(base64decode(data[MAINSTAY_PAYLOAD]));
-      console.log(payload)
+      let payload;
+      try {
+        payload = JSON.parse(base64decode(data[MAINSTAY_PAYLOAD]));
+      } catch (e) {
+        return reply_err(res, BAD_ARG_PAYLOAD, startTime);
+      }
       if (payload === undefined)
         return reply_err(res, MISSING_ARG_PAYLOAD, startTime);
+
+      // check payload components are defined
       signatureCommitment = data[MAINSTAY_SIGNATURE];
       if (signatureCommitment === undefined)
         return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
