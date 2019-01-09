@@ -25,6 +25,6 @@ console.log("Msg hash               :", msgHash);
 //
 var key = ec.keyFromPublic(pubKey, 'hex');
 
-var test2 = "7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090";
+var test2 = "304402201742daea5ec3b7306b9164be862fc1659cc830032180b8b17beffe02645860d602201039eba402d22e630308e6af05da8dd4f05b51b7d672ca5fc9e3b0a57776365c";
 
 console.log("Signature valid?", ec.verify(msgHash, test2, key));

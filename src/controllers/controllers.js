@@ -25,6 +25,7 @@ const MISSING_ARG_APIKEY = 'missing X-MAINSTAY-APIKEY';
 const MISSING_ARG_COMMITMENT = 'missing commitment parameter';
 const MISSING_ARG_MERKLE_ROOT = 'missing merkle_root parameter';
 const MISSING_ARG_PAYLOAD = 'missing X-MAINSTAY-PAYLOAD';
+const BAD_ARG_PAYLOAD = 'X-MAINSTAY-PAYLOAD not in base64 format'
 const MISSING_ARG_POSITION = 'missing position parameter';
 const MISSING_ARG_SIGNATURE_APIKEY = 'missing X-MAINSTAY-SIGNATURE-APIKEY';
 const MISSING_ARG_SIGNATURE = 'missing X-MAINSTAY-SIGNATURE';
@@ -267,27 +268,36 @@ module.exports = {
         return res.json({error: 'token'});
       if (payload.commitment === undefined)
         return res.json({error: 'commitment'});
-      if (payload.signature === undefined ||
-          !/[0-9A-Fa-f]{75}/g.test(payload.signature))
+      if (payload.signature === undefined)
         return res.json({error: 'signature'});
       models.clientDetails.find({client_position: payload.position},
                                 (error, data) => {
         if (data === undefined || data.length == 0)
-          return res.json({error: 'undefined'});
+          return res.json({error: 'position'});
         if (error)
           return res.json({error: 'api'});
         if (data[0].auth_token != payload.token)
           return res.json({error: 'token'});
-        let pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
-        if (!ec.verify(payload.commitment, payload.signature, pubkey))
-          return res.json({error: 'signature'});
-        models.clientCommitment.findOneAndUpdate(
-          { client_position: payload.position },
-          { commitment: payload.commitment }, { upsert: true }, (error) => {
-          if (error)
-            return res.json({error: 'api'});
-          return res.send();
-        });
+
+        try {
+          // get pubkey hex
+          let pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
+
+          // get base64 signature
+          let sig = Buffer.from(payload.signature, 'base64')
+
+          if (!ec.verify(payload.commitment, sig, pubkey))
+            return res.json({error: 'signature'});
+          models.clientCommitment.findOneAndUpdate(
+            { client_position: payload.position },
+            { commitment: payload.commitment }, { upsert: true }, (error) => {
+            if (error)
+              return res.json({error: 'api'});
+            return res.send();
+          });
+        } catch (e) {
+          return res.json({error: SIGNATURE_INVALID});
+        }
       });
     });
   },
@@ -455,10 +465,19 @@ module.exports = {
   commitment_send: (req, res) => {
     let startTime = start_time();
     req.on(DATA, chunk => {
-      let data = JSON.parse(chunk.toString());
-      let payload = JSON.parse(base64decode(data[MAINSTAY_PAYLOAD]));
+      // test payload in base64 format and defined
+      let data;
+      let payload;
+      try {
+        data = JSON.parse(chunk.toString());
+        payload = JSON.parse(base64decode(data[MAINSTAY_PAYLOAD]));
+      } catch (e) {
+        return reply_err(res, BAD_ARG_PAYLOAD, startTime);
+      }
       if (payload === undefined)
         return reply_err(res, MISSING_ARG_PAYLOAD, startTime);
+
+      // check payload components are defined
       signatureCommitment = data[MAINSTAY_SIGNATURE];
       if (signatureCommitment === undefined)
         return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
@@ -468,22 +487,36 @@ module.exports = {
         return reply_err(res, MISSING_PAYLOAD_POSITION, startTime);
       if (payload.token === undefined)
         return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
+
+      // try get client details
       models.clientDetails.find({ client_position: payload.position },
                                 (error, data) => {
         if (error)
           return reply_err(res, INTERNAL_ERROR_API, startTime);
+        if (data.length == 0)
+          return reply_err(res, POSITION_UNKNOWN, startTime);
         if (data[0].auth_token != payload.token)
           return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
-        let msg = new message(payload.commitment);
-        if (msg.verify(data[0].pubkey, signatureCommitment) != true)
-          return reply_err(res, SIGNATURE_INVALID, startTime);
-        models.clientCommitment.findOneAndUpdate(
+
+        try {
+          // get pubkey hex
+          let pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
+
+          // get base64 signature
+          let sig = Buffer.from(signatureCommitment, 'base64')
+
+          if (!ec.verify(payload.commitment, sig, pubkey))
+            return reply_err(res, SIGNATURE_INVALID, startTime);
+          models.clientCommitment.findOneAndUpdate(
             { client_position: payload.position },
             { commitment: payload.commitment }, { upsert: true }, (error) => {
-          if (error)
-            return reply_err(res, INTERNAL_ERROR_API, startTime);
-          reply_msg(res, 'feedback', startTime);
-        });
+            if (error)
+              return reply_err(res, INTERNAL_ERROR_API, startTime);
+            reply_msg(res, 'feedback', startTime);
+          });
+        } catch (e) {
+          return reply_err(res, SIGNATURE_INVALID, startTime);
+        }
       });
     });
   },
