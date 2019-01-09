@@ -268,27 +268,36 @@ module.exports = {
         return res.json({error: 'token'});
       if (payload.commitment === undefined)
         return res.json({error: 'commitment'});
-      if (payload.signature === undefined ||
-          !/[0-9A-Fa-f]{75}/g.test(payload.signature))
+      if (payload.signature === undefined)
         return res.json({error: 'signature'});
       models.clientDetails.find({client_position: payload.position},
                                 (error, data) => {
         if (data === undefined || data.length == 0)
-          return res.json({error: 'undefined'});
+          return res.json({error: 'position'});
         if (error)
           return res.json({error: 'api'});
         if (data[0].auth_token != payload.token)
           return res.json({error: 'token'});
-        let pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
-        if (!ec.verify(payload.commitment, payload.signature, pubkey))
-          return res.json({error: 'signature'});
-        models.clientCommitment.findOneAndUpdate(
-          { client_position: payload.position },
-          { commitment: payload.commitment }, { upsert: true }, (error) => {
-          if (error)
-            return res.json({error: 'api'});
-          return res.send();
-        });
+
+        try {
+          // get pubkey hex
+          let pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
+
+          // get base64 signature
+          let sig = Buffer.from(payload.signature, 'base64')
+
+          if (!ec.verify(payload.commitment, sig, pubkey))
+            return res.json({error: 'signature'});
+          models.clientCommitment.findOneAndUpdate(
+            { client_position: payload.position },
+            { commitment: payload.commitment }, { upsert: true }, (error) => {
+            if (error)
+              return res.json({error: 'api'});
+            return res.send();
+          });
+        } catch (e) {
+          return res.json({error: SIGNATURE_INVALID});
+        }
       });
     });
   },
