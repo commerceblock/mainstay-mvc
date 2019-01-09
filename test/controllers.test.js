@@ -277,10 +277,8 @@ describe('Test Controllers', () => {
       { method: 'POST',
         url: '/api/v1/commitment/send',
         headers: {
-          'X-MAINSTAY-APIKEY': 'a',
-          'X-MAINSTAY-PLAYLOAD': 'b',
-          'X-MAINSTAY-SIGNATURE-APIKEY': 'c',
-          'X-MAINSTAY-SIGNATURE-COMMITMENT': 'd'
+          'X-MAINSTAY-PAYLOAD': 'b',
+          'X-MAINSTAY-SIGNATURE': 'd'
         }
       });
     const res = mockHttp.createResponse();
