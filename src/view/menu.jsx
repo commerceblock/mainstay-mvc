@@ -53,8 +53,12 @@ class Menu extends Component {
       signature: this.state.signature
     }).then(res => {
       if(res.data && "error" in res.data){
+        let error_message = "Incorrect " + res.data.error;
+        if (res.data.error === 'undefined'){
+            error_message = "Something went wrong";
+        }
         swal({
-          text: "Error!",
+          text: error_message,
           icon: "error",
           className: "error",
           closeOnClickOutside: true
