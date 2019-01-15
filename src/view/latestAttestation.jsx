@@ -47,7 +47,7 @@ class LatestAttestation extends Component {
                   </td>
                   <td>
                     <a class="hash truncate-hash keyboard-target"
-                       href={`/tx/${data.merkle_root}`}
+                       href={`/merkle_root/${data.merkle_root}`}
                        title={data.merkle_root}>{data.merkle_root}
                     </a>
                   </td>

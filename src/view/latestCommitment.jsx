@@ -44,7 +44,7 @@ class LatestCommitment extends Component {
                   </td>
                   <td>
                     <a class="lastCommitement hash truncate-hash keyboard-target"
-                       href={`/tx/${data.commitment}`}
+                       href={`/commitment/${data.commitment}`}
                        title={data.commitment}>{data.commitment}
                     </a>
                   </td>
