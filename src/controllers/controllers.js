@@ -311,6 +311,8 @@ module.exports = {
                       .exec((error, data) => {
       if (error)
         return reply_err(res, INTERNAL_ERROR_API, startTime);
+      if (data.length == 0)
+        return reply_msg(res, {}, startTime);
       reply_msg(res, { merkle_root: data[0].merkle_root, txid: data[0].txid },
                 startTime);
     });
@@ -339,6 +341,8 @@ module.exports = {
                       .exec((error, data) => {
       if (error)
         return reply_err(res, INTERNAL_ERROR_API, startTime);
+      if (data.length == 0)
+        return reply_msg(res, {}, startTime);
       const txid = data[0].txid;
       const merkle_root = data[0].merkle_root;
       models.merkleCommitment.find({ client_position: position,
