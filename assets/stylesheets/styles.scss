@@ -1062,3 +1062,14 @@ table th span {
 .lastAttestationPage .head-table table {
   top: 0;
 }
+.main {
+  margin:30px;
+ }
+.main table {
+  max-height: 70vh;
+  overflow: auto;
+  display: block;
+}
+.main table td {
+  padding: 5px;
+}

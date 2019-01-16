@@ -98,64 +98,74 @@ class Commitment extends Component {
         </div>
         <div class="container main" data-controller="main">
           <div class="row" data-controller="homepageMempool">
-            <td>
-              <tr>
-                <td>Commitment</td>
-              </tr>
-              <tr>
-                <td>Attestation</td>
-              </tr>
-              <tr>
-                <td>MerkleRoot</td>
-                <td>{attestation.merkle_root}</td>
-              </tr>
-              <tr>
-                <td>Transaction_ID</td>
-                <td>{attestation.txid}</td>
-              </tr>
-              <tr>
-                <td>Confirmed</td>
-                <td>{(attestation.confirmed) ? 'true': 'false'}</td>
-              </tr>
-              <tr>
-                <td>Inserted at</td>
-                <td>{attestation.inserted_at}</td>
-              </tr>
-              <tr>
-                <td>MerkleProof</td>
-              </tr>
-              <tr>
-                <td>Position</td>
-                <td>{merkleproof.position}</td>
-              </tr>
-              <tr>
-                <td>MerkleRoot</td>
-                <td>{merkleproof.merkle_root}</td>
-              </tr>
-              <tr>
-                <td>Commitment</td>
-                <td>{merkleproof.commitment}</td>
-              </tr>
-              <tr>
-                <td>ops</td>
-              </tr>
-              <tr>
-                <td>Append</td>
-                <td>{(merkleproof.ops[0].append) ? 'true': 'false'}</td>
-              </tr>
-              <tr>
-                <td>Commitment</td>
-                <td>{merkleproof.ops[0].commitment}</td>
-              </tr>
-              <tr>
-                <td>Append</td>
-                <td>{(merkleproof.ops[1].append) ? 'true': 'false'}</td>
-              </tr>
-              <tr>
-                <td>Commitment</td>
-                <td>{merkleproof.ops[1].commitment}</td>
-              </tr>
-            </td>
+            <table >
+              <tbody>
+
+                <tr>
+                  <td>Commitment</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>Attestation</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>MerkleRoot</td>
+                  <td>{attestation.merkle_root}</td>
+                </tr>
+                <tr>
+                  <td>Transaction_ID</td>
+                  <td>{attestation.txid}</td>
+                </tr>
+                <tr>
+                  <td>Confirmed</td>
+                  <td>{(attestation.confirmed) ? 'true': 'false'}</td>
+                </tr>
+                <tr>
+                  <td>Inserted at</td>
+                  <td>{attestation.inserted_at}</td>
+                </tr>
+                <tr>
+                  <td>MerkleProof</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>Position</td>
+                  <td>{merkleproof.position}</td>
+                </tr>
+                <tr>
+                  <td>MerkleRoot</td>
+                  <td>{merkleproof.merkle_root}</td>
+                </tr>
+                <tr>
+                  <td>Commitment</td>
+                  <td>{merkleproof.commitment}</td>
+                </tr>
+                <tr>
+                  <td>ops</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>Append</td>
+                  <td>{(merkleproof.ops[0].append) ? 'true': 'false'}</td>
+                </tr>
+                <tr>
+                  <td>Commitment</td>
+                  <td>{merkleproof.ops[0].commitment}</td>
+                </tr>
+                <tr>
+                  <td>Append</td>
+                  <td>{(merkleproof.ops[1].append) ? 'true': 'false'}</td>
+                </tr>
+                <tr>
+                  <td>Commitment</td>
+                  <td>{merkleproof.ops[1].commitment}</td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
           </div>
         </div>
         <FooterPage/>
@@ -283,36 +293,42 @@ class Position extends Component {
         </div>
         <div class="container main" data-controller="main">
           <div class="row" data-controller="homepageMempool">
-            <td>
+            <table>
               <tbody>
-                  <tr>
-                    <td>Client Name: {this.state.response.response.client_name}</td>
-                  </tr>
-                  <tr>
-                    <td>Position: {this.state.response.response.position[0].position}</td>
-                  </tr>
-                {this.state.response.response.position.map((data) =>
+              <tr>
+                <td>Client Name: {this.state.response.response.client_name}</td>
+
+              </tr>
+              <tr>
+                <td>Position: {this.state.response.response.position[0].position}</td>
+
+              </tr>
+              {this.state.response.response.position.map((data) =>
                   <tr>
                     <tr>
                       <td>Commitment</td>
                       <td>{data.commitment}</td>
+                      <td></td>
                     </tr>
                     <tr>
                       <td>MerkleRoot</td>
                       <td>{data.merkle_root}</td>
+                      <td></td>
                     </tr>
                     {data.ops.map((op, i) =>
-                      <tr>
-                        <td>ops {i}</td>
-                        <td>{(op.append) ? 'true': 'false'}</td>
-                        <td>{op.commitment}</td>
-                      </tr>
+                        <tr>
+                          <td>ops {i}</td>
+                          <td>{(op.append) ? 'true': 'false'}</td>
+                          <td>{op.commitment}</td>
+                        </tr>
                     )}
-                    <tr><td></td></tr>
+
                   </tr>
-                )}
+              )}
               </tbody>
-            </td>
+            </table>
+
+
           </div>
         </div>
         <FooterPage/>
@@ -361,45 +377,52 @@ class TransactionId extends Component {
         </div>
         <div class="container main" data-controller="main">
           <div class="row" data-controller="homepageMempool">
-            <td>
-              <tr>TransactionID</tr>
+            <table>
+
               <tbody>
-                <tr>Attestation</tr>
-                <tr>
-                  <td>Merkle_root</td>
-                  <td>{attestation.merkle_root}</td>
-                </tr>
-                <tr>
-                  <td>Transaction_ID</td>
-                  <td>{attestation.txid}</td>
-                </tr>
-                <tr>
-                  <td>Confirmed</td>
-                  <td>{(attestation.confirmed) ? 'true': 'false'}</td>
-                </tr>
-                <tr>
-                  <td>Inserted_at</td>
-                  <td>{attestation.inserted_at}</td>
-                </tr>
-                <tr>AttestationInfo</tr>
-                <tr>
-                  <td>Transaction_ID</td>
-                  <td>{attestationInfo.txid}</td>
-                </tr>
-                <tr>
-                  <td>Amount</td>
-                  <td>{attestationInfo.amount}</td>
-                </tr>
-                <tr>
-                  <td>Blockhash</td>
-                  <td>{attestationInfo.blockhash}</td>
-                </tr>
-                <tr>
-                  <td>Time</td>
-                  <td>{attestationInfo.time}</td>
-                </tr>
+              <tr>
+                <td>Attestation</td>
+                <td>TransactionID</td>
+              </tr>
+
+              <tr>
+                <td>Merkle_root</td>
+                <td>{attestation.merkle_root}</td>
+              </tr>
+              <tr>
+                <td>Transaction_ID</td>
+                <td>{attestation.txid}</td>
+              </tr>
+              <tr>
+                <td>Confirmed</td>
+                <td>{(attestation.confirmed) ? 'true': 'false'}</td>
+              </tr>
+              <tr>
+                <td>Inserted_at</td>
+                <td>{attestation.inserted_at}</td>
+              </tr>
+              <tr>
+                <td>AttestationInfo</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Transaction_ID</td>
+                <td>{attestationInfo.txid}</td>
+              </tr>
+              <tr>
+                <td>Amount</td>
+                <td>{attestationInfo.amount}</td>
+              </tr>
+              <tr>
+                <td>Blockhash</td>
+                <td>{attestationInfo.blockhash}</td>
+              </tr>
+              <tr>
+                <td>Time</td>
+                <td>{attestationInfo.time}</td>
+              </tr>
               </tbody>
-            </td>
+            </table>
           </div>
         </div>
         <FooterPage/>
