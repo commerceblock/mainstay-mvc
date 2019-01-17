@@ -1064,7 +1064,7 @@ table th span {
 }
 .main {
   margin:30px;
- }
+}
 .main table {
   max-height: 70vh;
   overflow: auto;
@@ -1072,4 +1072,33 @@ table th span {
 }
 .main table td {
   padding: 5px;
+}
+
+.block-title {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 20px;
+  font-size: 30px;
+}
+
+.main-firts-position {
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+  border: none;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.main-firts-position td {
+  border: none;
+}
+
+.main-second-position-block {
+  border: 1px solid #ddd;
+}
+
+.main-second-position-block td {
+  padding: 5px 40px !important;
 }

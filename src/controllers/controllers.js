@@ -163,20 +163,26 @@ function find_type_number(res, paramValue, startTime) {
 }
 
 module.exports = {
-  blockhash: (req, res) => {
-    let startTime = start_time();
-    let hash = get_hash_arg(req, res, startTime);
-    if (hash === undefined)
-      return ; // TODO add message error
-    models.attestationInfo.find({blockhash: hash}, (error, data) => {
-      if (error)
-        return reply_err(res, INTERNAL_ERROR_API, startTime);
-      if (data.length == 0)
-        return reply_err(res, 'Bla Bla', startTime);
-      reply_msg(res, { blockhash: { txid: data[0].txid, amount: data[0].amount,
-        blockhash: data[0].blockhash, time: data[0].time }}, startTime);
-    });
-  },
+    blockhash: (req, res) => {
+        let startTime = start_time();
+        let hash = get_hash_arg(req, res, startTime);
+        if (hash === undefined)
+            return; // TODO add message error
+        models.attestationInfo.find({blockhash: hash}, (error, data) => {
+            if (error)
+                return reply_err(res, INTERNAL_ERROR_API, startTime);
+            if (data.length == 0)
+                return reply_err(res, 'Bla Bla', startTime);
+            reply_msg(res, {
+                blockhash: {
+                    txid: data[0].txid,
+                    amount: data[0].amount/100000000,
+                    blockhash: data[0].blockhash,
+                    time: dateFormat(data[0].time*1000, "HH:MM:ss dd/mm/yy")
+                }
+            }, startTime);
+        });
+    },
 
   ctrl_latest_attestation: (req, res) => {
 
@@ -395,7 +401,7 @@ module.exports = {
           return reply_err(res, 'BLA BLA', startTime);
         reply_msg(res, { attestation: { merkle_root: data[0].merkle_root,
           txid: data[0].txid, confirmed: data[0].confirmed,
-          inserted_at: data[0].inserted_at }, merkleproof: {
+          inserted_at: dateFormat(data[0].inserted_at,  "HH:MM:ss dd/mm/yy")  }, merkleproof: {
           position: response.client_position, merkle_root: response.merkle_root,
           commitment: response.commitment, ops: response.ops }}, startTime);
       });
@@ -544,7 +550,7 @@ module.exports = {
           return reply_err(res, 'BLA BLA', startTime);
         reply_msg(res, { attestation: { merkle_root: data[0].merkle_root,
           txid: data[0].txid, confirmed: data[0].confirmed,
-          inserted_at: data[0].inserted_at }, merkle_commitment: {
+          inserted_at: dateFormat(data[0].inserted_at, "HH:MM:ss dd/mm/yy") }, merkle_commitment: {
           position: response.client_position, merkle_root: response.merkle_root,
           commitment: response.commitment}}, startTime);
       });
@@ -555,7 +561,7 @@ module.exports = {
     let position = get_position_arg(req, res, startTime);
     if (position === undefined)
       return ; // TODO add message error
-    models.merkleProof.find({client_position: position}).limit(5)
+    models.merkleProof.find({client_position: position})
                       .exec((error, data) => {
       if (error)
         return reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -595,8 +601,8 @@ module.exports = {
           return reply_err(res, 'BLA BLA', startTime);
         reply_msg(res, { attestation: { merkle_root: response.merkle_root,
           txid: response.txid, confirmed: response.confirmed,
-          inserted_at: response.inserted_at }, attestationInfo: {
-          txid: data[0].txid, amount: data[0].amount,
+          inserted_at: dateFormat(response.inserted_at,  "HH:MM:ss dd/mm/yy") }, attestationInfo: {
+          txid: data[0].txid, amount: data[0].amount/100000000,
           blockhash: data[0].blockhash, time: data[0].time }}, startTime);
       });
     });
