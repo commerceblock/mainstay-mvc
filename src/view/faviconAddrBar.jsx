@@ -9,6 +9,11 @@ class FaviconAddrBar extends Component {
               <img src="favicon.png" alt="favicon"/>
           </a>
         </div>
+        <div class="col-sm-auto">
+          <a href="/" class="logo_securosys">
+              <img src="securosys.png" alt="favicon"/>
+          </a>
+        </div>
       </div>
     );
   }
