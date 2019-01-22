@@ -46,7 +46,7 @@ class Blockhash extends Component {
                 </tr>
                 <tr>
                   <td>Amount</td>
-                  <td>{blockhash.amount}</td>
+                  <td>{blockhash.amount} BTC</td>
                 </tr>
 
                 <tr>
@@ -105,12 +105,15 @@ class Commitment extends Component {
               <table class="main-second-position-block" >
                 <tbody>
                 <tr>
-                  <td>Transaction_ID</td>
+                  <td>Position</td>
+                  <td colSpan="2">{merkleproof.position}</td>
+
+                </tr>
+                <tr>
+                  <td>TxID</td>
                   <td colspan="2">{attestation.txid}</td>
 
                 </tr>
-
-
 
                 <tr>
                   <td>Confirmed</td>
@@ -123,11 +126,6 @@ class Commitment extends Component {
 
                 </tr>
 
-                <tr>
-                  <td>Position</td>
-                  <td colspan="2">{merkleproof.position}</td>
-
-                </tr>
                 <tr>
                   <td>MerkleRoot</td>
                   <td colspan="2">{merkleproof.merkle_root}</td>
@@ -207,7 +205,11 @@ class MerkleRoot extends Component {
               <table>
                 <tbody>
                 <tr>
-                  <td>Transaction_ID</td>
+                  <td>Position </td>
+                  <td>{merkle_commitment.position}</td>
+                </tr>
+                <tr>
+                  <td>TxID</td>
                   <td>{attestation.txid}</td>
                 </tr>
                 <tr>
@@ -217,11 +219,6 @@ class MerkleRoot extends Component {
                 <tr>
                   <td>Inserted at</td>
                   <td>{attestation.inserted_at}</td>
-                </tr>
-
-                <tr>
-                  <td>Position </td>
-                  <td>{merkle_commitment.position}</td>
                 </tr>
                 <tr>
                   <td>MerkleRoot</td>
@@ -293,6 +290,8 @@ class Position extends Component {
               </table>
               <table class="main-second-position">
                 <tbody>
+
+                <h5>Commitments({this.state.response.response.position.length})</h5>
 
                 {this.state.response.response.position.map((data) =>
 
@@ -372,13 +371,13 @@ class TransactionId extends Component {
           </div>
           <div class="container main" data-controller="main">
             <div class="row" data-controller="homepageMempool">
-              <span class="block-title">Attestation TransactionID</span>
+              <span class="block-title">Attestation Transaction</span>
               <table>
 
                 <tbody>
 
                 <tr>
-                  <td>Transaction_ID</td>
+                  <td>TxID</td>
                   <td>{attestation.txid}</td>
                 </tr>
                 <tr>
