@@ -1064,7 +1064,7 @@ table th span {
 }
 .main {
   margin:30px;
-}
+ }
 .main table {
   max-height: 70vh;
   overflow: auto;
@@ -1088,17 +1088,55 @@ table th span {
   margin: 0 auto;
   border: none;
   font-size: 18px;
-  margin-bottom: 20px;
+  margin-bottom:20px;
 }
 
 .main-firts-position td {
-  border: none;
+  border: none !important;
+  font-size: 20px !important;
+
+
 }
 
 .main-second-position-block {
-  border: 1px solid #ddd;
+  border:2px solid #ddd;
 }
 
-.main-second-position-block td {
-  padding: 5px 40px !important;
+.searchTable {
+  border:none;
+}
+.searchTable td {
+  border:none;
+  border-bottom:1px solid #ddd;
+  padding: 10px;
+}
+
+.searchTable tr td:first-child {
+  text-align: left !important;
+
+}
+
+
+.searchTable tr td:last-child {
+  text-align: right;
+  font-size: 13px;
+  padding-left: 15px;
+}
+.block-subtitle {
+  font-size: 18px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+.secondTableOps {
+  border:1px solid #ddd !important;
+  border-bottom: none;
+}
+.tabelOpsName {
+  width: 160px;
+  font-size: 20px !important;
+  text-align: center !important;
+  margin: auto;
 }

@@ -541,7 +541,15 @@ module.exports = {
         return reply_err(res, INTERNAL_ERROR_API, startTime);
       if (data.length == 0)
         return reply_err(res, 'BLA BLA', startTime);
+
+      let array = [];
+      for (let index in data)
+       array.push({
+         position: data[index].client_position,
+         commitment: data[index].commitment});
+
       let response = data[0];
+
       models.attestation.find({ merkle_root: response.merkle_root },
                               (error, data) => {
         if (error)
@@ -550,9 +558,8 @@ module.exports = {
           return reply_err(res, 'BLA BLA', startTime);
         reply_msg(res, { attestation: { merkle_root: data[0].merkle_root,
           txid: data[0].txid, confirmed: data[0].confirmed,
-          inserted_at: dateFormat(data[0].inserted_at, "HH:MM:ss dd/mm/yy") }, merkle_commitment: {
-          position: response.client_position, merkle_root: response.merkle_root,
-          commitment: response.commitment}}, startTime);
+          inserted_at: dateFormat(data[0].inserted_at, "HH:MM:ss dd/mm/yy") }, merkle_commitment: array}, startTime);
+
       });
     });
   },

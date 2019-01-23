@@ -34,14 +34,11 @@ class Blockhash extends Component {
           <div class="container main" data-controller="main">
             <div class="row" data-controller="homepageMempool">
               <span class="block-title">Block</span>
-              <table>
+              <span className="block-subtitle">Blockhash: {blockhash.blockhash}</span>
+              <table class="searchTable">
                 <tbody>
                 <tr>
-                  <td>Blockhash</td>
-                  <td>{blockhash.blockhash}</td>
-                </tr>
-                <tr>
-                  <td>Transaction_ID</td>
+                  <td>Txid</td>
                   <td>{blockhash.txid}</td>
                 </tr>
                 <tr>
@@ -102,7 +99,8 @@ class Commitment extends Component {
           <div class="container main" data-controller="main">
             <div class="row" data-controller="homepageMempool">
               <span class="block-title">Commitment</span>
-              <table class="main-second-position-block" >
+              <span className="block-subtitle">Hash: {merkleproof.commitment}</span>
+              <table class="main-second-position-block searchTable">
                 <tbody>
                 <tr>
                   <td>Position</td>
@@ -129,19 +127,14 @@ class Commitment extends Component {
                 <tr>
                   <td>MerkleRoot</td>
                   <td colspan="2">{merkleproof.merkle_root}</td>
-
-                </tr>
-                <tr>
-                  <td>Commitment</td>
-                  <td colspan="2">{merkleproof.commitment}</td>
-
                 </tr>
 
                 <tr>
-                  <td rowspan={merkleproof.ops.length+1}>ops</td>
+                  <td rowspan={merkleproof.ops.length+1} class="tabelOpsName">ops</td>
 
 
                 </tr>
+
                 {merkleproof.ops.map((op, i) =>
                     <tr>
 
@@ -154,6 +147,8 @@ class Commitment extends Component {
                 </tbody>
 
               </table>
+
+
 
             </div>
           </div>
@@ -202,7 +197,7 @@ class MerkleRoot extends Component {
             <div class="row" data-controller="homepageMempool">
               <span class="block-title">MerkleRoot</span>
 
-              <table>
+              <table class="searchTable">
                 <tbody>
                 <tr>
                   <td>Position </td>
@@ -276,7 +271,7 @@ class Position extends Component {
           </div>
           <div class="container main" data-controller="main">
             <div class="row" data-controller="homepageMempool">
-              <table class="main-firts-position">
+              <table class="main-firts-position searchTable">
                 <tbody>
                 <tr>
                   <td>Client Name: {this.state.response.response.client_name}</td>
@@ -288,7 +283,7 @@ class Position extends Component {
                 </tr>
                 </tbody>
               </table>
-              <table class="main-second-position">
+              <table class="main-second-position searchTable">
                 <tbody>
 
                 <h5>Commitments({this.state.response.response.position.length})</h5>
@@ -307,7 +302,7 @@ class Position extends Component {
 
                       </tr>
                       <tr>
-                        <td rowspan={data.ops.length+1}>ops</td>
+                        <td rowspan={data.ops.length+1}  class="tabelOpsName">ops</td>
                       </tr>
                       {data.ops.map((op, i) =>
                           <tr>
@@ -372,14 +367,12 @@ class TransactionId extends Component {
           <div class="container main" data-controller="main">
             <div class="row" data-controller="homepageMempool">
               <span class="block-title">Attestation Transaction</span>
-              <table>
+              <span class="block-subtitle">TxID:  {attestation.txid}</span>
+              <table class="searchTable">
 
                 <tbody>
 
-                <tr>
-                  <td>TxID</td>
-                  <td>{attestation.txid}</td>
-                </tr>
+
                 <tr>
                   <td>Merkle_root</td>
                   <td>{attestation.merkle_root}</td>
