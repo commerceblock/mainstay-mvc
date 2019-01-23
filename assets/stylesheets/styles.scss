@@ -1104,6 +1104,7 @@ table th span {
 
 .searchTable {
   border:none;
+  width: 100%;
 }
 .searchTable td {
   border:none;
@@ -1139,4 +1140,8 @@ table th span {
   font-size: 20px !important;
   text-align: center !important;
   margin: auto;
+}
+
+.commitments_title {
+  padding: 40px 0 10px;
 }
