@@ -181,14 +181,13 @@ module.exports = {
             reply_msg(res, {
                 blockhash: {
                     txid: data[0].txid,
-                    amount: data[0].amount,
+                    amount: data[0].amount / 100000000,
                     blockhash: data[0].blockhash,
-                    time: data[0].time
+                    time: dateFormat(data[0].time * 1000, "HH:MM:ss dd/mm/yy")
                 }
             }, startTime);
         });
     },
-
     ctrl_latest_attestation: (req, res) => {
 
         let response = {};
@@ -395,6 +394,211 @@ module.exports = {
                 }, startTime);
             });
     },
+    commitment_latest_proof: (req, res) => {
+        let startTime = start_time();
+        let position = get_position_arg(req, res, startTime);
+        if (position === undefined)
+            return;
+        models.attestation.find().sort({ inserted_at: -1 }).limit(1)
+            .exec((error, data) => {
+                let merkle_root = data[0].merkle_root;
+                models.merkleProof.find({
+                    client_position: position,
+                    merkle_root: merkle_root
+                }, (error, data) => {
+                    if (error)
+                        return reply_err(res, INTERNAL_ERROR_API, startTime);
+                    if (data.length == 0)
+                        return reply_err(res, POSITION_UNKNOWN, startTime);
+                    reply_msg(res, {
+                            commitment: data[0].commitment,
+                            merkle_root: merkle_root,
+                            ops: data[0].ops
+                        },
+                        startTime);
+                });
+            });
+    },
+    commitment_send: (req, res) => {
+        let startTime = start_time();
+        req.on(DATA, chunk => {
+            // test payload in base64 format and defined
+            let data;
+            let payload;
+            try {
+                data = JSON.parse(chunk.toString());
+                payload = JSON.parse(base64decode(data[MAINSTAY_PAYLOAD]));
+            } catch (e) {
+                return reply_err(res, BAD_ARG_PAYLOAD, startTime);
+            }
+            if (payload === undefined)
+                return reply_err(res, MISSING_ARG_PAYLOAD, startTime);
+
+            // check payload components are defined
+            signatureCommitment = data[MAINSTAY_SIGNATURE];
+            if (signatureCommitment === undefined)
+                return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
+            if (payload.commitment === undefined)
+                return reply_err(res, MISSING_PAYLOAD_COMMITMENT, startTime);
+            if (payload.position === undefined)
+                return reply_err(res, MISSING_PAYLOAD_POSITION, startTime);
+            if (payload.token === undefined)
+                return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
+
+            // try get client details
+            models.clientDetails.find({ client_position: payload.position },
+                (error, data) => {
+                    if (error)
+                        return reply_err(res, INTERNAL_ERROR_API, startTime);
+                    if (data.length == 0)
+                        return reply_err(res, POSITION_UNKNOWN, startTime);
+                    if (data[0].auth_token != payload.token)
+                        return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
+
+                    try {
+                        // get pubkey hex
+                        let pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
+
+                        // get base64 signature
+                        let sig = Buffer.from(signatureCommitment, 'base64')
+
+                        if (!ec.verify(payload.commitment, sig, pubkey))
+                            return reply_err(res, SIGNATURE_INVALID, startTime);
+                        models.clientCommitment.findOneAndUpdate({ client_position: payload.position }, { commitment: payload.commitment }, { upsert: true }, (error) => {
+                            if (error)
+                                return reply_err(res, INTERNAL_ERROR_API, startTime);
+                            reply_msg(res, 'feedback', startTime);
+                        });
+                    } catch (e) {
+                        return reply_err(res, SIGNATURE_INVALID, startTime);
+                    }
+                });
+        });
+    },
+    ctrl_send_commitment: (req, res) => {
+        req.on('data', chunk => {
+            const payload = JSON.parse(chunk.toString());
+            if (payload.position === undefined)
+                return res.json({ error: 'position' });
+            if (payload.token === undefined)
+                return res.json({ error: 'token' });
+            if (payload.commitment === undefined)
+                return res.json({ error: 'commitment' });
+            if (payload.signature === undefined)
+                return res.json({ error: 'signature' });
+            models.clientDetails.find({ client_position: payload.position },
+                (error, data) => {
+                    if (data === undefined || data.length == 0)
+                        return res.json({ error: 'position' });
+                    if (error)
+                        return res.json({ error: 'api' });
+                    if (data[0].auth_token != payload.token)
+                        return res.json({ error: 'token' });
+
+                    try {
+                        // get pubkey hex
+                        let pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
+
+                        // get base64 signature
+                        let sig = Buffer.from(payload.signature, 'base64')
+
+                        if (!ec.verify(payload.commitment, sig, pubkey))
+                            return res.json({ error: 'signature' });
+                        models.clientCommitment.findOneAndUpdate({ client_position: payload.position }, { commitment: payload.commitment }, { upsert: true }, (error) => {
+                            if (error)
+                                return res.json({ error: 'api' });
+                            return res.send();
+                        });
+                    } catch (e) {
+                        return res.json({ error: SIGNATURE_INVALID });
+                    }
+                });
+        });
+    },
+    index: (req, res) => {
+        let startTime = start_time();
+        reply_msg(res, VERSION_API_V1, startTime);
+    },
+    latest_attestation: (req, res) => {
+        let startTime = start_time();
+        models.attestation.find().sort({ inserted_at: -1 }).limit(1)
+            .exec((error, data) => {
+                if (error)
+                    return reply_err(res, INTERNAL_ERROR_API, startTime);
+                if (data.length == 0)
+                    return reply_msg(res, {}, startTime);
+                reply_msg(res, { merkle_root: data[0].merkle_root, txid: data[0].txid },
+                    startTime);
+            });
+    },
+    attestation: (req, res) => {
+        let startTime = start_time();
+        let txid = get_txid_arg(req, res, startTime);
+        if (txid === undefined)
+            return;
+        models.attestation.find({ txid: txid })
+            .exec((error, data) => {
+                if (error)
+                    return reply_err(res, INTERNAL_ERROR_API, startTime);
+                if (data.length == 0)
+                    return reply_err(res, TXID_UNKNOWN, startTime)
+                reply_msg(res, { merkle_root: data[0].merkle_root, txid: data[0].txid },
+                    startTime);
+            });
+    },
+    latest_commitment: (req, res) => {
+        let startTime = start_time();
+        let position = get_position_arg(req, res, startTime);
+        if (position === undefined)
+            return;
+        models.attestation.find().sort({ inserted_at: -1 }).limit(1)
+            .exec((error, data) => {
+                if (error)
+                    return reply_err(res, INTERNAL_ERROR_API, startTime);
+                if (data.length == 0)
+                    return reply_msg(res, {}, startTime);
+                const txid = data[0].txid;
+                const merkle_root = data[0].merkle_root;
+                models.merkleCommitment.find({
+                        client_position: position,
+                        merkle_root: merkle_root
+                    },
+                    (error, data) => {
+                        if (error)
+                            return reply_err(res, INTERNAL_ERROR_API, startTime);
+                        if (data.length == 0)
+                            return reply_err(res, POSITION_UNKNOWN, startTime);
+                        reply_msg(res, {
+                            commitment: data[0].commitment,
+                            merkle_root: merkle_root,
+                            txid: txid
+                        }, startTime);
+                    });
+            });
+    },
+    commitment: (req, res) => {
+        let startTime = start_time();
+        let position = get_position_arg(req, res, startTime);
+        if (position === undefined)
+            return;
+        let merkle_root = get_merkle_root_arg(req, res, startTime);
+        if (merkle_root === undefined)
+            return;
+        models.merkleCommitment.find({
+                client_position: position,
+                merkle_root: merkle_root
+            },
+            (error, data) => {
+                if (error)
+                    return reply_err(res, INTERNAL_ERROR_API, startTime);
+                if (data.length == 0)
+                    return reply_err(res, COMMITMENT_POSITION_UNKNOWN, startTime);
+                reply_msg(res, {
+                    commitment: data[0].commitment,
+                    merkle_root: merkle_root
+                }, startTime);
+            });
+    },
     commitment_commitment: (req, res) => {
         let startTime = start_time();
         let commitment = get_commitment_arg(req, res, startTime);
@@ -417,7 +621,7 @@ module.exports = {
                             merkle_root: data[0].merkle_root,
                             txid: data[0].txid,
                             confirmed: data[0].confirmed,
-                            inserted_at: data[0].inserted_at
+                            inserted_at: dateFormat(data[0].inserted_at, "HH:MM:ss dd/mm/yy")
                         },
                         merkleproof: {
                             position: response.client_position,
@@ -506,62 +710,6 @@ module.exports = {
                     startTime);
             });
     },
-    commitment_send: (req, res) => {
-        let startTime = start_time();
-        req.on(DATA, chunk => {
-            // test payload in base64 format and defined
-            let data;
-            let payload;
-            try {
-                data = JSON.parse(chunk.toString());
-                payload = JSON.parse(base64decode(data[MAINSTAY_PAYLOAD]));
-            } catch (e) {
-                return reply_err(res, BAD_ARG_PAYLOAD, startTime);
-            }
-            if (payload === undefined)
-                return reply_err(res, MISSING_ARG_PAYLOAD, startTime);
-
-            // check payload components are defined
-            signatureCommitment = data[MAINSTAY_SIGNATURE];
-            if (signatureCommitment === undefined)
-                return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
-            if (payload.commitment === undefined)
-                return reply_err(res, MISSING_PAYLOAD_COMMITMENT, startTime);
-            if (payload.position === undefined)
-                return reply_err(res, MISSING_PAYLOAD_POSITION, startTime);
-            if (payload.token === undefined)
-                return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
-
-            // try get client details
-            models.clientDetails.find({ client_position: payload.position },
-                (error, data) => {
-                    if (error)
-                        return reply_err(res, INTERNAL_ERROR_API, startTime);
-                    if (data.length == 0)
-                        return reply_err(res, POSITION_UNKNOWN, startTime);
-                    if (data[0].auth_token != payload.token)
-                        return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
-
-                    try {
-                        // get pubkey hex
-                        let pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
-
-                        // get base64 signature
-                        let sig = Buffer.from(signatureCommitment, 'base64')
-
-                        if (!ec.verify(payload.commitment, sig, pubkey))
-                            return reply_err(res, SIGNATURE_INVALID, startTime);
-                        models.clientCommitment.findOneAndUpdate({ client_position: payload.position }, { commitment: payload.commitment }, { upsert: true }, (error) => {
-                            if (error)
-                                return reply_err(res, INTERNAL_ERROR_API, startTime);
-                            reply_msg(res, 'feedback', startTime);
-                        });
-                    } catch (e) {
-                        return reply_err(res, SIGNATURE_INVALID, startTime);
-                    }
-                });
-        });
-    },
     merkleroot: (req, res) => {
         let startTime = start_time();
         let merkle_root = get_merkle_root_arg(req, res, startTime);
@@ -573,7 +721,16 @@ module.exports = {
                     return reply_err(res, INTERNAL_ERROR_API, startTime);
                 if (data.length == 0)
                     return reply_err(res, 'BLA BLA', startTime);
+
+                let array = [];
+                for (let index in data)
+                    array.push({
+                        position: data[index].client_position,
+                        commitment: data[index].commitment
+                    });
+
                 let response = data[0];
+
                 models.attestation.find({ merkle_root: response.merkle_root },
                     (error, data) => {
                         if (error)
@@ -585,14 +742,11 @@ module.exports = {
                                 merkle_root: data[0].merkle_root,
                                 txid: data[0].txid,
                                 confirmed: data[0].confirmed,
-                                inserted_at: data[0].inserted_at
+                                inserted_at: dateFormat(data[0].inserted_at, "HH:MM:ss dd/mm/yy")
                             },
-                            merkle_commitment: {
-                                position: response.client_position,
-                                merkle_root: response.merkle_root,
-                                commitment: response.commitment
-                            }
+                            merkle_commitment: array
                         }, startTime);
+
                     });
             });
     },
@@ -601,7 +755,7 @@ module.exports = {
         let position = get_position_arg(req, res, startTime);
         if (position === undefined)
             return; // TODO add message error
-        models.merkleProof.find({ client_position: position }).limit(5)
+        models.merkleProof.find({ client_position: position })
             .exec((error, data) => {
                 if (error)
                     return reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -647,11 +801,11 @@ module.exports = {
                         merkle_root: response.merkle_root,
                         txid: response.txid,
                         confirmed: response.confirmed,
-                        inserted_at: response.inserted_at
+                        inserted_at: dateFormat(response.inserted_at, "HH:MM:ss dd/mm/yy")
                     },
                     attestationInfo: {
                         txid: data[0].txid,
-                        amount: data[0].amount,
+                        amount: data[0].amount / 100000000,
                         blockhash: data[0].blockhash,
                         time: data[0].time
                     }

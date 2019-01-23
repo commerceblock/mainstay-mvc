@@ -24,7 +24,7 @@ const Main = () => (
             <Route path="/block/:value" exact component={Blockhash} />
             <Route path="/commitment/:value" exact component={Commitment} />
             <Route path="/tx/:value" exact component={TransactionId} />
-            <Route path="/markle_root/:value" exact component={MerkleRoot} />
+            <Route path="/merkle_root/:value" exact component={MerkleRoot} />
             <Route path="/attestation" exact component={Attestation}/>
         </div>
     </BrowserRouter>
