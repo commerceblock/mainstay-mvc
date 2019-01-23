@@ -12,7 +12,7 @@ class LatestAttestation extends Component {
 
   request() {
     Axios.get('/ctrl/latestattestation')
-    .then(response => this.setState({data: response.data}));
+    .then(response => this.setState({data: response.data['data']}));
   }
 
   render() {
@@ -20,18 +20,18 @@ class LatestAttestation extends Component {
       <div class="column">
         <div class="d-flex align-items-center">
           <h4>Latest Attestation</h4>
-          <a href="/mempool" class="pl-2 keyboard-target" data-keynav-priority>
+          <a href="/attestation" class="pl-2 keyboard-target" data-keynav-priority>
             <small>see more ...</small>
           </a>
         </div>
         <div class="mb-3 flex-table latestAttestation head-table">
-          <table width="100%">
-            <thead>
+            <table width="100%">
+              <thead>
               <th><span class="lh1rem mr-auto">Txid</span></th>
               <th><span class="lh1rem mr-auto">MerkleRoot</span></th>
               <th><span class="lh1rem ">Confirmed</span></th>
               <th><span class="lh1rem mr-auto">Date</span></th>
-            </thead>
+              </thead>
           </table>
         </div>
         <div class="mb-3 flex-table latestAttestation">
@@ -47,7 +47,7 @@ class LatestAttestation extends Component {
                   </td>
                   <td>
                     <a class="hash truncate-hash keyboard-target"
-                       href={`/tx/${data.merkle_root}`}
+                       href={`/merkle_root/${data.merkle_root}`}
                        title={data.merkle_root}>{data.merkle_root}
                     </a>
                   </td>

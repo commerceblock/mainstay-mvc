@@ -220,9 +220,9 @@ request.get(url + route + '?' + position + '&' + commitment, (error, response, b
 
 _Node.js example_
 ```js
-var Bitcore = require('bitcore-lib');
-var Message = require('bitcore-message');
 const request = require('request');
+let elliptic = require('elliptic');
+let ec = new elliptic.ec('secp256k1');
 
 const url = "https://localhost:9000/api/v1";
 const route = '/commitment/send'
@@ -232,9 +232,12 @@ const pvtKey =
 const commitment =
     'F01111111111111111111111111111111111111111111111111111111111110F';
 
-var message = new Message(commitment);
-var privateKey = new Bitcore.PrivateKey(pvtKey);
-var signature = message.sign(privateKey);
+
+let keyPair = ec.keyFromPrivate("97ddae0f3a25b92268175400149d65d6887b9cefaf28ea2c078e05cdc15a3c0a");
+let privKey = keyPair.getPrivate("hex");
+let pubKey = keyPair.getPublic();
+
+let signature = ec.sign(commitment, privKey, "hex", {canonical: true}).toDER('base64');
 
 var payload = {
   commitment: commitment,
@@ -260,7 +263,7 @@ request.post(options, (error, response, body) => {
 ```
 _Curl example_
 ```perl
-curl --header "Content-Type: application/json" --request POST --data '{"X-MAINSTAY-APIKEY":"a","X-MAINSTAY-PLAYLOAD":"eyJwb3NpdGlvbiI6MCwiY29tbWl0bWVudCI6IkYwMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMEYifQ==","X-MAINSTAY-SIGNATURE-APIKEY":"apiKey","X-MAINSTAY-SIGNATURE-COMMITMENT":"IJbqe50XtfZbQ1b0jr+J1tswSPfZlWwZugXCpYbwYMPuRl+htqSb7wTLYY9RtQ6Bw9Ym5dw0vMNRaDwR8pked2Y="}' http://localhost:9000/api/v1/commitment/send
+curl --header "Content-Type: application/json" --request POST --data '{"X-MAINSTAY-PLAYLOAD":"eyJwb3NpdGlvbiI6MCwiY29tbWl0bWVudCI6IkYwMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMEYifQ==","X-MAINSTAY-SIGNATURE":"IJbqe50XtfZbQ1b0jr+J1tswSPfZlWwZugXCpYbwYMPuRl+htqSb7wTLYY9RtQ6Bw9Ym5dw0vMNRaDwR8pked2Y="}' http://localhost:9000/api/v1/commitment/send
 ```
 response
 ```perl

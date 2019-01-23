@@ -25,7 +25,7 @@ function __MAIN__() {
   let db = connect_mongo();
   db.on(ERROR, console.error.bind(console, 'Connection Error:'));
   db.once(OPEN, () => {
-    mainstay_websocket();
+    // mainstay_websocket();
     api(app);
     ctrl(app);
     app.get('*', (req, res) => {
