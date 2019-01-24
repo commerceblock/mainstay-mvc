@@ -379,6 +379,7 @@ module.exports = {
         models.attestation.find().sort({ inserted_at: -1 }).limit(1)
             .exec((error, data) => {
                 let merkle_root = data[0].merkle_root;
+                let txid = data[0].txid;
                 models.merkleProof.find({
                     client_position: position,
                     merkle_root: merkle_root
@@ -388,6 +389,7 @@ module.exports = {
                     if (data.length == 0)
                         return reply_err(res, POSITION_UNKNOWN, startTime);
                     reply_msg(res, {
+                            txid: txid,
                             commitment: data[0].commitment,
                             merkle_root: merkle_root,
                             ops: data[0].ops
@@ -413,7 +415,7 @@ module.exports = {
                     return reply_err(res, INTERNAL_ERROR_API, startTime);
                 if (data.length == 0)
                     return reply_err(res, COMMITMENT_POSITION_UNKNOWN, startTime);
-                models.attestation.find({ merkle_root: data[0].merkle_root },
+                models.attestation.find({ merkle_root: data[data.length - 1].merkle_root },
                     (error, data) => {
                         if (error)
                             return reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -514,7 +516,7 @@ module.exports = {
                 return reply_err(res, INTERNAL_ERROR_API, startTime);
             if (data.length == 0)
                 return reply_err(res, 'Not found', startTime);
-            let response = data[0];
+            let response = data[data.length - 1]; // get latest
             models.attestation.find({ merkle_root: response.merkle_root },
                 (error, data) => {
                     if (error)
