@@ -968,7 +968,7 @@ table th span {
   margin-bottom: 0.7rem !important;
 }
 .LatestCommitment {
-  height: 35vh;
+  height: 28vh;
   overflow: auto;
 }
 
@@ -1072,10 +1072,13 @@ table th span {
 .main table {
   max-height: 70vh;
   overflow: auto;
-  display: block;
 }
 .main table td {
   padding: 5px;
+}
+
+.home-left{
+  padding-right: 60px;
 }
 
 .block-title {
@@ -1107,6 +1110,7 @@ table th span {
 }
 
 .searchTable {
+  display: block;
   border:none;
   width: 100%;
 }
@@ -1149,3 +1153,12 @@ table th span {
 .commitments_title {
   padding: 40px 0 10px;
 }
+
+.MerkleRootTable {
+  max-height: 45vh !important;
+}
+
+.MerkleRootTable tbody {
+  border-bottom: 3px solid #ddd;
+}
+

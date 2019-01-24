@@ -200,7 +200,7 @@ class MerkleRoot extends Component {
                     <div class="row" data-controller="homepageMempool">
                         <span class="block-title">MerkleRoot</span>
                         <span className="block-subtitle">MerkleRoot: {attestation.merkle_root}</span>
-                        <table class="searchTable">
+                        <table class="searchTable ">
                             <tbody>
 
                             <tr>
@@ -222,23 +222,25 @@ class MerkleRoot extends Component {
                             <h6 class="align-items-center">Commitments({merkle_commitment.length})</h6>
                         </div>
 
-                        <table className="main-second-position searchTable">
+                        <table className="main-second-position searchTable MerkleRootTable">
+                            {merkle_commitment.map((data) =>
                             <tbody>
 
-                            {merkle_commitment.map((data) =>
 
-                                <tr className="main-second-position-block">
                                     <tr>
-                                        <td>Position</td>
+                                        <td class="positionField">Position</td>
                                         <td>{data.position}</td>
+
                                     </tr>
-                                    <tr>
-                                        <td>Commitment</td>
-                                        <td colSpan="2">{data.commitment}</td>
-                                    </tr>
-                                </tr>
-                            )}
+                                        <tr>
+                                            <td>Commitment</td>
+                                            <td colSpan="2">{data.commitment}</td>
+                                        </tr>
+
+
+
                             </tbody>
+                            )}
                         </table>
 
 

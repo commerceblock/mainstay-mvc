@@ -21,7 +21,7 @@ class Home extends Component {
         <div class="container main" data-controller="main">
           <div class="row" data-controller="homepageMempool">
             <MainstayInfo/>
-            <div class="col-md-6">
+            <div class="col-md-6  home-left">
               <LatestAttestation/>
               <LatestCommitment/>
             </div>
