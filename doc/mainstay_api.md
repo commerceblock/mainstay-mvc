@@ -1,230 +1,422 @@
-# Documentation Mainstay API
+## Documentation Mainstay API
 
-_REST_
+Short documentation for the public API offered on the Mainstay website at `https://testnet.mainstay.xyz/api/v1`.
 
+### REST framework structure
 
-timestamp = timestamp in milli second
-
-allowance = allocation des ressource "cont" est le coup du processuse en nano second
-
-merkle root =
-
-commitment =
-
-txid = Id Transaction
-
-
-ops
-
-_Public Endpoints_
-```js
-const request = require('request');
-const url = "https://localhost:9000/api/v1";
-
-request.get(url + "Endpoint/address", (error, response, body) => {
-  console.log(body);
-});
 ```
-- _Latest Attestation_
-```js
-// Example Request
-const request = require('request');
-const url = "https://localhost:9000/api/v1";
+response = json response object
 
-request.get(url + '/latestattestation', (error, response, body) => {
-  console.log(body);
-});
+response['error'] : json response error field
+
+timestamp : timestamp in ms
+
+allowance : time taken to respond in ns
 ```
-```js
-// Example Response
+
+### Public Endpoints
+
+#### Index
+
+API index page.
+
+**request:** https://testnet.mainstay.xyz/api/v1
+
+*response*
+```
 {
-  "response": {
-    "merkle_root": "7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090",
-    "txid": "6a855c1c70849ed28eb51cffd808ccd4e45c4cdddfa17495ccf98856b2421b8e",
-  },
-  "timestamp": 1541762949142,
-  "allowance": {
-    "cost": 15107449
-  }
+    "response": "Mainstay-API-v1",
+    "timestamp": 1548329067489,
+    "allowance":
+    {
+        "cost": 4562
+    }
 }
 ```
-- _Attestation_
-```js
-// Example Request
-const request = require('request');
-const url = "https://localhost:9000/api/v1";
 
-request.get(url + '/attestation?txid=bb1f2dea9205666786fc54469db1090f9c0976068c00e7e7ebfa5d1e5916e250', (error, response, body) => {
-  console.log(body);
-});
+#### Latest Attestation
+
+Provide information on latest attestation.
+
+**request:** https://testnet.mainstay.xyz/api/v1/latestattestation
+
+*response*
 ```
-```js
-// Example Response
 {
-  "response": {
-    "merkle_root": "7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090",
-    "txid": "6a855c1c70849ed28eb51cffd808ccd4e45c4cdddfa17495ccf98856b2421b8e",
-  },
-  "timestamp": 1541762949142,
-  "allowance": {
-    "cost": 15107449
-  }
+    "response":
+    {
+        "merkle_root": "f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b",
+        "txid": "38fa2c6e103673925aaec50e5aadcbb6fd0bf1677c5c88e27a9e4b0229197b13"
+    },
+    "timestamp": 1548329116999,
+    "allowance":
+    {
+        "cost": 1796883
+    }
 }
 ```
-- _Latest Commitment_
-```js
-// Example Request
-const request = require('request')
-const url = "https://localhost:9000/api/v1";
 
-request.get(url + '/latestcommitment?position=0', (error, response, body) => {
-  console.log(body);
-});
+#### Latest Commitment
+
+Provide information on latest commitment for a specific position.
+
+**request:** https://testnet.mainstay.xyz/api/v1/latestcommitment?position=3
+
+*response*
 ```
-```js
-// Example Response
 {
-  "response": {
-    "commitment": "1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7",
-    "merkle_root": "7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090",
-    "txid": "6a855c1c70849ed28eb51cffd808ccd4e45c4cdddfa17495ccf98856b2421b8e"
-  },
-  "timestamp": 1541763110233,
-  "allowance": {
-    "cost": 1944359
-  }
+    "response":
+    {
+        "commitment": "d235db29356bb02f37e16712c4d34a724282fd81134fbfda61407b3009755a9e",
+        "merkle_root": "f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b",
+        "txid": "38fa2c6e103673925aaec50e5aadcbb6fd0bf1677c5c88e27a9e4b0229197b13"
+    },
+    "timestamp": 1548329166363,
+    "allowance":
+    {
+        "cost": 3119659
+    }
 }
 ```
-- _Commitment_
-```js
-// Example Request
-const request = require('request')
-const url = "https://localhost:9000/api/v1";
 
-request.get(url + '/commitment?merkle_root=7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090=&position=0', (error, response, body) => {
-  console.log(body);
-});
+#### Commitment
+
+Fetch commitment information for a specific position and merkle_root.
+
+**request:** https://testnet.mainstay.xyz/api/v1/commitment?position=3&merkle_root=f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b
+
+*response*
 ```
-```js
-// Example Response
 {
-  "response": {
-    "commitment": "1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7",
-    "merkle_root": "7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090"
-  },
-  "timestamp": 1541763110233,
-  "allowance": {
-    "cost": 1944359
-  }
+    "response":
+    {
+        "commitment": "d235db29356bb02f37e16712c4d34a724282fd81134fbfda61407b3009755a9e",
+        "merkle_root": "f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b"
+    },
+    "timestamp": 1548329204516,
+    "allowance":
+    {
+        "cost": 1484074
+    }
 }
 ```
-- _Commitment Latest Proof_
-```js
-// Example Request
-const request = require('request')
-const url = "https://localhost:9000/api/v1";
 
-request.get(url + '/commitment/latestproof?position=0', (error, response, body) => {
-  console.log(body);
-});
+#### Commitment Latest Proof
+
+Fetch latest commitment proof for a specific position.
+
+**request:** https://testnet.mainstay.xyz/api/v1/commitment/latestproof?position=1
+
+*response*
 ```
-```js
-// Example Response
 {
-  "response": {
-    "commitment": "1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7",
-    "merkle_root": "7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090",
-    "ops": [
-      {
-        "append": true,
-        "commitment": "2a39e34e883d9a1e6cdc3418b54aa57747106bc75e3e84426661f37f48ada3b7"
-      },
-      {
-        "append": true,
-        "commitment":"91ffafe62866dd95ea1ed7a56907ddc59ea495b477c3e8f853ee2d1b55a24d47"
-      }
-    ]
-  },
-  "timestamp": 1541411923448,
-  "allowance": {
-    "cost": 1544035
-  }
+    "response":
+    {
+        "txid": "38fa2c6e103673925aaec50e5aadcbb6fd0bf1677c5c88e27a9e4b0229197b13",
+        "commitment": "d235db29356bb02f37e16712c4d34a724282fd81134fbfda61407b3009755a9e",
+        "merkle_root": "f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b",
+        "ops": [
+        {
+            "append": false,
+            "commitment": "5309053b9d4db8f86d2c7ec164645bdf1669111280e49e04c036c323b58f4709"
+        },
+        {
+            "append": false,
+            "commitment": "213e122aaec314a94f111dd8dc797814660b680f7258f1d95adec56318eabd7c"
+        },
+        {
+            "append": true,
+            "commitment": "406ab5d975ae922753fad4db83c3716ed4d2d1c6a0191f8336c76000962f63ba"
+        }]
+    },
+    "timestamp": 1548330374527,
+    "allowance":
+    {
+        "cost": 19732506
+    }
 }
 ```
-- _Commitment Proof_
-```js
-// Example Request
-const request = require('request')
-const url = "https://localhost:9000/api/v1";
 
-const route = '/commitment/proof'
-const position = 'position=0'
-const merkle_root = 'merkle_root=0849d03563d6d7e7d2d0063a5dae944bfcfd4d56d149ffbe73ccead275b2762e'
+#### Commitment Verify
 
-request.get(url + route + '?' + position + '&' + merkle_root, (error, response, body) => {
-  console.log(body);
-});
+Check if a commitment for a specific position is included in an attestation.
+
+**request:** https://testnet.mainstay.xyz/api/v1/commitment/verify?position=1&commitment=5555c29bc4ac63ad3aa4377d82d40460440a67f6249b463453ca6b451c94e053
+
+*response*
 ```
-```js
-// Example Response
 {
-  "response": {
-    "merkle_root": "0849d03563d6d7e7d2d0063a5dae944bfcfd4d56d149ffbe73ccead275b2762e",
-    "commitment": "1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7",
-    "ops": [
-      {
-        "append": true,
-        "commitment": "2a39e34e883d9a1e6cdc3418b54aa57747106bc75e3e84426661f27f98ada3b7"
-      },
-      {
-        "append": true,
-        "commitment":"91ffafe62866dd95ea1ed7a56907ddc59ea495b477c3e8f853ee2d1b55a24d47"
-      }
-    ]
-  },
-  "timestamp": 1541764083449,
-  "allowance": {
-    "cost": 2938583
-  }
+    "response":
+    {
+        "confirmed": true
+    },
+    "timestamp": 1548329867868,
+    "allowance":
+    {
+        "cost": 30212539
+    }
 }
 ```
-- _Commitment Verify_
-```js
-// Example Request
-const request = require('request')
-const url = "https://localhost:9000/api/v1";
 
-const route = '/commitment/verify'
-const position = 'position=0'
-const commitment = 'commitment=1a39e34e881d49a1e6cdc3418b54aa57747106bc75e9e8443666127f98ada3b7'
+#### Commitment Proof
 
-request.get(url + route + '?' + position + '&' + commitment, (error, response, body) => {
-  console.log(body);
-});
+Get the merkle commitment proof for a specific position and merkle root.
+
+**request:** https://testnet.mainstay.xyz/api/v1/commitment/proof?position=1&merkle_root=f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b
+
+*response*
 ```
-```js
-// Example Response
 {
-  "response": {
-    "confirmed":true
-  },
-  "timestamp": 1541411923448,
-  "allowance": {
-    "cost": 1544035
-  }
+    "response":
+    {
+        "merkle_root": "f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b",
+        "commitment": "5555c29bc4ac63ad3aa4377d82d40460440a67f6249b463453ca6b451c94e053",
+        "ops": [
+        {
+            "append": false,
+            "commitment": "21b0a66806bdc99ac4f2e697d05cb17c757ae10deb851ee869830d617e4f519c"
+        },
+        {
+            "append": true,
+            "commitment": "622d1b5efe11e9031f1b25aac11587e0ff81a37e9565ded16ee8e82bbc0c2fc1"
+        },
+        {
+            "append": true,
+            "commitment": "406ab5d975ae922753fad4db83c3716ed4d2d1c6a0191f8336c76000962f63ba"
+        }]
+    },
+    "timestamp": 1548330450896,
+    "allowance":
+    {
+        "cost": 2098095
+    }
 }
 ```
-###_Authenticated Endpoints_
 
-- _Commitment Send_
+#### Commitment Commitment
 
-_Node.js example_
+Get information on a specific commitment.
+
+**request:** https://testnet.mainstay.xyz/api/v1/commitment/commitment?commitment=5555c29bc4ac63ad3aa4377d82d40460440a67f6249b463453ca6b451c94e053
+
+*response*
+```
+{
+    "response":
+    {
+        "attestation":
+        {
+            "merkle_root": "f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b",
+            "txid": "38fa2c6e103673925aaec50e5aadcbb6fd0bf1677c5c88e27a9e4b0229197b13",
+            "confirmed": true,
+            "inserted_at": "16:06:41 23/01/19"
+        },
+        "merkleproof":
+        {
+            "position": 1,
+            "merkle_root": "f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b",
+            "commitment": "5555c29bc4ac63ad3aa4377d82d40460440a67f6249b463453ca6b451c94e053",
+            "ops": [
+            {
+                "append": false,
+                "commitment": "21b0a66806bdc99ac4f2e697d05cb17c757ae10deb851ee869830d617e4f519c"
+            },
+            {
+                "append": true,
+                "commitment": "622d1b5efe11e9031f1b25aac11587e0ff81a37e9565ded16ee8e82bbc0c2fc1"
+            },
+            {
+                "append": true,
+                "commitment": "406ab5d975ae922753fad4db83c3716ed4d2d1c6a0191f8336c76000962f63ba"
+            }]
+        }
+    },
+    "timestamp": 1548330505898,
+    "allowance":
+    {
+        "cost": 60414043
+    }
+}
+```
+
+#### Merle Root
+
+Get information on an attested merkle root.
+
+**request:** https://testnet.mainstay.xyz/api/v1/merkleroot?merkle_root=f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b
+
+*response*
+```
+{
+    "response":
+    {
+        "attestation":
+        {
+            "merkle_root": "f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b",
+            "txid": "38fa2c6e103673925aaec50e5aadcbb6fd0bf1677c5c88e27a9e4b0229197b13",
+            "confirmed": true,
+            "inserted_at": "16:06:41 23/01/19"
+        },
+        "merkle_commitment": [
+        {
+            "position": 0,
+            "commitment": "21b0a66806bdc99ac4f2e697d05cb17c757ae10deb851ee869830d617e4f519c"
+        },
+        {
+            "position": 1,
+            "commitment": "5555c29bc4ac63ad3aa4377d82d40460440a67f6249b463453ca6b451c94e053"
+        },
+        {
+            "position": 2,
+            "commitment": "5309053b9d4db8f86d2c7ec164645bdf1669111280e49e04c036c323b58f4709"
+        },
+        {
+            "position": 3,
+            "commitment": "d235db29356bb02f37e16712c4d34a724282fd81134fbfda61407b3009755a9e"
+        },
+        {
+            "position": 4,
+            "commitment": "9b07569d4fd42ae3a19c0803b7401443e0275feb728e8103330d7d8615eecb62"
+        }]
+    },
+    "timestamp": 1548330553639,
+    "allowance":
+    {
+        "cost": 3318936
+    }
+}
+```
+
+#### Position
+
+Get information on a client position.
+
+**request:** https://testnet.mainstay.xyz/api/v1/position?position=1
+
+*response*
+```
+{
+    "response":
+    {
+        "position": [
+        {
+            "position": 1,
+            "merkle_root": "300ab922905c67631e46e6d014be286fe1bb6dc550ae2df83484fcb1ccb21011",
+            "commitment": "5555c29bc4ac63ad3aa4377d82d40460440a67f6249b463453ca6b451c94e053",
+            "ops": [
+            {
+                "append": false,
+                "commitment": "2851174cf04f206e6fdfd78a9208c90a324fea5e97ee5b0629d35b5a853fbcfc"
+            },
+            {
+                "append": true,
+                "commitment": "622d1b5efe11e9031f1b25aac11587e0ff81a37e9565ded16ee8e82bbc0c2fc1"
+            },
+            {
+                "append": true,
+                "commitment": "406ab5d975ae922753fad4db83c3716ed4d2d1c6a0191f8336c76000962f63ba"
+            }]
+        },
+        {
+            "position": 1,
+            "merkle_root": "2522e16722cfb1b29d01bbe6bfabe54ef7dd69b8bf8a00f911103284eebf4e3e",
+            "commitment": "5555c29bc4ac63ad3aa4377d82d40460440a67f6249b463453ca6b451c94e053",
+            "ops": [
+            {
+                "append": false,
+                "commitment": "586f199625d902706e0ebf24e2720e62f3f4343a5d7b2ddc2fac155fb359ca3a"
+            },
+            {
+                "append": true,
+                "commitment": "622d1b5efe11e9031f1b25aac11587e0ff81a37e9565ded16ee8e82bbc0c2fc1"
+            },
+            {
+                "append": true,
+                "commitment": "406ab5d975ae922753fad4db83c3716ed4d2d1c6a0191f8336c76000962f63ba"
+            }]
+        }, ]
+    },
+    "timestamp": 1548330579389,
+    "allowance":
+    {
+        "cost": 31613129
+    }
+}
+```
+
+#### Attestation
+
+Get information on an attestation.
+
+**request:** https://testnet.mainstay.xyz/api/v1/attestation?txid=38fa2c6e103673925aaec50e5aadcbb6fd0bf1677c5c88e27a9e4b0229197b13
+
+*response*
+```
+{
+    "response":
+    {
+        "attestation":
+        {
+            "merkle_root": "f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b",
+            "txid": "38fa2c6e103673925aaec50e5aadcbb6fd0bf1677c5c88e27a9e4b0229197b13",
+            "confirmed": true,
+            "inserted_at": "16:06:41 23/01/19"
+        },
+        "attestationInfo":
+        {
+            "txid": "86b372fb70e0935bfff4d6ba112e78cb9a3201ca15251dcd7db7cbf135b342b5",
+            "amount": 149.9999155,
+            "blockhash": "3c50145441751dfb8f01cd05f21a24d0763005334667daa734bbf4147eeabe14",
+            "time": 1548253554
+        }
+    },
+    "timestamp": 1548330644403,
+    "allowance":
+    {
+        "cost": 7959634
+    }
+}
+```
+
+#### Block
+
+Get information on a bitcoin block if it contains a mainstay attestation.
+
+**request:** https://testnet.mainstay.xyz/api/v1/blockhash?hash=3c50145441751dfb8f01cd05f21a24d0763005334667daa734bbf4147eeabe14
+
+*response*
+```
+{
+    "response":
+    {
+        "blockhash":
+        {
+            "txid": "86b372fb70e0935bfff4d6ba112e78cb9a3201ca15251dcd7db7cbf135b342b5",
+            "amount": 149.9999155,
+            "blockhash": "3c50145441751dfb8f01cd05f21a24d0763005334667daa734bbf4147eeabe14",
+            "time": "14:25:54 23/01/19"
+        }
+    },
+    "timestamp": 1548330671498,
+    "allowance":
+    {
+        "cost": 1543490
+    }
+}
+```
+
+### Authenticated Endpoints
+
+#### Commitment Send
+
+**Node.js example**
+
 ```js
 const request = require('request');
 let elliptic = require('elliptic');
 let ec = new elliptic.ec('secp256k1');
 
-const url = "https://localhost:9000/api/v1";
+const url = "https://testnet.mainstay.xyz/api/v1";
 const route = '/commitment/send'
 const pubKey = '1CsSceq9GWnmozaky3DGa24UER6gRDgibf';
 const pvtKey =
@@ -261,11 +453,13 @@ request.post(options, (error, response, body) => {
   ...
 });
 ```
-_Curl example_
+
+**Curl example**
 ```perl
 curl --header "Content-Type: application/json" --request POST --data '{"X-MAINSTAY-PLAYLOAD":"eyJwb3NpdGlvbiI6MCwiY29tbWl0bWVudCI6IkYwMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMEYifQ==","X-MAINSTAY-SIGNATURE":"IJbqe50XtfZbQ1b0jr+J1tswSPfZlWwZugXCpYbwYMPuRl+htqSb7wTLYY9RtQ6Bw9Ym5dw0vMNRaDwR8pked2Y="}' http://localhost:9000/api/v1/commitment/send
 ```
-response
+
+*response*
 ```perl
 {"response":"feedback","timestamp":1541761540171,"allowance":{"cost":4832691}}
 ```
