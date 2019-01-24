@@ -1,10 +1,10 @@
 import Axios from 'axios';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Pagination from "react-js-pagination";
 
 class AttestationPaginated extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props)
         this.state = {
             data: [],
             activePage: 1,
@@ -13,7 +13,7 @@ class AttestationPaginated extends Component {
         };
         this.request(1);
 
-        this.handlePageChange=this.handlePageChange.bind(this);
+        this.handlePageChange = this.handlePageChange.bind(this);
     }
 
     handlePageChange(pageNumber) {
@@ -21,7 +21,12 @@ class AttestationPaginated extends Component {
     }
 
     request(page) {
-        Axios.get('/ctrl/latestattestation?page=' + page)
+        let failedArg = ''
+        if (this.props.props.match.params.value && this.props.props.match.params.value == "showFailed") {
+            failedArg = '&failed=true'
+        }
+
+        Axios.get('/ctrl/latestattestation?page=' + page + failedArg)
             .then(response => this.setState({
                 data: response.data['data'],
                 activePage: page,

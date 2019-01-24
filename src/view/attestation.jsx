@@ -2,7 +2,7 @@ import FaviconAddrBar from './faviconAddrBar';
 import FooterPage from './footerPage';
 import HamburgerMenu from './hamburgerMenu';
 import Navbar from './navbar';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import AttestationPaginated from './attestationPaginated';
 
 class Attestation extends Component {
@@ -13,7 +13,7 @@ class Attestation extends Component {
                     <FaviconAddrBar/>
                     <Navbar/>
                     <HamburgerMenu/>
-                    <AttestationPaginated/>
+                    <AttestationPaginated props={this.props}/>
                     <FooterPage/>
 
                 </div>

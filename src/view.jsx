@@ -1,7 +1,6 @@
 import Home from './view/home/home';
-import 
-    Search, 
-    { Position, Blockhash, Commitment, TransactionId, MerkleRoot } 
+import
+Search, { Position, Blockhash, Commitment, TransactionId, MerkleRoot }
 from './view/search/search';
 import Attestation from './view/attestation';
 
@@ -25,7 +24,7 @@ const Main = () => (
             <Route path="/commitment/:value" exact component={Commitment} />
             <Route path="/tx/:value" exact component={TransactionId} />
             <Route path="/merkle_root/:value" exact component={MerkleRoot} />
-            <Route path="/attestation" exact component={Attestation}/>
+            <Route path="/attestation/:value?" exact component={Attestation}/>
         </div>
     </BrowserRouter>
 );

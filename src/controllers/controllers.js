@@ -172,7 +172,10 @@ function find_type_number(res, paramValue, startTime) {
 module.exports = {
     ctrl_latest_attestation: (req, res) => {
         let response = {};
-        models.attestation.find().sort({ inserted_at: -1 })
+
+        // set confirmed only filter unless failed flag is set to true
+        let confirmedFilter = req.query.failed ? (req.query.failed == 'true' ? {} : { confirmed: true }) : { confirmed: true }
+        models.attestation.find(confirmedFilter).sort({ inserted_at: -1 })
             .exec((error, data) => {
 
                 let page = parseInt(req.query.page);
