@@ -428,7 +428,7 @@ class TransactionId extends Component {
     }
 
     componentWillMount() {
-        Axios.get("/api/v1/transaction?hash=" + this.props.match.params.value)
+        Axios.get("/api/v1/attestation?txid=" + this.props.match.params.value)
             .then(response => {
                 this.setState({response: response.data})
             });
@@ -475,7 +475,7 @@ class Search extends Component {
         if (value.query == undefined)
             return this.setState({page: page_undefined});
         if (/[0-9A-Fa-f]{64}/g.test(value.query) || /^\d+$/.test(value.query))
-            Axios.get("/api/v1/type?value=" + value.query)
+            Axios.get("/ctrl/type?value=" + value.query)
                 .then(response => {
                     if (response.data.response === 'commitment')
                         this.props.history.replace(`/commitment/${value.query}`)
