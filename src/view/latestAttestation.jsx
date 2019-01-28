@@ -29,7 +29,6 @@ class LatestAttestation extends Component {
               <thead>
               <th><span class="lh1rem mr-auto">Txid</span></th>
               <th><span class="lh1rem mr-auto">MerkleRoot</span></th>
-              <th><span class="lh1rem ">Confirmed</span></th>
               <th><span class="lh1rem mr-auto">Date</span></th>
               </thead>
           </table>
@@ -50,9 +49,6 @@ class LatestAttestation extends Component {
                        href={`/merkle_root/${data.merkle_root}`}
                        title={data.merkle_root}>{data.merkle_root}
                     </a>
-                  </td>
-                  <td>
-                    <span class="mono text-right ml-1">{(data.confirmed) ? "true" : "false"}</span>
                   </td>
                   <td>
                     <span class="mono text-right ml-1">{data.age}</span>
