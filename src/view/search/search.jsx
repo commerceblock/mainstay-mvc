@@ -224,22 +224,21 @@ class MerkleRoot extends Component {
 
                         <table className="main-second-position searchTable MerkleRootTable">
                             {merkle_commitment.map((data) =>
-                            <tbody>
+                                <tbody>
 
 
-                                    <tr>
-                                        <td class="positionField">Position</td>
-                                        <td>{data.position}</td>
+                                <tr>
+                                    <td class="positionField">Position</td>
+                                    <td>{data.position}</td>
 
-                                    </tr>
-                                        <tr>
-                                            <td>Commitment</td>
-                                            <td colSpan="2">{data.commitment}</td>
-                                        </tr>
+                                </tr>
+                                <tr>
+                                    <td>Commitment</td>
+                                    <td colSpan="2">{data.commitment}</td>
+                                </tr>
 
 
-
-                            </tbody>
+                                </tbody>
                             )}
                         </table>
 
@@ -452,7 +451,22 @@ class Waiting extends Component {
 
     render() {
         return (
-            <div>Page - Wait ...</div>
+            <div>
+                <div class="alert alert-danger col-md-6 col-md-offset-3">Search does not match any valid client position, attestation transaction
+                    id or commitment hash.
+                </div>
+
+                <div className="container main" data-controller="main">
+                    <div className="row" data-controller="homepageMempool">
+                        <MainstayInfo/>
+                        <div className="col-md-6  home-left">
+                            <LatestAttestation/>
+                            <LatestCommitment/>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         );
     }
 }
@@ -492,6 +506,7 @@ class Search extends Component {
                     else if (response.data.response === 'type unknown')
                         this.setState({page: type_unknown()});
                     else
+
                         this.setState({page: undefined()});
                 });
     }
