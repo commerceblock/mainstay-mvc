@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import React, { Component } from 'react';
 import swal from 'sweetalert';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import {
   Button,
   Form,
@@ -87,7 +87,7 @@ class Menu extends Component {
         <Link to="/attestation" className="menu" color="muted" >Attestations {this.props.buttonLabel}</Link>
         <Button className="menu" color="muted" >Clients/Slots {this.props.buttonLabel}</Button>
         <Button className="menu" color="muted" onClick={this.toggle}>Send Commitment {this.props.buttonLabel}</Button>
-        <Button className="menu" color="muted" >API information {this.props.buttonLabel}</Button>
+        <a href={'https://github.com/commerceblock/mainstay-mvc/blob/develop/doc/mainstay_api.md'} className="menu" color="muted" target="_blank">API information {this.props.buttonLabel}</a>
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Send Commitment</ModalHeader>
           <Form onSubmit={this.handleSubmit}>
