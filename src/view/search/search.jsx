@@ -447,25 +447,29 @@ class TransactionId extends Component {
 class Waiting extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            value: QueryString.parse(location.search)
+        }
+
     }
 
     render() {
         return (
-            <div>
-                <div class="alert alert-danger col-md-6 col-md-offset-3">Search does not match any valid client position, attestation transaction
-                    id or commitment hash.
-                </div>
 
-                <div className="container main" data-controller="main">
-                    <div className="row" data-controller="homepageMempool">
-                        <MainstayInfo/>
-                        <div className="col-md-6  home-left">
-                            <LatestAttestation/>
-                            <LatestCommitment/>
-                        </div>
+            <div className="row" data-controller="homepageMempool">
+                <div class="col-md-12">
+                    <div className="alert alert-danger ">
+                        Search does not match any valid client position, attestation transaction
+                        id or commitment hash, for query: {this.state.value.query}
                     </div>
                 </div>
 
+                <MainstayInfo/>
+                <div className="col-md-6  home-left">
+                    <LatestAttestation/>
+                    <LatestCommitment/>
+                </div>
             </div>
         );
     }
@@ -506,7 +510,6 @@ class Search extends Component {
                     else if (response.data.response === 'type unknown')
                         this.setState({page: type_unknown()});
                     else
-
                         this.setState({page: undefined()});
                 });
     }
@@ -522,9 +525,7 @@ class Search extends Component {
                     </div>
                 </div>
                 <div class="container main" data-controller="main">
-                    <div class="row" data-controller="homepageMempool">
                         {this.state.page}
-                    </div>
                 </div>
                 <FooterPage/>
             </div>
