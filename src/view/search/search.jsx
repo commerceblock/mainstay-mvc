@@ -200,7 +200,7 @@ class MerkleRoot extends Component {
                     <div class="row" data-controller="homepageMempool">
                         <span class="block-title">MerkleRoot</span>
                         <span className="block-subtitle">MerkleRoot: {attestation.merkle_root}</span>
-                        <table class="searchTable">
+                        <table class="searchTable ">
                             <tbody>
 
                             <tr>
@@ -222,23 +222,24 @@ class MerkleRoot extends Component {
                             <h6 class="align-items-center">Commitments({merkle_commitment.length})</h6>
                         </div>
 
-                        <table className="main-second-position searchTable">
-                            <tbody>
-
+                        <table className="main-second-position searchTable MerkleRootTable">
                             {merkle_commitment.map((data) =>
+                                <tbody>
 
-                                <tr className="main-second-position-block">
-                                    <tr>
-                                        <td>Position</td>
-                                        <td>{data.position}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Commitment</td>
-                                        <td colSpan="2">{data.commitment}</td>
-                                    </tr>
+
+                                <tr>
+                                    <td class="positionField">Position</td>
+                                    <td>{data.position}</td>
+
                                 </tr>
+                                <tr>
+                                    <td>Commitment</td>
+                                    <td colSpan="2">{data.commitment}</td>
+                                </tr>
+
+
+                                </tbody>
                             )}
-                            </tbody>
                         </table>
 
 
@@ -428,7 +429,7 @@ class TransactionId extends Component {
     }
 
     componentWillMount() {
-        Axios.get("/api/v1/transaction?hash=" + this.props.match.params.value)
+        Axios.get("/api/v1/attestation?txid=" + this.props.match.params.value)
             .then(response => {
                 this.setState({response: response.data})
             });
@@ -446,11 +447,30 @@ class TransactionId extends Component {
 class Waiting extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            value: QueryString.parse(location.search)
+        }
+
     }
 
     render() {
         return (
-            <div>Page - Wait ...</div>
+
+            <div className="row" data-controller="homepageMempool">
+                <div class="col-md-12">
+                    <div className="alert alert-danger ">
+                        Search does not match any valid client position, attestation transaction
+                        id or commitment hash, for query: {this.state.value.query}
+                    </div>
+                </div>
+
+                <MainstayInfo/>
+                <div className="col-md-6  home-left">
+                    <LatestAttestation/>
+                    <LatestCommitment/>
+                </div>
+            </div>
         );
     }
 }
@@ -475,7 +495,7 @@ class Search extends Component {
         if (value.query == undefined)
             return this.setState({page: page_undefined});
         if (/[0-9A-Fa-f]{64}/g.test(value.query) || /^\d+$/.test(value.query))
-            Axios.get("/api/v1/type?value=" + value.query)
+            Axios.get("/ctrl/type?value=" + value.query)
                 .then(response => {
                     if (response.data.response === 'commitment')
                         this.props.history.replace(`/commitment/${value.query}`)
@@ -505,9 +525,7 @@ class Search extends Component {
                     </div>
                 </div>
                 <div class="container main" data-controller="main">
-                    <div class="row" data-controller="homepageMempool">
                         {this.state.page}
-                    </div>
                 </div>
                 <FooterPage/>
             </div>

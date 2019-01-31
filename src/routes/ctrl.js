@@ -1,18 +1,17 @@
 const controllers = require('../controllers/controllers');
 
-const CTRL_LATEST_ATTESTATION = '/ctrl/latestattestation';
-const CTRL_LATEST_ATTESTATION_INFO = '/ctrl/latestattestationinfo';
-const CTRL_LATEST_COMMITMENT = '/ctrl/latestcommitment';
-const CTRL_SEND_COMMITMENT = '/ctrl/sendcommitment';
+const CTRL = '/ctrl'
 
 function ctrl_get(app) {
-  app.get(CTRL_LATEST_ATTESTATION, controllers.ctrl_latest_attestation);
-  app.get(CTRL_LATEST_ATTESTATION_INFO, controllers.ctrl_latest_attestation_info);
-  app.get(CTRL_LATEST_COMMITMENT, controllers.ctrl_latest_commitment);
+  app.get(CTRL + '/latestattestation', controllers.ctrl_latest_attestation);
+  app.get(CTRL + '/latestattestationinfo', controllers.ctrl_latest_attestation_info);
+  app.get(CTRL + '/latestcommitment', controllers.ctrl_latest_commitment);
+
+  app.get(CTRL + '/type', controllers.ctrl_type);
 }
 
 function ctrl_post(app) {
-  app.post(CTRL_SEND_COMMITMENT, controllers.ctrl_send_commitment);
+  app.post(CTRL + '/sendcommitment', controllers.ctrl_send_commitment);
 }
 
 function ctrl(app) {

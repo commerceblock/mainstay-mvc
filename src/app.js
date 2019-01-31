@@ -3,7 +3,7 @@ const express = require('express');
 const env = require('../src/env');
 const mongoose = require('mongoose');
 const app = express();
-const mainstay_websocket = require('./websocket/mainstay_websocket').mainstay_websocket;
+//const mainstay_websocket = require('./websocket/mainstay_websocket').mainstay_websocket;
 
 const api = require('./routes/api').api;
 const ctrl = require('./routes/ctrl').ctrl;
