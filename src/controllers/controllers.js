@@ -669,19 +669,41 @@ module.exports = {
     clients: (req, res) => {
         let response = [];
 
-        models.clientDetails.find().exec(async (err, data) => {
+        models.attestation.find().sort({inserted_at: -1}).limit(1)
+            .exec( async (error, data) => {
+                if (error)
+                    return;
+                if (data.length > 0) {
 
-            for (let itr = 0; itr < data.length; ++itr) {
-                await models.clientCommitment.findOne({client_position: data[itr].client_position}).exec().then(function (client) {
-                    response.push({
-                        position: data[itr].client_position,
-                        client_name: data[itr].client_name,
-                        commitment: client.commitment
+                    let merkle_root = data[0].merkle_root;
+
+                    await models.clientDetails.find().exec(async (err, data) => {
+
+                        for (let itr = 0; itr < data.length; ++itr) {
+                            await models.clientCommitment.findOne({
+                                client_position: data[itr].client_position,
+                                merkle_root: merkle_root
+                            }).exec().then(function (client) {
+                                if (client){
+                                    response.push({
+                                        position: data[itr].client_position,
+                                        client_name: data[itr].client_name,
+                                        commitment: client.commitment
+                                    });
+                                }
+                                else {
+                                    response.push({
+                                        position: data[itr].client_position,
+                                        client_name: data[itr].client_name
+                                    });
+                                }
+
+                            });
+                        }
+
+                        res.json(response);
                     });
-                });
-            }
-
-            res.json(response);
-        });
+                }
+            });
     },
 };
