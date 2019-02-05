@@ -1,8 +1,11 @@
 import Home from './view/home/home';
+import Client from './view/client';
 import
 Search, { Position, Blockhash, Commitment, TransactionId, MerkleRoot }
 from './view/search/search';
 import Attestation from './view/attestation';
+import PrivacyPolicy from './view/PrivacyPolicy';
+import TermsConditions from './view/TermsConditions';
 
 import {
     BrowserRouter,
@@ -25,6 +28,9 @@ const Main = () => (
             <Route path="/tx/:value" exact component={TransactionId} />
             <Route path="/merkle_root/:value" exact component={MerkleRoot} />
             <Route path="/attestation/:value?" exact component={Attestation}/>
+            <Route path="/clients" exact component={Client}/>
+            <Route path="/privacy" exact component={PrivacyPolicy}/>
+            <Route path="/terms" exact component={TermsConditions}/>
         </div>
     </BrowserRouter>
 );

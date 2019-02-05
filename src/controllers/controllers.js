@@ -1,7 +1,7 @@
 const models = require('../models/models');
 const mongoose = require('mongoose');
 const elliptic = require('elliptic');
-const { base64encode, base64decode } = require('nodejs-base64');
+const {base64encode, base64decode} = require('nodejs-base64');
 //
 const ec = new elliptic.ec('secp256k1');
 //
@@ -113,7 +113,7 @@ function reply_err(res, message, startTime) {
     res.json({
         error: message,
         timestamp: time.getTime(),
-        allowance: { cost: endTime - startTime }
+        allowance: {cost: endTime - startTime}
     });
 }
 
@@ -124,29 +124,29 @@ function reply_msg(res, message, startTime) {
     res.json({
         response: message,
         timestamp: time.getTime(),
-        allowance: { cost: endTime - startTime }
+        allowance: {cost: endTime - startTime}
     });
 }
 
 var dateFormat = require('dateformat');
 
 function find_type_hash(res, paramValue, startTime) {
-    models.merkleProof.find({ commitment: paramValue }, (error, data) => {
+    models.merkleProof.find({commitment: paramValue}, (error, data) => {
         if (error)
             return reply_err(res, INTERNAL_ERROR_API, startTime);
         if (data.length != 0)
             return reply_msg(res, 'commitment', startTime);
-        models.merkleProof.find({ merkle_root: paramValue }, (error, data) => {
+        models.merkleProof.find({merkle_root: paramValue}, (error, data) => {
             if (error)
                 return reply_err(res, INTERNAL_ERROR_API, startTime);
             if (data.length != 0)
                 return reply_msg(res, 'merkle_root', startTime);
-            models.attestationInfo.find({ txid: paramValue }, (error, data) => {
+            models.attestationInfo.find({txid: paramValue}, (error, data) => {
                 if (error)
                     return reply_err(res, INTERNAL_ERROR_API, startTime);
                 if (data.length != 0)
                     return reply_msg(res, 'txid', startTime);
-                models.attestationInfo.find({ blockhash: paramValue },
+                models.attestationInfo.find({blockhash: paramValue},
                     (error, data) => {
                         if (error)
                             return reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -160,7 +160,7 @@ function find_type_hash(res, paramValue, startTime) {
 }
 
 function find_type_number(res, paramValue, startTime) {
-    models.clientDetails.find({ client_position: paramValue }, (error, data) => {
+    models.clientDetails.find({client_position: paramValue}, (error, data) => {
         if (error)
             return reply_err(res, INTERNAL_ERROR_API, startTime);
         if (data.length != 0)
@@ -174,8 +174,8 @@ module.exports = {
         let response = {};
 
         // set confirmed only filter unless failed flag is set to true
-        let confirmedFilter = req.query.failed ? (req.query.failed == 'true' ? {} : { confirmed: true }) : { confirmed: true }
-        models.attestation.find(confirmedFilter).sort({ inserted_at: -1 })
+        let confirmedFilter = req.query.failed ? (req.query.failed == 'true' ? {} : {confirmed: true}) : {confirmed: true}
+        models.attestation.find(confirmedFilter).sort({inserted_at: -1})
             .exec((error, data) => {
 
                 let page = parseInt(req.query.page);
@@ -215,7 +215,7 @@ module.exports = {
     },
     ctrl_latest_attestation_info: (req, res) => {
         let response = [];
-        models.attestationInfo.find().sort({ time: -1 }).limit(10)
+        models.attestationInfo.find().sort({time: -1}).limit(10)
             .exec((error, data) => {
                 if (error)
                     return; // TODO Add message error
@@ -232,12 +232,12 @@ module.exports = {
     },
     ctrl_latest_commitment: (req, res) => {
         let response = [];
-        models.attestation.find().sort({ inserted_at: -1 }).limit(1)
+        models.attestation.find().sort({inserted_at: -1}).limit(1)
             .exec((error, data) => {
                 if (error)
                     return; // TODO Add message error
                 if (data.length > 0) {
-                    models.merkleCommitment.find({ merkle_root: data[0].merkle_root })
+                    models.merkleCommitment.find({merkle_root: data[0].merkle_root})
                         .exec((error, data) => {
                             if (error)
                                 return; // TODO Add message error
@@ -258,21 +258,21 @@ module.exports = {
         req.on('data', chunk => {
             const payload = JSON.parse(chunk.toString());
             if (payload.position === undefined)
-                return res.json({ error: 'position' });
+                return res.json({error: 'position'});
             if (payload.token === undefined)
-                return res.json({ error: 'token' });
+                return res.json({error: 'token'});
             if (payload.commitment === undefined)
-                return res.json({ error: 'commitment' });
+                return res.json({error: 'commitment'});
             if (payload.signature === undefined)
-                return res.json({ error: 'signature' });
-            models.clientDetails.find({ client_position: payload.position },
+                return res.json({error: 'signature'});
+            models.clientDetails.find({client_position: payload.position},
                 (error, data) => {
                     if (data === undefined || data.length == 0)
-                        return res.json({ error: 'position' });
+                        return res.json({error: 'position'});
                     if (error)
-                        return res.json({ error: 'api' });
+                        return res.json({error: 'api'});
                     if (data[0].auth_token != payload.token)
-                        return res.json({ error: 'token' });
+                        return res.json({error: 'token'});
 
                     try {
                         // get pubkey hex
@@ -282,14 +282,14 @@ module.exports = {
                         let sig = Buffer.from(payload.signature, 'base64')
 
                         if (!ec.verify(payload.commitment, sig, pubkey))
-                            return res.json({ error: 'signature' });
-                        models.clientCommitment.findOneAndUpdate({ client_position: payload.position }, { commitment: payload.commitment }, { upsert: true }, (error) => {
+                            return res.json({error: 'signature'});
+                        models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true}, (error) => {
                             if (error)
-                                return res.json({ error: 'api' });
+                                return res.json({error: 'api'});
                             return res.send();
                         });
                     } catch (e) {
-                        return res.json({ error: SIGNATURE_INVALID });
+                        return res.json({error: SIGNATURE_INVALID});
                     }
                 });
         });
@@ -311,13 +311,13 @@ module.exports = {
     },
     latest_attestation: (req, res) => {
         let startTime = start_time();
-        models.attestation.find().sort({ inserted_at: -1 }).limit(1)
+        models.attestation.find().sort({inserted_at: -1}).limit(1)
             .exec((error, data) => {
                 if (error)
                     return reply_err(res, INTERNAL_ERROR_API, startTime);
                 if (data.length == 0)
                     return reply_msg(res, {}, startTime);
-                reply_msg(res, { merkle_root: data[0].merkle_root, txid: data[0].txid },
+                reply_msg(res, {merkle_root: data[0].merkle_root, txid: data[0].txid},
                     startTime);
             });
     },
@@ -326,7 +326,7 @@ module.exports = {
         let position = get_position_arg(req, res, startTime);
         if (position === undefined)
             return;
-        models.attestation.find().sort({ inserted_at: -1 }).limit(1)
+        models.attestation.find().sort({inserted_at: -1}).limit(1)
             .exec((error, data) => {
                 if (error)
                     return reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -379,7 +379,7 @@ module.exports = {
         let position = get_position_arg(req, res, startTime);
         if (position === undefined)
             return;
-        models.attestation.find().sort({ inserted_at: -1 }).limit(1)
+        models.attestation.find().sort({inserted_at: -1}).limit(1)
             .exec((error, data) => {
                 let merkle_root = data[0].merkle_root;
                 let txid = data[0].txid;
@@ -418,13 +418,13 @@ module.exports = {
                     return reply_err(res, INTERNAL_ERROR_API, startTime);
                 if (data.length == 0)
                     return reply_err(res, COMMITMENT_POSITION_UNKNOWN, startTime);
-                models.attestation.find({ merkle_root: data[data.length - 1].merkle_root },
+                models.attestation.find({merkle_root: data[data.length - 1].merkle_root},
                     (error, data) => {
                         if (error)
                             return reply_err(res, INTERNAL_ERROR_API, startTime);
                         if (data.length == 0)
                             return reply_err(res, MERKLEROOT_UNKNOWN, startTime);
-                        reply_msg(res, { confirmed: data[0].confirmed }, startTime);
+                        reply_msg(res, {confirmed: data[0].confirmed}, startTime);
                     });
             });
     },
@@ -480,7 +480,7 @@ module.exports = {
                 return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
 
             // try get client details
-            models.clientDetails.find({ client_position: payload.position },
+            models.clientDetails.find({client_position: payload.position},
                 (error, data) => {
                     if (error)
                         return reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -498,7 +498,7 @@ module.exports = {
 
                         if (!ec.verify(payload.commitment, sig, pubkey))
                             return reply_err(res, SIGNATURE_INVALID, startTime);
-                        models.clientCommitment.findOneAndUpdate({ client_position: payload.position }, { commitment: payload.commitment }, { upsert: true }, (error) => {
+                        models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true}, (error) => {
                             if (error)
                                 return reply_err(res, INTERNAL_ERROR_API, startTime);
                             reply_msg(res, 'feedback', startTime);
@@ -514,13 +514,13 @@ module.exports = {
         let commitment = get_commitment_arg(req, res, startTime);
         if (commitment === undefined)
             return;
-        models.merkleProof.find({ commitment: commitment }, (error, data) => {
+        models.merkleProof.find({commitment: commitment}, (error, data) => {
             if (error)
                 return reply_err(res, INTERNAL_ERROR_API, startTime);
             if (data.length == 0)
                 return reply_err(res, 'Not found', startTime);
             let response = data[data.length - 1]; // get latest
-            models.attestation.find({ merkle_root: response.merkle_root },
+            models.attestation.find({merkle_root: response.merkle_root},
                 (error, data) => {
                     if (error)
                         return reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -548,7 +548,7 @@ module.exports = {
         let merkle_root = get_merkle_root_arg(req, res, startTime);
         if (merkle_root === undefined)
             return;
-        models.merkleCommitment.find({ merkle_root: merkle_root },
+        models.merkleCommitment.find({merkle_root: merkle_root},
             (error, data) => {
                 if (error)
                     return reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -564,7 +564,7 @@ module.exports = {
 
                 let response = data[0];
 
-                models.attestation.find({ merkle_root: response.merkle_root },
+                models.attestation.find({merkle_root: response.merkle_root},
                     (error, data) => {
                         if (error)
                             return reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -588,7 +588,7 @@ module.exports = {
         let position = get_position_arg(req, res, startTime);
         if (position === undefined)
             return; // TODO add message error
-        models.merkleProof.find({ client_position: position })
+        models.merkleProof.find({client_position: position})
             .exec((error, data) => {
                 if (error)
                     return reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -603,13 +603,13 @@ module.exports = {
                         ops: data[index].ops
                     });
 
-                models.clientDetails.findOne({ client_position: position }, (error, client) => {
+                models.clientDetails.findOne({client_position: position}, (error, client) => {
                     if (error)
                         return reply_err(res, INTERNAL_ERROR_API, startTime);
                     if (client.length == 0)
                         return reply_err(res, 'No client details found for position provided', startTime);
 
-                    reply_msg(res, { position: array, client_name: client.client_name }, startTime);
+                    reply_msg(res, {position: array, client_name: client.client_name}, startTime);
                 });
             });
     },
@@ -618,7 +618,7 @@ module.exports = {
         let hash = get_txid_arg(req, res, startTime);
         if (hash === undefined)
             return; // TODO add message error
-        models.attestation.find({ txid: hash }, (error, data) => {
+        models.attestation.find({txid: hash}, (error, data) => {
             if (error)
                 return reply_err(res, INTERNAL_ERROR_API, startTime);
             if (data.length == 0)
@@ -651,7 +651,7 @@ module.exports = {
         let hash = get_hash_arg(req, res, startTime);
         if (hash === undefined)
             return; // TODO add message error
-        models.attestationInfo.find({ blockhash: hash }, (error, data) => {
+        models.attestationInfo.find({blockhash: hash}, (error, data) => {
             if (error)
                 return reply_err(res, INTERNAL_ERROR_API, startTime);
             if (data.length == 0)
@@ -665,5 +665,45 @@ module.exports = {
                 }
             }, startTime);
         });
-    }
+    },
+    clients: (req, res) => {
+        let response = [];
+
+        models.attestation.find().sort({inserted_at: -1}).limit(1)
+            .exec( async (error, data) => {
+                if (error)
+                    return;
+                if (data.length > 0) {
+
+                    let merkle_root = data[0].merkle_root;
+
+                    await models.clientDetails.find().exec(async (err, data) => {
+
+                        for (let itr = 0; itr < data.length; ++itr) {
+                            await models.merkleCommitment.findOne({
+                                client_position: data[itr].client_position,
+                                merkle_root: merkle_root
+                            }).exec().then(function (client) {
+                                if (client){
+                                    response.push({
+                                        position: data[itr].client_position,
+                                        client_name: data[itr].client_name,
+                                        commitment: client.commitment
+                                    });
+                                }
+                                else {
+                                    response.push({
+                                        position: data[itr].client_position,
+                                        client_name: data[itr].client_name
+                                    });
+                                }
+
+                            });
+                        }
+
+                        res.json(response);
+                    });
+                }
+            });
+    },
 };
