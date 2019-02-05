@@ -409,7 +409,7 @@ body.darkBG .progress {
 #menu {
   position: absolute;
   width: 273px;
-  margin: -34px 0 0 -243px;
+  margin: -47px 0 0 -243px;
   padding: 20px 0px;
   padding-top: 42px;
   background: #fff;
@@ -1068,7 +1068,7 @@ table th span {
 }
 .main {
   margin:30px;
- }
+}
 .main table {
   max-height: 70vh;
   overflow: auto;
@@ -1157,4 +1157,11 @@ table th span {
 .MerkleRootTable tbody {
   border-bottom: 3px solid #ddd;
 }
+
+.privacy-page,
+.terms-page {
+  background: #Fff;
+  padding: 60px;
+}
+
 
