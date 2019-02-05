@@ -16,6 +16,9 @@ function api_get(app) {
   app.get(API + '/position', controllers.position);
   app.get(API + '/attestation', controllers.attestation);
   app.get(API + '/blockhash', controllers.blockhash);
+
+  app.get(API + '/clients', controllers.clients);
+
 }
 
 function api_post(app) {

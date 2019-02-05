@@ -85,7 +85,7 @@ class Menu extends Component {
       <div id="menu">
         <Link  to="/" className="menu" color="muted" >Home {this.props.buttonLabel}</Link>
         <Link to="/attestation" className="menu" color="muted" >Attestations {this.props.buttonLabel}</Link>
-        <Button className="menu" color="muted" >Clients/Slots {this.props.buttonLabel}</Button>
+        <Link to="/clients" className="menu" color="muted" >Clients {this.props.buttonLabel}</Link>
         <Button className="menu" color="muted" onClick={this.toggle}>Send Commitment {this.props.buttonLabel}</Button>
         <a href={'https://github.com/commerceblock/mainstay-mvc/blob/develop/doc/mainstay_api.md'} className="menu" color="muted" target="_blank">API information {this.props.buttonLabel}</a>
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
