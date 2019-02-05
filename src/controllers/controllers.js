@@ -680,7 +680,7 @@ module.exports = {
                     await models.clientDetails.find().exec(async (err, data) => {
 
                         for (let itr = 0; itr < data.length; ++itr) {
-                            await models.clientCommitment.findOne({
+                            await models.merkleCommitment.findOne({
                                 client_position: data[itr].client_position,
                                 merkle_root: merkle_root
                             }).exec().then(function (client) {
