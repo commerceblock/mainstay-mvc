@@ -1375,3 +1375,41 @@ table th span {
     background: #Fff;
     padding: 60px;
 }
+
+
+
+@media only screen and (max-width: 768px)  {
+    .container.main {
+        margin:0;
+        padding-bottom: 30%;
+    }
+    .navbar-fixed-bottom .nav-item {
+        display: block;
+    }
+    .top-nav, .navbar-fixed-bottom {
+        position: absolute;
+        padding: 10px;
+        padding-top: 0;
+    }
+
+    .block-subtitle {
+        padding-left: 20px;
+        overflow: hidden;
+        padding-right: 20px;
+    }
+    .flex-table .lh1rem.ml-1 {
+        width: 30%;
+        overflow: hidden;
+    }
+    .table {
+        margin-bottom: 0;
+        width: 100%;
+    }
+    .sm-fullwidth {
+        width: 100%;
+        max-width: 100% !important;
+    }
+    .sm-w151 {
+        width: 151px;
+    }
+}
