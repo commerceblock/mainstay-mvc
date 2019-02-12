@@ -9,7 +9,7 @@ class Terms extends Component {
 
   render() {
     return (
-        <div >
+        <div className="footer-content">
           <div className="top-nav">
             <div className="container">
               <div className="d-flex align-items-center flex-wrap">
@@ -17,7 +17,6 @@ class Terms extends Component {
                 <Navbar/>
                 <HamburgerMenu/>
 
-                <FooterPage/>
 
               </div>
             </div>
@@ -33,7 +32,7 @@ class Terms extends Component {
               samples, on-line help files and technical documentation, our websites, account portal, technical
               support, made generally available by us, and includes any of our SDKs, APIs or software provided
               to you in connection with your use of our services, and our connectivity services. <b>“CommerceBlock,”</b>
-             <b> “us,”</b> or <b> “we”</b> refers to Commerceblock Limited, incorporated in England and Wales with registered
+              <b> “us,”</b> or <b> “we”</b> refers to Commerceblock Limited, incorporated in England and Wales with registered
               address at 7/10 Chandos Street, Cavendish Square, W1G 9DQ London.
             </p>
             <p>
@@ -42,14 +41,14 @@ class Terms extends Component {
               the Services.
             </p>
             <p>
-            <b>
-              BY SIGNING UP TO CREATE AN ACCOUNT WITH US OR BY CONTINUING TO USE OUR WEBSITE YOU AGREE TO THESE TERMS.
-              BY DOING SO, YOU AGREE ON BEHALF OF YOURSELF OR, IF APPLICABLE, YOUR ORGANISATION TO BE BOUND BY THIS
-              AGREEMENT AS OF THAT DATE (THE “EFFECTIVE DATE”). YOUR ACCESS TO, AND USE OF, THE SERVICES AND COMMERCEBLOCK’S
-              OBLIGATIONS WITH RESPECT TO THE SERVICES ARE EXPRESSLY CONDITIONED ON YOUR ACCEPTANCE OF THIS AGREEMENT,
-              INCLUDING OUR LIMITED LIABILITY IN SECTION 15 AND ARBITRATION ON AN INDIVIDUAL BASIS IN SECTION 19.
-              IF YOU DO NOT AGREE TO BE BOUND BY THIS AGREEMENT, YOU SHOULD NOT USE THE SERVICES.
-            </b>
+              <b>
+                BY SIGNING UP TO CREATE AN ACCOUNT WITH US OR BY CONTINUING TO USE OUR WEBSITE YOU AGREE TO THESE TERMS.
+                BY DOING SO, YOU AGREE ON BEHALF OF YOURSELF OR, IF APPLICABLE, YOUR ORGANISATION TO BE BOUND BY THIS
+                AGREEMENT AS OF THAT DATE (THE “EFFECTIVE DATE”). YOUR ACCESS TO, AND USE OF, THE SERVICES AND COMMERCEBLOCK’S
+                OBLIGATIONS WITH RESPECT TO THE SERVICES ARE EXPRESSLY CONDITIONED ON YOUR ACCEPTANCE OF THIS AGREEMENT,
+                INCLUDING OUR LIMITED LIABILITY IN SECTION 15 AND ARBITRATION ON AN INDIVIDUAL BASIS IN SECTION 19.
+                IF YOU DO NOT AGREE TO BE BOUND BY THIS AGREEMENT, YOU SHOULD NOT USE THE SERVICES.
+              </b>
             </p>
             <p>
               If you create an account or otherwise use the Services on behalf of an organization, you represent and warrant
@@ -125,7 +124,7 @@ class Terms extends Component {
               a) We will make our Services available to you in accordance with our SLA (if applicable based on your specific Services),
               which may be updated from time to time.<br/>
               b) You may use our Services, on a non-exclusive basis, solely in strict compliance with this Agreement and applicable law, including: <br/>
-                i) Using our Services as needed to develop your software applications that interface with our Services
+              i) Using our Services as needed to develop your software applications that interface with our Services
               <b>(“Your Applications“)</b>  or provide Services through your applications;<br/>
               ii) Making our Services available to End Users of Your Applications in connection with the use of each of Your Applications, and <br/>
               iii) Otherwise using our Services solely in connection with and as necessary for your activities under this Agreement.
@@ -157,7 +156,7 @@ class Terms extends Component {
               the Services.
             </p>
             <p>
-             <u> 6.2 Privacy Policy.  </u>For information regarding our collection and use of Your Content and other information
+              <u> 6.2 Privacy Policy.  </u>For information regarding our collection and use of Your Content and other information
               you provide, see our Privacy Policy,  which is incorporated into this Agreement by this reference. You agree
               that we may access, retain, and disclose information you provide in accordance with the terms of our Privacy
               Policy.
@@ -215,11 +214,11 @@ class Terms extends Component {
             </p>
             <p>
               <b>10. Fees, Payment Terms, Taxes.</b><br/>
-             <u>10.1 Fees.</u>  You agree to pay the usage fees set forth on the MainStay website fee section (as may be updated
+              <u>10.1 Fees.</u>  You agree to pay the usage fees set forth on the MainStay website fee section (as may be updated
               from time to time) and/or any other order forms for our Services ordered by you and accepted by us.
             </p>
             <p>
-             <u> 10.2 Payment Terms.</u> All payments are due immediately after the end of the billing period (one month).
+              <u> 10.2 Payment Terms.</u> All payments are due immediately after the end of the billing period (one month).
               All payments will be taken automatically via our designated payment processor and payment gateway from
               the payment method you selected during your account setup. Payment obligations can’t be canceled and
               fees paid are non-refundable. Subject to Section 11.4 (Fee Disputes), if you are overdue on any payment
@@ -265,7 +264,7 @@ class Terms extends Component {
               party technology license agreement specified by CommerceBlock and not under this Agreement.
             </p>
             <p>
-             <u> 11.2 Definition.</u> <b> “Confidential Information”</b> means any information disclosed by a party to the other party,
+              <u> 11.2 Definition.</u> <b> “Confidential Information”</b> means any information disclosed by a party to the other party,
               directly or indirectly, which, (i) if in written, graphic, machine-readable or other tangible form, is
               marked as “confidential” or “proprietary,” (ii) if disclosed orally or by demonstration, is identified
               at the time of initial disclosure as confidential and is confirmed in writing to the receiving party
@@ -329,7 +328,7 @@ class Terms extends Component {
               this Agreement.
             </p>
             <p><b>12. Warranties and Disclaimers.</b> <br/>
-             <u> 12.1 Your Warranties.</u>  If you are entering into this Agreement on behalf of an organization, you represent and
+              <u> 12.1 Your Warranties.</u>  If you are entering into this Agreement on behalf of an organization, you represent and
               warrant that:<br/>
               (a) such organization is a business duly incorporated, validly existing, and in good standing under the laws
               of its state of incorporation;<br/>
@@ -345,7 +344,7 @@ class Terms extends Component {
               required of it in connection with your obligations under this Agreement.
             </p>
             <p>
-             <u> 12.2 NO WARRANTY. </u> OTHER THAN AS EXPRESSLY PROVIDED IN THIS AGREEMENT, COMMERCEBLOCK MAKES NO WARRANTIES,
+              <u> 12.2 NO WARRANTY. </u> OTHER THAN AS EXPRESSLY PROVIDED IN THIS AGREEMENT, COMMERCEBLOCK MAKES NO WARRANTIES,
               EXPRESS OR IMPLIED, BY OPERATION OF LAW OR OTHERWISE, INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES
               OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE OR ANY IMPLIED WARRANTIES ARISING OUT OF COURSE OF
               PERFORMANCE, COURSE OF DEALING, OR USAGE OF TRADE. YOU AGREE THAT THE SERVICES ARE PROVIDED TO YOU AND YOUR
@@ -358,7 +357,7 @@ class Terms extends Component {
               PROBLEMS INHERENT IN THE USE OF SUCH COMMUNICATIONS FACILITIES.
             </p>
             <p>
-             <u> 12.3 Disclaimers Regarding Your Content and End User Data.</u> Without limiting the generality of the
+              <u> 12.3 Disclaimers Regarding Your Content and End User Data.</u> Without limiting the generality of the
               foregoing, CommerceBlock makes no warranty, expressed or implied, regarding accuracy, adequacy,
               completeness, legality, readability, reliability or usefulness of Your Content, including End User Data,
               that is transmitted, formatted or translated via the Services, even where Your Content has been translated,
@@ -466,7 +465,7 @@ class Terms extends Component {
               Services or other technology, including any features or functionality first developed for you, to other
             </p>
             <p>
-             <u> 17.2 Assignment.</u> You may not assign this Agreement or any right under this Agreement, without the consent
+              <u> 17.2 Assignment.</u> You may not assign this Agreement or any right under this Agreement, without the consent
               of CommerceBlock, which consent shall not be unreasonably withheld or delayed.  CommerceBlock may assign
               this Agreement at its discretion. This Agreement shall be binding upon and inure to the benefit of the
               parties’ successors and permitted assigns. Either party may employ subcontractors in performing its
@@ -485,7 +484,7 @@ class Terms extends Component {
 
             </p>
             <p>
-             <u> 17.4 Force Majeure.</u> Each party will be excused from performance for any period during which, and to the extent
+              <u> 17.4 Force Majeure.</u> Each party will be excused from performance for any period during which, and to the extent
               that, such party or any subcontractor thereof is prevented from performing any obligation, in whole or in part,
               as a result of causes beyond its reasonable control, including without limitation, acts of God, strikes, lockouts,
               riots, acts of terrorism or war, epidemics, communication line failures, and power failures.
@@ -498,7 +497,7 @@ class Terms extends Component {
             </p>
 
             <p>
-             <u> 17.6 Severability.</u> If any term of this Agreement is held to be invalid or unenforceable, that term shall
+              <u> 17.6 Severability.</u> If any term of this Agreement is held to be invalid or unenforceable, that term shall
               be reformed to achieve as nearly as possible the same effect as the original term, and the remainder of
               this Agreement shall remain in full force.
             </p>
@@ -520,12 +519,12 @@ class Terms extends Component {
               the other party or the other party’s personnel.
             </p>
             <p>
-             <u> 17.10 Statistical Information. </u> CommerceBlock may anonymously compile statistical information related to
+              <u> 17.10 Statistical Information. </u> CommerceBlock may anonymously compile statistical information related to
               the performance of the Services for purposes of improving the Services, provided that such information
               does not identify your data or include your name.
             </p>
             <p>
-             <u> 17.11 Governing Law. </u> This Agreement shall be governed by the laws of England and Wales, without
+              <u> 17.11 Governing Law. </u> This Agreement shall be governed by the laws of England and Wales, without
               giving effect to its conflicts of law principles. All disputes under this Agreement shall be
               subject to the exclusive jurisdiction of the courts of England and Wales.
             </p>
@@ -534,6 +533,7 @@ class Terms extends Component {
 
 
           </div>
+          <FooterPage/>
 
 
 

@@ -8,7 +8,7 @@ class Privacy extends Component {
 
   render() {
     return (
-    <div >
+    <div className="footer-content">
       <div className="top-nav">
         <div className="container">
           <div className="d-flex align-items-center flex-wrap">
@@ -16,7 +16,6 @@ class Privacy extends Component {
             <Navbar/>
             <HamburgerMenu/>
 
-            <FooterPage/>
 
           </div>
         </div>
@@ -291,6 +290,7 @@ class Privacy extends Component {
           <a href="mailto:info@commerceblock.com."> info@commerceblock.com.</a>.
         </p>
       </div>
+      <FooterPage/>
 
 
 
