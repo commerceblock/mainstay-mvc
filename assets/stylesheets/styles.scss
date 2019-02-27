@@ -327,7 +327,6 @@ body.darkBG .progress {
     position: relative;
     width: 100%;
     height: auto;
-    top: 50px;
     background: #fff;
 }
 
@@ -1298,6 +1297,10 @@ table.main-second-position {
     background: #Fff;
     padding: 60px;
 
+}
+
+.container.main {
+    margin:-1px 3%;
 }
 
 /*responsive*/
