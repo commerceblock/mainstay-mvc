@@ -36,11 +36,6 @@
     content: "\e900";
 }
 
-/* layout */
-.container.main {
-    padding-bottom: 40px;
-}
-
 /*fonts*/
 @font-face {
     font-weight: normal;
@@ -59,7 +54,8 @@ html {
     -webkit-font-smoothing: antialiased !important;
     -moz-font-smoothing: antialiased !important;
     text-rendering: optimizelegibility !important;
-    padding-top: 35px;
+    padding: 0;
+    margin: 0;
 }
 
 .mono {
@@ -68,8 +64,6 @@ html {
 
 body {
     font-family: 'Roboto', sans-serif;
-    padding-bottom: 2.1rem;
-    background: #F3F5F6;
 }
 
 a {
@@ -138,7 +132,7 @@ body.darkBG .table thead th {
 
 body.darkBG .flex-table .header,
 body.darkBG .table thead tr {
-    background: #2d2d2d !important;
+    background: #2d2d2d ;
 }
 
 body.darkBG .flex-table .flex-table-row,
@@ -148,7 +142,7 @@ body.darkBG .table tr {
 }
 
 .table.no-border tr {
-    border-bottom: none !important;
+    border-bottom: none ;
 }
 
 body.darkBG .top-nav,
@@ -214,12 +208,6 @@ body.darkBG .progress {
     background-color: #757575;
 }
 
-.darkBG select,
-.darkBG input[type=number] {
-    color: #fff !important;
-    background: #2a2a2a !important;
-    border-color: #191919 !important;
-}
 
 .darkBG .nav-pills .nav-link.active {
     background-color: #2DD8A3;
@@ -274,44 +262,9 @@ body.darkBG .progress {
 }
 
 .color-inherit {
-    color: inherit !important;
+    color: inherit ;
 }
 
-.fs11 {
-    font-size: 11px !important;
-}
-
-.fs12 {
-    font-size: 12px !important;
-}
-
-.fs13 {
-    font-size: 13px !important;
-}
-
-.fs14 {
-    font-size: 14px !important;
-}
-
-.fs15 {
-    font-size: 15px !important;
-}
-
-.fs16 {
-    font-size: 16px !important;
-}
-
-.fs18 {
-    font-size: 18px !important;
-}
-
-.fs24 {
-    font-size: 24px !important;
-}
-
-.fs28 {
-    font-size: 28px !important;
-}
 
 .no-underline,
 .no-underline:hover {
@@ -365,14 +318,15 @@ body.darkBG .progress {
 /*nav*/
 .top-nav,
 .navbar-fixed-bottom {
-    position: fixed;
+
     background: #3B3F45;
     z-index: 1000;
 }
 
 .top-nav {
+    position: relative;
     width: 100%;
-    top: 0;
+    height: auto;
     background: #fff;
 }
 
@@ -393,15 +347,24 @@ body.darkBG .progress {
     top: 1px;
     position: relative;
 }
+.menu-bar {
+    position: fixed;
+    width: 100%;
+    background: #fff;
+    top: 0;
+    display: block;
+    z-index: 1;
+    box-shadow: 0 0px 22px 0 rgba(115, 124, 132, 0.3)
+}
 
 .top-search {
     height: 30px;
-    margin: 2px 0 2px 2px !important;
+    margin: 2px 0 2px 2px ;
     border-top: 0px;
     border-left: 0px;
     border-right: 0px;
     border-radius: 0px;
-    background: transparent !important;
+    background: transparent ;
 }
 
 #hamburger-menu {
@@ -497,7 +460,7 @@ body.darkBG .progress {
 #menu {
     position: absolute;
     width: 273px;
-    margin: -47px 0 0 -243px;
+    margin: -67px 0 0 -243px;
     padding: 20px 0px;
     padding-top: 42px;
     background: #fff;
@@ -506,7 +469,7 @@ body.darkBG .progress {
     transform-origin: 0% 0%;
     transform: translate(0, -100%);
     transition: transform 0.33s cubic-bezier(0.77, 0.2, 0.05, 1.0);
-    box-shadow: 0px 0px 0px 1px #0000001a;
+    box-shadow:0 10px 22px 0 rgba(115, 124, 132, 0.3);
 }
 
 #menu a {
@@ -540,8 +503,10 @@ body.darkBG .progress {
 
 .navbar-fixed-bottom {
     position: fixed;
+    padding: 10px;
     bottom: 0;
     width: 100%;
+    border-top: 1px solid #ddd;
 
     .nav-item {
         color: #3c4044;
@@ -586,7 +551,7 @@ body.darkBG .progress {
 }
 
 .table thead tr {
-    background: #fff !important;
+    background: #fff ;
     border-bottom: 1px solid #e2e2e2;
 }
 
@@ -820,28 +785,15 @@ body.darkBG .keynav-target {
     }
 }
 
-/*responsive*/
-@media only screen and (max-width: 992px) {
-    // .container {
-    //   max-width: 100% !important;
-    // }
-}
+
 
 .container {
-    max-width: 96% !important;
+    max-width: 100%;
 }
 
 
 
-@media only screen and (max-width: 576px) {
-    .xs-w91 {
-        width: 91px !important;
-    }
 
-    .xs-w117 {
-        width: 117px;
-    }
-}
 
 /*socket connection*/
 /* Notice: Portions of the connection indicator style come from html5rocks.com */
@@ -923,23 +875,23 @@ body.darkBG .keynav-target {
     border-radius: 2px;
 }
 
-.menu {
-    display: block !important;
+#menu .menu {
+    display: block ;
     background-color: transparent;
     color: #212529;
     box-shadow: 0px 0px 2px #0003;
-    margin: 10px !important;
+    margin: 10px ;
     text-align: left;
     width: 170px;
-    font-size: 17px !important;
+    font-size: 17px ;
     outline: none;
 }
 
-.menu:hover,
-.menu:focus {
+#menu .menu:hover,
+#menu .menu:focus {
     font-weight: bold;
     outline: none;
-    color: #212529 !important;
+    color: #212529 ;
 }
 
 .btn-primary {
@@ -1123,32 +1075,29 @@ table td a {
 }
 
 td .lastCommitement {
-    width: 40vw !important;
+    width: 40vw ;
 }
 
 table th span {
     margin-left: 10px;
-    margin-right: 10px !important;
+    margin-right: 10px ;
 }
 
 .latestAttestation {
     margin-top: 0;
-    height: 30vh;
-    overflow: auto;
-}
-
-.mb-3,
-.my-3 {
-    margin-bottom: 0.7rem !important;
-}
-
-.LatestCommitment {
     height: 27vh;
     overflow: auto;
 }
 
+
+
+.LatestCommitment {
+    height: 26vh;
+    overflow: auto;
+}
+
 .column {
-    height: 46vh;
+    height: 42vh;
 }
 
 .input-group>.custom-file,
@@ -1156,10 +1105,16 @@ table th span {
 .input-group>.form-control {
     font-style: italic;
 }
+.clientsPage .lastAttestationPage .latestAttestation {
+    height: 60vh;
+}
+.lastAttestationPage .latestAttestation.body-table {
+    height: 52vh;
+}
 
 .form-control:focus {
 
-    box-shadow: none !important;
+    box-shadow: none ;
 }
 
 .latestAttestation table th,
@@ -1203,22 +1158,6 @@ table th span {
 }
 
 
-
-.error {
-    /*color: #b84442;
-  background-color: #f2dede;
-  border: 1px solid #b84442;*/
-}
-
-.success {
-    /*color: #3c763d;
-  background-color: #dff0d8;
-  border:1px solid #3c763d;*/
-
-
-
-}
-
 .success .swal-button {
     background-color: #fff;
     border: 1px solid #3c763d;
@@ -1241,30 +1180,32 @@ table th span {
 
 .lastAttestationPage {
     width: 100%;
-    margin-top: 30px;
-
 }
 
-.lastAttestationPage .latestAttestation {
-    height: auto !important;
-}
-
-.lastAttestationPage .head-table table {
-    top: 0;
-}
 
 .main {
-    margin: 30px;
+    margin-top: 40px;
+
 }
 
 .main table {
     max-height: 70vh;
     overflow: auto;
-}
 
+}
+.position-main {
+    padding-bottom: 50px;
+}
 .main table td {
     padding: 5px;
 }
+table.main-second-position {
+    padding-bottom: 50px;
+}
+.main-second-position.searchTable {
+    max-height: 50vh;
+}
+
 
 .block-title {
     display: block;
@@ -1283,9 +1224,9 @@ table th span {
     margin-bottom: 20px;
 }
 
-.main-firts-position td {
-    border: none !important;
-    font-size: 20px !important;
+.position-main .searchTable.main-firts-position td {
+    border: none ;
+    font-size: 20px ;
 
 
 }
@@ -1307,15 +1248,14 @@ table th span {
 }
 
 .searchTable tr td:first-child {
-    text-align: left !important;
+    text-align: left ;
 
 }
 
 
 .searchTable tr td:last-child {
-    text-align: right;
     font-size: 13px;
-    padding-left: 15px;
+
 }
 
 .block-subtitle {
@@ -1327,15 +1267,12 @@ table th span {
     text-align: left;
 }
 
-.secondTableOps {
-    border: 1px solid #ddd !important;
-    border-bottom: none;
-}
 
-.tabelOpsName {
+
+.main-second-position .main-second-position-block .tabelOpsName {
     width: 160px;
-    font-size: 20px !important;
-    text-align: center !important;
+    font-size: 20px ;
+    text-align: center ;
     margin: auto;
 }
 
@@ -1343,8 +1280,8 @@ table th span {
     padding: 40px 0 10px;
 }
 
-.MerkleRootTable {
-    max-height: 45vh !important;
+.main-second-position.MerkleRootTable {
+    max-height: 42vh ;
 }
 
 .MerkleRootTable tbody {
@@ -1362,9 +1299,21 @@ table th span {
 
 }
 
-
+.container.main {
+    margin:-1px 3%;
+}
+.container.main.homepage {
+    margin: 0;
+}
+/*responsive*/
 
 @media only screen and (max-width: 768px)  {
+    .menu-bar {
+        left: 0;
+    }
+    .top-nav {
+        top: 80px;
+    }
 
     .footer-content {
         position: relative;
@@ -1383,11 +1332,12 @@ table th span {
 
     }
     .lastAttestationPage {
-        height: auto !important;
+        height: auto ;
         margin-bottom: 90px;
     }
     #menu {
         padding-top: 18px;
+        margin: -67px 0 0 -222px;
     }
 
     .table {
@@ -1397,7 +1347,7 @@ table th span {
 
     .sm-fullwidth {
         width: 100%;
-        max-width: 100% !important;
+        max-width: 100% ;
     }
 
     .sm-w151 {
@@ -1432,7 +1382,7 @@ table th span {
     }
     .sm-fullwidth {
         width: 100%;
-        max-width: 100% !important;
+        max-width: 100% ;
     }
     .sm-w151 {
         width: 151px;
@@ -1441,3 +1391,42 @@ table th span {
 
 
 }
+
+.pricing-page {
+    margin: 0 !important;
+    margin-bottom: 10%;
+    margin-top: 85px !important;
+}
+.table-block {
+    display: flex;
+}
+.pricing-page table, .pricing-page table td {
+    border:none
+}
+
+.header-row
+{
+    border-bottom:2px solid #545454;
+}
+.pricing-page table tr td:first-child  {
+    border-right:2px solid #545454;
+}
+.pricing-page table tr td {
+    padding: 20px;
+}
+
+.rotate-txt {
+    transform: rotate(271deg);
+    position: absolute;
+    top: 48%;
+    font-weight: bold;
+}
+.pricing-table-info {
+    margin-left: 20%;
+    margin-bottom: 5%;
+    display: block;
+    margin-top: 5%;
+    font-weight: bold;
+}
+
+

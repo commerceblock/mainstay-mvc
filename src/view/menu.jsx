@@ -88,6 +88,7 @@ class Menu extends Component {
         <Link to="/clients" className="menu" color="muted" >Clients {this.props.buttonLabel}</Link>
         <Button className="menu" color="muted" onClick={this.toggle}>Send Commitment {this.props.buttonLabel}</Button>
         <a href={'https://github.com/commerceblock/mainstay-mvc/blob/develop/doc/mainstay_api.md'} className="menu" color="muted" target="_blank">API information {this.props.buttonLabel}</a>
+        <Link to="/pricing" className="menu" color="muted" >Pricing {this.props.buttonLabel}</Link>
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Send Commitment</ModalHeader>
           <Form onSubmit={this.handleSubmit}>

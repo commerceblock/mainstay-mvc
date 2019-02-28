@@ -18,7 +18,7 @@ class Home extends Component {
             <HamburgerMenu/>
           </div>
         </div>
-        <div class="container main" data-controller="main">
+        <div class="container main homepage" data-controller="main">
           <div class="row" data-controller="homepageMempool">
             <MainstayInfo/>
             <div class="col-md-6  home-left">
