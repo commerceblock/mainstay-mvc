@@ -1302,7 +1302,9 @@ table.main-second-position {
 .container.main {
     margin:-1px 3%;
 }
-
+.container.main.homepage {
+    margin: 0;
+}
 /*responsive*/
 
 @media only screen and (max-width: 768px)  {
@@ -1391,7 +1393,9 @@ table.main-second-position {
 }
 
 .pricing-page {
+    margin: 0 !important;
     margin-bottom: 10%;
+    margin-top: 85px !important;
 }
 .table-block {
     display: flex;
@@ -1424,3 +1428,5 @@ table.main-second-position {
     margin-top: 5%;
     font-weight: bold;
 }
+
+
