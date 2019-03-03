@@ -1302,17 +1302,77 @@ table.main-second-position {
 .container.main {
     margin:-1px 3%;
 }
+
 .container.main.homepage {
-    margin: 0;
+    margin:0;
 }
+.pricing-page {
+    margin-top: 95px !important;
+}
+
+.pricing-page {
+    margin-bottom: 10%;
+}
+
+.pricing-page table, .pricing-page table td {
+    border:none
+}
+
+.header-row
+{
+    border-bottom:2px solid #545454;
+}
+.pricing-page table tr td:first-child  {
+    border-right:2px solid #545454;
+}
+.pricing-page table tr td {
+    padding: 20px;
+}
+.pricing-page table {
+    margin:auto;
+}
+
+.rotate-txt {
+    transform: rotate(271deg);
+    position: absolute;
+    margin-top: 230px;
+    margin-left: -100px;
+    font-weight: bold;
+}
+
+.pricing-table-info {
+    //margin-bottom: 5%;
+    margin-top: -30px;
+    margin-left: 200px;
+    display: block;
+    font-weight: bold;
+}
+
+.table-block {
+    text-align: center;
+    margin-bottom: 60px;
+}
+.table {
+    width: 95%;
+    overflow: auto;
+    margin-top: 70px;
+}
+
+.table th {
+    position: absolute;
+}
+
 /*responsive*/
 
 @media only screen and (max-width: 768px)  {
     .menu-bar {
         left: 0;
     }
-    .top-nav {
-        top: 80px;
+    .rotate-txt {
+        margin-left: -95px;
+    }
+    .pricing-table-info {
+        margin-left: 55px;
     }
 
     .footer-content {
@@ -1365,7 +1425,7 @@ table.main-second-position {
         padding: 10px;
         padding-top: 0;
     }
-
+    .pricing-table-info
 
     .block-subtitle {
         padding-left: 20px;
@@ -1391,42 +1451,4 @@ table.main-second-position {
 
 
 }
-
-.pricing-page {
-    margin: 0 !important;
-    margin-bottom: 10%;
-    margin-top: 85px !important;
-}
-.table-block {
-    display: flex;
-}
-.pricing-page table, .pricing-page table td {
-    border:none
-}
-
-.header-row
-{
-    border-bottom:2px solid #545454;
-}
-.pricing-page table tr td:first-child  {
-    border-right:2px solid #545454;
-}
-.pricing-page table tr td {
-    padding: 20px;
-}
-
-.rotate-txt {
-    transform: rotate(271deg);
-    position: absolute;
-    top: 48%;
-    font-weight: bold;
-}
-.pricing-table-info {
-    margin-left: 20%;
-    margin-bottom: 5%;
-    display: block;
-    margin-top: 5%;
-    font-weight: bold;
-}
-
 
