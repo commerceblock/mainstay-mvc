@@ -1,25 +1,53 @@
-import FaviconAddrBar from './faviconAddrBar';
-import FooterPage from './footerPage';
-import HamburgerMenu from './hamburgerMenu';
-import Navbar from './navbar';
 import React, { Component } from 'react';
-import ClientDetails from "./clientDetails";
+import Axios from "axios";
+
+import NoResult from './NoResult';
 
 class Client extends Component {
-    render() {
-        return <div class="top-nav">
-            <div class="container">
-                <div class="d-flex align-items-center flex-wrap">
-                    <FaviconAddrBar/>
-                    <Navbar/>
-                    <HamburgerMenu/>
-                    <ClientDetails props={this.props}/>
-                    <FooterPage/>
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: null,
+        };
+    }
 
+    componentDidMount() {
+        Axios.get('/api/v1/clients')
+            .then(response => {
+                this.setState({data: response.data});
+            });
+    }
+
+    render() {
+        return (
+            <div>
+                <div className="d-flex align-items-center">
+                    <h4>Clients</h4>
+                </div>
+                <div className="flex-table overflow-auto height-60">
+                    {this.state.data ? (
+                        <table width="100%">
+                            <thead>
+                            <tr>
+                                <td><span className="lh1rem mr-auto">Position</span></td>
+                                <td><span className="lh1rem mr-auto">Client name</span></td>
+                                <td><span className="lh1rem ">Latest Commitment</span></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {this.state.data.map(data => (
+                                <tr key={data.position} className="mono">
+                                    <td>{data.position}</td>
+                                    <td>{data.client_name}</td>
+                                    <td>{data.commitment}</td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    ) : <NoResult />}
                 </div>
             </div>
-
-        </div>;
+        )
     }
 }
 

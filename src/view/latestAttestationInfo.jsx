@@ -32,44 +32,44 @@ class LatestAttestationInfo extends Component {
   render() {
     if (!this.state.data) {
       return (
-        <div class="mb-3 flex-table">
-          <div class="d-flex justify-content-end header">
-            <span class="lh1rem mr-auto">Blockhash</span>
-            <span class="lh1rem text-right ml-1"></span>
+        <div className="mb-3 flex-table">
+          <div className="d-flex justify-content-end header">
+            <span className="lh1rem mr-auto">Blockhash</span>
+            <span className="lh1rem text-right ml-1"></span>
           </div>
         </div>
       );
     }
     return (
       <div>
-        <div class="mb-3 flex-table">
-          <div class="d-flex justify-content-end header">
-            <span class="lh1rem mr-auto">Blockhash</span>
-            <span class="lh1rem text-right ml-1">{this.state.data.blockhash}</span>
+        <div className="mb-3 flex-table">
+          <div className="d-flex justify-content-end header">
+            <span className="lh1rem mr-auto">Blockhash</span>
+            <span className="lh1rem text-right ml-1">{this.state.data.blockhash}</span>
           </div>
         </div>
-        <div class="mb-3 flex-table">
-          <div class="d-flex justify-content-end header">
-            <span class="lh1rem mr-auto">Latest Txid</span>
-            <span class="lh1rem text-right ml-1">{this.state.data.txid}</span>
+        <div className="mb-3 flex-table">
+          <div className="d-flex justify-content-end header">
+            <span className="lh1rem mr-auto">Latest Txid</span>
+            <span className="lh1rem text-right ml-1">{this.state.data.txid}</span>
           </div>
         </div>
-        <div class="mb-3 flex-table">
-          <div class="d-flex justify-content-end header">
-            <span class="lh1rem mr-auto">Time</span>
-            <span class="lh1rem text-right ml-1">{this.state.data.time}</span>
+        <div className="mb-3 flex-table">
+          <div className="d-flex justify-content-end header">
+            <span className="lh1rem mr-auto">Time</span>
+            <span className="lh1rem text-right ml-1">{this.state.data.time}</span>
           </div>
         </div>
-        <div class="mb-3 flex-table">
-          <div class="d-flex justify-content-end header">
-            <span class="lh1rem mr-auto">Amount</span>
-            <span class="lh1rem text-right ml-1">{this.state.data.amount / 100000000} BTC</span>
+        <div className="mb-3 flex-table">
+          <div className="d-flex justify-content-end header">
+            <span className="lh1rem mr-auto">Amount</span>
+            <span className="lh1rem text-right ml-1">{this.state.data.amount / 100000000} BTC</span>
           </div>
         </div>
-        <div class="mb-3 flex-table">
-          <div class="d-flex justify-content-end header">
-            <span class="lh1rem mr-auto">Average Fee</span>
-            <span class="lh1rem text-right ml-1">{this.state.fee / 100000000} BTC</span>
+        <div className="mb-3 flex-table">
+          <div className="d-flex justify-content-end header">
+            <span className="lh1rem mr-auto">Average Fee</span>
+            <span className="lh1rem text-right ml-1">{this.state.fee / 100000000} BTC</span>
           </div>
         </div>
 

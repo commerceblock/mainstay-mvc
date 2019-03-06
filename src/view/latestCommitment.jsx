@@ -1,61 +1,61 @@
 import Axios from 'axios';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { routes, getRoute } from "./routes";
 
 class LatestCommitment extends Component {
-  constructor() {
-    super();
-    this.state = {
-      data: []
-    };
-    this.request();
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: []
+        };
+    }
 
-  request() {
-    Axios.get('/ctrl/latestcommitment')
-    .then(response => this.setState({data: response.data}));
-  }
+    componentDidMount() {
+        Axios.get('/ctrl/latestcommitment')
+            .then(response => this.setState({ data: response.data }));
+    }
 
-  render() {
-    return (
-      <div class="column">
-        <div class="d-flex align-items-center">
-          <h4>Latest Commitment</h4>
-          <a href="/clients" class="pl-2 keyboard-target" data-keynav-priority>
-            <small>see more ...</small>
-          </a>
-        </div>
-        <div class="mb-3 flex-table LatestCommitment head-table">
-          <table width="100%">
-            <thead>
-              <th><span class="lh1rem ">Position</span></th>
-              <th><span class="lh1rem ">Commitment</span></th>
-            </thead>
-          </table>
-        </div>
-        <div class="mb-3 flex-table LatestCommitment">
-          <table width="100%">
-            <tbody>
-              {this.state.data.map((data) =>
-                <tr>
-                  <td>
-                    <span class="lastCommitement mono text-right ml-1">
-                      {data.position}
-                    </span>
-                  </td>
-                  <td>
-                    <a class="lastCommitement hash truncate-hash keyboard-target"
-                       href={`/commitment/${data.commitment}`}
-                       title={data.commitment}>{data.commitment}
+    render() {
+        return (
+            <div className="column">
+                <div className="d-flex align-items-center">
+                    <h4>Latest Commitment</h4>
+                    <a href={routes.client} className="pl-2 keyboard-target" data-keynav-priority>
+                        <small>see more ...</small>
                     </a>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
-  }
+                </div>
+                <div className="mb-3 flex-table LatestCommitment head-table">
+                    <table width="100%">
+                        <thead>
+                        <th><span className="lh1rem ">Position</span></th>
+                        <th><span className="lh1rem ">Commitment</span></th>
+                        </thead>
+                    </table>
+                </div>
+                <div className="mb-3 flex-table LatestCommitment">
+                    <table width="100%">
+                        <tbody>
+                        {this.state.data.map(data =>
+                            <tr>
+                                <td>
+                                    <span className="lastCommitement mono text-right ml-1">
+                                      {data.position}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a className="lastCommitement hash truncate-hash keyboard-target"
+                                       href={getRoute(routes.commitment, { value: data.commitment })}
+                                       title={data.commitment}>{data.commitment}
+                                    </a>
+                                </td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        );
+    }
 }
 
 export default LatestCommitment;

@@ -1,26 +1,100 @@
-import FaviconAddrBar from './faviconAddrBar';
-import FooterPage from './footerPage';
-import HamburgerMenu from './hamburgerMenu';
-import Navbar from './navbar';
+import Axios from 'axios';
 import React, { Component } from 'react';
-import AttestationPaginated from './attestationPaginated';
+import Pagination from "react-js-pagination";
 
 class Attestation extends Component {
-    render() {
-        return <div class="top-nav">
-            <div class="container">
-                <div class="d-flex align-items-center flex-wrap">
-                    <FaviconAddrBar/>
-                    <Navbar/>
-                    <HamburgerMenu/>
-                    <AttestationPaginated props={this.props}/>
-                    <FooterPage/>
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+            activePage: 1,
+            itemsCountPerPage: 1,
+            totalItemsCount: 1
+        };
+        this.request(1);
+    }
 
+    handlePageChange = (pageNumber) => {
+        this.request(pageNumber);
+    };
+
+    request(page) {
+        const failedArg = '&failed=true' ? this.props.match.params?.value === 'showFailed' : '';
+
+        Axios.get(`/ctrl/latestattestation?page=${page}${failedArg}`)
+            .then(response => this.setState({
+                data: response.data['data'],
+                activePage: page,
+                totalItemsCount: response.data['total']
+            }));
+    }
+
+    render() {
+        return (
+            <div className="column lastAttestationPage">
+                <div className="d-flex align-items-center">
+                    <h4>Attestations</h4>
+                </div>
+                <div className="mb-3 flex-table latestAttestation head-table">
+                    <table width="100%">
+                        <thead>
+                        <tr className="lh1rem mr-auto">
+                            <th>Txid</th>
+                            <th>MerkleRoot</th>
+                            <th>Confirmed</th>
+                            <th>Date</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div className="mb-3 flex-table latestAttestation">
+                    <table width="100%">
+                        <tbody>
+                        {this.state.data.map(data =>
+                            <tr key={data.txid}>
+                                <td>
+                                    <a
+                                        className="hash truncate-hash keyboard-target"
+                                        href={`/tx/${data.txid}`}
+                                        title={data.txid}
+                                    >
+                                        {data.txid}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a
+                                        className="hash truncate-hash keyboard-target"
+                                        href={`/merkle_root/${data.merkle_root}`}
+                                        title={data.merkle_root}
+                                    >
+                                        {data.merkle_root}
+                                    </a>
+                                </td>
+                                <td>
+                                    <span className="mono text-right ml-1">{(data.confirmed) ? "true" : "false"}</span>
+                                </td>
+                                <td>
+                                    <span className="mono text-right ml-1">{data.age}</span>
+                                </td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="d-flex justify-content-center">
+                    <Pagination
+                        activePage={this.state.activePage}
+                        itemsCountPerPage={20}
+                        totalItemsCount={this.state.totalItemsCount}
+                        pageRangeDisplayed={5}
+                        onChange={this.handlePageChange}
+                        itemClass='page-item'
+                        linkClass='page-link'
+                    />
                 </div>
             </div>
-
-
-        </div>;
+        );
     }
 }
 

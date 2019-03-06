@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import FaviconAddrBar from './faviconAddrBar';
+import FaviconAddrBar from './Logo';
 import FooterPage from './footerPage';
 import HamburgerMenu from './hamburgerMenu';
 import Navbar from './navbar';

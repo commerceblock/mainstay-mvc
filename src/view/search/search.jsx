@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import {Switch, Route} from 'react-router-dom';
-import FaviconAddrBar from '../faviconAddrBar';
+import FaviconAddrBar from '../Logo';
 import FooterPage from '../footerPage';
 import HamburgerMenu from '../hamburgerMenu';
 import LatestAttestation from '../latestAttestation';
@@ -23,19 +23,19 @@ class Blockhash extends Component {
             return 'Fail';
         const blockhash = this.state.response.response.blockhash;
         return (
-            <div class="top-nav">
-                <div class="container">
-                    <div class="d-flex align-items-center flex-wrap">
+            <div className="top-nav">
+                <div className="container">
+                    <div className="d-flex align-items-center flex-wrap">
                         <FaviconAddrBar/>
                         <Navbar/>
                         <HamburgerMenu/>
                     </div>
                 </div>
-                <div class="container main" data-controller="main">
-                    <div class="row" data-controller="homepageMempool">
-                        <span class="block-title">Block</span>
+                <div className="container main" data-controller="main">
+                    <div className="row" data-controller="homepageMempool">
+                        <span className="block-title">Block</span>
                         <span className="block-subtitle">Blockhash: {blockhash.blockhash}</span>
-                        <table class="searchTable">
+                        <table className="searchTable">
                             <tbody>
                             <tr>
                                 <td>Txid</td>
@@ -75,105 +75,6 @@ class Blockhash extends Component {
     }
 }
 
-
-class Commitment extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            response: ''
-        };
-    }
-
-    show() {
-        if (this.state.response === '')
-            return 'Fail';
-        const attestation = this.state.response.response.attestation;
-        const merkleproof = this.state.response.response.merkleproof;
-        return (
-            <div class="top-nav">
-                <div class="container">
-                    <div class="d-flex align-items-center flex-wrap">
-                        <FaviconAddrBar/>
-                        <Navbar/>
-                        <HamburgerMenu/>
-                    </div>
-                </div>
-                <div class="container main" data-controller="main">
-                    <div class="row" data-controller="homepageMempool">
-                        <span class="block-title">Commitment</span>
-                        <span className="block-subtitle">Hash: {merkleproof.commitment}</span>
-                        <table class="main-second-position-block searchTable">
-                            <tbody>
-                            <tr>
-                                <td>Position</td>
-                                <td colSpan="2">{merkleproof.position}</td>
-
-                            </tr>
-                            <tr>
-                                <td>TxID</td>
-                                <td colspan="2">{attestation.txid}</td>
-
-                            </tr>
-
-                            <tr>
-                                <td>Confirmed</td>
-                                <td colspan="2"> {(attestation.confirmed) ? 'true' : 'false'}</td>
-
-                            </tr>
-                            <tr>
-                                <td>Inserted at</td>
-                                <td colspan="2">{attestation.inserted_at}</td>
-
-                            </tr>
-
-                            <tr>
-                                <td>MerkleRoot</td>
-                                <td colspan="2">{merkleproof.merkle_root}</td>
-                            </tr>
-
-                            <tr>
-                                <td rowspan={merkleproof.ops.length + 1} class="tabelOpsName">ops</td>
-
-
-                            </tr>
-
-                            {merkleproof.ops.map((op, i) =>
-                                <tr>
-
-                                    <td>{(op.append) ? 'true' : 'false'}</td>
-                                    <td>{op.commitment}</td>
-                                </tr>
-                            )}
-
-
-                            </tbody>
-
-                        </table>
-
-
-                    </div>
-                </div>
-                <FooterPage/>
-            </div>
-        );
-    }
-
-    componentWillMount() {
-        Axios.get("/api/v1/commitment/commitment?commitment=" + this.props.match.params.value)
-            .then(response => {
-                this.setState({response: response.data})
-            });
-    }
-
-    render() {
-        return (
-            <div>
-                <table width="100%">{this.show()}</table>
-            </div>
-        );
-    }
-}
-
 class MerkleRoot extends Component {
     constructor(props) {
         super(props);
@@ -188,19 +89,19 @@ class MerkleRoot extends Component {
         const attestation = this.state.response.response.attestation;
         const merkle_commitment = this.state.response.response.merkle_commitment;
         return (
-            <div class="top-nav">
-                <div class="container">
-                    <div class="d-flex align-items-center flex-wrap">
+            <div className="top-nav">
+                <div className="container">
+                    <div className="d-flex align-items-center flex-wrap">
                         <FaviconAddrBar/>
                         <Navbar/>
                         <HamburgerMenu/>
                     </div>
                 </div>
-                <div class="container main" data-controller="main">
-                    <div class="row" data-controller="homepageMempool">
-                        <span class="block-title">MerkleRoot</span>
+                <div className="container main" data-controller="main">
+                    <div className="row" data-controller="homepageMempool">
+                        <span className="block-title">MerkleRoot</span>
                         <span className="block-subtitle">MerkleRoot: {attestation.merkle_root}</span>
-                        <table class="searchTable ">
+                        <table className="searchTable ">
                             <tbody>
 
                             <tr>
@@ -218,8 +119,8 @@ class MerkleRoot extends Component {
                             </tbody>
                         </table>
 
-                        <div class="commitments_title">
-                            <h6 class="align-items-center">Commitments({merkle_commitment.length})</h6>
+                        <div className="commitments_title">
+                            <h6 className="align-items-center">Commitments({merkle_commitment.length})</h6>
                         </div>
 
                         <table className="main-second-position searchTable MerkleRootTable">
@@ -228,7 +129,7 @@ class MerkleRoot extends Component {
 
 
                                 <tr>
-                                    <td class="positionField">Position</td>
+                                    <td className="positionField">Position</td>
                                     <td>{data.position}</td>
 
                                 </tr>
@@ -279,17 +180,17 @@ class Position extends Component {
 
             return 'Fail';
         return (
-            <div class="top-nav">
-                <div class="container">
-                    <div class="d-flex align-items-center flex-wrap">
+            <div className="top-nav">
+                <div className="container">
+                    <div className="d-flex align-items-center flex-wrap">
                         <FaviconAddrBar/>
                         <Navbar/>
                         <HamburgerMenu/>
                     </div>
                 </div>
-                <div class="container main" data-controller="main">
-                    <div class="row" data-controller="homepageMempool">
-                        <table class="main-firts-position searchTable">
+                <div className="container main" data-controller="main">
+                    <div className="row" data-controller="homepageMempool">
+                        <table className="main-firts-position searchTable">
                             <tbody>
                             <tr>
                                 <td>Client Name: {this.state.response.response.client_name}</td>
@@ -307,11 +208,11 @@ class Position extends Component {
                             <h6 className="align-items-center">Commitments({this.state.response.response.position.length})</h6>
                         </div>
 
-                        <table class="main-second-position searchTable">
+                        <table className="main-second-position searchTable">
                             <tbody>
                             {this.state.response.response.position.map((data) =>
 
-                                <tr class="main-second-position-block">
+                                <tr className="main-second-position-block">
                                     <tr>
                                         <td>Commitment</td>
                                         <td colspan="2">{data.commitment}</td>
@@ -323,7 +224,7 @@ class Position extends Component {
 
                                     </tr>
                                     <tr>
-                                        <td rowspan={data.ops.length + 1} class="tabelOpsName">ops</td>
+                                        <td rowspan={data.ops.length + 1} className="tabelOpsName">ops</td>
                                     </tr>
                                     {data.ops.map((op, i) =>
                                         <tr>
@@ -362,88 +263,6 @@ class Position extends Component {
     }
 }
 
-class TransactionId extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            response: ''
-        }
-    }
-
-    show() {
-        if (this.state.response === '')
-            return 'Fail';
-
-        console.log(this.state.response);
-
-        const attestation = this.state.response.response.attestation;
-        const attestationInfo = this.state.response.response.attestationInfo;
-        return (
-            <div class="top-nav">
-                <div class="container">
-                    <div class="d-flex align-items-center flex-wrap">
-                        <FaviconAddrBar/>
-                        <Navbar/>
-                        <HamburgerMenu/>
-                    </div>
-                </div>
-                <div class="container main" data-controller="main">
-                    <div class="row" data-controller="homepageMempool">
-                        <span class="block-title">Attestation Transaction</span>
-                        <span class="block-subtitle">TxID: {attestation.txid}</span>
-                        <table class="searchTable">
-
-                            <tbody>
-
-
-                            <tr>
-                                <td>Merkle_root</td>
-                                <td>{attestation.merkle_root}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Confirmed</td>
-                                <td>{(attestation.confirmed) ? 'true' : 'false'}</td>
-                            </tr>
-                            <tr>
-                                <td>Inserted_at</td>
-                                <td>{attestation.inserted_at}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Amount</td>
-                                <td>{attestationInfo.amount}</td>
-                            </tr>
-                            <tr>
-                                <td>Blockhash</td>
-                                <td>{attestationInfo.blockhash}</td>
-                            </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <FooterPage/>
-            </div>
-        );
-    }
-
-    componentWillMount() {
-        Axios.get("/api/v1/attestation?txid=" + this.props.match.params.value)
-            .then(response => {
-                this.setState({response: response.data})
-            });
-    }
-
-    render() {
-        return (
-            <div>
-                <table width="100%">{this.show()}</table>
-            </div>
-        );
-    }
-}
-
 class Waiting extends Component {
     constructor(props) {
         super(props);
@@ -458,7 +277,7 @@ class Waiting extends Component {
         return (
 
             <div className="row" data-controller="homepageMempool">
-                <div class="col-md-12">
+                <div className="col-md-12">
                     <div className="alert alert-danger ">
                         Search does not match any valid client position, attestation transaction
                         id or commitment hash, for query: {this.state.value.query}
@@ -492,7 +311,7 @@ class Search extends Component {
 
         const value = QueryString.parse(location.search);
 
-        if (value.query == undefined)
+        if (value.query === undefined)
             return this.setState({page: page_undefined});
         if (/[0-9A-Fa-f]{64}/g.test(value.query) || /^\d+$/.test(value.query))
             Axios.get("/ctrl/type?value=" + value.query)
@@ -515,23 +334,9 @@ class Search extends Component {
     }
 
     render() {
-        return (
-            <div class="top-nav">
-                <div class="container">
-                    <div class="d-flex align-items-center flex-wrap">
-                        <FaviconAddrBar/>
-                        <Navbar/>
-                        <HamburgerMenu/>
-                    </div>
-                </div>
-                <div class="container main" data-controller="main">
-                        {this.state.page}
-                </div>
-                <FooterPage/>
-            </div>
-        );
+        return this.state.page;
     }
 }
 
-export {Position, Blockhash, Commitment, TransactionId, MerkleRoot};
+export { Position, Blockhash, MerkleRoot };
 export default Search;
