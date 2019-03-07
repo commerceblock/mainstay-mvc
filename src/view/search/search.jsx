@@ -1,7 +1,6 @@
 import Axios from 'axios';
-import {Switch, Route} from 'react-router-dom';
 import FaviconAddrBar from '../Logo';
-import FooterPage from '../footerPage';
+import FooterPage from '../Footer';
 import HamburgerMenu from '../hamburgerMenu';
 import LatestAttestation from '../latestAttestation';
 import LatestCommitment from '../latestCommitment';
@@ -75,97 +74,7 @@ class Blockhash extends Component {
     }
 }
 
-class MerkleRoot extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            response: ''
-        };
-    }
 
-    show() {
-        if (this.state.response === '')
-            return 'Fail';
-        const attestation = this.state.response.response.attestation;
-        const merkle_commitment = this.state.response.response.merkle_commitment;
-        return (
-            <div className="top-nav">
-                <div className="container">
-                    <div className="d-flex align-items-center flex-wrap">
-                        <FaviconAddrBar/>
-                        <Navbar/>
-                        <HamburgerMenu/>
-                    </div>
-                </div>
-                <div className="container main" data-controller="main">
-                    <div className="row" data-controller="homepageMempool">
-                        <span className="block-title">MerkleRoot</span>
-                        <span className="block-subtitle">MerkleRoot: {attestation.merkle_root}</span>
-                        <table className="searchTable ">
-                            <tbody>
-
-                            <tr>
-                                <td>TxID</td>
-                                <td>{attestation.txid}</td>
-                            </tr>
-                            <tr>
-                                <td>Confirmed</td>
-                                <td>{(attestation.confirmed) ? 'true' : 'false'}</td>
-                            </tr>
-                            <tr>
-                                <td>Inserted at</td>
-                                <td>{attestation.inserted_at}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        <div className="commitments_title">
-                            <h6 className="align-items-center">Commitments({merkle_commitment.length})</h6>
-                        </div>
-
-                        <table className="main-second-position searchTable MerkleRootTable">
-                            {merkle_commitment.map((data) =>
-                                <tbody>
-
-
-                                <tr>
-                                    <td className="positionField">Position</td>
-                                    <td>{data.position}</td>
-
-                                </tr>
-                                <tr>
-                                    <td>Commitment</td>
-                                    <td colSpan="2">{data.commitment}</td>
-                                </tr>
-
-
-                                </tbody>
-                            )}
-                        </table>
-
-
-                    </div>
-                </div>
-                <FooterPage/>
-            </div>
-        );
-    }
-
-    componentWillMount() {
-        Axios.get("/api/v1/merkleroot?merkle_root=" + this.props.match.params.value)
-            .then(response => {
-                this.setState({response: response.data})
-            });
-    }
-
-    render() {
-        return (
-            <div>
-                <table width="100%">{this.show()}</table>
-            </div>
-        );
-    }
-}
 
 class Position extends Component {
     constructor(props) {
@@ -238,8 +147,6 @@ class Position extends Component {
                             )}
                             </tbody>
                         </table>
-
-
                     </div>
                 </div>
                 <FooterPage/>
@@ -338,5 +245,5 @@ class Search extends Component {
     }
 }
 
-export { Position, Blockhash, MerkleRoot };
+export { Position, Blockhash };
 export default Search;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import FaviconAddrBar from './Logo';
-import FooterPage from './footerPage';
+import FooterPage from './Footer';
 import HamburgerMenu from './hamburgerMenu';
 import Navbar from './navbar';
 
