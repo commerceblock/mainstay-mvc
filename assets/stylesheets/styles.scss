@@ -68,7 +68,10 @@ html {
 body {
     font-family: 'Roboto', sans-serif;
     padding-bottom: 2.1rem;
-    background: #F3F5F6;
+    //background: #F3F5F6;
+}
+body, html {
+    height: 100%;
 }
 
 a {
@@ -1122,7 +1125,7 @@ table td a {
 }
 
 td .lastCommitement {
-    width: 40vw !important;
+    width: 30vw !important;
 }
 
 table th span {
@@ -1206,23 +1209,6 @@ table th span {
     line-height: 43px;
     z-index: 100;
     border: 1px solid #ddd;
-}
-
-
-
-.error {
-    /*color: #b84442;
-  background-color: #f2dede;
-  border: 1px solid #b84442;*/
-}
-
-.success {
-    /*color: #3c763d;
-  background-color: #dff0d8;
-  border:1px solid #3c763d;*/
-
-
-
 }
 
 .success .swal-button {
@@ -1316,7 +1302,6 @@ table th span {
     text-align: left !important;
 
 }
-
 
 .searchTable tr td:last-child {
     text-align: right;
@@ -1417,7 +1402,7 @@ table th span {
         display: block;
     }
     .navbar-fixed-bottom {
-        position: absolute;
+        position: relative;
         padding: 10px;
         padding-top: 0;
     }
@@ -1442,7 +1427,4 @@ table th span {
     .sm-w151 {
         width: 151px;
     }
-
-
-
 }

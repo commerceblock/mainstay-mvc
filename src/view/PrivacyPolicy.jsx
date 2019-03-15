@@ -1,26 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import FaviconAddrBar from './Logo';
-import FooterPage from './Footer';
-import HamburgerMenu from './hamburgerMenu';
+import Footer from './Footer';
+import Menu from './Menu';
 import Navbar from './navbar';
 
-class Privacy extends Component {
-
-  render() {
-    return (
+const Privacy = () => (
     <div className="footer-content">
       <div className="top-nav">
         <div className="container">
           <div className="d-flex align-items-center flex-wrap">
             <FaviconAddrBar/>
             <Navbar/>
-            <HamburgerMenu/>
-
-
+            <Menu/>
           </div>
         </div>
-
-
       </div>
       <div className="privacy-page">
         <h2>Privacy Policy</h2>
@@ -290,13 +283,8 @@ class Privacy extends Component {
           <a href="mailto:info@commerceblock.com."> info@commerceblock.com.</a>.
         </p>
       </div>
-      <FooterPage/>
-
-
-
+      <Footer/>
     </div>
-    );
-  }
-}
+);
 
 export default Privacy;

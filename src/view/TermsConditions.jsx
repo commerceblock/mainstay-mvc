@@ -1,30 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import FaviconAddrBar from './Logo';
-import FooterPage from './Footer';
-import HamburgerMenu from './hamburgerMenu';
+import Footer from './Footer';
+import Menu from './Menu';
 import Navbar from './navbar';
 
-class Terms extends Component {
-
-
-  render() {
-    return (
+const Terms = () =>(
         <div className="footer-content">
           <div className="top-nav">
             <div className="container">
               <div className="d-flex align-items-center flex-wrap">
                 <FaviconAddrBar/>
                 <Navbar/>
-                <HamburgerMenu/>
-
-
+                <Menu/>
               </div>
             </div>
-
-
           </div>
           <div className="terms-page">
-
             <h2>Terms and Conditions</h2>
             <p><b> 1. Intro and Acceptance.</b> <br/> CommerceBlock is pleased to offer you access to its MainStay Services.
               When we refer to our “Services” in these Terms and Conditions, we mean to include everything — our
@@ -528,18 +519,9 @@ class Terms extends Component {
               giving effect to its conflicts of law principles. All disputes under this Agreement shall be
               subject to the exclusive jurisdiction of the courts of England and Wales.
             </p>
-
-
-
-
           </div>
-          <FooterPage/>
-
-
-
+          <Footer/>
         </div>
-    );
-  }
-}
+);
 
 export default Terms;
