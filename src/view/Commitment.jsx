@@ -11,7 +11,7 @@ class Commitment extends Component {
 
     componentDidMount() {
         Axios.get("/api/v1/commitment/commitment?commitment=" + this.props.match.params.value)
-            .then(({ data, error }) => {
+            .then(({ data }) => {
                 if (data) {
                     this.setState({ data: data.response });
                 }
@@ -20,45 +20,54 @@ class Commitment extends Component {
 
     render() {
         const { data } = this.state;
-        return data ? (
+        if (!data) {
+            return 'Fail';
+        }
+        const { 
+            merkleproof: { commitment, position, merkle_root, ops },
+            attestation: { txid, confirmed, inserted_at }
+        } = data;
+        return (
             <div className="row" data-controller="homepageMempool">
                 <span className="block-title">Commitment</span>
-                <span className="block-subtitle">Hash: {data.merkleproof.commitment}</span>
-                <table className="main-second-position-block searchTable">
-                    <tbody>
-                    <tr>
-                        <td>Position</td>
-                        <td colSpan="2">{data.merkleproof.position}</td>
-                    </tr>
-                    <tr>
-                        <td>TxID</td>
-                        <td colSpan="2">{data.attestation.txid}</td>
-                    </tr>
-                    <tr>
-                        <td>Confirmed</td>
-                        <td colSpan="2"> {(data.attestation.confirmed) ? 'true' : 'false'}</td>
-                    </tr>
-                    <tr>
-                        <td>Inserted at</td>
-                        <td colSpan="2">{data.attestation.inserted_at}</td>
-                    </tr>
-                    <tr>
-                        <td>MerkleRoot</td>
-                        <td colSpan="2">{data.merkleproof.merkle_root}</td>
-                    </tr>
-                    <tr>
-                        <td rowSpan={data.merkleproof.ops.length + 1} className="tabelOpsName">ops</td>
-                    </tr>
-                    {data.merkleproof.ops.map(op =>
-                        <tr key={op.commitment}>
-                            <td>{(op.append) ? 'true' : 'false'}</td>
-                            <td>{op.commitment}</td>
+                <span className="block-subtitle"><strong>Hash:</strong> {commitment}</span>
+                <div className="flex-table">
+                    <table className="main-second-position-block" width="100%">
+                        <tbody>
+                        <tr>
+                            <th>Position</th>
+                            <td colSpan="2">{position}</td>
                         </tr>
-                    )}
-                    </tbody>
-                </table>
+                        <tr>
+                            <th>TxID</th>
+                            <td colSpan="2">{txid}</td>
+                        </tr>
+                        <tr>
+                            <th>Confirmed</th>
+                            <td colSpan="2"> {`${!!confirmed}`}</td>
+                        </tr>
+                        <tr>
+                            <th>Inserted at</th>
+                            <td colSpan="2">{inserted_at}</td>
+                        </tr>
+                        <tr>
+                            <th>MerkleRoot</th>
+                            <td colSpan="2">{merkle_root}</td>
+                        </tr>
+                        <tr>
+                            <th rowSpan={ops.length + 1} className="tabelOpsName">ops</th>
+                        </tr>
+                        {ops.map(({ commitment, append }) =>
+                            <tr key={commitment}>
+                                <td>{`${!!append}`}</td>
+                                <td>{commitment}</td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        ): 'Fail';
+        );
     }
 }
 

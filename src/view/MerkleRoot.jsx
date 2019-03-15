@@ -1,11 +1,12 @@
 import Axios from "axios";
 import React, { Component } from "react";
+import { routes, getRoute } from "./routes";
 
 class MerkleRoot extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            response: null,
+            data: null,
         };
     }
 
@@ -13,56 +14,62 @@ class MerkleRoot extends Component {
         Axios.get("/api/v1/merkleroot?merkle_root=" + this.props.match.params.value)
             .then(({ data, error }) => {
                 if (data) {
-                    this.setState({ response: data.response });
+                    this.setState({ data: data.response });
                 }
             });
     }
 
     render() {
-        const { response } = this.state;
-        if (!this.state.response) {
+        const { data } = this.state;
+        if (!data) {
             return 'Fail';
         }
-        const { attestation, merkle_commitment } = response;
+        const { attestation: { txid, merkle_root, confirmed, inserted_at }, merkle_commitment } = data;
         return (
-            <div className="row" data-controller="homepageMempool">
+            <div className="column" data-controller="homepageMempool">
                 <span className="block-title">MerkleRoot</span>
-                <span className="block-subtitle">MerkleRoot: {attestation.merkle_root}</span>
-                <table className="searchTable ">
-                    <tbody>
-                    <tr>
-                        <td>TxID</td>
-                        <td>{attestation.txid}</td>
-                    </tr>
-                    <tr>
-                        <td>Confirmed</td>
-                        <td>{(attestation.confirmed) ? 'true' : 'false'}</td>
-                    </tr>
-                    <tr>
-                        <td>Inserted at</td>
-                        <td>{attestation.inserted_at}</td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <div className="commitments_title">
-                    <h6 className="align-items-center">Commitments({merkle_commitment.length})</h6>
-                </div>
-
-                <table className="main-second-position searchTable MerkleRootTable">
-                    {merkle_commitment.map((data) =>
+                <span className="block-subtitle"><strong>MerkleRoot:</strong> {merkle_root}</span>
+                <div className="flex-table">
+                    <table width="100%">
                         <tbody>
                         <tr>
-                            <td className="positionField">Position</td>
-                            <td>{data.position}</td>
+                            <th>TxID</th>
+                            <td>{txid}</td>
                         </tr>
                         <tr>
-                            <td>Commitment</td>
-                            <td colSpan="2">{data.commitment}</td>
+                            <th>Confirmed</th>
+                            <td>{`${!!confirmed}`}</td>
+                        </tr>
+                        <tr>
+                            <th>Inserted at</th>
+                            <td>{inserted_at}</td>
                         </tr>
                         </tbody>
-                    )}
-                </table>
+                    </table>
+                </div>
+                <div className="commitments_title">
+                    <h5 className="align-items-center">Commitments ({merkle_commitment.length})</h5>
+                </div>
+                <div className="mb-4 flex-table">
+                    <table width="100%">
+                        <thead>
+                            <tr>
+                                <th className="lh2rem">Position</th>
+                                <th className="lh2rem">Commitment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {merkle_commitment.map(({ position, commitment }) =>
+                            <tr key={commitment}>
+                                <td>{position}</td>
+                                <td colSpan="2">
+                                    <a href={getRoute(routes.commitment, { value: commitment })}>{commitment}</a>
+                                </td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     }

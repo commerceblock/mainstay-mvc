@@ -11,9 +11,8 @@ export const routes = {
     commitment: '/commitment/:value',
     transation: '/tx/:value',
     merkle: '/merkle_root/:value',
-    attestation: '/attestation/:value?',
+    attestation: '/attestation',
     client: '/client',
-    pricing: '/pricing',
     privacy: '/privacy',
     terms: '/terms',
 };

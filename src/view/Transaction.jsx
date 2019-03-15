@@ -1,5 +1,6 @@
 import Axios from "axios";
 import React, { Component } from "react";
+import { getRoute, routes } from "./routes";
 
 class Transaction extends Component {
     constructor(props) {
@@ -19,37 +20,44 @@ class Transaction extends Component {
     }
 
     render() {
+
         const { data } = this.state;
-        return data ? (
-            <div className="row" data-controller="homepageMempool">
+        if (!data) {
+            return 'Fail';
+        }
+        const { attestation: { txid, merkle_root, confirmed, inserted_at }, attestationInfo: { amount, blockhash }  } = data;
+        return (
+            <div className="column" data-controller="homepageMempool">
                 <span className="block-title">Attestation Transaction</span>
-                <span className="block-subtitle">TxID: {data.attestation.txid}</span>
-                <table className="searchTable" width="100%">
-                    <tbody>
-                    <tr>
-                        <td>Merkle_root</td>
-                        <td>{data.attestation.merkle_root}</td>
-                    </tr>
-                    <tr>
-                        <td>Confirmed</td>
-                        <td>{(data.attestation.confirmed) ? 'true' : 'false'}</td>
-                    </tr>
-                    <tr>
-                        <td>Inserted_at</td>
-                        <td>{data.attestation.inserted_at}</td>
-                    </tr>
-                    <tr>
-                        <td>Amount</td>
-                        <td>{data.attestationInfo.amount}</td>
-                    </tr>
-                    <tr>
-                        <td>Blockhash</td>
-                        <td>{data.attestationInfo.blockhash}</td>
-                    </tr>
-                    </tbody>
-                </table>
+                <span className="block-subtitle">TxID: {txid}</span>
+                <div className="flex-table">
+                    <table width="100%">
+                        <tbody>
+                        <tr>
+                            <th>Merkle_root</th>
+                            <td>{merkle_root}</td>
+                        </tr>
+                        <tr>
+                            <th>Confirmed</th>
+                            <td>{`${!!confirmed}`}</td>
+                        </tr>
+                        <tr>
+                            <th>Inserted at</th>
+                            <td>{inserted_at}</td>
+                        </tr>
+                        <tr>
+                            <th>Amount at</th>
+                            <td>{amount}</td>
+                        </tr>
+                        <tr>
+                            <th>Blockhash</th>
+                            <td>{blockhash}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        ) : 'Fail';
+        );
     }
 }
 

@@ -3,21 +3,18 @@ import React, { Component } from 'react';
 import swal from 'sweetalert';
 import { Link } from "react-router-dom";
 import {
-  Button,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader
+    Button,
+    Form, FormGroup,
+    Input,
+    Label,
+    Modal, ModalBody, ModalFooter, ModalHeader,
+    Dropdown, DropdownMenu, DropdownToggle, DropdownItem,
 } from 'reactstrap';
 import { routes }from './routes';
 
 
 const options = [
-    { label: 'Position', name: 'position', hint: '0'},
+    { label: '  Position', name: 'position', hint: '0'},
     { label: 'Token', name: 'token', hint: '4c8c006d-4cee-4fef-8e06-bb8112db6314' },
     { label: 'Commitment', name: 'commitment', hint: '6a855c1c70849ed28eb51cffd808ccd4e45c4cdddfa17495ccf98856b2421b8e' },
     { label: 'signature', name: 'signature', hint: '7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090' },
@@ -32,6 +29,7 @@ class Menu extends Component {
             token: undefined,
             commitment: undefined,
             signature: undefined,
+            isMenuOpened: false,
         };
     }
 
@@ -75,23 +73,54 @@ class Menu extends Component {
         this.setState({ modal: !this.state.modal });
     };
 
+    toggleMenu = () => {
+        this.setState({ isMenuOpened: !this.state.isMenuOpened });
+    };
+
     render() {
         const { buttonLabel } = this.props;
-        const { modal } = this.state;
+        const { modal, isMenuOpened } = this.state;
         return (
-            <div id="menu">
-                <Link  to={routes.home} className="menu" color="muted" >Home {buttonLabel}</Link>
-                <Link to={routes.attestation} className="menu" color="muted" >Attestations {buttonLabel}</Link>
-                <Link to={routes.client} className="menu" color="muted" >Clients {buttonLabel}</Link>
-                <Button className="menu" color="muted" onClick={this.toggle}>Send Commitment {buttonLabel}</Button>
-                <a href={'https://github.com/commerceblock/mainstay-mvc/blob/develop/doc/mainstay_api.md'} className="menu" color="muted" target="_blank">API information {buttonLabel}</a>
-                <Link to={routes.pricing} className="menu" color="muted" >Pricing {buttonLabel}</Link>
+            <div className="clickable">
+                <Dropdown isOpen={isMenuOpened} toggle={this.toggleMenu} direction="left">
+                    <DropdownToggle
+                        tag="span"
+                        onClick={this.toggleMenu}
+                        data-toggle="dropdown"
+                        aria-expanded={isMenuOpened}
+                    >
+                        <span className="patty" />
+                        <span className="patty" />
+                        <span className="patty short" />
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        <DropdownItem href={routes.home} className="menu no-underline" color="muted">
+                            Home {buttonLabel}
+                        </DropdownItem>
+                        <DropdownItem href={routes.attestation} className="menu no-underline" color="muted">
+                            Attestations {buttonLabel}
+                        </DropdownItem>
+                        <DropdownItem tag="a" href={routes.client} className="menu no-underline" color="muted">
+                            Clients {buttonLabel}
+                        </DropdownItem>
+                        <DropdownItem className="menu" color="muted" onClick={this.toggle}>
+                            Send Commitment {buttonLabel}
+                        </DropdownItem>
+                        <DropdownItem
+                            href="https://github.com/commerceblock/mainstay-mvc/blob/develop/doc/mainstay_api.md"
+                            className="menu"
+                            color="muted" target="_blank"
+                        >
+                            API information {buttonLabel}
+                        </DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
                 <Modal isOpen={modal} toggle={this.toggle}>
                     <ModalHeader toggle={this.toggle}>Send Commitment</ModalHeader>
                     <Form onSubmit={this.handleSubmit}>
                         <ModalBody>
                             {options.map(({ label, name, hint }) => (
-                                <FormGroup>
+                                <FormGroup key={name}>
                                     <Label>{label}</Label>
                                     <Input
                                         name={name}

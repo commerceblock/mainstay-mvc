@@ -3,7 +3,7 @@ import { Route, Redirect, BrowserRouter } from 'react-router-dom';
 import { routes } from './routes';
 import Logo from './Logo';
 import FooterPage from './Footer';
-import HamburgerMenu from './hamburgerMenu';
+import Menu from './Menu';
 import Navbar from './navbar';
 import Client from "./Client";
 import PrivacyPolicy from "./PrivacyPolicy";
@@ -14,8 +14,7 @@ import { Blockhash, Position } from "./search/search";
 import Attestation from "./Attestation";
 import Search from "./search/search";
 import TermsConditions from "./TermsConditions";
-import Home from './home/home'
-
+import Home from './Home'
 
 
 const Root = () => (
@@ -25,7 +24,7 @@ const Root = () => (
                 <div className="d-flex align-items-center flex-wrap">
                     <Logo/>
                     <Navbar/>
-                    <HamburgerMenu/>
+                    <Menu/>
                 </div>
             </div>
             <div className="container main" data-controller="main">

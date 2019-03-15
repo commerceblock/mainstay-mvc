@@ -11,14 +11,17 @@ class Attestation extends Component {
             itemsCountPerPage: 1,
             totalItemsCount: 1
         };
-        this.request(1);
+    }
+
+    componentDidMount() {
+        this.fetchPage(1)
     }
 
     handlePageChange = (pageNumber) => {
-        this.request(pageNumber);
+        this.fetchPage(pageNumber);
     };
 
-    request(page) {
+    fetchPage = (page) => {
         const failedArg = '&failed=true' ? this.props.match.params?.value === 'showFailed' : '';
 
         Axios.get(`/ctrl/latestattestation?page=${page}${failedArg}`)
@@ -27,7 +30,7 @@ class Attestation extends Component {
                 activePage: page,
                 totalItemsCount: response.data['total']
             }));
-    }
+    };
 
     render() {
         return (
@@ -35,53 +38,48 @@ class Attestation extends Component {
                 <div className="d-flex align-items-center">
                     <h4>Attestations</h4>
                 </div>
-                <div className="mb-3 flex-table latestAttestation head-table">
+                <div className="mb-3 flex-table latestAttestation">
                     <table width="100%">
                         <thead>
-                        <tr className="lh1rem mr-auto">
+                        <tr className="mr-auto">
                             <th>Txid</th>
                             <th>MerkleRoot</th>
                             <th>Confirmed</th>
                             <th>Date</th>
                         </tr>
                         </thead>
-                    </table>
-                </div>
-                <div className="mb-3 flex-table latestAttestation">
-                    <table width="100%">
                         <tbody>
-                        {this.state.data.map(data =>
-                            <tr key={data.txid}>
+                        {this.state.data.map(({ txid, merkle_root, confirmed, age }) =>
+                            <tr key={txid}>
                                 <td>
                                     <a
                                         className="hash truncate-hash keyboard-target"
-                                        href={`/tx/${data.txid}`}
-                                        title={data.txid}
+                                        href={`/tx/${txid}`}
+                                        title={txid}
                                     >
-                                        {data.txid}
+                                        {txid}
                                     </a>
                                 </td>
                                 <td>
                                     <a
                                         className="hash truncate-hash keyboard-target"
-                                        href={`/merkle_root/${data.merkle_root}`}
-                                        title={data.merkle_root}
+                                        href={`/merkle_root/${merkle_root}`}
+                                        title={merkle_root}
                                     >
-                                        {data.merkle_root}
+                                        {merkle_root}
                                     </a>
                                 </td>
                                 <td>
-                                    <span className="mono text-right ml-1">{(data.confirmed) ? "true" : "false"}</span>
+                                    <span className="mono text-right ml-1">{`${!!confirmed}`}</span>
                                 </td>
                                 <td>
-                                    <span className="mono text-right ml-1">{data.age}</span>
+                                    <span className="mono text-right ml-1">{age}</span>
                                 </td>
                             </tr>
                         )}
                         </tbody>
                     </table>
                 </div>
-
                 <div className="d-flex justify-content-center">
                     <Pagination
                         activePage={this.state.activePage}

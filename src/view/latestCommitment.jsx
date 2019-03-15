@@ -27,8 +27,8 @@ class LatestCommitment extends Component {
                 <div className="mb-3 flex-table LatestCommitment head-table">
                     <table width="100%">
                         <thead>
-                        <th><span className="lh1rem ">Position</span></th>
-                        <th><span className="lh1rem ">Commitment</span></th>
+                        <th><span className="lh1rem">Position</span></th>
+                        <th><span className="lh1rem">Commitment</span></th>
                         </thead>
                     </table>
                 </div>
