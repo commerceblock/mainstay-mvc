@@ -23,7 +23,7 @@ class Position extends Component {
         }
         const { position, client_name } = data;
         return (
-            <div className="row" data-controller="homepageMempool">
+            <div className="full-table" data-controller="homepageMempool">
                 <table className="main-firts-position searchTable">
                     <tbody>
                     <tr>
@@ -38,32 +38,30 @@ class Position extends Component {
                 <div className="commitments_title">
                     <h6 className="align-items-center">Commitments({position.length})</h6>
                 </div>
-                <table className="main-second-position searchTable">
-                    <tbody>
-                    {position.map((data) =>
-
-                        <tr className="main-second-position-block">
-                            <tr>
-                                <td>Commitment</td>
-                                <td colSpan="2">{data.commitment}</td>
-                            </tr>
-                            <tr>
-                                <td>MerkleRoot</td>
-                                <td colSpan="2">{data.merkle_root}</td>
-                            </tr>
-                            <tr>
-                                <td rowSpan={data.ops.length + 1} className="tabelOpsName">ops</td>
-                            </tr>
-                            {data.ops.map((op, i) =>
-                                <tr>
-                                    <td>{(op.append) ? 'true' : 'false'}</td>
-                                    <td>{op.commitment}</td>
-                                </tr>
-                            )}
+                {position.map((data) =>
+                    <table className="main-second-position flex-table" width="100%">
+                        <tbody>
+                        <tr>
+                            <td>Commitment</td>
+                            <td colSpan="2"><span className="hash truncate-hash">{data.commitment}</span></td>
                         </tr>
-                    )}
-                    </tbody>
-                </table>
+                        <tr>
+                            <td>MerkleRoot</td>
+                            <td colSpan="2"><span className="hash truncate-hash">{data.merkle_root}</span></td>
+                        </tr>
+                        <tr>
+                            <td rowSpan={data.ops.length + 1} className="tabelOpsName">ops</td>
+                        </tr>
+                        {data.ops.map((op, i) =>
+                            <tr>
+                                <td>{(op.append) ? 'true' : 'false'}</td>
+                                <td><span className="hash truncate-hash">{op.commitment}</span></td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+
+                )}
             </div>
         );
     }

@@ -50,13 +50,13 @@ class LatestAttestationInfo extends Component {
                 <div className="mb-3 flex-table">
                     <div className="d-flex justify-content-end header">
                         <span className="lh1rem mr-auto">Blockhash</span>
-                        <span className="lh1rem text-right ml-1">{this.state.data.blockhash}</span>
+                        <span className="lh1rem text-right ml-1 hash truncate-hash">{this.state.data.blockhash}</span>
                     </div>
                 </div>
                 <div className="mb-3 flex-table">
                     <div className="d-flex justify-content-end header">
                         <span className="lh1rem mr-auto">Latest Txid</span>
-                        <span className="lh1rem text-right ml-1">{this.state.data.txid}</span>
+                        <span className="lh1rem text-right ml-1 hash truncate-hash">{this.state.data.txid}</span>
                     </div>
                 </div>
                 <div className="mb-3 flex-table">

@@ -26,15 +26,15 @@ class MerkleRoot extends Component {
         }
         const { attestation: { txid, merkle_root, confirmed, inserted_at }, merkle_commitment } = data;
         return (
-            <div className="column" data-controller="homepageMempool">
+            <div className="full-table" data-controller="homepageMempool">
                 <span className="block-title">MerkleRoot</span>
-                <span className="block-subtitle"><strong>MerkleRoot:</strong> {merkle_root}</span>
+                <span className="block-subtitle h3 hash truncate-hash"><strong>MerkleRoot:</strong> {merkle_root}</span>
                 <div className="flex-table">
                     <table width="100%">
                         <tbody>
                         <tr>
                             <th>TxID</th>
-                            <td>{txid}</td>
+                            <td><span className="hash truncate-hash">{txid}</span></td>
                         </tr>
                         <tr>
                             <th>Confirmed</th>
@@ -63,7 +63,9 @@ class MerkleRoot extends Component {
                             <tr key={commitment}>
                                 <td>{position}</td>
                                 <td colSpan="2">
-                                    <a href={getRoute(routes.commitment, { value: commitment })}>{commitment}</a>
+                                    <a href={getRoute(routes.commitment, { value: commitment })}>
+                                        <span className="hash truncate-hash">{commitment}</span>
+                                    </a>
                                 </td>
                             </tr>
                         )}

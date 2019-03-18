@@ -1278,8 +1278,6 @@ table th span {
 .main-firts-position td {
     border: none !important;
     font-size: 20px !important;
-
-
 }
 
 .main-second-position-block {
@@ -1300,7 +1298,6 @@ table th span {
 
 .searchTable tr td:first-child {
     text-align: left !important;
-
 }
 
 .searchTable tr td:last-child {
@@ -1401,20 +1398,26 @@ table th span {
     .navbar-fixed-bottom .nav-item {
         display: block;
     }
-    .navbar-fixed-bottom {
-        position: relative;
-        padding: 10px;
-        padding-top: 0;
-    }
 
     .block-subtitle {
         padding-left: 20px;
         overflow: hidden;
         padding-right: 20px;
     }
-    .flex-table .lh1rem.ml-1 {
+    .flex-table .lh1rem {
         width: 30%;
         overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .full-table .hash.truncate-hash {
+        width: 40vw;
+    }
+    .full-table .h3 {
+        width: 70vw !important;
+    }
+    .full-table.col3 .hash.truncate-hash {
+        width: 35vw;
     }
     .table {
         margin-bottom: 0;

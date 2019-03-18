@@ -28,19 +28,19 @@ class Commitment extends Component {
             attestation: { txid, confirmed, inserted_at }
         } = data;
         return (
-            <div className="row" data-controller="homepageMempool">
+            <div className="full-table" data-controller="homepageMempool">
                 <span className="block-title">Commitment</span>
-                <span className="block-subtitle"><strong>Hash:</strong> {commitment}</span>
+                <span className="block-subtitle hash truncate-hash h3"><strong>Hash:</strong> {commitment}</span>
                 <div className="flex-table">
                     <table className="main-second-position-block" width="100%">
                         <tbody>
                         <tr>
                             <th>Position</th>
-                            <td colSpan="2">{position}</td>
+                            <td colSpan="2"><span className="hash truncate-hash">{position}</span></td>
                         </tr>
                         <tr>
                             <th>TxID</th>
-                            <td colSpan="2">{txid}</td>
+                            <td colSpan="2"><span className="hash truncate-hash">{txid}</span></td>
                         </tr>
                         <tr>
                             <th>Confirmed</th>
@@ -52,7 +52,7 @@ class Commitment extends Component {
                         </tr>
                         <tr>
                             <th>MerkleRoot</th>
-                            <td colSpan="2">{merkle_root}</td>
+                            <td colSpan="2"><span className="hash truncate-hash">{merkle_root}</span></td>
                         </tr>
                         <tr>
                             <th rowSpan={ops.length + 1} className="tabelOpsName">ops</th>
@@ -60,7 +60,7 @@ class Commitment extends Component {
                         {ops.map(({ commitment, append }) =>
                             <tr key={commitment}>
                                 <td>{`${!!append}`}</td>
-                                <td>{commitment}</td>
+                                <td><span className="hash truncate-hash">{commitment}</span></td>
                             </tr>
                         )}
                         </tbody>

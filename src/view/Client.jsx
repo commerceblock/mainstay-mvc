@@ -24,7 +24,7 @@ class Client extends Component {
                 <div className="d-flex align-items-center">
                     <h4>Clients</h4>
                 </div>
-                <div className="flex-table overflow-auto height-60">
+                <div className="flex-table full-table col3">
                     {this.state.data ? (
                         <table width="100%">
                             <thead>
@@ -38,8 +38,8 @@ class Client extends Component {
                             {this.state.data.map(data => (
                                 <tr key={data.position} className="mono">
                                     <td>{data.position}</td>
-                                    <td>{data.client_name}</td>
-                                    <td>{data.commitment}</td>
+                                    <td><span className="hash truncate-hash">{data.client_name}</span></td>
+                                    <td><span className="hash truncate-hash">{data.commitment}</span></td>
                                 </tr>
                             ))}
                             </tbody>
