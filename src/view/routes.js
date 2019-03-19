@@ -15,4 +15,5 @@ export const routes = {
     client: '/client',
     privacy: '/privacy',
     terms: '/terms',
+    pricing: '/pricing'
 };

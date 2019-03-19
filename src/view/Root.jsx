@@ -16,6 +16,7 @@ import Attestation from "./Attestation";
 import Search from "./search/search";
 import TermsConditions from "./TermsConditions";
 import Home from './Home'
+import Pricing from './Pricing'
 
 
 const Root = () => (
@@ -45,6 +46,7 @@ const Root = () => (
                 <Route path={routes.client} exac component={Client} />
                 <Route path={routes.privacy} component={PrivacyPolicy} />
                 <Route path={routes.terms} component={TermsConditions} />
+                <Route path={routes.pricing} component={Pricing} />
             </div>
             <FooterPage/>
         </div>

@@ -1350,6 +1350,52 @@ table th span {
 
 }
 
+.pricing-page {
+    margin: 0 !important;
+    margin-bottom: 10%;
+    margin-top: 85px !important;
+}
+.table-block {
+    display: flex;
+  overflow: auto;
+}
+.pricing-page table, .pricing-page table td {
+    border:none
+}
+
+.pricing-content {
+    margin-left: 40px;
+}
+
+.header-row
+{
+    border-bottom:2px solid #545454;
+}
+
+.pricing-page table tr td:first-child  {
+    border-right:2px solid #545454;
+}
+.pricing-page table tr td {
+    padding: 20px;
+}
+
+.rotate-txt {
+  width: 200px;
+    transform: rotate(271deg);
+    position: absolute;
+    top: 60%;
+    font-weight: bold;
+}
+.pricing-table-info {
+    margin-left: 15%;
+    //margin-bottom: 5%;
+    display: block;
+    margin-top: 5%;
+    font-weight: bold;
+}
+
+
+
 
 
 @media only screen and (max-width: 768px)  {
@@ -1430,4 +1476,12 @@ table th span {
     .sm-w151 {
         width: 151px;
     }
+
+  .pricing-content {
+    margin-left: 0;
+
+  }
+  .rotate-txt {
+    left: -80px;
+  }
 }
