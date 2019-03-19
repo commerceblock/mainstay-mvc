@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import LatestAttestation from '../LatestAttestation';
-import LatestCommitment from '../latestCommitment';
+import LatestCommitment from '../LatestCommitment';
 import MainstayInfo from '../MainstayInfo';
 import React, {Component} from 'react';
 import QueryString from 'query-string';
@@ -13,12 +13,10 @@ class Waiting extends Component {
         this.state = {
             value: QueryString.parse(location.search)
         }
-
     }
 
     render() {
         return (
-
             <div className="row" data-controller="homepageMempool">
                 <div className="col-md-12">
                     <div className="alert alert-danger ">
@@ -26,9 +24,8 @@ class Waiting extends Component {
                         id or commitment hash, for query: {this.state.value.query}
                     </div>
                 </div>
-
                 <MainstayInfo/>
-                <div className="col-md-6  home-left">
+                <div className="col-md-6 home-left">
                     <LatestAttestation/>
                     <LatestCommitment/>
                 </div>
@@ -42,15 +39,8 @@ const type_unknown = (<div>Page - Type Unknown</div>);
 const undefined = (<div>Page - Undefined</div>);
 
 class Search extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            page: <Waiting/>,
-        };
-    }
-
     componentDidMount() {
-        const {history, location} = this.props;
+        const { location } = this.props;
 
         const value = QueryString.parse(location.search);
 
@@ -60,15 +50,15 @@ class Search extends Component {
             Axios.get("/ctrl/type?value=" + value.query)
                 .then(response => {
                     if (response.data.response === 'commitment')
-                        this.props.history.replace(`/commitment/${value.query}`)
+                        this.props.history.replace(`/commitment/${value.query}`);
                     else if (response.data.response === 'merkle_root')
-                        this.props.history.replace(`/merkle_root/${value.query}`)
+                        this.props.history.replace(`/merkle_root/${value.query}`);
                     else if (response.data.response === 'position')
-                        this.props.history.replace(`/position/${value.query}`)
+                        this.props.history.replace(`/position/${value.query}`);
                     else if (response.data.response === 'txid')
-                        this.props.history.replace(`/tx/${value.query}`)
+                        this.props.history.replace(`/tx/${value.query}`);
                     else if (response.data.response === 'blockhash')
-                        this.props.history.replace(`/block/${value.query}`)
+                        this.props.history.replace(`/block/${value.query}`);
                     else if (response.data.response === 'type unknown')
                         this.setState({page: type_unknown()});
                     else
@@ -77,7 +67,7 @@ class Search extends Component {
     }
 
     render() {
-        return this.state.page;
+        return <Waiting />;
     }
 }
 

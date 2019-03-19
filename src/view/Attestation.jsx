@@ -36,7 +36,7 @@ class Attestation extends Component {
         return (
             <div className="column lastAttestationPage">
                 <div className="d-flex align-items-center">
-                    <h4>Attestations</h4>
+                    <span className="block-title">Attestations</span>
                 </div>
                 <div className="mb-3 flex-table latestAttestation">
                     <table width="100%">

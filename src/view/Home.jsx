@@ -1,5 +1,5 @@
 import LatestAttestation from './LatestAttestation';
-import LatestCommitment from './latestCommitment';
+import LatestCommitment from './LatestCommitment';
 import MainstayInfo from './MainstayInfo';
 import React from 'react';
 

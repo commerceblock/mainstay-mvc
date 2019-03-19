@@ -1350,14 +1350,9 @@ table th span {
 
 }
 
-.pricing-page {
-    margin: 0 !important;
-    margin-bottom: 10%;
-    margin-top: 85px !important;
-}
 .table-block {
     display: flex;
-  overflow: auto;
+    overflow: auto;
 }
 .pricing-page table, .pricing-page table td {
     border:none
@@ -1367,8 +1362,7 @@ table th span {
     margin-left: 40px;
 }
 
-.header-row
-{
+.header-row {
     border-bottom:2px solid #545454;
 }
 

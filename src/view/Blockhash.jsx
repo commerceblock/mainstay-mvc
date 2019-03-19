@@ -23,14 +23,14 @@ class Blockhash extends Component {
         }
         const { blockhash } = data;
         return (
-            <div className="row" data-controller="homepageMempool">
-                <span className="block-title">Block</span>
-                <span className="block-subtitle">Blockhash: {blockhash.blockhash}</span>
-                <table className="searchTable">
+            <div className="full-table" data-controller="homepageMempool">
+                <span className="block-title mb-0">Block</span>
+                <span className="block-subtitle hash truncate-hash h3"><strong>Blockhash:</strong> {blockhash.blockhash}</span>
+                <table className="full-table">
                     <tbody>
                     <tr>
                         <td>Txid</td>
-                        <td>{blockhash.txid}</td>
+                        <td><span className="hash truncate-hash">{blockhash.txid}</span></td>
                     </tr>
                     <tr>
                         <td>Amount</td>
