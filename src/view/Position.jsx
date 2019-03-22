@@ -1,5 +1,6 @@
 import Axios from "axios/index";
 import React, { Component } from "react";
+import { getRoute, routes } from "./routes";
 
 class Position extends Component {
     constructor(props) {
@@ -27,14 +28,13 @@ class Position extends Component {
                 <table className="main-firts-position searchTable">
                     <tbody>
                     <tr>
-                        <td>Client Name: {client_name}</td>
+                        <th>Client Name: {client_name}</th>
                     </tr>
                     <tr>
-                        <td>Position: {position[0].position}</td>
+                        <th>Position: {position[0].position}</th>
                     </tr>
                     </tbody>
                 </table>
-
                 <div className="commitments_title">
                     <h6 className="align-items-center">Commitments({position.length})</h6>
                 </div>
@@ -42,25 +42,36 @@ class Position extends Component {
                     <table className="main-second-position flex-table" width="100%">
                         <tbody>
                         <tr>
-                            <td>Commitment</td>
-                            <td colSpan="2"><span className="hash truncate-hash">{data.commitment}</span></td>
+                            <th colSpan="2">Commitment</th>
+                            <td colSpan="3">
+                                <a href={getRoute(routes.commitment, {value: data.commitment})}>
+                                    <span className="hash truncate-hash">{data.commitment}</span>
+                                </a>
+                            </td>
                         </tr>
                         <tr>
-                            <td>MerkleRoot</td>
-                            <td colSpan="2"><span className="hash truncate-hash">{data.merkle_root}</span></td>
+                            <th colSpan="2">MerkleRoot</th>
+                            <td colSpan="3">
+                                <a href={getRoute(routes.merkle, {value: data.merkle_root})}>
+                                    <span className="hash truncate-hash">{data.merkle_root}</span>
+                                </a>
+                            </td>
                         </tr>
                         <tr>
-                            <td rowSpan={data.ops.length + 1} className="tabelOpsName">ops</td>
+                            <th rowSpan={data.ops.length + 1} className="tabelOpsName">ops</th>
                         </tr>
                         {data.ops.map((op, i) =>
                             <tr>
                                 <td>{(op.append) ? 'true' : 'false'}</td>
-                                <td><span className="hash truncate-hash">{op.commitment}</span></td>
+                                <td>
+                                    <a href={getRoute(routes.commitment, {value: op.commitment})}>
+                                        <span className="hash truncate-hash">{op.commitment}</span>
+                                    </a>
+                                </td>
                             </tr>
                         )}
                         </tbody>
                     </table>
-
                 )}
             </div>
         );

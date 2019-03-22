@@ -1,5 +1,6 @@
 import Axios from "axios/index";
 import React, { Component } from "react";
+import { getRoute, routes } from "./routes";
 
 class Blockhash extends Component {
     constructor(props) {
@@ -26,19 +27,19 @@ class Blockhash extends Component {
             <div className="full-table" data-controller="homepageMempool">
                 <span className="block-title mb-0">Block</span>
                 <span className="block-subtitle hash truncate-hash h3"><strong>Blockhash:</strong> {blockhash.blockhash}</span>
-                <table className="full-table">
+                <table className="full-table" width="100%">
                     <tbody>
                     <tr>
-                        <td>Txid</td>
-                        <td><span className="hash truncate-hash">{blockhash.txid}</span></td>
+                        <th>Txid</th>
+                        <td><a href={getRoute(routes.transation, {value: blockhash.txid})}><span className="hash truncate-hash">{blockhash.txid}</span></a></td>
                     </tr>
                     <tr>
-                        <td>Amount</td>
+                        <th>Amount</th>
                         <td>{blockhash.amount} BTC</td>
                     </tr>
 
                     <tr>
-                        <td>Time</td>
+                        <th>Time</th>
                         <td>{blockhash.time}</td>
                     </tr>
                     </tbody>

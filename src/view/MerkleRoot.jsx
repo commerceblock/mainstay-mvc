@@ -34,7 +34,9 @@ class MerkleRoot extends Component {
                         <tbody>
                         <tr>
                             <th>TxID</th>
-                            <td><span className="hash truncate-hash">{txid}</span></td>
+                            <td><a href={getRoute(routes.transation, {value: txid})}>
+                                <span className="hash truncate-hash">{txid}</span></a>
+                            </td>
                         </tr>
                         <tr>
                             <th>Confirmed</th>

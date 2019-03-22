@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Axios from "axios";
 
 import NoResult from './NoResult';
+import { getRoute, routes } from "./routes";
 
 class Client extends Component {
     constructor(props) {
@@ -22,16 +23,16 @@ class Client extends Component {
         return (
             <div>
                 <div className="d-flex align-items-center">
-                    <h4>Clients</h4>
+                    <span className="block-title">Clients</span>
                 </div>
                 <div className="flex-table full-table col3">
                     {this.state.data ? (
                         <table width="100%">
                             <thead>
                             <tr>
-                                <td><span className="lh1rem mr-auto">Position</span></td>
-                                <td><span className="lh1rem mr-auto">Client name</span></td>
-                                <td><span className="lh1rem ">Latest Commitment</span></td>
+                                <th><span className="lh1rem mr-auto">Position</span></th>
+                                <th><span className="lh1rem mr-auto">Client name</span></th>
+                                <th><span className="lh1rem ">Latest Commitment</span></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -39,7 +40,11 @@ class Client extends Component {
                                 <tr key={data.position} className="mono">
                                     <td>{data.position}</td>
                                     <td><span className="hash truncate-hash">{data.client_name}</span></td>
-                                    <td><span className="hash truncate-hash">{data.commitment}</span></td>
+                                    <td>
+                                        <a href={getRoute(routes.commitment, {value: data.commitment || '/'})}>
+                                            <span className="hash truncate-hash">{data.commitment}</span>
+                                        </a>
+                                    </td>
                                 </tr>
                             ))}
                             </tbody>

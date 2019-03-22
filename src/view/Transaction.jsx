@@ -35,7 +35,11 @@ class Transaction extends Component {
                             <tbody>
                             <tr>
                                 <th>Merkle_root</th>
-                                <td colSpan="2"><span className="hash truncate-hash">{merkle_root}</span></td>
+                                <td colSpan="2">
+                                    <a href={getRoute(routes.merkle, {value: merkle_root})}>
+                                        <span className="hash truncate-hash">{merkle_root}</span>
+                                    </a>
+                                </td>
                             </tr>
                             <tr>
                                 <th>Confirmed</th>
@@ -51,7 +55,11 @@ class Transaction extends Component {
                             </tr>
                             <tr>
                                 <th>Blockhash</th>
-                                <td colSpan="2"><span className="hash truncate-hash">{blockhash}</span></td>
+                                <td colSpan="2">
+                                    <a href={getRoute(routes.block, {value: blockhash})}>
+                                        <span className="hash truncate-hash">{blockhash}</span>
+                                    </a>
+                                </td>
                             </tr>
                             </tbody>
                         </table>

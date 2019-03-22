@@ -1,5 +1,6 @@
 import Axios from "axios/index";
 import React, { Component } from "react";
+import { getRoute, routes } from "./routes";
 
 class Commitment extends Component {
     constructor(props) {
@@ -40,7 +41,11 @@ class Commitment extends Component {
                         </tr>
                         <tr>
                             <th>TxID</th>
-                            <td colSpan="2"><span className="hash truncate-hash">{txid}</span></td>
+                            <td colSpan="2">
+                                <a href={getRoute(routes.transation, {value: txid})}>
+                                    <span className="hash truncate-hash">{txid}</span>
+                                </a>
+                            </td>
                         </tr>
                         <tr>
                             <th>Confirmed</th>
@@ -52,7 +57,11 @@ class Commitment extends Component {
                         </tr>
                         <tr>
                             <th>MerkleRoot</th>
-                            <td colSpan="2"><span className="hash truncate-hash">{merkle_root}</span></td>
+                            <td colSpan="2">
+                                <a href={getRoute(routes.merkle, {value: merkle_root})}>
+                                    <span className="hash truncate-hash">{merkle_root}</span>
+                                </a>
+                            </td>
                         </tr>
                         <tr>
                             <th rowSpan={ops.length + 1} className="tabelOpsName">ops</th>
@@ -60,7 +69,11 @@ class Commitment extends Component {
                         {ops.map(({ commitment, append }) =>
                             <tr key={commitment}>
                                 <td>{`${!!append}`}</td>
-                                <td><span className="hash truncate-hash">{commitment}</span></td>
+                                <td>
+                                    <a href={getRoute(routes.commitment, {value: commitment})}>
+                                        <span className="hash truncate-hash">{commitment}</span>
+                                    </a>
+                                </td>
                             </tr>
                         )}
                         </tbody>

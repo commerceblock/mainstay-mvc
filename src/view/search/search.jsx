@@ -39,6 +39,13 @@ const type_unknown = (<div>Page - Type Unknown</div>);
 const undefined = (<div>Page - Undefined</div>);
 
 class Search extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            page: '',
+        };
+    }
+
     componentDidMount() {
         const { location } = this.props;
 
@@ -46,7 +53,7 @@ class Search extends Component {
 
         if (value.query === undefined)
             return this.setState({page: page_undefined});
-        if (/[0-9A-Fa-f]{64}/g.test(value.query) || /^\d+$/.test(value.query))
+        if (/[0-9A-Fa-f]{64}/g.test(value.query) || /^\d+$/.test(value.query)) {
             Axios.get("/ctrl/type?value=" + value.query)
                 .then(response => {
                     if (response.data.response === 'commitment')
@@ -63,11 +70,17 @@ class Search extends Component {
                         this.setState({page: type_unknown()});
                     else
                         this.setState({page: undefined()});
+                })
+                .catch(() => {
+                    this.setState({ page: <Waiting />});
                 });
+        } else {
+            this.setState({ page: <Waiting />});
+        }
     }
 
     render() {
-        return <Waiting />;
+        return this.state.page;
     }
 }
 
