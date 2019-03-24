@@ -36,11 +36,6 @@
     content: "\e900";
 }
 
-/* layout */
-.container.main {
-    padding-bottom: 40px;
-}
-
 /*fonts*/
 @font-face {
     font-weight: normal;
@@ -1245,10 +1240,6 @@ table th span {
     top: 0;
 }
 
-.main {
-    margin: 10px;
-}
-
 .main table {
     max-height: 70vh;
     overflow: auto;
@@ -1328,7 +1319,7 @@ table th span {
 }
 
 .commitments_title {
-    padding: 40px 0 10px;
+    padding-bottom: 10px;
 }
 
 .MerkleRootTable {
@@ -1345,9 +1336,7 @@ table th span {
 
 .privacy-page,
 .terms-page {
-    background: #Fff;
-    padding: 0 30px 30px 30px;
-
+    background: #fff;
 }
 
 .table-block {

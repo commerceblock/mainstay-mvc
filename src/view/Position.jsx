@@ -25,16 +25,8 @@ class Position extends Component {
         const { position, client_name } = data;
         return (
             <div className="full-table" data-controller="homepageMempool">
-                <table className="main-firts-position searchTable">
-                    <tbody>
-                    <tr>
-                        <th>Client Name: {client_name}</th>
-                    </tr>
-                    <tr>
-                        <th>Position: {position[0].position}</th>
-                    </tr>
-                    </tbody>
-                </table>
+                <span className="block-title">Client Name: {client_name}</span>
+                <span className="block-subtitle h3 hash truncate-hash"><strong>Position:</strong> {position[0].position}</span>
                 <div className="commitments_title">
                     <h6 className="align-items-center">Commitments({position.length})</h6>
                 </div>

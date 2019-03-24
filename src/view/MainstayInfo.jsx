@@ -10,7 +10,7 @@ const MainstayInfo = () => (
             <h3 className="mt-2">Mainstay</h3>
         </div>
         <div>
-            <div className="mb-3 col">
+            <div className="mb-3">
                 {/*<TotalSupplyCBT/>*/}
                 <PriceCBT/>
                 <LatestAttestationInfo/>
