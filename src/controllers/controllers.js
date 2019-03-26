@@ -624,7 +624,7 @@ module.exports = {
             if (data.length == 0)
                 return reply_err(res, 'No attestation found', startTime);
             let response = data[0];
-            models.attestationInfo.find({}, (error, data) => {
+            models.attestationInfo.find({txid: hash}, (error, data) => {
                 if (error)
                     return reply_err(res, INTERNAL_ERROR_API, startTime);
                 if (data.length == 0)
