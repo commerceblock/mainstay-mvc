@@ -628,21 +628,35 @@ module.exports = {
                 if (error)
                     return reply_err(res, INTERNAL_ERROR_API, startTime);
                 if (data.length == 0)
-                    return reply_err(res, 'No attestation info found', startTime);
-                reply_msg(res, {
-                    attestation: {
-                        merkle_root: response.merkle_root,
-                        txid: response.txid,
-                        confirmed: response.confirmed,
-                        inserted_at: dateFormat(response.inserted_at, "HH:MM:ss dd/mm/yy")
-                    },
-                    attestationInfo: {
-                        txid: data[0].txid,
-                        amount: data[0].amount / 100000000,
-                        blockhash: data[0].blockhash,
-                        time: data[0].time
-                    }
-                }, startTime);
+                    reply_msg(res, {
+                        attestation: {
+                            merkle_root: response.merkle_root,
+                            txid: response.txid,
+                            confirmed: response.confirmed,
+                            inserted_at: dateFormat(response.inserted_at, "HH:MM:ss dd/mm/yy")
+                        },
+                        attestationInfo: {
+                            txid: response.txid,
+                            amount: '',
+                            blockhash: '',
+                            time: ''
+                        }
+                    }, startTime);
+                else
+                    reply_msg(res, {
+                        attestation: {
+                            merkle_root: response.merkle_root,
+                            txid: response.txid,
+                            confirmed: response.confirmed,
+                            inserted_at: dateFormat(response.inserted_at, "HH:MM:ss dd/mm/yy")
+                        },
+                        attestationInfo: {
+                            txid: data[0].txid,
+                            amount: data[0].amount / 100000000,
+                            blockhash: data[0].blockhash,
+                            time: data[0].time
+                        }
+                    }, startTime);
             });
         });
     },
