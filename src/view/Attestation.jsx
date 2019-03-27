@@ -22,7 +22,7 @@ class Attestation extends Component {
     };
 
     fetchPage = (page) => {
-        const failedArg = '&failed=true' ? this.props.match.params?.value === 'showFailed' : '';
+        const failedArg = this.props.match.params?.value === 'showFailed' ? '&failed=true' : '';
 
         Axios.get(`/ctrl/latestattestation?page=${page}${failedArg}`)
             .then(response => this.setState({

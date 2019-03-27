@@ -9,14 +9,14 @@ import {
     Modal, ModalBody, ModalFooter, ModalHeader,
     Dropdown, DropdownMenu, DropdownToggle, DropdownItem,
 } from 'reactstrap';
-import {routes} from './routes';
+import { routes }from './routes';
 
 
 const options = [
-    {label: 'Position', name: 'position', hint: '0'},
-    {label: 'Token', name: 'token', hint: '4c8c006d-4cee-4fef-8e06-bb8112db6314'},
-    {label: 'Commitment', name: 'commitment', hint: '6a855c1c70849ed28eb51cffd808ccd4e45c4cdddfa17495ccf98856b2421b8e'},
-    {label: 'signature', name: 'signature', hint: '7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090'},
+    { label: 'Position', name: 'position', hint: '0' },
+    { label: 'Token', name: 'token', hint: '4c8c006d-4cee-4fef-8e06-bb8112db6314' },
+    { label: 'Commitment', name: 'commitment', hint: '6a855c1c70849ed28eb51cffd808ccd4e45c4cdddfa17495ccf98856b2421b8e' },
+    { label: 'signature', name: 'signature', hint: '7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090' },
 ];
 
 class Menu extends Component {
@@ -38,7 +38,7 @@ class Menu extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        const {position, token, commitment, signature} = this.state;
+        const { position, token, commitment, signature } = this.state;
         Axios.post('/ctrl/sendcommitment', {
             position,
             token,
@@ -68,16 +68,16 @@ class Menu extends Component {
     };
 
     toggle = () => {
-        this.setState({modal: !this.state.modal});
+        this.setState({ modal: !this.state.modal });
     };
 
     toggleMenu = () => {
-        this.setState({isMenuOpened: !this.state.isMenuOpened});
+        this.setState({ isMenuOpened: !this.state.isMenuOpened });
     };
 
     render() {
-        const {buttonLabel} = this.props;
-        const {modal, isMenuOpened} = this.state;
+        const { buttonLabel } = this.props;
+        const { modal, isMenuOpened } = this.state;
         return (
             <div className="clickable">
                 <Dropdown isOpen={isMenuOpened} toggle={this.toggleMenu} direction="left">
@@ -87,9 +87,9 @@ class Menu extends Component {
                         data-toggle="dropdown"
                         aria-expanded={isMenuOpened}
                     >
-                        <span className="patty"/>
-                        <span className="patty"/>
-                        <span className="patty short"/>
+                        <span className="patty" />
+                        <span className="patty" />
+                        <span className="patty short" />
                     </DropdownToggle>
                     <DropdownMenu>
                         <DropdownItem href={routes.home} className="menu no-underline" color="muted">
@@ -120,7 +120,7 @@ class Menu extends Component {
                     <ModalHeader toggle={this.toggle}>Send Commitment</ModalHeader>
                     <Form onSubmit={this.handleSubmit}>
                         <ModalBody>
-                            {options.map(({label, name, hint}) => (
+                            {options.map(({ label, name, hint }) => (
                                 <FormGroup key={name}>
                                     <Label>{label}</Label>
                                     <Input

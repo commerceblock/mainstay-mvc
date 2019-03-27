@@ -1,6 +1,6 @@
 import Axios from "axios/index";
-import React, { Component } from "react";
-import { getRoute, routes } from "./routes";
+import React, {Component} from "react";
+import {getRoute, routes} from "./routes";
 
 class Position extends Component {
     constructor(props) {
@@ -18,14 +18,15 @@ class Position extends Component {
     }
 
     render() {
-        const { data } = this.state;
+        const {data} = this.state;
         if (!data) {
             return 'Fail';
         }
-        const { position, client_name } = data;
+        const {position, client_name} = data;
         return (
             <div className="full-table" data-controller="homepageMempool">
-                <span className="block-title">Client Name: {client_name}</span>
+                <span className="block-title">Client</span>
+                <span className="block-subtitle h3 hash truncate-hash"><strong>Name:</strong> {client_name}</span>
                 <span className="block-subtitle h3 hash truncate-hash"><strong>Position:</strong> {position[0].position}</span>
                 <div className="commitments_title">
                     <h6 className="align-items-center">Commitments({position.length})</h6>
