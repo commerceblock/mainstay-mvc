@@ -1,28 +1,35 @@
-import Axios from "axios/index";
+import Axios from "axios";
 import React, { Component } from "react";
 import { getRoute, routes } from "./routes";
+import NotFound from "./NotFound";
 
 class Commitment extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data: null,
+            isReady: false,
         };
     }
 
     componentDidMount() {
         Axios.get("/api/v1/commitment/commitment?commitment=" + this.props.match.params.value)
             .then(({ data }) => {
-                if (data) {
+                if (data?.response) {
                     this.setState({ data: data.response });
                 }
+                this.setState({ isReady: true });
             });
     }
 
     render() {
-        const { data } = this.state;
+        const { isReady, data } = this.state;
+        if (!isReady) {
+            return null;
+        }
         if (!data) {
-            return 'Fail';
+            const errorMessage = `A commitment with ${this.props.match.params.value} id does not exist`;
+            return <NotFound message={errorMessage} />
         }
         const { 
             merkleproof: { commitment, position, merkle_root, ops },

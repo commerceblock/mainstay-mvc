@@ -50,22 +50,16 @@ class Transaction extends Component {
                                 <td colSpan="2">{inserted_at}</td>
                             </tr>
                             <tr>
-                                <th>Amount</th>
+                                <th>Amount at</th>
                                 <td>{amount}</td>
                             </tr>
                             <tr>
                                 <th>Blockhash</th>
-                                {blockhash && blockhash != "" ? (
-                                    <td colSpan="2">
-                                        <a href={getRoute(routes.block, {value: blockhash})}>
-                                            <span className="hash truncate-hash">{blockhash}</span>
-                                        </a>
-                                    </td>
-                                ) : (
-                                    <td colSpan="2">
-                                        <span className="hash truncate-hash"></span>
-                                    </td>
-                                )}
+                                <td colSpan="2">
+                                    <a href={getRoute(routes.block, {value: blockhash})}>
+                                        <span className="hash truncate-hash">{blockhash}</span>
+                                    </a>
+                                </td>
                             </tr>
                             </tbody>
                         </table>

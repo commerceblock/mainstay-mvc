@@ -1,6 +1,7 @@
 import Axios from 'axios';
 import React, { Component } from 'react';
 import Pagination from "react-js-pagination";
+import PageSpinner from './PageSpinner'
 
 class Attestation extends Component {
     constructor(props) {
@@ -34,6 +35,7 @@ class Attestation extends Component {
 
     render() {
         return (
+            <PageSpinner delay={100}>
             <div className="column lastAttestationPage">
                 <div className="d-flex align-items-center">
                     <span className="block-title">Attestations</span>
@@ -92,6 +94,7 @@ class Attestation extends Component {
                     />
                 </div>
             </div>
+            </PageSpinner>
         );
     }
 }
