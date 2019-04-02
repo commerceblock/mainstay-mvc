@@ -15,7 +15,7 @@ const OPEN = 'open';
 function connect_mongo() {
   let url = 'mongodb://';
   if (env.db.user && env.db.password)
-    url += env.db.user + ':' + env.db.password
+    url += env.db.user + ':' + env.db.password;
   url = url + '@' + env.db.address + ':' + env.db.port + '/' + env.db.database;
   mongoose.connect(url, { useNewUrlParser: true });
   return mongoose.connection;

@@ -4,6 +4,11 @@
     font-weight: normal;
     font-style: normal;
 }
+/*fonts*/
+@font-face {
+  font-weight: normal;
+  font-style: normal;
+}
 
 [class^="dcricon-"],
 [class*=" dcricon-"] {
@@ -36,38 +41,33 @@
     content: "\e900";
 }
 
-/*fonts*/
-@font-face {
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-weight: normal;
-    font-style: normal;
-}
-
 /*elements*/
-html {
-    color: #052f4b;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased !important;
-    -moz-font-smoothing: antialiased !important;
-    text-rendering: optimizelegibility !important;
-    padding: 0;
-    margin: 0;
-}
+//html {
+//    color: #052f4b;
+//    -moz-osx-font-smoothing: grayscale;
+//    -webkit-font-smoothing: antialiased !important;
+//    -moz-font-smoothing: antialiased !important;
+//    text-rendering: optimizelegibility !important;
+//}
 
 .mono {
     font-family: 'inconsolata-v15-latin-regular';
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  //min-height: 30px;
+  //padding-bottom: 2.1rem;
+}
+
+body, html {
+   min-height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 a {
-    color: #2e75ff;
+    color: #052f4b;;
 }
 
 h4 {
@@ -90,7 +90,7 @@ body.theme-testnet .top-search {
     color: #fff;
 }
 
-body.theme-testnet #menuToggle .patty {
+body.theme-testnet .patty {
     background: #fff;
 }
 
@@ -110,10 +110,9 @@ body.theme-simnet .navbar-fixed-bottom .nav-item {
     color: #fff;
 }
 
-body.theme-simnet #menuToggle .patty {
+body.theme-simnet .patty {
     background: #fff;
 }
-
 
 /*dark theme*/
 body.darkBG {
@@ -132,7 +131,7 @@ body.darkBG .table thead th {
 
 body.darkBG .flex-table .header,
 body.darkBG .table thead tr {
-    background: #2d2d2d ;
+    background: #2d2d2d !important;
 }
 
 body.darkBG .flex-table .flex-table-row,
@@ -142,7 +141,7 @@ body.darkBG .table tr {
 }
 
 .table.no-border tr {
-    border-bottom: none ;
+    border-bottom: none !important;
 }
 
 body.darkBG .top-nav,
@@ -183,11 +182,11 @@ body.darkBG .navbar-fixed-bottom .nav-item {
     color: #dcdcdc;
 }
 
-body.darkBG #menuToggle .patty {
+body.darkBG .patty {
     background: #fdfdfd;
 }
 
-body.darkBG #menuToggle input:checked~.patty {
+body.darkBG input:checked~.patty {
     background: #fbfbfb;
 }
 
@@ -201,13 +200,19 @@ body.darkBG #hamburger-menu a:hover {
 
 body.darkBG #menu {
     background: #2a2a2a;
-    box-shadow: 0px 0px 0px 1px #ffffff33;
+    box-shadow: 0 0 0 1px #ffffff33;
 }
 
 body.darkBG .progress {
     background-color: #757575;
 }
 
+.darkBG select,
+.darkBG input[type=number] {
+    color: #fff !important;
+    background: #2a2a2a !important;
+    border-color: #191919 !important;
+}
 
 .darkBG .nav-pills .nav-link.active {
     background-color: #2DD8A3;
@@ -262,9 +267,44 @@ body.darkBG .progress {
 }
 
 .color-inherit {
-    color: inherit ;
+    color: inherit !important;
 }
 
+.fs11 {
+    font-size: 11px !important;
+}
+
+.fs12 {
+    font-size: 12px !important;
+}
+
+.fs13 {
+    font-size: 13px !important;
+}
+
+.fs14 {
+    font-size: 14px !important;
+}
+
+.fs15 {
+    font-size: 15px !important;
+}
+
+.fs16 {
+    font-size: 16px !important;
+}
+
+.fs18 {
+    font-size: 18px !important;
+}
+
+.fs24 {
+    font-size: 24px !important;
+}
+
+.fs28 {
+    font-size: 28px !important;
+}
 
 .no-underline,
 .no-underline:hover {
@@ -283,6 +323,9 @@ body.darkBG .progress {
     line-height: 1rem;
 }
 
+.lh2rem {
+    line-height: 2rem;
+}
 .h2rem {
     height: 2rem;
 }
@@ -316,17 +359,15 @@ body.darkBG .progress {
 }
 
 /*nav*/
-.top-nav,
 .navbar-fixed-bottom {
-
+    position: fixed;
     background: #3B3F45;
     z-index: 1000;
 }
 
 .top-nav {
-    position: relative;
     width: 100%;
-    height: auto;
+    top: 0;
     background: #fff;
 }
 
@@ -347,33 +388,24 @@ body.darkBG .progress {
     top: 1px;
     position: relative;
 }
-.menu-bar {
-    position: fixed;
-    width: 100%;
-    background: #fff;
-    top: 0;
-    display: block;
-    z-index: 1;
-    box-shadow: 0 0px 22px 0 rgba(115, 124, 132, 0.3)
-}
 
 .top-search {
     height: 30px;
-    margin: 2px 0 2px 2px ;
-    border-top: 0px;
-    border-left: 0px;
-    border-right: 0px;
-    border-radius: 0px;
-    background: transparent ;
+    margin: 2px 0 2px 2px !important;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    background: transparent !important;
 }
 
 #hamburger-menu {
     flex: 0 40px;
     z-index: 10;
     width: 100%;
-    top: 0px;
-    right: 0px;
-    left: 0px;
+    top: 0;
+    right: 0;
+    left: 0;
 }
 
 #hamburger-menu a {
@@ -405,12 +437,12 @@ body.darkBG .progress {
     left: -14px;
     cursor: pointer;
     opacity: 0;
-    padding: 0px;
+    padding: 0;
     z-index: 2;
     -webkit-touch-callout: none;
 }
 
-#menuToggle .patty {
+.patty {
     display: block;
     width: 20px;
     height: 2px;
@@ -427,25 +459,25 @@ body.darkBG .progress {
         opacity 0.55s ease;
 }
 
-#menuToggle .patty.short {
+.patty.short {
     width: 14px;
 }
 
-#menuToggle .patty :first-child {
+.patty :first-child {
     transform-origin: top right;
 }
 
-#menuToggle .patty :nth-last-child(2) {
+.patty :nth-last-child(2) {
     transform-origin: bottom right;
 }
 
-#menuToggle input:checked~.patty {
+input:checked~.patty {
     opacity: 1;
     background: #232323;
     transform: rotate(-45deg) translate(0px, -2px) scale(1.1, 1.1);
 }
 
-#menuToggle input:checked~.patty.short {
+input:checked~.patty.short {
     width: 20px;
 }
 
@@ -460,8 +492,8 @@ body.darkBG .progress {
 #menu {
     position: absolute;
     width: 273px;
-    margin: -67px 0 0 -243px;
-    padding: 20px 0px;
+    margin: -47px 0 0 -243px;
+    padding: 20px 0;
     padding-top: 42px;
     background: #fff;
     list-style-type: none;
@@ -469,7 +501,7 @@ body.darkBG .progress {
     transform-origin: 0% 0%;
     transform: translate(0, -100%);
     transition: transform 0.33s cubic-bezier(0.77, 0.2, 0.05, 1.0);
-    box-shadow:0 10px 22px 0 rgba(115, 124, 132, 0.3);
+    box-shadow: 0 0 0 1px #0000001a;
 }
 
 #menu a {
@@ -503,10 +535,8 @@ body.darkBG .progress {
 
 .navbar-fixed-bottom {
     position: fixed;
-    padding: 10px;
     bottom: 0;
     width: 100%;
-    border-top: 1px solid #ddd;
 
     .nav-item {
         color: #3c4044;
@@ -551,7 +581,7 @@ body.darkBG .progress {
 }
 
 .table thead tr {
-    background: #fff ;
+    background: #fff !important;
     border-bottom: 1px solid #e2e2e2;
 }
 
@@ -567,7 +597,7 @@ body.darkBG .progress {
 }
 
 .table.flush-left tr td:first-child {
-    padding-left: 0px;
+    padding-left: 0;
 }
 
 .table-mono-cells td {
@@ -628,7 +658,7 @@ body.darkBG .progress {
     line-height: 11px;
     opacity: 0.8;
     font-weight: bold;
-    letter-spacing: 0px;
+    letter-spacing: 0;
 }
 
 .dcr-total .total-text .d-block {
@@ -785,15 +815,28 @@ body.darkBG .keynav-target {
     }
 }
 
-
+/*responsive*/
+@media only screen and (max-width: 992px) {
+    // .container {
+    //   max-width: 100% !important;
+    // }
+}
 
 .container {
-    max-width: 100%;
+    max-width: 96% !important;
 }
 
 
 
+@media only screen and (max-width: 576px) {
+    .xs-w91 {
+        width: 91px !important;
+    }
 
+    .xs-w117 {
+        width: 117px;
+    }
+}
 
 /*socket connection*/
 /* Notice: Portions of the connection indicator style come from html5rocks.com */
@@ -846,13 +889,13 @@ body.darkBG .keynav-target {
 
 #connection.connected div {
     background-color: #63df1e;
-    -webkit-box-shadow: rgba(0, 255, 0, 0.5) 0px 0px 5px;
+    -webkit-box-shadow: rgba(0, 255, 0, 0.5) 0 0 5px;
     -webkit-animation-name: glowGreen;
 }
 
 #connection.disconnected div {
     background-color: red;
-    -webkit-box-shadow: rgba(255, 0, 0, 0.5) 0px 0px 5px;
+    -webkit-box-shadow: rgba(255, 0, 0, 0.5) 0 0 5px;
     -webkit-animation-name: glowRed;
 }
 
@@ -866,7 +909,7 @@ body.darkBG .keynav-target {
     color: #fff;
     height: 20px;
     line-height: 20px;
-    text-shadow: 1px 1px 0px #00000012;
+    text-shadow: 1px 1px 0 #00000012;
 }
 
 /*bootstrap overrides*/
@@ -875,23 +918,22 @@ body.darkBG .keynav-target {
     border-radius: 2px;
 }
 
-#menu .menu {
-    display: block ;
+.menu {
+    display: block !important;
     background-color: transparent;
     color: #212529;
-    box-shadow: 0px 0px 2px #0003;
-    margin: 10px ;
+    margin: 10px !important;
     text-align: left;
     width: 170px;
-    font-size: 17px ;
+    font-size: 17px !important;
     outline: none;
 }
 
-#menu .menu:hover,
-#menu .menu:focus {
+.menu:hover,
+.menu:focus {
     font-weight: bold;
     outline: none;
-    color: #212529 ;
+    color: #212529 !important;
 }
 
 .btn-primary {
@@ -1075,29 +1117,39 @@ table td a {
 }
 
 td .lastCommitement {
-    width: 40vw ;
+    width: 30vw !important;
 }
 
 table th span {
     margin-left: 10px;
-    margin-right: 10px ;
+    margin-right: 10px !important;
 }
 
 .latestAttestation {
     margin-top: 0;
+    height: 30vh;
+    overflow: auto;
+}
+
+.mb-3,
+.my-3 {
+    margin-bottom: 0.7rem !important;
+}
+
+.LatestCommitment {
     height: 27vh;
     overflow: auto;
 }
 
-
-
-.LatestCommitment {
-    height: 26vh;
-    overflow: auto;
+.column {
+    height: 46vh;
 }
 
-.column {
-    height: 42vh;
+.overflow-auto {
+    overflow: auto;
+}
+.height-60 {
+    height: 72vh;
 }
 
 .input-group>.custom-file,
@@ -1105,16 +1157,10 @@ table th span {
 .input-group>.form-control {
     font-style: italic;
 }
-.clientsPage .lastAttestationPage .latestAttestation {
-    height: 60vh;
-}
-.lastAttestationPage .latestAttestation.body-table {
-    height: 52vh;
-}
 
 .form-control:focus {
 
-    box-shadow: none ;
+    box-shadow: none !important;
 }
 
 .latestAttestation table th,
@@ -1157,7 +1203,6 @@ table th span {
     border: 1px solid #ddd;
 }
 
-
 .success .swal-button {
     background-color: #fff;
     border: 1px solid #3c763d;
@@ -1180,32 +1225,26 @@ table th span {
 
 .lastAttestationPage {
     width: 100%;
+    margin-top: 10px;
+
 }
 
+.lastAttestationPage .latestAttestation {
+    height: auto !important;
+}
 
-.main {
-    margin-top: 40px;
-
+.lastAttestationPage .head-table table {
+    top: 0;
 }
 
 .main table {
     max-height: 70vh;
     overflow: auto;
+}
 
-}
-.position-main {
-    padding-bottom: 50px;
-}
 .main table td {
     padding: 5px;
 }
-table.main-second-position {
-    padding-bottom: 50px;
-}
-.main-second-position.searchTable {
-    max-height: 50vh;
-}
-
 
 .block-title {
     display: block;
@@ -1224,11 +1263,9 @@ table.main-second-position {
     margin-bottom: 20px;
 }
 
-.position-main .searchTable.main-firts-position td {
-    border: none ;
-    font-size: 20px ;
-
-
+.main-firts-position td {
+    border: none !important;
+    font-size: 20px !important;
 }
 
 .main-second-position-block {
@@ -1248,14 +1285,13 @@ table.main-second-position {
 }
 
 .searchTable tr td:first-child {
-    text-align: left ;
-
+    text-align: left !important;
 }
 
-
 .searchTable tr td:last-child {
+    text-align: right;
     font-size: 13px;
-
+    padding-left: 15px;
 }
 
 .block-subtitle {
@@ -1267,21 +1303,24 @@ table.main-second-position {
     text-align: left;
 }
 
+.secondTableOps {
+    border: 1px solid #ddd !important;
+    border-bottom: none;
+}
 
-
-.main-second-position .main-second-position-block .tabelOpsName {
+.tabelOpsName {
     width: 160px;
-    font-size: 20px ;
-    text-align: center ;
+    font-size: 20px !important;
+    text-align: center !important;
     margin: auto;
 }
 
 .commitments_title {
-    padding: 40px 0 10px;
+    padding: 30px 0 10px 0;
 }
 
-.main-second-position.MerkleRootTable {
-    max-height: 42vh ;
+.MerkleRootTable {
+    max-height: 45vh !important;
 }
 
 .MerkleRootTable tbody {
@@ -1294,86 +1333,53 @@ table.main-second-position {
 
 .privacy-page,
 .terms-page {
-    background: #Fff;
-    padding: 60px;
-
+    background: #fff;
+    padding-bottom: 50px;
 }
 
-.container.main {
-    margin:-1px 3%;
+.table-block {
+    display: flex;
+    overflow: auto;
 }
-
-.container.main.homepage {
-    margin:0;
-}
-.pricing-page {
-    margin-top: 95px !important;
-}
-
-.pricing-page {
-    margin-bottom: 10%;
-}
-
 .pricing-page table, .pricing-page table td {
     border:none
 }
 
-.header-row
-{
+.pricing-content {
+    margin-left: 40px;
+}
+
+.header-row {
     border-bottom:2px solid #545454;
 }
+
 .pricing-page table tr td:first-child  {
     border-right:2px solid #545454;
 }
 .pricing-page table tr td {
     padding: 20px;
 }
-.pricing-page table {
-    margin:auto;
-}
 
 .rotate-txt {
+  width: 200px;
     transform: rotate(271deg);
     position: absolute;
-    margin-top: 230px;
-    margin-left: -100px;
+    top: 60%;
     font-weight: bold;
 }
-
 .pricing-table-info {
+    margin-left: 15%;
     //margin-bottom: 5%;
-    margin-top: -30px;
-    margin-left: 200px;
     display: block;
+    margin-top: 5%;
     font-weight: bold;
 }
 
-.table-block {
-    text-align: center;
-    margin-bottom: 60px;
-}
-.table {
-    width: 95%;
-    overflow: auto;
-    margin-top: 70px;
-}
 
-.table th {
-    position: absolute;
-}
 
-/*responsive*/
+
 
 @media only screen and (max-width: 768px)  {
-    .menu-bar {
-        left: 0;
-    }
-    .rotate-txt {
-        margin-left: -95px;
-    }
-    .pricing-table-info {
-        margin-left: 55px;
-    }
 
     .footer-content {
         position: relative;
@@ -1381,7 +1387,7 @@ table.main-second-position {
     .privacy-page, .terms-page {
         margin-bottom: -42px;
     }
-    .footer-content .top-nav, .navbar-fixed-bottom {
+    .navbar-fixed-bottom {
         position: fixed;
     }
     .navbar-fixed-bottom {
@@ -1392,12 +1398,11 @@ table.main-second-position {
 
     }
     .lastAttestationPage {
-        height: auto ;
+        height: auto !important;
         margin-bottom: 90px;
     }
     #menu {
         padding-top: 18px;
-        margin: -67px 0 0 -222px;
     }
 
     .table {
@@ -1407,7 +1412,7 @@ table.main-second-position {
 
     .sm-fullwidth {
         width: 100%;
-        max-width: 100% ;
+        max-width: 100% !important;
     }
 
     .sm-w151 {
@@ -1420,21 +1425,26 @@ table.main-second-position {
     .navbar-fixed-bottom .nav-item {
         display: block;
     }
-    .top-nav, .navbar-fixed-bottom {
-        position: absolute;
-        padding: 10px;
-        padding-top: 0;
-    }
-    .pricing-table-info
 
     .block-subtitle {
         padding-left: 20px;
         overflow: hidden;
         padding-right: 20px;
     }
-    .flex-table .lh1rem.ml-1 {
+    .flex-table .lh1rem {
         width: 30%;
         overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .full-table .hash.truncate-hash {
+        width: 40vw;
+    }
+    .full-table .h3 {
+        width: 70vw !important;
+    }
+    .full-table.col3 .hash.truncate-hash {
+        width: 35vw;
     }
     .table {
         margin-bottom: 0;
@@ -1442,13 +1452,17 @@ table.main-second-position {
     }
     .sm-fullwidth {
         width: 100%;
-        max-width: 100% ;
+        max-width: 100% !important;
     }
     .sm-w151 {
         width: 151px;
     }
 
+  .pricing-content {
+    margin-left: 0;
 
-
+  }
+  .rotate-txt {
+    left: -80px;
+  }
 }
-

@@ -38,11 +38,11 @@ class PriceCBT extends Component {
 
   render() {
     return (
-      <div class="mb-3 flex-table">
-        <div class="d-flex justify-content-end header">
-          <span class="lh1rem mr-auto">Price</span>
-          <span class="lh1rem text-right ml-1">{this.state.priceCBT} $</span>
-        </div>
+      <div className="mb-3 flex-table">
+          <div className="d-flex justify-content-end header">
+              <span className="lh1rem mr-auto">Price</span>
+              <span className="lh1rem text-right ml-1">{this.state.priceCBT} $</span>
+          </div>
       </div>
     );
   }
