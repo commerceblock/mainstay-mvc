@@ -1,26 +1,35 @@
-import Axios from "axios/index";
+import Axios from "axios";
 import React, { Component } from "react";
-import { getRoute, routes } from "./routes";
+import NotFound from './NotFound';
+import { getRoute, routes } from './routes';
 
 class Blockhash extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data: null,
+            isReady: false,
         }
     }
 
     componentDidMount() {
         Axios.get("/api/v1/blockhash?hash=" + this.props.match.params.value)
-            .then(({data}) => {
-                this.setState({data: data.response})
+            .then(({ data, error }) => {
+                if (data?.response) {
+                    this.setState({ data: data.response, isReady: true });
+                }
+                this.setState({ isReady: true });
             });
     }
 
     render() {
-        const { data } = this.state;
+        const { isReady, data } = this.state;
+        if (!isReady) {
+            return null;
+        }
         if (!data) {
-            return 'Fail';
+            const errorMessage = `A block with ${this.props.match.params.value} hash does not exist`;
+            return <NotFound message={errorMessage} />;
         }
         const { blockhash } = data;
         return (

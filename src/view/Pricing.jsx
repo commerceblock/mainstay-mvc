@@ -5,7 +5,7 @@ const Pricing = () => (
             <div className="pricing-heading">
                 <span className="block-title mb-0">Pricing</span>
             </div>
-            <div className='pricing-content'>
+            <div className='mb-4 pricing-content'>
                 <h4>Fees</h4>
                 <div className="col-lg-12">
                     <p>Our main objective is to provide you with a transparent pricing structure. We only

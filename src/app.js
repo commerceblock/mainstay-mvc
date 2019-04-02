@@ -8,14 +8,14 @@ const app = express();
 const api = require('./routes/api').api;
 const ctrl = require('./routes/ctrl').ctrl;
 
-
+u
 const ERROR = 'error';
 const OPEN = 'open';
 
 function connect_mongo() {
   let url = 'mongodb://';
   if (env.db.user && env.db.password)
-    url += env.db.user + ':' + env.db.password
+    url += env.db.user + ':' + env.db.password;
   url = url + '@' + env.db.address + ':' + env.db.port + '/' + env.db.database;
   mongoose.connect(url, { useNewUrlParser: true });
   return mongoose.connection;

@@ -2,9 +2,9 @@ import React from 'react';
 import { Route, Redirect, BrowserRouter } from 'react-router-dom';
 import { routes } from './routes';
 import Logo from './Logo';
-import FooterPage from './Footer';
+import Footer from './Footer';
 import Menu from './Menu';
-import Navbar from './navbar';
+import Navbar from './Navbar';
 import Client from "./Client";
 import PrivacyPolicy from "./PrivacyPolicy";
 import Commitment from './Commitment';
@@ -48,7 +48,7 @@ const Root = () => (
                 <Route path={routes.terms} component={TermsConditions} />
                 <Route path={routes.pricing} component={Pricing} />
             </div>
-            <FooterPage/>
+            <Footer/>
         </div>
     </BrowserRouter>
 );

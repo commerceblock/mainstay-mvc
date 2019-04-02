@@ -27,9 +27,11 @@ class LatestAttestation extends Component {
               <div className="mb-3 flex-table latestAttestation head-table">
                   <table width="100%">
                       <thead>
-                      <th><span className="lh1rem mr-auto">Txid</span></th>
-                      <th><span className="lh1rem mr-auto">MerkleRoot</span></th>
-                      <th><span className="lh1rem mr-auto">Date</span></th>
+                          <tr>
+                              <th><span className="lh1rem mr-auto">Txid</span></th>
+                              <th><span className="lh1rem mr-auto">MerkleRoot</span></th>
+                              <th><span className="lh1rem mr-auto">Date</span></th>
+                          </tr>
                       </thead>
                   </table>
               </div>
@@ -37,7 +39,7 @@ class LatestAttestation extends Component {
                   <table width="100%">
                       <tbody>
                       {this.state.data.map(({ txid, merkle_root, age }) =>
-                          <tr>
+                          <tr key={txid}>
                               <td>
                                   <a className="hash truncate-hash keyboard-target"
                                      href={`/tx/${txid}`}

@@ -13,10 +13,10 @@ class Commitment extends Component {
     }
 
     componentDidMount() {
-        Axios.get("/api/v1/commitment/commitment?commitment=" + this.props.match.params.value)
+        Axios.get(`/api/v1/commitment/commitment?commitment=${this.props.match.params.value}`)
             .then(({ data }) => {
                 if (data?.response) {
-                    this.setState({ data: data.response });
+                    this.setState({ data: data.response, isReady: true });
                 }
                 this.setState({ isReady: true });
             });
@@ -29,7 +29,7 @@ class Commitment extends Component {
         }
         if (!data) {
             const errorMessage = `A commitment with ${this.props.match.params.value} id does not exist`;
-            return <NotFound message={errorMessage} />
+            return <NotFound message={errorMessage} />;
         }
         const { 
             merkleproof: { commitment, position, merkle_root, ops },

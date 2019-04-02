@@ -1,28 +1,36 @@
 import Axios from "axios";
 import React, { Component } from "react";
+import NotFound from './NotFound';
 import { routes, getRoute } from "./routes";
+
 
 class MerkleRoot extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data: null,
+            isReady: false,
         };
     }
 
     componentDidMount() {
-        Axios.get("/api/v1/merkleroot?merkle_root=" + this.props.match.params.value)
+        Axios.get(`/api/v1/merkleroot?merkle_root=${this.props.match.params.value}`)
             .then(({ data, error }) => {
                 if (data) {
                     this.setState({ data: data.response });
                 }
+                this.setState({ isReady: true });
             });
     }
 
     render() {
-        const { data } = this.state;
+        const { isReady, data } = this.state;
+        if (!isReady) {
+            return null;
+        }
         if (!data) {
-            return 'Fail';
+            const errorMessage = `A merkle Root with ${this.props.match.params.value} id does not exist`;
+            return <NotFound message={errorMessage} />;
         }
         const { attestation: { txid, merkle_root, confirmed, inserted_at }, merkle_commitment } = data;
         return (

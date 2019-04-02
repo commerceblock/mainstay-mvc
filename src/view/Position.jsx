@@ -1,5 +1,6 @@
-import Axios from "axios/index";
-import React, { Component } from "react";
+import Axios from 'axios';
+import React, { Component } from 'react';
+import NotFound from './NotFound';
 import { getRoute, routes } from "./routes";
 
 class Position extends Component {
@@ -7,32 +8,43 @@ class Position extends Component {
         super(props);
         this.state = {
             data: null,
+            isReady: false,
         };
     }
 
     componentWillMount() {
         Axios.get("/api/v1/position?position=" + this.props.match.params.value)
-            .then(({data}) => {
-                this.setState({data: data.response})
+            .then(({ data }) => {
+                if (data?.response) {
+                    this.setState({ data: data.response, isReady: true });
+                }
+                this.setState({ isReady: true });
             });
     }
 
     render() {
-        const { data } = this.state;
+        const { isReady, data } = this.state;
+        if (!isReady) {
+            return null;
+        }
         if (!data) {
-            return 'Fail';
+            const errorMessage = `A position with ${this.props.match.params.value} id does not exist`;
+            return <NotFound message={errorMessage} />;
         }
         const { position, client_name } = data;
         return (
             <div className="full-table" data-controller="homepageMempool">
-                <span className="block-title">Client</span>
-                <span className="block-subtitle h3 hash truncate-hash"><strong> Name:</strong> {client_name}</span>
+                <span className="block-title">Client Name: {client_name}</span>
                 <span className="block-subtitle h3 hash truncate-hash"><strong>Position:</strong> {position[0].position}</span>
                 <div className="commitments_title">
-                    <h5 className="align-items-center">Commitments({position.length})</h5>
+                    <h6 className="align-items-center">Commitments({position.length})</h6>
                 </div>
-                {position.map((data) =>
-                    <table className="main-second-position flex-table" width="100%">
+                {position.map((data, index) =>
+                    <table
+                        key={`position-${index}-${data.position}`}
+                        className="main-second-position flex-table"
+                        width="100%"
+                    >
                         <tbody>
                         <tr>
                             <th colSpan="2">Commitment</th>
@@ -54,7 +66,7 @@ class Position extends Component {
                             <th rowSpan={data.ops.length + 1} className="tabelOpsName">ops</th>
                         </tr>
                         {data.ops.map((op, i) =>
-                            <tr>
+                            <tr key={`ops${i}`}>
                                 <td>{(op.append) ? 'true' : 'false'}</td>
                                 <td>
                                     <a href={getRoute(routes.commitment, {value: op.commitment})}>

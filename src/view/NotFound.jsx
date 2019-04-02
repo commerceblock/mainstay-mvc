@@ -5,7 +5,7 @@ import history from './app.history';
 
 const NotFound = ({ message }) => (
     <div className="col-md-12">
-        <div className="alert alert-danger ">
+        <div className="alert alert-danger">
             {message}
         </div>
         <div className="text-center">

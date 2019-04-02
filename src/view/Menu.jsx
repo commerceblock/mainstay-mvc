@@ -95,7 +95,7 @@ class Menu extends Component {
                         <DropdownItem href={routes.home} className="menu no-underline" color="muted">
                             Home {buttonLabel}
                         </DropdownItem>
-                        <DropdownItem href={routes.attestation} className="menu no-underline" color="muted">
+                        <DropdownItem href="/attestation" className="menu no-underline" color="muted">
                             Attestations {buttonLabel}
                         </DropdownItem>
                         <DropdownItem tag="a" href={routes.client} className="menu no-underline" color="muted">

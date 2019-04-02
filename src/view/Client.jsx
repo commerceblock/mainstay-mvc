@@ -14,19 +14,26 @@ class Client extends Component {
 
     componentDidMount() {
         Axios.get('/api/v1/clients')
-            .then(response => {
-                this.setState({data: response.data});
+            .then(({data}) => {
+                if (!!data) {
+                    this.setState({ data, isReady: true });
+                }
+                this.setState({ isReady: true });
             });
     }
 
     render() {
+        const { isReady, data } = this.state;
+        if (!isReady) {
+            return null;
+        }
         return (
-            <div>
+            <div className="column">
                 <div className="d-flex align-items-center">
                     <span className="block-title">Clients</span>
                 </div>
-                <div className="flex-table full-table col3">
-                    {this.state.data ? (
+                <div className="mb-5 flex-table full-table col3">
+                    {data ? (
                         <table width="100%">
                             <thead>
                             <tr>
@@ -36,7 +43,7 @@ class Client extends Component {
                             </tr>
                             </thead>
                             <tbody>
-                            {this.state.data.map(data => (
+                            {data.map(data => (
                                 <tr key={data.position} className="mono">
                                     <td>{data.position}</td>
                                     <td><span className="hash truncate-hash">{data.client_name}</span></td>

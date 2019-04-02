@@ -27,8 +27,10 @@ class LatestCommitment extends Component {
                 <div className="mb-3 flex-table LatestCommitment head-table">
                     <table width="100%">
                         <thead>
-                        <th><span className="lh1rem">Position</span></th>
-                        <th><span className="lh1rem">Commitment</span></th>
+                            <tr>
+                                <th><span className="lh1rem">Position</span></th>
+                                <th><span className="lh1rem">Commitment</span></th>
+                            </tr>
                         </thead>
                     </table>
                 </div>
@@ -36,7 +38,7 @@ class LatestCommitment extends Component {
                     <table width="100%">
                         <tbody>
                         {this.state.data.map(data =>
-                            <tr>
+                            <tr key={data.commitment}>
                                 <td>
                                     <span className="lastCommitement mono text-right ml-1">
                                       {data.position}

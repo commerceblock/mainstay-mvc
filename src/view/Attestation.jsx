@@ -10,7 +10,8 @@ class Attestation extends Component {
             data: [],
             activePage: 1,
             itemsCountPerPage: 1,
-            totalItemsCount: 1
+            totalItemsCount: 1,
+            isReady: false,
         };
     }
 
@@ -26,14 +27,28 @@ class Attestation extends Component {
         const failedArg = this.props.match.params?.value === 'showFailed' ? '&failed=true' : '';
 
         Axios.get(`/ctrl/latestattestation?page=${page}${failedArg}`)
-            .then(response => this.setState({
-                data: response.data['data'],
-                activePage: page,
-                totalItemsCount: response.data['total']
-            }));
+            .then(({ data }) => {
+                if (data?.data) {
+                    this.setState({
+                        data: data.data,
+                        activePage: page,
+                        totalItemsCount: data.total,
+                        isReady: true,
+                    });
+                }
+                this.setState({ isReady: true, activePage: page });
+            });
     };
 
     render() {
+        const { data, isReady, activePage } = this.state;
+        if (!isReady) {
+            return null;
+        }
+        if (!data) {
+            const errorMessage = `The ${activePage} for the attestation list does not exist`;
+            return <NotFound message={errorMessage}/>;
+        }
         return (
             <PageSpinner delay={100}>
             <div className="column lastAttestationPage">
@@ -51,7 +66,7 @@ class Attestation extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                        {this.state.data.map(({ txid, merkle_root, confirmed, age }) =>
+                        {data.map(({ txid, merkle_root, confirmed, age }) =>
                             <tr key={txid}>
                                 <td>
                                     <a
