@@ -1,7 +1,7 @@
 import Axios from 'axios';
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import NotFound from './NotFound';
-import { getRoute, routes } from "./routes";
+import {getRoute, routes} from "./routes";
 
 class Position extends Component {
     constructor(props) {
@@ -14,30 +14,31 @@ class Position extends Component {
 
     componentWillMount() {
         Axios.get("/api/v1/position?position=" + this.props.match.params.value)
-            .then(({ data }) => {
+            .then(({data}) => {
                 if (data?.response) {
-                    this.setState({ data: data.response, isReady: true });
+                    this.setState({data: data.response, isReady: true});
                 }
-                this.setState({ isReady: true });
+                this.setState({isReady: true});
             });
     }
 
     render() {
-        const { isReady, data } = this.state;
+        const {isReady, data} = this.state;
         if (!isReady) {
             return null;
         }
         if (!data) {
             const errorMessage = `A position with ${this.props.match.params.value} id does not exist`;
-            return <NotFound message={errorMessage} />;
+            return <NotFound message={errorMessage}/>;
         }
-        const { position, client_name } = data;
+        const {position, client_name} = data;
         return (
             <div className="full-table" data-controller="homepageMempool">
-                <span className="block-title">Client Name: {client_name}</span>
+                <span className="block-title">Client</span>
+                <span className="block-subtitle h3 hash truncate-hash"><strong>Name:</strong> {client_name}</span>
                 <span className="block-subtitle h3 hash truncate-hash"><strong>Position:</strong> {position[0].position}</span>
                 <div className="commitments_title">
-                    <h6 className="align-items-center">Commitments({position.length})</h6>
+                    <h5 className="align-items-center">Commitments({position.length})</h5>
                 </div>
                 {position.map((data, index) =>
                     <table

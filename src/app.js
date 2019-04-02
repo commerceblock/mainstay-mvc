@@ -8,7 +8,7 @@ const app = express();
 const api = require('./routes/api').api;
 const ctrl = require('./routes/ctrl').ctrl;
 
-u
+
 const ERROR = 'error';
 const OPEN = 'open';
 

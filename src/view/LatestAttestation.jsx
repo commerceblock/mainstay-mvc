@@ -20,7 +20,7 @@ class LatestAttestation extends Component {
           <div className="column">
               <div className="d-flex align-items-center">
                   <h4>Latest Attestation</h4>
-                  <a href={routes.attestation} className="pl-2 keyboard-target" data-keynav-priority>
+                  <a href='/attestation' className="pl-2 keyboard-target" data-keynav-priority>
                       <small>see more ...</small>
                   </a>
               </div>
