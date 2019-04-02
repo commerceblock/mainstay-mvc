@@ -1,57 +1,48 @@
-import React, { Component } from 'react';
-import FaviconAddrBar from './faviconAddrBar';
-import HamburgerMenu from './hamburgerMenu';
-import Navbar from './navbar';
-import FooterPage from './footerPage';
+import React from 'react';
 
-class Pricing extends Component {
-  render() {
-    return (
-        <div className="top-nav">
-            <div className="container menu-bar">
-                <div className="d-flex align-items-center flex-wrap">
-                    <FaviconAddrBar/>
-                    <Navbar/>
-                    <HamburgerMenu/>
-                </div>
+const Pricing = () => (
+        <div className="pricing-page">
+            <div className="pricing-heading">
+                <span className="block-title mb-0">Pricing</span>
             </div>
-            <div className="container main pricing-page">
+            <div className='mb-4 pricing-content'>
+                <h4>Fees</h4>
                 <div className="col-lg-12">
-                    <div className="col-lg-10">
-                       <div className="pricing-heading">
-                           <h2>Pricing</h2>
-                           <h4>Fees</h4>
-                       </div>
-                        <p>Our main objective is to provide you with a transparent pricing structure. We only offer one
-                            simple pricing option that represents</p>
-                        <ul>
-                            <li>
-                                A minimum slot reservation fee
-                            </li>
-                            <li>
-                                + actual average transaction cost per user for billing period (month), only if the underlying
-                                BTC transaction cost causes average user fees to be > £1
-                            </li>
-                        </ul>
-                        <p>
-                            For each individual user and billing period, the following pricing formula will be used:
-                        </p>
-                        <p><b>Minimum flat fee: £1/month per user (for slot reservation)</b></p>
-                        <p><b>(Total BTC tx cost / AVG(Users per month) - £1</b></p>
-                        <p>
-                            The table below provides an illustrative example of how your individual monthly fee is dependent
-                            on the transaction cost and the # of users:
-                        </p>
-                    </div>
-
+                    <p>Our main objective is to provide you with a transparent pricing structure. We only
+                        offer
+                        one
+                        simple pricing option that represents</p>
+                    <ul>
+                        <li>
+                            A minimum slot reservation fee
+                        </li>
+                        <li>
+                            + actual average transaction cost per user for billing period (month), only if
+                            the
+                            underlying
+                            BTC transaction cost causes average user fees to be > £1
+                        </li>
+                    </ul>
+                    <p>
+                        For each individual user and billing period, the following pricing formula will be
+                        used:
+                    </p>
+                    <p><b>Minimum flat fee: £1/month per user (for slot reservation)</b></p>
+                    <p><b>(Total BTC tx cost / AVG(Users per month) - £1</b></p>
+                    <p>
+                        The table below provides an illustrative example of how your individual monthly fee
+                        is
+                        dependent
+                        on the transaction cost and the # of users:
+                    </p>
                 </div>
-                <div className="col-lg-12 table-block">
-                    <div className="col-lg-2">
+                <div className="col-md-12 table-block">
+                    <div className="col-md-1">
                         <p className="rotate-txt">avg. # of users / month</p>
 
                     </div>
-                    <div className="col-lg-10 ">
-                        <p className="pricing-table-info">tx fee  for  confirmation within 6 blocks</p>
+                    <div className="col-md-11 ">
+                        <p className="pricing-table-info">tx fee for confirmation within 6 blocks</p>
                         <table>
                             <tbody>
                             <tr className="header-row">
@@ -136,17 +127,9 @@ class Pricing extends Component {
                             </tr>
                             </tbody>
                         </table>
-
                     </div>
-
-
                 </div>
-
             </div>
-            <FooterPage/>
         </div>
-    );
-  }
-}
-
+);
 export default Pricing;
