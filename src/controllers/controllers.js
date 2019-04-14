@@ -193,26 +193,27 @@ module.exports = {
             if (count - start < limit) {
                 limit = count - start;
             }
+
+            models.attestation.find(confirmedFilter).sort({inserted_at: -1}).limit(limit).skip(start)
+                .exec((error, data) => {
+                    if (error)
+                        return; // TODO Add message error
+                    res.header("Access-Control-Allow-Origin", "*");
+
+                    let now = new Date();
+
+                    for (let itr = 0; itr < limit; ++itr)
+                        response['data'].push({
+                            txid: data[itr].txid,
+                            merkle_root: data[itr].merkle_root,
+                            confirmed: data[itr].confirmed,
+                            age: (now.toDateString() === data[itr].inserted_at.toDateString()) ?
+                                dateFormat(data[itr].inserted_at, "HH:MM:ss") : dateFormat(data[itr].inserted_at, "HH:MM:ss dd/mm/yy")
+                        });
+                    res.json(response);
+                });
         });
 
-        models.attestation.find(confirmedFilter).sort({inserted_at: -1}).limit(limit).skip(start)
-            .exec((error, data) => {
-                if (error)
-                    return; // TODO Add message error
-                res.header("Access-Control-Allow-Origin", "*");
-
-                let now = new Date();
-
-                for (let itr = 0; itr < limit; ++itr)
-                    response['data'].push({
-                        txid: data[itr].txid,
-                        merkle_root: data[itr].merkle_root,
-                        confirmed: data[itr].confirmed,
-                        age: (now.toDateString() === data[itr].inserted_at.toDateString()) ?
-                            dateFormat(data[itr].inserted_at, "HH:MM:ss") : dateFormat(data[itr].inserted_at, "HH:MM:ss dd/mm/yy")
-                    });
-                res.json(response);
-            });
     },
     ctrl_latest_attestation_info: (req, res) => {
         let response = [];
