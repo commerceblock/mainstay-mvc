@@ -178,7 +178,6 @@ module.exports = {
         let start = limit * (page - 1);
 
         if (!page) {
-            limit = 10;
             start = 0;
         }
 
@@ -190,10 +189,6 @@ module.exports = {
             response['pages'] = count / limit;
             response['limit'] = limit;
 
-            if (count - start < limit) {
-                limit = count - start;
-            }
-
             models.attestation.find(confirmedFilter).sort({inserted_at: -1}).limit(limit).skip(start)
                 .exec((error, data) => {
                     if (error)
@@ -202,7 +197,7 @@ module.exports = {
 
                     let now = new Date();
 
-                    for (let itr = 0; itr < limit; ++itr)
+                    for (let itr = 0; itr < data.length; ++itr)
                         response['data'].push({
                             txid: data[itr].txid,
                             merkle_root: data[itr].merkle_root,
