@@ -60,26 +60,30 @@ class Position extends Component {
                     className="block-subtitle h3 hash truncate-hash"><strong>Name:</strong> {this.state.client}</span>
                 <span className="block-subtitle h3 hash truncate-hash"><strong>Position:</strong> {this.state.position}</span>
                 <div className="commitments_title">
-                    <h5 className="align-items-center">Commitments({data.length})</h5>
+                    <h5 className="align-items-center">Commitments({this.state.totalItemsCount})</h5>
                 </div>
                 <div className="mb-3 flex-table">
-                    {data.map((data, index) =>
-                        <table
-                            key={`position-${index}-${this.state.position}`}
-                            className="main-second-position flex-table"
-                            width="100%">
-                            <tbody>
+                    <table width="100%">
+                        <thead>
+                        <tr>
+                            <th><span className="lh1rem mr-auto">Commitment</span></th>
+                            <th><span className="lh1rem">Date</span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {data.map(data => (
                             <tr>
-                                <th colSpan="2">Commitment</th>
-                                <td colSpan="3">
+                                <td className="mono">
                                     <a href={getRoute(routes.commitment, {value: data.commitment})}>
                                         <span className="hash truncate-hash">{data.commitment}</span>
                                     </a>
                                 </td>
+                                <td><span className="hash truncate-hash">{data.date}</span></td>
                             </tr>
-                            </tbody>
-                        </table>
-                    )}</div>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
                 <div className="d-flex justify-content-center">
                     <Pagination
                         activePage={this.state.activePage}

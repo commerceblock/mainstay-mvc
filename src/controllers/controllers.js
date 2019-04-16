@@ -598,7 +598,6 @@ module.exports = {
         let start = limit * (page - 1);
 
         if (!page) {
-            limit = 10;
             start = 0;
         }
 
@@ -606,20 +605,25 @@ module.exports = {
             response['total'] = count;
             response['pages'] = count / limit;
             response['limit'] = limit;
-            if (count - start < limit) {
-                limit = count - start;
-            }
 
             models.merkleProof.find({client_position: position}).sort({_id: -1}).limit(limit).skip(start)
-                .exec((error, data) => {
+                .exec(async (error, data) => {
                     if (error)
                         return reply_err(res, INTERNAL_ERROR_API, startTime);
                     if (data.length === 0)
                         return reply_err(res, 'No data found for position provided', startTime);
 
-                    for (let itr = 0; itr < limit; ++itr)
-                        response['data'].push({
-                            commitment: data[itr].commitment
+                    for (let itr = 0; itr < data.length; ++itr)
+
+                        await models.attestation.findOne({merkle_root: data[itr].merkle_root}, (error, attestation) => {
+                            if (error)
+                                return reply_err(res, INTERNAL_ERROR_API, startTime);
+                            if (attestation.length === 0)
+                                return reply_err(res, 'No client details found for position provided', startTime);
+                            response['data'].push({
+                                commitment: data[itr].commitment,
+                                date: dateFormat(attestation.inserted_at, "HH:MM:ss dd/mm/yy")
+                            });
                         });
 
                     models.clientDetails.findOne({client_position: position}, (error, client) => {
