@@ -171,47 +171,44 @@ function find_type_number(res, paramValue, startTime) {
 
 module.exports = {
     ctrl_latest_attestation: (req, res) => {
-        let response = {};
+        let response = {'data': []};
+
+        let page = parseInt(req.query.page);
+        let limit = 20;
+        let start = limit * (page - 1);
+
+        if (!page) {
+            start = 0;
+        }
 
         // set confirmed only filter unless failed flag is set to true
         let confirmedFilter = req.query.failed ? (req.query.failed == 'true' ? {} : {confirmed: true}) : {confirmed: true}
-        models.attestation.find(confirmedFilter).sort({inserted_at: -1})
-            .exec((error, data) => {
 
-                let page = parseInt(req.query.page);
-                let limit = 20;
-                let start = limit * (page - 1);
+        models.attestation.countDocuments({confirmed: true}, function (error, count) {
+            response['total'] = count;
+            response['pages'] = count / limit;
+            response['limit'] = limit;
 
-                if (!page) {
-                    limit = 10;
-                    start = 0;
-                }
+            models.attestation.find(confirmedFilter).sort({inserted_at: -1}).limit(limit).skip(start)
+                .exec((error, data) => {
+                    if (error)
+                        return; // TODO Add message error
+                    res.header("Access-Control-Allow-Origin", "*");
 
-                let end = start + limit;
-                if (end > data.length) {
-                    end = data.length;
-                }
+                    let now = new Date();
 
-                response['total'] = data.length;
-                response['pages'] = data.length / limit;
-                response['data'] = [];
+                    for (let itr = 0; itr < data.length; ++itr)
+                        response['data'].push({
+                            txid: data[itr].txid,
+                            merkle_root: data[itr].merkle_root,
+                            confirmed: data[itr].confirmed,
+                            age: (now.toDateString() === data[itr].inserted_at.toDateString()) ?
+                                dateFormat(data[itr].inserted_at, "HH:MM:ss") : dateFormat(data[itr].inserted_at, "HH:MM:ss dd/mm/yy")
+                        });
+                    res.json(response);
+                });
+        });
 
-                if (error)
-                    return; // TODO Add message error
-                res.header("Access-Control-Allow-Origin", "*");
-
-                let now = new Date();
-
-                for (let itr = start; itr < end; ++itr)
-                    response['data'].push({
-                        txid: data[itr].txid,
-                        merkle_root: data[itr].merkle_root,
-                        confirmed: data[itr].confirmed,
-                        age: (now.toDateString() === data[itr].inserted_at.toDateString()) ?
-                            dateFormat(data[itr].inserted_at, "HH:MM:ss") : dateFormat(data[itr].inserted_at, "HH:MM:ss dd/mm/yy")
-                    });
-                res.json(response);
-            });
     },
     ctrl_latest_attestation_info: (req, res) => {
         let response = [];
@@ -684,7 +681,7 @@ module.exports = {
         let response = [];
 
         models.attestation.find().sort({inserted_at: -1}).limit(1)
-            .exec( async (error, data) => {
+            .exec(async (error, data) => {
                 if (error)
                     return;
                 if (data.length > 0) {
@@ -698,14 +695,13 @@ module.exports = {
                                 client_position: data[itr].client_position,
                                 merkle_root: merkle_root
                             }).exec().then(function (client) {
-                                if (client){
+                                if (client) {
                                     response.push({
                                         position: data[itr].client_position,
                                         client_name: data[itr].client_name,
                                         commitment: client.commitment
                                     });
-                                }
-                                else {
+                                } else {
                                     response.push({
                                         position: data[itr].client_position,
                                         client_name: data[itr].client_name
