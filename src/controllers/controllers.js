@@ -576,7 +576,6 @@ module.exports = {
                             },
                             merkle_commitment: array
                         }, startTime);
-
                     });
             });
     },
@@ -585,30 +584,60 @@ module.exports = {
         let position = get_position_arg(req, res, startTime);
         if (position === undefined)
             return; // TODO add message error
-        models.merkleProof.find({client_position: position})
-            .exec((error, data) => {
-                if (error)
-                    return reply_err(res, INTERNAL_ERROR_API, startTime);
-                if (data.length == 0)
-                    return reply_err(res, 'No data found for position provided', startTime);
-                let array = [];
-                for (let index in data)
-                    array.push({
-                        position: data[index].client_position,
-                        merkle_root: data[index].merkle_root,
-                        commitment: data[index].commitment,
-                        ops: data[index].ops
-                    });
 
-                models.clientDetails.findOne({client_position: position}, (error, client) => {
+        let response = {
+            'position': position,
+            'data': []
+        };
+
+        let page = parseInt(req.query.page);
+        let limit = 10;
+        let start = limit * (page - 1);
+
+        if (!page) {
+            start = 0;
+        }
+
+        models.merkleProof.countDocuments({client_position: position}, function (error, count) {
+            response['total'] = count;
+            response['pages'] = count / limit;
+            response['limit'] = limit;
+
+            models.merkleProof.find({client_position: position}).sort({_id: -1}).limit(limit).skip(start)
+                .exec(async (error, data) => {
                     if (error)
                         return reply_err(res, INTERNAL_ERROR_API, startTime);
-                    if (client.length == 0)
-                        return reply_err(res, 'No client details found for position provided', startTime);
+                    if (data.length === 0)
+                        return reply_err(res, 'No data found for position provided', startTime);
 
-                    reply_msg(res, {position: array, client_name: client.client_name}, startTime);
+                    for (let itr = 0; itr < data.length; ++itr)
+
+                        await models.attestation.findOne({merkle_root: data[itr].merkle_root}, (error, attestation) => {
+                            if (error)
+                                return reply_err(res, INTERNAL_ERROR_API, startTime);
+                            if (!attestation)
+                                response['data'].push({
+                                    commitment: data[itr].commitment,
+                                    date: ""
+                                });
+                            else
+                                response['data'].push({
+                                    commitment: data[itr].commitment,
+                                    date: dateFormat(attestation.inserted_at, "HH:MM:ss dd/mm/yy")
+                                });
+                        });
+
+                    models.clientDetails.findOne({client_position: position}, (error, client) => {
+                        if (error)
+                            return reply_err(res, INTERNAL_ERROR_API, startTime);
+                        if (!client)
+                            return reply_err(res, 'No client details found for position provided', startTime);
+                        response['client_name'] = client.client_name;
+
+                        res.json(response);
+                    });
                 });
-            });
+        });
     },
     attestation: (req, res) => {
         let startTime = start_time();
