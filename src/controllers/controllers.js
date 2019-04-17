@@ -618,8 +618,12 @@ module.exports = {
                         await models.attestation.findOne({merkle_root: data[itr].merkle_root}, (error, attestation) => {
                             if (error)
                                 return reply_err(res, INTERNAL_ERROR_API, startTime);
-                            if (attestation.length === 0)
-                                return reply_err(res, 'No client details found for position provided', startTime);
+                            if (!attestation)
+                                response['data'].push({
+                                    commitment: data[itr].commitment,
+                                    date: ""
+                                });
+
                             response['data'].push({
                                 commitment: data[itr].commitment,
                                 date: dateFormat(attestation.inserted_at, "HH:MM:ss dd/mm/yy")
@@ -629,7 +633,7 @@ module.exports = {
                     models.clientDetails.findOne({client_position: position}, (error, client) => {
                         if (error)
                             return reply_err(res, INTERNAL_ERROR_API, startTime);
-                        if (client.length === 0)
+                        if (!client)
                             return reply_err(res, 'No client details found for position provided', startTime);
                         response['client_name'] = client.client_name;
 
