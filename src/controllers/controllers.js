@@ -623,11 +623,11 @@ module.exports = {
                                     commitment: data[itr].commitment,
                                     date: ""
                                 });
-
-                            response['data'].push({
-                                commitment: data[itr].commitment,
-                                date: dateFormat(attestation.inserted_at, "HH:MM:ss dd/mm/yy")
-                            });
+                            else
+                                response['data'].push({
+                                    commitment: data[itr].commitment,
+                                    date: dateFormat(attestation.inserted_at, "HH:MM:ss dd/mm/yy")
+                                });
                         });
 
                     models.clientDetails.findOne({client_position: position}, (error, client) => {
