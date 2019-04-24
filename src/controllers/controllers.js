@@ -171,47 +171,44 @@ function find_type_number(res, paramValue, startTime) {
 
 module.exports = {
     ctrl_latest_attestation: (req, res) => {
-        let response = {};
+        let response = {'data': []};
+
+        let page = parseInt(req.query.page);
+        let limit = 20;
+        let start = limit * (page - 1);
+
+        if (!page) {
+            start = 0;
+        }
 
         // set confirmed only filter unless failed flag is set to true
         let confirmedFilter = req.query.failed ? (req.query.failed == 'true' ? {} : {confirmed: true}) : {confirmed: true}
-        models.attestation.find(confirmedFilter).sort({inserted_at: -1})
-            .exec((error, data) => {
 
-                let page = parseInt(req.query.page);
-                let limit = 20;
-                let start = limit * (page - 1);
+        models.attestation.countDocuments({confirmed: true}, function (error, count) {
+            response['total'] = count;
+            response['pages'] = count / limit;
+            response['limit'] = limit;
 
-                if (!page) {
-                    limit = 10;
-                    start = 0;
-                }
+            models.attestation.find(confirmedFilter).sort({inserted_at: -1}).limit(limit).skip(start)
+                .exec((error, data) => {
+                    if (error)
+                        return; // TODO Add message error
+                    res.header("Access-Control-Allow-Origin", "*");
 
-                let end = start + limit;
-                if (end > data.length) {
-                    end = data.length;
-                }
+                    let now = new Date();
 
-                response['total'] = data.length;
-                response['pages'] = data.length / limit;
-                response['data'] = [];
+                    for (let itr = 0; itr < data.length; ++itr)
+                        response['data'].push({
+                            txid: data[itr].txid,
+                            merkle_root: data[itr].merkle_root,
+                            confirmed: data[itr].confirmed,
+                            age: (now.toDateString() === data[itr].inserted_at.toDateString()) ?
+                                dateFormat(data[itr].inserted_at, "HH:MM:ss") : dateFormat(data[itr].inserted_at, "HH:MM:ss dd/mm/yy")
+                        });
+                    res.json(response);
+                });
+        });
 
-                if (error)
-                    return; // TODO Add message error
-                res.header("Access-Control-Allow-Origin", "*");
-
-                let now = new Date();
-
-                for (let itr = start; itr < end; ++itr)
-                    response['data'].push({
-                        txid: data[itr].txid,
-                        merkle_root: data[itr].merkle_root,
-                        confirmed: data[itr].confirmed,
-                        age: (now.toDateString() === data[itr].inserted_at.toDateString()) ?
-                            dateFormat(data[itr].inserted_at, "HH:MM:ss") : dateFormat(data[itr].inserted_at, "HH:MM:ss dd/mm/yy")
-                    });
-                res.json(response);
-            });
     },
     ctrl_latest_attestation_info: (req, res) => {
         let response = [];
@@ -579,7 +576,6 @@ module.exports = {
                             },
                             merkle_commitment: array
                         }, startTime);
-
                     });
             });
     },
@@ -588,30 +584,60 @@ module.exports = {
         let position = get_position_arg(req, res, startTime);
         if (position === undefined)
             return; // TODO add message error
-        models.merkleProof.find({client_position: position})
-            .exec((error, data) => {
-                if (error)
-                    return reply_err(res, INTERNAL_ERROR_API, startTime);
-                if (data.length == 0)
-                    return reply_err(res, 'No data found for position provided', startTime);
-                let array = [];
-                for (let index in data)
-                    array.push({
-                        position: data[index].client_position,
-                        merkle_root: data[index].merkle_root,
-                        commitment: data[index].commitment,
-                        ops: data[index].ops
-                    });
 
-                models.clientDetails.findOne({client_position: position}, (error, client) => {
+        let response = {
+            'position': position,
+            'data': []
+        };
+
+        let page = parseInt(req.query.page);
+        let limit = 10;
+        let start = limit * (page - 1);
+
+        if (!page) {
+            start = 0;
+        }
+
+        models.merkleProof.countDocuments({client_position: position}, function (error, count) {
+            response['total'] = count;
+            response['pages'] = count / limit;
+            response['limit'] = limit;
+
+            models.merkleProof.find({client_position: position}).sort({_id: -1}).limit(limit).skip(start)
+                .exec(async (error, data) => {
                     if (error)
                         return reply_err(res, INTERNAL_ERROR_API, startTime);
-                    if (client.length == 0)
-                        return reply_err(res, 'No client details found for position provided', startTime);
+                    if (data.length === 0)
+                        return reply_err(res, 'No data found for position provided', startTime);
 
-                    reply_msg(res, {position: array, client_name: client.client_name}, startTime);
+                    for (let itr = 0; itr < data.length; ++itr)
+
+                        await models.attestation.findOne({merkle_root: data[itr].merkle_root}, (error, attestation) => {
+                            if (error)
+                                return reply_err(res, INTERNAL_ERROR_API, startTime);
+                            if (!attestation)
+                                response['data'].push({
+                                    commitment: data[itr].commitment,
+                                    date: ""
+                                });
+                            else
+                                response['data'].push({
+                                    commitment: data[itr].commitment,
+                                    date: dateFormat(attestation.inserted_at, "HH:MM:ss dd/mm/yy")
+                                });
+                        });
+
+                    models.clientDetails.findOne({client_position: position}, (error, client) => {
+                        if (error)
+                            return reply_err(res, INTERNAL_ERROR_API, startTime);
+                        if (!client)
+                            return reply_err(res, 'No client details found for position provided', startTime);
+                        response['client_name'] = client.client_name;
+
+                        res.json(response);
+                    });
                 });
-            });
+        });
     },
     attestation: (req, res) => {
         let startTime = start_time();
@@ -684,7 +710,7 @@ module.exports = {
         let response = [];
 
         models.attestation.find().sort({inserted_at: -1}).limit(1)
-            .exec( async (error, data) => {
+            .exec(async (error, data) => {
                 if (error)
                     return;
                 if (data.length > 0) {
@@ -698,14 +724,13 @@ module.exports = {
                                 client_position: data[itr].client_position,
                                 merkle_root: merkle_root
                             }).exec().then(function (client) {
-                                if (client){
+                                if (client) {
                                     response.push({
                                         position: data[itr].client_position,
                                         client_name: data[itr].client_name,
                                         commitment: client.commitment
                                     });
-                                }
-                                else {
+                                } else {
                                     response.push({
                                         position: data[itr].client_position,
                                         client_name: data[itr].client_name

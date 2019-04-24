@@ -7,7 +7,7 @@ const Footer = () => (
     <footer className="navbar-fixed-bottom">
         <div className="text-center">
             <div>
-                <a className="nav-item" href="https://github.com/commerceblock/mainstay-mvc">Mainstay-mvc v0.5.0-release</a>
+                <a className="nav-item" href="https://github.com/commerceblock/mainstay-mvc">Mainstay-mvc v0.5.1-release</a>
                 <a className="nav-item" href="https://github.com/commerceblock/mainstay-mvc/blob/develop/LICENSE">© 2019 CommerceBlock-Limited</a>
                 <a className="nav-item" href={routes.privacy} target="_blank">Privacy Policy</a>
                 <a className="nav-item" href={routes.terms} target="_blank">Terms and Conditions</a>

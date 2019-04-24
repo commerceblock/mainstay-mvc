@@ -34,6 +34,7 @@ class Attestation extends Component {
                         activePage: page,
                         totalItemsCount: data.total,
                         isReady: true,
+                        itemsPerPage: data.limit
                     });
                 }
                 this.setState({ isReady: true, activePage: page });
@@ -100,7 +101,7 @@ class Attestation extends Component {
                 <div className="d-flex justify-content-center">
                     <Pagination
                         activePage={this.state.activePage}
-                        itemsCountPerPage={20}
+                        itemsCountPerPage={this.state.itemsPerPage}
                         totalItemsCount={this.state.totalItemsCount}
                         pageRangeDisplayed={5}
                         onChange={this.handlePageChange}
