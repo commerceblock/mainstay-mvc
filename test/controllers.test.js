@@ -1,11 +1,12 @@
+/* eslint-disable indent */
 const assert = require('assert');
 const mockHttp = require('node-mocks-http');
 const mongoose = require('mongoose');
-const controllers = require('../lib/controllers');
+const controllers = require('../src/controllers/api_controller');
 ////////////////////////////////////////////////////////////////////////////////
 /// Connect to MongoBD fot Test                                              ///
 ////////////////////////////////////////////////////////////////////////////////
-var dbConnect = 'mongodb://localhost/mainstay1'
+const dbConnect = 'mongodb://localhost/mainstayX';
 
 mongoose.connect(dbConnect, (error) => {
   if (error) {
@@ -18,7 +19,7 @@ before((done) => {
   mongoose.connection.on('open', done)
 });
 
-describe('Test Controllers', () => {
+describe('Test Api Controllers', () => {
   //////////////////////////////////////////////////////////////////////////////
   /// Test                                                                   ///
   //////////////////////////////////////////////////////////////////////////////
@@ -40,7 +41,7 @@ describe('Test Controllers', () => {
     const merkle_root =
         '7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090';
     const txid =
-        "6a855c1c70849ed28eb51cffd808ccd4e45c4cdddfa17495ccf98856b2421b8e";
+        '6a855c1c70849ed28eb51cffd808ccd4e45c4cdddfa17495ccf98856b2421b8e';
     assert(json.response.merkle_root === merkle_root);
     assert(json.response.txid === txid);
   });
