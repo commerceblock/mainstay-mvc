@@ -7,9 +7,6 @@ const app = express();
 
 const routes = require('./routes');
 
-const ERROR = 'error';
-const OPEN = 'open';
-
 function connect_mongo() {
     let url = 'mongodb://';
     if (env.db.user && env.db.password) {
@@ -22,8 +19,8 @@ function connect_mongo() {
 
 function __MAIN__() {
     const db = connect_mongo();
-    db.on(ERROR, console.error.bind(console, 'Connection Error:'));
-    db.once(OPEN, () => {
+    db.on('error', console.error.bind(console, 'Connection Error:'));
+    db.once('open', () => {
         // mainstay_websocket();
         routes.api(app);
         routes.ctrl(app);
@@ -31,7 +28,9 @@ function __MAIN__() {
         app.get('*', (req, res) => {
             res.status(404).send('404 Not Found');
         });
-        app.listen(env.server.port || 80);
+        app.listen(env.server.port || 80, () => {
+            console.log(`Server started on port ${env.server.port || 80}`);
+        });
     });
 }
 

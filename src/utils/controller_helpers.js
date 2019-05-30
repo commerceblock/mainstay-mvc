@@ -1,4 +1,3 @@
-const models = require('../models/models');
 const {
     ARG_HASH,
     MISSING_ARG_HASH,
@@ -18,12 +17,10 @@ const {
     MISSING_ARG_POSITION,
     BAD_TYPE_POSITION,
     NS_PER_SEC,
-    INTERNAL_ERROR_API,
-    TYPE_UNKNOWN
 } = require('./constants');
 
 function get_hash_arg(req, res, startTime) {
-    let paramTxid = req.query[ARG_HASH];
+    const paramTxid = req.query[ARG_HASH];
     if (paramTxid === undefined) {
         return reply_err(res, MISSING_ARG_HASH, startTime);
     }
@@ -34,7 +31,7 @@ function get_hash_arg(req, res, startTime) {
 }
 
 function get_txid_arg(req, res, startTime) {
-    let paramTxid = req.query[ARG_TXID];
+    const paramTxid = req.query[ARG_TXID];
     if (paramTxid === undefined) {
         return reply_err(res, MISSING_ARG_TXID, startTime);
     }
@@ -45,7 +42,7 @@ function get_txid_arg(req, res, startTime) {
 }
 
 function get_commitment_arg(req, res, startTime) {
-    let paramCommitment = req.query[ARG_COMMITMENT];
+    const paramCommitment = req.query[ARG_COMMITMENT];
     if (paramCommitment === undefined) {
         return reply_err(res, MISSING_ARG_COMMITMENT, startTime);
     }
@@ -56,7 +53,7 @@ function get_commitment_arg(req, res, startTime) {
 }
 
 function get_merkle_root_arg(req, res, startTime) {
-    let paramMerkelRoot = req.query[ARG_MERKLE_ROOT];
+    const paramMerkelRoot = req.query[ARG_MERKLE_ROOT];
     if (paramMerkelRoot === undefined) {
         return reply_err(res, MISSING_ARG_MERKLE_ROOT, startTime);
     }
@@ -67,89 +64,45 @@ function get_merkle_root_arg(req, res, startTime) {
 }
 
 function get_position_arg(req, res, startTime) {
-    let paramPosition = req.query[ARG_POSITION];
+    const paramPosition = req.query[ARG_POSITION];
     if (paramPosition === undefined) {
         return reply_err(res, MISSING_ARG_POSITION, startTime);
     }
-    let position = parseInt(paramPosition, 10);
+    const position = parseInt(paramPosition, 10);
     if (isNaN(position)) {
         return reply_err(res, BAD_TYPE_POSITION, startTime);
     }
     return position;
 }
 
+/**
+ * @see https://nodejs.org/docs/latest-v10.x/api/process.html#process_process_hrtime_time
+ *
+ * @returns {[number, number]}
+ */
 function start_time() {
-    let startTime = process.hrtime();
-    return startTime[0] * NS_PER_SEC + startTime[1];
+    return process.hrtime();
 }
 
 function reply_err(res, message, startTime) {
     const time = new Date();
-    let endTime = process.hrtime();
-    endTime = endTime[0] * NS_PER_SEC + endTime[1];
+    const timeDiff = process.hrtime(startTime);
+    const cost = timeDiff[0] * NS_PER_SEC + timeDiff[1];
     res.json({
         error: message,
         timestamp: time.getTime(),
-        allowance: {cost: endTime - startTime}
+        allowance: {cost}
     });
 }
 
 function reply_msg(res, message, startTime) {
     const time = new Date();
-    let endTime = process.hrtime();
-    endTime = endTime[0] * NS_PER_SEC + endTime[1];
+    const timeDiff = process.hrtime(startTime);
+    const cost = timeDiff[0] * NS_PER_SEC + timeDiff[1];
     res.json({
         response: message,
         timestamp: time.getTime(),
-        allowance: {cost: endTime - startTime}
-    });
-}
-
-function find_type_hash(res, paramValue, startTime) {
-    models.merkleProof.find({commitment: paramValue}, (error, data) => {
-        if (error) {
-            return reply_err(res, INTERNAL_ERROR_API, startTime);
-        }
-        if (data.length !== 0) {
-            return reply_msg(res, 'commitment', startTime);
-        }
-        models.merkleProof.find({merkle_root: paramValue}, (error, data) => {
-            if (error) {
-                return reply_err(res, INTERNAL_ERROR_API, startTime);
-            }
-            if (data.length !== 0) {
-                return reply_msg(res, 'merkle_root', startTime);
-            }
-            models.attestationInfo.find({txid: paramValue}, (error, data) => {
-                if (error) {
-                    return reply_err(res, INTERNAL_ERROR_API, startTime);
-                }
-                if (data.length !== 0) {
-                    return reply_msg(res, 'txid', startTime);
-                }
-                models.attestationInfo.find({blockhash: paramValue}, (error, data) => {
-                    if (error) {
-                        return reply_err(res, INTERNAL_ERROR_API, startTime);
-                    }
-                    if (data.length !== 0) {
-                        return reply_msg(res, 'blockhash', startTime);
-                    }
-                    reply_err(res, TYPE_UNKNOWN, startTime);
-                });
-            });
-        });
-    });
-}
-
-function find_type_number(res, paramValue, startTime) {
-    models.clientDetails.find({client_position: paramValue}, (error, data) => {
-        if (error) {
-            return reply_err(res, INTERNAL_ERROR_API, startTime);
-        }
-        if (data.length !== 0) {
-            return reply_msg(res, 'position', startTime);
-        }
-        reply_err(res, 'Not found', startTime);
+        allowance: {cost}
     });
 }
 
@@ -162,6 +115,4 @@ module.exports = {
     start_time,
     reply_err,
     reply_msg,
-    find_type_hash,
-    find_type_number,
 };
