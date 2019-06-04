@@ -1,20 +1,14 @@
-var WebSocketClient = require('websocket').client;
-
-const CONNECT = 'connect';
-const ERROR = 'error';
-const CLOSE = 'close';
-const MESSAGE = 'message';
+const WebSocketClient = require('websocket').client;
 
 function live_price_token() {
 
+  const client = new WebSocketClient();
 
-  var client = new WebSocketClient();
+  client.on('connect', (sock) => {
 
-  client.on(CONNECT, (sock) => {
-
-    sock.on(CLOSE, () => {});
-    sock.on(ERROR, (error) => {});
-    sock.on(MESSAGE, (data) => {
+    sock.on('close', () => {});
+    sock.on('error', console.error);
+    sock.on('message', (data) => {
       console.log(data.utf8Data);
     });
 
@@ -24,13 +18,10 @@ function live_price_token() {
       args: ['chat']
     }));
 
-
   });
 
   // client.connect('wss://api.ethfinex.com/ws/2');
   client.connect('wss://www.bitmex.com/realtime');
-
-
 }
 
 module.exports.live_price_token = live_price_token;

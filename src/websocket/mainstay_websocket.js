@@ -1,5 +1,5 @@
-var WebSocketServer = require('websocket').server;
-var http = require('http');
+const WebSocketServer = require('websocket').server;
+const http = require('http');
 const models = require('../models/models');
 
 const CHANNEL_ATTESTATION = 'attestation';
@@ -20,13 +20,13 @@ const UNSUBSCRIBE = 'unsubscribe';
 const UNSUBSCRIBED = 'unsubscribed';
 const UTF8 = 'utf8';
 
-var channelAttestation = [];
-var channelAttestationInfo = [];
-var channelMerkleCommitment = [];
-var channelMerkleProof = [];
+const channelAttestation = [];
+const channelAttestationInfo = [];
+const channelMerkleCommitment = [];
+const channelMerkleProof = [];
 
 function subscribe_channel_attestation(client) {
-  for (var itr = 0; itr < channelAttestation.length; ++itr)
+  for (let itr = 0; itr < channelAttestation.length; ++itr)
     if (channelAttestation[itr].client === client)
       return client.sendUTF(JSON.stringify({
         event: ERROR,
@@ -41,7 +41,7 @@ function subscribe_channel_attestation(client) {
 }
 
 function subscribe_channel_attestationinfo(client) {
-  for (var itr = 0; itr < channelAttestationInfo.length; ++itr)
+  for (let itr = 0; itr < channelAttestationInfo.length; ++itr)
     if (channelAttestationInfo[itr].client === client)
       return client.sendUTF(JSON.stringify({
         event: ERROR,
@@ -56,7 +56,7 @@ function subscribe_channel_attestationinfo(client) {
 }
 
 function subscribe_channel_merklecommitment(client) {
-  for (var itr = 0; itr < channelMerkleCommitment.length; ++itr)
+  for (let itr = 0; itr < channelMerkleCommitment.length; ++itr)
     if (channelMerkleCommitment[itr].client === client)
       return client.sendUTF(JSON.stringify({
         event: ERROR,
@@ -71,7 +71,7 @@ function subscribe_channel_merklecommitment(client) {
 }
 
 function subscribe_channel_merkleproof(client) {
-  for (var itr = 0; itr < channelMerkleProof.length; ++itr)
+  for (let itr = 0; itr < channelMerkleProof.length; ++itr)
     if (channelMerkleProof[itr].client === client)
       return client.sendUTF(JSON.stringify({
         event: ERROR,
@@ -94,7 +94,7 @@ function subscribe_channel_price_CBT(client) {
 }
 
 function unsubscribe_channel_attestation(client) {
-  for (var itr = 0; itr < channelAttestation.length; ++itr)
+  for (let itr = 0; itr < channelAttestation.length; ++itr)
     if (channelAttestation[itr].client === client) {
       delete channelAttestation.splice(itr);
       return client.sendUTF(JSON.stringify({
@@ -110,7 +110,7 @@ function unsubscribe_channel_attestation(client) {
 }
 
 function unsubscribe_channel_attestationinfo(client) {
-  for (var itr = 0; itr < channelAttestationInfo.length; ++itr)
+  for (let itr = 0; itr < channelAttestationInfo.length; ++itr)
     if (channelAttestationInfo[itr].client === client) {
       delete channelAttestationInfo.splice(itr);
       return client.sendUTF(JSON.stringify({
@@ -126,7 +126,7 @@ function unsubscribe_channel_attestationinfo(client) {
 }
 
 function unsubscribe_channel_merklecommitment(client) {
-  for (var itr = 0; itr < channelMerkleCommitment.length; ++itr)
+  for (let itr = 0; itr < channelMerkleCommitment.length; ++itr)
     if (channelMerkleCommitment[itr].client === client) {
       delete channelMerkleCommitment.splice(itr);
       return client.sendUTF(JSON.stringify({
@@ -142,7 +142,7 @@ function unsubscribe_channel_merklecommitment(client) {
 }
 
 function unsubscribe_channel_merkleproof(client) {
-  for (var itr = 0; itr < channelMerkleProof.length; ++itr)
+  for (let itr = 0; itr < channelMerkleProof.length; ++itr)
     if (channelMerkleProof[itr].client === client) {
       delete channelMerkleProof.splice(itr);
       return client.sendUTF(JSON.stringify({
@@ -168,7 +168,7 @@ function unsubscribe_channel_price_CBT(client) {
 
 function subscribe(client, data) {
   if (data.channel === CHANNEL_ATTESTATION)
-    subscribe_channel_attestation(client)
+    subscribe_channel_attestation(client);
   else if (data.channel === CHANNEL_ATTESTATION_INFO)
     subscribe_channel_attestationinfo(client);
   else if (data.channel === CHANNEL_MERKLE_COMMITMENT)
@@ -202,7 +202,7 @@ function unsubscribe(client, data) {
 
 function listen(message) {
   if (message.type === UTF8) {
-    var data = JSON.parse(message.utf8Data);
+    let data = JSON.parse(message.utf8Data);
     if (data.event === EVENT_PING)
       return this.sendUTF(JSON.stringify({event: "pong"}));
     else if (data.event === EVENT_SUBSCRIBE)
@@ -288,12 +288,12 @@ function watch_mongo() {
 
 function mainstay_websocket() {
   watch_mongo();
-  var server = http.createServer((request, response) => {
+  const server = http.createServer((request, response) => {
     console.log((new Date()) + ' Received request for ' + request.url);
     response.writeHead(404);
     response.end();
   });
-  wsServer = new WebSocketServer({
+  const wsServer = new WebSocketServer({
     httpServer: server,
     autoAcceptConnections: false
   });
