@@ -38,180 +38,170 @@ const DATE_FORMAT = 'HH:MM:ss dd/mm/yy';
 
 module.exports = {
     index: (req, res) => {
-        let startTime = start_time();
+        const startTime = start_time();
         reply_msg(res, VERSION_API_V1, startTime);
-        console.log("qaq");
     },
 
-    latest_attestation: (req, res) => {
-        let startTime = start_time();
-        models.attestation
-            .find()
-            .sort({inserted_at: -1})
-            .limit(1)
-            .exec((error, data) => {
-                if (error) {
-                    return reply_err(res, INTERNAL_ERROR_API, startTime);
-                }
-                if (data.length === 0) {
-                    return reply_msg(res, {}, startTime);
-                }
+    latest_attestation: async (req, res) => {
+        const startTime = start_time();
+        try {
+            const data = await models.attestation.find().sort({inserted_at: -1}).limit(1).exec();
+            if (data.length === 0) {
+                reply_msg(res, {}, startTime);
+            } else {
                 reply_msg(res, {merkle_root: data[0].merkle_root, txid: data[0].txid}, startTime);
-            });
+            }
+        } catch (error) {
+            reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
     },
 
-    latest_commitment: (req, res) => {
+    latest_commitment: async (req, res) => {
         let startTime = start_time();
         let position = get_position_arg(req, res, startTime);
-        if (position === undefined) {
+        if (res.headersSent) {
             return;
         }
 
-        models.attestation
-            .find()
-            .sort({inserted_at: -1}).limit(1)
-            .exec((error, data) => {
-                if (error) {
-                    return reply_err(res, INTERNAL_ERROR_API, startTime);
-                }
-                if (data.length === 0) {
-                    return reply_msg(res, {}, startTime);
-                }
-                const txid = data[0].txid;
-                const merkle_root = data[0].merkle_root;
-                models.merkleCommitment.find({
-                    client_position: position,
-                    merkle_root: merkle_root
-                }, (error, data) => {
-                    if (error) {
-                        return reply_err(res, INTERNAL_ERROR_API, startTime);
-                    }
-                    if (data.length === 0) {
-                        return reply_err(res, POSITION_UNKNOWN, startTime);
-                    }
-                    reply_msg(res, {
-                        commitment: data[0].commitment,
-                        merkle_root: merkle_root,
-                        txid: txid
-                    }, startTime);
-                });
+        try {
+            const attestationData = await models.attestation.find().sort({inserted_at: -1}).limit(1).exec();
+            if (attestationData.length === 0) {
+                return reply_msg(res, {}, startTime);
+            }
+            const txid = attestationData[0].txid;
+            const merkle_root = attestationData[0].merkle_root;
+
+            const merkleCommitmentData = await models.merkleCommitment.find({
+                client_position: position,
+                merkle_root: merkle_root
             });
+            if (merkleCommitmentData.length === 0) {
+                return reply_err(res, POSITION_UNKNOWN, startTime);
+            }
+
+            //sen success response
+            reply_msg(res, {
+                commitment: merkleCommitmentData[0].commitment,
+                merkle_root: merkle_root,
+                txid: txid
+            }, startTime);
+
+        } catch (error) {
+            return reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
     },
 
-    commitment: (req, res) => {
-        let startTime = start_time();
+    commitment: async (req, res) => {
+        const startTime = start_time();
         const position = get_position_arg(req, res, startTime);
-        if (position === undefined) {
+        if (res.headersSent) {
             return;
         }
-
         const merkle_root = get_merkle_root_arg(req, res, startTime);
         if (merkle_root === undefined) {
             return;
         }
 
-        models.merkleCommitment.find({
-            client_position: position,
-            merkle_root: merkle_root
-        }, (error, data) => {
-            if (error) {
-                return reply_err(res, INTERNAL_ERROR_API, startTime);
-            }
-            if (data.length === 0) {
+        try {
+            const merkleCommitmentData = await models.merkleCommitment.find({
+                client_position: position,
+                merkle_root: merkle_root
+            });
+            if (merkleCommitmentData.length === 0) {
                 return reply_err(res, COMMITMENT_POSITION_UNKNOWN, startTime);
             }
             reply_msg(res, {
-                commitment: data[0].commitment,
+                commitment: merkleCommitmentData[0].commitment,
                 merkle_root: merkle_root
             }, startTime);
-        });
+
+        } catch (error) {
+            return reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
     },
 
-    commitment_latest_proof: (req, res) => {
-        let startTime = start_time();
-        let position = get_position_arg(req, res, startTime);
-        if (position === undefined) {
+    commitment_latest_proof: async (req, res) => {
+        const startTime = start_time();
+        const position = get_position_arg(req, res, startTime);
+        if (res.headersSent) {
             return;
         }
 
-        models.attestation
-            .find()
-            .sort({inserted_at: -1}).limit(1)
-            .exec((error, data) => {
-                let merkle_root = data[0].merkle_root;
-                let txid = data[0].txid;
-                models.merkleProof.find({
-                    client_position: position,
-                    merkle_root: merkle_root
-                }, (error, data) => {
-                    if (error) {
-                        return reply_err(res, INTERNAL_ERROR_API, startTime);
-                    }
-                    if (data.length === 0) {
-                        return reply_err(res, POSITION_UNKNOWN, startTime);
-                    }
-                    reply_msg(res, {
-                        txid: txid,
-                        commitment: data[0].commitment,
-                        merkle_root: merkle_root,
-                        ops: data[0].ops
-                    }, startTime);
-                });
+        try {
+            const attestationData = await models.attestation.find().sort({inserted_at: -1}).limit(1).exec();
+            const merkle_root = attestationData[0].merkle_root;
+            const txid = attestationData[0].txid;
+
+            const merkleProofData = await models.merkleProof.find({
+                client_position: position,
+                merkle_root: merkle_root
             });
+            if (merkleProofData.length === 0) {
+                return reply_err(res, POSITION_UNKNOWN, startTime);
+            }
+            reply_msg(res, {
+                txid: txid,
+                commitment: merkleProofData[0].commitment,
+                merkle_root: merkle_root,
+                ops: merkleProofData[0].ops
+            }, startTime);
+        } catch (error) {
+            return reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
     },
 
-    commitment_verify: (req, res) => {
-        let startTime = start_time();
+    commitment_verify: async (req, res) => {
+        const startTime = start_time();
         let position = get_position_arg(req, res, startTime);
-        if (position === undefined) {
+        if (res.headersSent) {
             return;
         }
 
-        let commitment = get_commitment_arg(req, res, startTime);
-        if (commitment === undefined) {
+        const commitment = get_commitment_arg(req, res, startTime);
+        if (res.headersSent) {
             return;
         }
 
-        models.merkleCommitment.find({
-            client_position: position,
-            commitment: commitment
-        }, (error, data) => {
-            if (error) {
-                return reply_err(res, INTERNAL_ERROR_API, startTime);
-            }
-            if (data.length === 0) {
+        try {
+            const merkleCommitmentData = await models.merkleCommitment.find({
+                client_position: position,
+                commitment: commitment
+            });
+
+            if (merkleCommitmentData.length === 0) {
                 return reply_err(res, COMMITMENT_POSITION_UNKNOWN, startTime);
             }
-            models.attestation.find({merkle_root: data[data.length - 1].merkle_root}, (error, data) => {
-                if (error) {
-                    return reply_err(res, INTERNAL_ERROR_API, startTime);
-                }
-                if (data.length === 0) {
-                    return reply_err(res, MERKLEROOT_UNKNOWN, startTime);
-                }
-                reply_msg(res, {confirmed: data[0].confirmed}, startTime);
-            });
-        });
+            const merkle_root = merkleCommitmentData[merkleCommitmentData.length - 1].merkle_root;
+            const attestationData = await models.attestation.find({merkle_root});
+
+            if (attestationData.length === 0) {
+                return reply_err(res, MERKLEROOT_UNKNOWN, startTime);
+            }
+
+            reply_msg(res, {confirmed: attestationData[0].confirmed}, startTime);
+
+        } catch (error) {
+            return reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
     },
 
-    commitment_proof: (req, res) => {
-        let startTime = start_time();
+    commitment_proof: async (req, res) => {
+        const startTime = start_time();
         let position = get_position_arg(req, res, startTime);
-        if (position === undefined) {
+        if (res.headersSent) {
             return;
         }
 
         let merkle_root = get_merkle_root_arg(req, res, startTime);
-        if (merkle_root === undefined) {
+        if (res.headersSent) {
             return;
         }
-        models.merkleProof.find({
-            client_position: position,
-            merkle_root: merkle_root
-        }, (error, data) => {
-            if (error) {
-                return reply_err(res, INTERNAL_ERROR_API, startTime);
-            }
+
+        try {
+            const data = await models.merkleProof.find({
+                client_position: position,
+                merkle_root: merkle_root
+            });
             if (data.length === 0) {
                 return reply_err(res, POSITION_UNKNOWN, startTime);
             }
@@ -220,17 +210,19 @@ module.exports = {
                 commitment: data[0].commitment,
                 ops: data[0].ops
             }, startTime);
-        });
+        } catch (error) {
+            return reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
     },
 
-    commitment_send: (req, res) => {
-        let startTime = start_time();
+    commitment_send: async (req, res) => {
+        const startTime = start_time();
         let rawRequestData = '';
         req.on('data', chunk => {
             rawRequestData += chunk.toString();
         });
 
-        req.on('end', () => {
+        req.on('end', async () => {
             // test payload in base64 format and defined
             let data;
             let payload;
@@ -259,11 +251,10 @@ module.exports = {
             if (payload.token === undefined) {
                 return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
             }
-            // try get client details
-            models.clientDetails.find({client_position: payload.position}, (error, data) => {
-                if (error) {
-                    return reply_err(res, INTERNAL_ERROR_API, startTime);
-                }
+
+            try {
+                // try get client details
+                const data = await models.clientDetails.find({client_position: payload.position});
                 if (data.length === 0) {
                     return reply_err(res, POSITION_UNKNOWN, startTime);
                 }
@@ -275,113 +266,106 @@ module.exports = {
                     const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
 
                     // get base64 signature
-                    let sig = Buffer.from(signatureCommitment, 'base64')
+                    let sig = Buffer.from(signatureCommitment, 'base64');
 
                     if (!ec.verify(payload.commitment, sig, pubkey)) {
                         return reply_err(res, SIGNATURE_INVALID, startTime);
                     }
-
-                    models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true}, (error) => {
-                        if (error) {
-                            return reply_err(res, INTERNAL_ERROR_API, startTime);
-                        }
-                        reply_msg(res, 'feedback', startTime);
-                    });
-                } catch (e) {
+                } catch (error) {
                     return reply_err(res, SIGNATURE_INVALID, startTime);
                 }
-            });
+                await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
+                reply_msg(res, 'feedback', startTime);
+
+            } catch (error) {
+                return reply_err(res, INTERNAL_ERROR_API, startTime);
+            }
         });
     },
 
-    commitment_commitment: (req, res) => {
-        let startTime = start_time();
-        let commitment = get_commitment_arg(req, res, startTime);
-        if (commitment === undefined) {
+    commitment_commitment: async (req, res) => {
+        const startTime = start_time();
+        const commitment = get_commitment_arg(req, res, startTime);
+        if (res.headersSent) {
             return;
         }
 
-        models.merkleProof.find({commitment: commitment}, (error, data) => {
-            if (error) {
-                return reply_err(res, INTERNAL_ERROR_API, startTime);
-            }
-            if (data.length === 0) {
+        try {
+            const merkleProofData = await models.merkleProof.find({commitment: commitment});
+            if (merkleProofData.length === 0) {
                 return reply_err(res, 'Not found', startTime);
             }
-            const response = data[data.length - 1]; // get latest
-            models.attestation.find({merkle_root: response.merkle_root}, (error, data) => {
-                if (error) {
-                    return reply_err(res, INTERNAL_ERROR_API, startTime);
+            const response = merkleProofData[merkleProofData.length - 1]; // get latest
+            const attestationData = await models.attestation.find({merkle_root: response.merkle_root});
+
+            if (attestationData.length === 0) {
+                return reply_err(res, 'Not found', startTime);
+            }
+            reply_msg(res, {
+                attestation: {
+                    merkle_root: attestationData[0].merkle_root,
+                    txid: attestationData[0].txid,
+                    confirmed: attestationData[0].confirmed,
+                    inserted_at: dateFormat(attestationData[0].inserted_at, DATE_FORMAT)
+                },
+                merkleproof: {
+                    position: response.client_position,
+                    merkle_root: response.merkle_root,
+                    commitment: response.commitment,
+                    ops: response.ops
                 }
-                if (data.length === 0) {
-                    return reply_err(res, 'Not found', startTime);
-                }
-                reply_msg(res, {
-                    attestation: {
-                        merkle_root: data[0].merkle_root,
-                        txid: data[0].txid,
-                        confirmed: data[0].confirmed,
-                        inserted_at: dateFormat(data[0].inserted_at, DATE_FORMAT)
-                    },
-                    merkleproof: {
-                        position: response.client_position,
-                        merkle_root: response.merkle_root,
-                        commitment: response.commitment,
-                        ops: response.ops
-                    }
-                }, startTime);
-            });
-        });
+            }, startTime);
+        } catch (error) {
+            return reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
+
     },
 
-    merkleroot: (req, res) => {
-        let startTime = start_time();
+    merkleroot: async (req, res) => {
+        const startTime = start_time();
         let merkle_root = get_merkle_root_arg(req, res, startTime);
-        if (merkle_root === undefined) {
+        if (res.headersSent) {
             return;
         }
-        models.merkleCommitment.find({merkle_root: merkle_root}, (error, data) => {
-            if (error) {
-                return reply_err(res, INTERNAL_ERROR_API, startTime);
-            }
-            if (data.length === 0) {
+        try {
+            const merkleCommitmentData = await models.merkleCommitment.find({merkle_root: merkle_root});
+            if (merkleCommitmentData.length === 0) {
                 return reply_err(res, 'Commitments not found for merkle_root provided', startTime);
             }
 
-            const array = [];
-            for (let index in data) {
-                array.push({
-                    position: data[index].client_position,
-                    commitment: data[index].commitment
-                });
-            }
-
-            const response = data[0];
-            models.attestation.find({merkle_root: response.merkle_root}, (error, data) => {
-                if (error) {
-                    return reply_err(res, INTERNAL_ERROR_API, startTime);
+            const array = merkleCommitmentData.map(item => {
+                return {
+                    position: item.client_position,
+                    commitment: item.commitment
                 }
-                if (data.length === 0) {
-                    return reply_err(res, 'No attestation found for merkle_root provided', startTime);
-                }
-                reply_msg(res, {
-                    attestation: {
-                        merkle_root: data[0].merkle_root,
-                        txid: data[0].txid,
-                        confirmed: data[0].confirmed,
-                        inserted_at: dateFormat(data[0].inserted_at, DATE_FORMAT)
-                    },
-                    merkle_commitment: array
-                }, startTime);
             });
-        });
+
+            const response = merkleCommitmentData[0];
+
+            const attestationData = await models.attestation.find({merkle_root: response.merkle_root});
+            if (attestationData.length === 0) {
+                return reply_err(res, 'No attestation found for merkle_root provided', startTime);
+            }
+            reply_msg(res, {
+                attestation: {
+                    merkle_root: attestationData[0].merkle_root,
+                    txid: attestationData[0].txid,
+                    confirmed: attestationData[0].confirmed,
+                    inserted_at: dateFormat(attestationData[0].inserted_at, DATE_FORMAT)
+                },
+                merkle_commitment: array
+            }, startTime);
+
+        } catch (error) {
+            return reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
     },
 
-    position: (req, res) => {
-        let startTime = start_time();
-        let position = get_position_arg(req, res, startTime);
-        if (position === undefined) {
-            return; // TODO add message error
+    position: async (req, res) => {
+        const startTime = start_time();
+        const position = get_position_arg(req, res, startTime);
+        if (res.headersSent) {
+            return;
         }
 
         const response = {
@@ -389,129 +373,118 @@ module.exports = {
             'data': []
         };
 
-        let page = parseInt(req.query.page);
-        let limit = 10;
+        const page = parseInt(req.query.page);
+        const limit = 10;
         let start = limit * (page - 1);
 
         if (!page) {
             start = 0;
         }
 
-        models.merkleProof.countDocuments({client_position: position}, function (error, count) {
-            response['total'] = count;
-            response['pages'] = count / limit;
+        try {
+            const makeProofCount = await models.merkleProof.countDocuments({client_position: position});
+            response['total'] = makeProofCount;
+            response['pages'] = makeProofCount / limit;
             response['limit'] = limit;
 
-            models.merkleProof
+            const data = await models.merkleProof
                 .find({client_position: position})
-                .sort({_id: -1}).limit(limit)
+                .sort({_id: -1})
+                .limit(limit)
                 .skip(start)
-                .exec(async (error, data) => {
-                    if (error) {
-                        return reply_err(res, INTERNAL_ERROR_API, startTime);
-                    }
-                    if (data.length === 0) {
-                        return reply_err(res, 'No data found for position provided', startTime);
-                    }
+                .exec();
 
-                    for (let itr = 0; itr < data.length; ++itr) {
-                        await models.attestation.findOne({merkle_root: data[itr].merkle_root}, (error, attestation) => {
-                            if (error) {
-                                return reply_err(res, INTERNAL_ERROR_API, startTime);
-                            }
-                            if (!attestation) {
-                                response['data'].push({
-                                    commitment: data[itr].commitment,
-                                    date: ''
-                                });
-                            } else {
-                                response['data'].push({
-                                    commitment: data[itr].commitment,
-                                    date: dateFormat(attestation.inserted_at, DATE_FORMAT)
-                                });
-                            }
-                        });
-                    }
+            if (data.length === 0) {
+                return reply_err(res, 'No data found for position provided', startTime);
+            }
 
-                    models.clientDetails.findOne({client_position: position}, (error, client) => {
-                        if (error) {
-                            return reply_err(res, INTERNAL_ERROR_API, startTime);
-                        }
-                        if (!client) {
-                            return reply_err(res, 'No client details found for position provided', startTime);
-                        }
-                        response['client_name'] = client.client_name;
-                        res.json(response);
+            for (let itr = 0; itr < data.length; ++itr) {
+                const attestation = await models.attestation.findOne({merkle_root: data[itr].merkle_root});
+
+                if (!attestation) {
+                    response['data'].push({
+                        commitment: data[itr].commitment,
+                        date: ''
                     });
-                });
-        });
+                } else {
+                    response['data'].push({
+                        commitment: data[itr].commitment,
+                        date: dateFormat(attestation.inserted_at, DATE_FORMAT)
+                    });
+                }
+            }
+
+            const client = await models.clientDetails.findOne({client_position: position});
+            if (!client) {
+                return reply_err(res, 'No client details found for position provided', startTime);
+            }
+            response['client_name'] = client.client_name;
+            res.json(response);
+        } catch (error) {
+            return reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
     },
 
-    attestation: (req, res) => {
-        let startTime = start_time();
-        let hash = get_txid_arg(req, res, startTime);
-        if (hash === undefined) {
-            return; // TODO add message error
+    attestation: async (req, res) => {
+        const startTime = start_time();
+        const hash = get_txid_arg(req, res, startTime);
+        if (res.headersSent) {
+            return;
         }
-        models.attestation.find({txid: hash}, (error, data) => {
-            if (error) {
-                return reply_err(res, INTERNAL_ERROR_API, startTime);
-            }
-            if (data.length === 0) {
+
+        try {
+            const attestationData = await models.attestation.find({txid: hash});
+            if (attestationData.length === 0) {
                 return reply_err(res, 'No attestation found', startTime);
             }
-            let response = data[0];
-            models.attestationInfo.find({txid: hash}, (error, data) => {
-                if (error) {
-                    return reply_err(res, INTERNAL_ERROR_API, startTime);
-                }
+            const response = attestationData[0];
+            const data = await models.attestationInfo.find({txid: hash});
 
-                if (data.length === 0) {
-                    reply_msg(res, {
-                        attestation: {
-                            merkle_root: response.merkle_root,
-                            txid: response.txid,
-                            confirmed: response.confirmed,
-                            inserted_at: dateFormat(response.inserted_at, DATE_FORMAT)
-                        },
-                        attestationInfo: {
-                            txid: response.txid,
-                            amount: '',
-                            blockhash: '',
-                            time: ''
-                        }
-                    }, startTime);
-                } else {
-                    reply_msg(res, {
-                        attestation: {
-                            merkle_root: response.merkle_root,
-                            txid: response.txid,
-                            confirmed: response.confirmed,
-                            inserted_at: dateFormat(response.inserted_at, DATE_FORMAT)
-                        },
-                        attestationInfo: {
-                            txid: data[0].txid,
-                            amount: data[0].amount / 100000000,
-                            blockhash: data[0].blockhash,
-                            time: data[0].time
-                        }
-                    }, startTime);
-                }
-            });
-        });
+            if (data.length === 0) {
+                reply_msg(res, {
+                    attestation: {
+                        merkle_root: response.merkle_root,
+                        txid: response.txid,
+                        confirmed: response.confirmed,
+                        inserted_at: dateFormat(response.inserted_at, DATE_FORMAT)
+                    },
+                    attestationInfo: {
+                        txid: response.txid,
+                        amount: '',
+                        blockhash: '',
+                        time: ''
+                    }
+                }, startTime);
+            } else {
+                reply_msg(res, {
+                    attestation: {
+                        merkle_root: response.merkle_root,
+                        txid: response.txid,
+                        confirmed: response.confirmed,
+                        inserted_at: dateFormat(response.inserted_at, DATE_FORMAT)
+                    },
+                    attestationInfo: {
+                        txid: data[0].txid,
+                        amount: data[0].amount / 100000000,
+                        blockhash: data[0].blockhash,
+                        time: data[0].time
+                    }
+                }, startTime);
+            }
+        } catch (error) {
+            return reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
     },
 
-    blockhash: (req, res) => {
-        let startTime = start_time();
-        let hash = get_hash_arg(req, res, startTime);
-        if (hash === undefined) {
-            return; // TODO add message error
+    blockhash: async (req, res) => {
+        const startTime = start_time();
+        const hash = get_hash_arg(req, res, startTime);
+        if (res.headersSent) {
+            return;
         }
 
-        models.attestationInfo.find({blockhash: hash}, (error, data) => {
-            if (error) {
-                return reply_err(res, INTERNAL_ERROR_API, startTime);
-            }
+        try {
+            const data = await models.attestationInfo.find({blockhash: hash});
             if (data.length === 0) {
                 return reply_err(res, 'No attestations found for blockhash provided', startTime);
             }
@@ -523,48 +496,50 @@ module.exports = {
                     time: dateFormat(data[0].time * 1000, DATE_FORMAT)
                 }
             }, startTime);
-        });
+        } catch (error) {
+            return reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
     },
 
-    clients: (req, res) => {
+    clients: async (req, res) => {
+
         const response = [];
+        try {
+            const attestationData = await models.attestation.find().sort({inserted_at: -1}).limit(1).exec();
+            if (attestationData.length === 0) {
+                return res.json(response);
+            }
 
-        models.attestation
-            .find()
-            .sort({inserted_at: -1})
-            .limit(1)
-            .exec((error, data) => {
-                if (error) {
-                    return;
-                }
-                if (data.length > 0) {
-                    const merkle_root = data[0].merkle_root;
+            const merkle_root = attestationData[0].merkle_root;
+            const data = await models.clientDetails.find().exec();
 
-                    models.clientDetails.find().exec(async (err, data) => {
-                        for (let itr = 0; itr < data.length; ++itr) {
+            for (let itr = 0; itr < data.length; ++itr) {
+                const client = await models.merkleCommitment.findOne({
+                    client_position: data[itr].client_position,
+                    merkle_root: merkle_root
+                }).exec();
 
-                            await models.merkleCommitment.findOne({
-                                client_position: data[itr].client_position,
-                                merkle_root: merkle_root
-                            }).exec().then(function (client) {
-                                if (client) {
-                                    response.push({
-                                        position: data[itr].client_position,
-                                        client_name: data[itr].client_name,
-                                        commitment: client.commitment
-                                    });
-                                } else {
-                                    response.push({
-                                        position: data[itr].client_position,
-                                        client_name: data[itr].client_name
-                                    });
-                                }
-                            });
-                        }
-
-                        res.json(response);
+                if (client) {
+                    response.push({
+                        position: data[itr].client_position,
+                        client_name: data[itr].client_name,
+                        commitment: client.commitment
+                    });
+                } else {
+                    response.push({
+                        position: data[itr].client_position,
+                        client_name: data[itr].client_name
                     });
                 }
+            }
+
+            res.json(response);
+
+        } catch (error) {
+            res.json({
+                error: INTERNAL_ERROR_API,
+                timestamp: new Date().getTime(),
             });
+        }
     },
 };
