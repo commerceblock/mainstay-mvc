@@ -96,7 +96,7 @@ module.exports = {
 
         try {
             const data = await models.attestation
-                .find()
+                .find({confirmed:true})
                 .sort({inserted_at: -1})
                 .limit(1)
                 .exec();
