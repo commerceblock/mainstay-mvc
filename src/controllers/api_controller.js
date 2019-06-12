@@ -45,7 +45,7 @@ module.exports = {
     latest_attestation: async (req, res) => {
         const startTime = start_time();
         try {
-            const data = await models.attestation.find().sort({inserted_at: -1}).limit(1).exec();
+            const data = await models.attestation.find({confirmed: true}).sort({inserted_at: -1}).limit(1).exec();
             if (data.length === 0) {
                 reply_msg(res, {}, startTime);
             } else {
@@ -64,7 +64,7 @@ module.exports = {
         }
 
         try {
-            const attestationData = await models.attestation.find().sort({inserted_at: -1}).limit(1).exec();
+            const attestationData = await models.attestation.find({confirmed: true}).sort({inserted_at: -1}).limit(1).exec();
             if (attestationData.length === 0) {
                 return reply_msg(res, {}, startTime);
             }
@@ -128,7 +128,7 @@ module.exports = {
         }
 
         try {
-            const attestationData = await models.attestation.find().sort({inserted_at: -1}).limit(1).exec();
+            const attestationData = await models.attestation.find({confirmed: true}).sort({inserted_at: -1}).limit(1).exec();
             const merkle_root = attestationData[0].merkle_root;
             const txid = attestationData[0].txid;
 
@@ -505,7 +505,7 @@ module.exports = {
 
         const response = [];
         try {
-            const attestationData = await models.attestation.find().sort({inserted_at: -1}).limit(1).exec();
+            const attestationData = await models.attestation.find({confirmed: true}).sort({inserted_at: -1}).limit(1).exec();
             if (attestationData.length === 0) {
                 return res.json(response);
             }
