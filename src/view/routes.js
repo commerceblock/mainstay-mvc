@@ -16,5 +16,6 @@ export const routes = {
     privacy: '/privacy',
     terms: '/terms',
     pricing: '/pricing',
-    notFound: '/not-found'
+    notFound: '/not-found',
+    subscribe: '/subscribe'
 };
