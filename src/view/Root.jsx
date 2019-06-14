@@ -17,6 +17,7 @@ import Search from "./search/search";
 import TermsConditions from "./TermsConditions";
 import Home from './Home'
 import Pricing from './Pricing'
+import Subscribe from "./Subscribe";
 
 
 const Root = () => (
@@ -47,6 +48,7 @@ const Root = () => (
                 <Route path={routes.privacy} component={PrivacyPolicy} />
                 <Route path={routes.terms} component={TermsConditions} />
                 <Route path={routes.pricing} component={Pricing} />
+                <Route path={routes.subscribe} component={Subscribe} />
             </div>
             <Footer/>
         </div>
