@@ -1,6 +1,7 @@
 import Axios from "axios";
 import React, {Component} from "react";
 import NotFound from './NotFound';
+import Flag from './Flag';
 import {getRoute, routes} from "./routes";
 
 
@@ -35,11 +36,23 @@ class Transaction extends Component {
         const {attestation: {txid, merkle_root, confirmed, inserted_at}, attestationInfo: {amount, blockhash}} = data;
         return (
             <div className="full-table" data-controller="homepageMempool">
-                <span className="block-title">Attestation Transaction</span>
-                <span className="block-subtitle hash truncate-hash h3"><strong>TxID:</strong> {txid}</span>
+                <h4 className="p-2 m-t-30 m-b-15">Attestation Transaction</h4>
                 <div className="flex-table">
                     <table className="main-second-position-block" width="100%">
                         <tbody>
+                        <tr>
+                            <th>TxID</th>
+                            <td colSpan="2">
+                                <a href={getRoute(routes.transation, {value: txid})}>
+                                    <span className="hash truncate-hash">{txid}</span>
+                                </a>
+                                <Flag
+                                    label={confirmed ? 'Confirmed' : 'Pending'}
+                                    viewType={confirmed ? 'success': 'info'}
+                                    className="m-l-15"
+                                />
+                            </td>
+                        </tr>
                         <tr>
                             <th>Merkle_root</th>
                             <td colSpan="2">
@@ -47,10 +60,6 @@ class Transaction extends Component {
                                     <span className="hash truncate-hash">{merkle_root}</span>
                                 </a>
                             </td>
-                        </tr>
-                        <tr>
-                            <th>Confirmed</th>
-                            <td colSpan="2"><span className="hash truncate-hash">{`${!!confirmed}`}</span></td>
                         </tr>
                         <tr>
                             <th>Inserted at</th>

@@ -2,6 +2,7 @@ import Axios from "axios";
 import React, { Component } from "react";
 import { getRoute, routes } from "./routes";
 import NotFound from "./NotFound";
+import Flag from './Flag';
 
 class Commitment extends Component {
     constructor(props) {
@@ -36,55 +37,57 @@ class Commitment extends Component {
             attestation: { txid, confirmed, inserted_at }
         } = data;
         return (
-            <div className="full-table" data-controller="homepageMempool">
-                <span className="block-title">Commitment</span>
-                <span className="block-subtitle hash truncate-hash h3"><strong>Hash:</strong> {commitment}</span>
-                <div className="flex-table">
-                    <table className="main-second-position-block" width="100%">
-                        <tbody>
-                        <tr>
-                            <th>Position</th>
-                            <td colSpan="2"><span className="hash truncate-hash">{position}</span></td>
-                        </tr>
-                        <tr>
-                            <th>TxID</th>
-                            <td colSpan="2">
-                                <a href={getRoute(routes.transation, {value: txid})}>
-                                    <span className="hash truncate-hash">{txid}</span>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Confirmed</th>
-                            <td colSpan="2"> {`${!!confirmed}`}</td>
-                        </tr>
-                        <tr>
-                            <th>Inserted at</th>
-                            <td colSpan="2">{inserted_at}</td>
-                        </tr>
-                        <tr>
-                            <th>MerkleRoot</th>
-                            <td colSpan="2">
-                                <a href={getRoute(routes.merkle, {value: merkle_root})}>
-                                    <span className="hash truncate-hash">{merkle_root}</span>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th rowSpan={ops.length + 1} className="tabelOpsName">ops</th>
-                        </tr>
-                        {ops.map(({ commitment, append }) =>
-                            <tr key={commitment}>
-                                <td>{`${!!append}`}</td>
-                                <td>
-                                    <a href={getRoute(routes.commitment, {value: commitment})}>
-                                        <span className="hash truncate-hash">{commitment}</span>
+            <div className="row">
+                <div className="col-lg-8 col-sm-12" data-controller="homepageMempool">
+                    <h4 className="p-2 m-t-30 m-b-15">Commitment</h4>
+                    <div className="flex-table">
+                        <table className="main-second-position-block" width="100%">
+                            <tbody>
+                            <tr>
+                                <th>Position</th>
+                                <td colSpan="2"><span className="hash truncate-hash">{position}</span></td>
+                            </tr>
+                            <tr>
+                                <th>TxID</th>
+                                <td colSpan="2">
+                                    <a href={getRoute(routes.transation, {value: txid})}>
+                                        <span className="hash truncate-hash">{txid}</span>
+                                    </a>
+                                    <Flag
+                                        label={confirmed ? 'Confirmed' : 'Pending'}
+                                        viewType={confirmed ? 'success': 'info'}
+                                        className="m-l-15"
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Inserted at</th>
+                                <td colSpan="2">{inserted_at}</td>
+                            </tr>
+                            <tr>
+                                <th>MerkleRoot</th>
+                                <td colSpan="2">
+                                    <a href={getRoute(routes.merkle, {value: merkle_root})}>
+                                        <span className="hash truncate-hash">{merkle_root}</span>
                                     </a>
                                 </td>
                             </tr>
-                        )}
-                        </tbody>
-                    </table>
+                            <tr>
+                                <th rowSpan={ops.length + 1} className="tabelOpsName light">Ops</th>
+                            </tr>
+                            {ops.map(({ commitment, append }) =>
+                                <tr key={commitment}>
+                                    <td><Flag label={`${!!append}`} viewType={!!append ? 'success' : 'danger'}/></td>
+                                    <td>
+                                        <a href={getRoute(routes.commitment, {value: commitment})}>
+                                            <span className="hash truncate-hash">{commitment}</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         );

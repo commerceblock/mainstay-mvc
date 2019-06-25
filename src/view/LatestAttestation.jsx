@@ -18,13 +18,17 @@ class LatestAttestation extends Component {
   render() {
       return (
           <div className="column">
-              <div className="d-flex align-items-center">
-                  <h4>Latest Attestation</h4>
-                  <a href='/attestation' className="pl-2 keyboard-target" data-keynav-priority>
-                      <small>see more ...</small>
+              <div className="d-flex align-items-center justify-content-between">
+                  <h4 className="p-2">Latest Attestation</h4>
+                  <a
+                      href={routes.attestation}
+                      className="pl-2 keyboard-target non-underline"
+                      data-keynav-priority
+                  >
+                      <small className="color-primary">View All &rarr;</small>
                   </a>
               </div>
-              <div className="mb-3 flex-table latestAttestation head-table">
+              <div className="mb-3 flex-table home-table head-table">
                   <table width="100%">
                       <thead>
                           <tr>
@@ -35,7 +39,7 @@ class LatestAttestation extends Component {
                       </thead>
                   </table>
               </div>
-              <div className="mb-3 flex-table latestAttestation">
+              <div className="mb-3 flex-table home-table">
                   <table width="100%">
                       <tbody>
                       {this.state.data.map(({ txid, merkle_root, age }) =>

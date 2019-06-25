@@ -30,33 +30,29 @@ class Client extends Component {
         return (
             <div className="column">
                 <div className="d-flex align-items-center">
-                    <span className="block-title">Clients</span>
+                    <h4 className="p-2 m-t-30 m-b-15">Clients</h4>
                 </div>
-                <div className="mb-5 flex-table full-table col3">
-                    {data ? (
-                        <table width="100%">
-                            <thead>
-                            <tr>
-                                <th><span className="lh1rem mr-auto">Position</span></th>
-                                <th><span className="lh1rem mr-auto">Client name</span></th>
-                                <th><span className="lh1rem ">Latest Commitment</span></th>
+                <div className="mb-4 flex-table col-md-7 col-sm-12">
+                    <table width="100%">
+                        <thead>
+                        <tr className="head-table-row">
+                            <th className="lh2rem">Pos.</th>
+                            <th className="lh2rem">Commitment</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {data.map(data =>
+                            <tr key={data.position}>
+                                <td>{data.position}</td>
+                                <td colSpan="2">
+                                    <a href={getRoute(routes.commitment, { value: data.commitment || '/'})}>
+                                        <span className="hash truncate-hash">{data.commitment}</span>
+                                    </a>
+                                </td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            {data.map(data => (
-                                <tr key={data.position} className="mono">
-                                    <td>{data.position}</td>
-                                    <td><span className="hash truncate-hash">{data.client_name}</span></td>
-                                    <td>
-                                        <a href={getRoute(routes.commitment, {value: data.commitment || '/'})}>
-                                            <span className="hash truncate-hash">{data.commitment}</span>
-                                        </a>
-                                    </td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
-                    ) : <NoResult />}
+                        )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         )

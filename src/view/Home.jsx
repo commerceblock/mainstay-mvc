@@ -5,9 +5,13 @@ import React from 'react';
 
 const Home = () => (
     <div className="row" data-controller="homepageMempool">
-        <MainstayInfo/>
-        <div className="col-md-6  home-left">
+        <div className="col-md-12">
+            <MainstayInfo/>
+        </div>
+        <div className="col-md-6 m-t-15">
             <LatestAttestation />
+        </div>
+        <div className="col-md-6 m-t-15">
             <LatestCommitment />
         </div>
     </div>

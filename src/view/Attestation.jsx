@@ -52,20 +52,24 @@ class Attestation extends Component {
         }
         return (
             <PageSpinner delay={100}>
-            <div className="column lastAttestationPage">
+            <div className="col-lg-7 col-sm-12 lastAttestationPage">
                 <div className="d-flex align-items-center">
-                    <span className="block-title">Attestations</span>
+                    <h4 className="p-2 m-t-30 m-b-15">Attestations</h4>
                 </div>
-                <div className="mb-3 flex-table latestAttestation">
+                <div className="mb-3 flex-table head-table">
                     <table width="100%">
                         <thead>
-                        <tr className="mr-auto">
+                        <tr>
                             <th>Txid</th>
                             <th>MerkleRoot</th>
                             <th>Confirmed</th>
                             <th>Date</th>
                         </tr>
                         </thead>
+                    </table>
+                </div>
+                <div className="mb-3 flex-table latestAttestation">
+                    <table width="100%">
                         <tbody>
                         {data.map(({ txid, merkle_root, confirmed, age }) =>
                             <tr key={txid}>

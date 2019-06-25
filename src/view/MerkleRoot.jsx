@@ -2,6 +2,7 @@ import Axios from "axios";
 import React, { Component } from "react";
 import NotFound from './NotFound';
 import { routes, getRoute } from "./routes";
+import Flag from "./Flag";
 
 
 class MerkleRoot extends Component {
@@ -35,20 +36,30 @@ class MerkleRoot extends Component {
         const { attestation: { txid, merkle_root, confirmed, inserted_at }, merkle_commitment } = data;
         return (
             <div className="full-table" data-controller="homepageMempool">
-                <span className="block-title">MerkleRoot</span>
-                <span className="block-subtitle h3 hash truncate-hash"><strong>MerkleRoot:</strong> {merkle_root}</span>
-                <div className="flex-table">
+                <h4 className="p-2 m-t-30 m-b-15">MerkleRoot</h4>
+                <div className="flex-table col-md-7 col-sm-12">
                     <table width="100%">
                         <tbody>
                         <tr>
-                            <th>TxID</th>
-                            <td><a href={getRoute(routes.transation, {value: txid})}>
-                                <span className="hash truncate-hash">{txid}</span></a>
+                            <th>MerkleRoot</th>
+                            <td colSpan="2">
+                                <a href={getRoute(routes.merkle, {value: merkle_root})}>
+                                    <span className="hash truncate-hash">{merkle_root}</span>
+                                </a>
                             </td>
                         </tr>
                         <tr>
-                            <th>Confirmed</th>
-                            <td>{`${!!confirmed}`}</td>
+                            <th>TxID</th>
+                            <td colSpan="2">
+                                <a href={getRoute(routes.transation, {value: txid})}>
+                                    <span className="hash truncate-hash">{txid}</span>
+                                </a>
+                                <Flag
+                                    label={confirmed ? 'Confirmed' : 'Pending'}
+                                    viewType={confirmed ? 'success': 'info'}
+                                    className="m-l-15"
+                                />
+                            </td>
                         </tr>
                         <tr>
                             <th>Inserted at</th>
@@ -60,10 +71,10 @@ class MerkleRoot extends Component {
                 <div className="commitments_title">
                     <h5 className="align-items-center">Commitments ({merkle_commitment.length})</h5>
                 </div>
-                <div className="mb-4 flex-table">
+                <div className="mb-4 flex-table col-md-7 col-sm-12">
                     <table width="100%">
                         <thead>
-                            <tr>
+                            <tr className="head-table-row">
                                 <th className="lh2rem">Position</th>
                                 <th className="lh2rem">Commitment</th>
                             </tr>

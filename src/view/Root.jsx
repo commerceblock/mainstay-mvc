@@ -3,8 +3,8 @@ import { Route, Redirect, BrowserRouter } from 'react-router-dom';
 import { routes } from './routes';
 import Logo from './Logo';
 import Footer from './Footer';
-import Menu from './Menu';
 import Navbar from './Navbar';
+import Searchbar from './Searchbar';
 import Client from "./Client";
 import PrivacyPolicy from "./PrivacyPolicy";
 import Commitment from './Commitment';
@@ -17,7 +17,7 @@ import Search from "./search/search";
 import TermsConditions from "./TermsConditions";
 import Home from './Home'
 import Pricing from './Pricing'
-import Subscribe from "./Subscribe";
+import About from './About';
 
 
 const Root = () => (
@@ -25,9 +25,9 @@ const Root = () => (
         <div className="top-nav">
             <div className="container">
                 <div className="d-flex align-items-center flex-wrap">
-                    <Logo/>
-                    <Navbar/>
-                    <Menu/>
+                    <Logo />
+                    <Searchbar />
+                    <Navbar />
                 </div>
             </div>
             <div className="container main" data-controller="main">
@@ -48,7 +48,7 @@ const Root = () => (
                 <Route path={routes.privacy} component={PrivacyPolicy} />
                 <Route path={routes.terms} component={TermsConditions} />
                 <Route path={routes.pricing} component={Pricing} />
-                <Route path={routes.subscribe} component={Subscribe} />
+                <Route path={routes.about} component={About} />
             </div>
             <Footer/>
         </div>

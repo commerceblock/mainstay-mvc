@@ -1,5 +1,7 @@
 import Axios from 'axios';
 import React, { Component } from 'react';
+import { getRoute, routes } from "./routes";
+import Flag from "./Flag";
 
 class LatestAttestationInfo extends Component {
     constructor(props) {
@@ -45,39 +47,38 @@ class LatestAttestationInfo extends Component {
                 </div>
             );
         }
+        const { blockhash, txid, time, amount } = data;
         return (
-            <div>
-                <div className="mb-3 flex-table">
-                    <div className="d-flex justify-content-end header">
-                        <span className="lh1rem mr-auto">Blockhash</span>
-                        <span className="lh1rem text-right ml-1 hash truncate-hash">{this.state.data.blockhash}</span>
-                    </div>
-                </div>
-                <div className="mb-3 flex-table">
-                    <div className="d-flex justify-content-end header">
-                        <span className="lh1rem mr-auto">Latest Txid</span>
-                        <span className="lh1rem text-right ml-1 hash truncate-hash">{this.state.data.txid}</span>
-                    </div>
-                </div>
-                <div className="mb-3 flex-table">
-                    <div className="d-flex justify-content-end header">
-                        <span className="lh1rem mr-auto">Time</span>
-                        <span className="lh1rem text-right ml-1">{this.state.data.time}</span>
-                    </div>
-                </div>
-                <div className="mb-3 flex-table">
-                    <div className="d-flex justify-content-end header">
-                        <span className="lh1rem mr-auto">Amount</span>
-                        <span className="lh1rem text-right ml-1">{this.state.data.amount / 100000000} BTC</span>
-                    </div>
-                </div>
-                <div className="mb-3 flex-table">
-                    <div className="d-flex justify-content-end header">
-                        <span className="lh1rem mr-auto">Average Fee</span>
-                        <span className="lh1rem text-right ml-1">{this.state.fee / 100000000} BTC</span>
-                    </div>
-                </div>
-            </div>
+            <>
+                <tr>
+                    <th className="align-end">Blockhash</th>
+                    <td colSpan="2">
+                        <a href={getRoute(routes.block, {value: blockhash})}>
+                            <span className="hash truncate-hash">{blockhash}</span>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <th className="align-end">Latest Txid</th>
+                    <td colSpan="2">
+                        <a href={getRoute(routes.transation, {value: txid})}>
+                            <span className="hash truncate-hash">{txid}</span>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <th className="align-end">Time</th>
+                    <td colSpan="2">{time}</td>
+                </tr>
+                <tr>
+                    <th className="align-end">Amount</th>
+                    <td colSpan="2">{amount / 100000000} BTC</td>
+                </tr>
+                <tr>
+                    <th className="align-end">Average Fee</th>
+                    <td colSpan="2">{fee / 100000000} BTC</td>
+                </tr>
+            </>
         );
     }
 }
