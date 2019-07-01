@@ -36,9 +36,9 @@ class Blockhash extends Component {
         return (
             <div className="row">
             <div className="col-lg-7 col-sm-12">
-                <h4 className="p-2 m-t-30 m-b-15">Block</h4>
+                <h4 className="p-2 m-t-30 m-b-15 customTitleStyle">Block</h4>
                 <div className="flex-table">
-                    <table className="main-second-position-block" width="100%">
+                    <table className="main-second-position-block block" width="100%">
                         <tbody>
                         <tr>
                             <th>BlockHash</th>

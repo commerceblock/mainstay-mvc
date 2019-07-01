@@ -20,6 +20,7 @@ import Pricing from './Pricing'
 import About from './About';
 
 
+
 const Root = () => (
     <BrowserRouter>
         <div className="top-nav">

@@ -19,10 +19,10 @@ class LatestCommitment extends Component {
         return (
             <div className="column">
                 <div className="d-flex align-items-center justify-content-between">
-                    <h4 className="p-2">Latest Commitment</h4>
+                    <h4 className="p-2 customTitleStyle">Latest Commitment</h4>
                     <a
                         href={routes.client}
-                        className="pl-2 keyboard-target non-underline"
+                        className="pl-2 keyboard-target non-underline "
                         data-keynav-priority
                     >
                         <small className="color-primary">View All &rarr;</small>
@@ -49,7 +49,7 @@ class LatestCommitment extends Component {
                                     </span>
                                 </td>
                                 <td>
-                                    <a className=""
+                                    <a className="hash truncate-hash keyboard-target latestCommitementStyle"
                                        href={getRoute(routes.commitment, { value: data.commitment })}
                                        title={data.commitment}>{data.commitment}
                                     </a>

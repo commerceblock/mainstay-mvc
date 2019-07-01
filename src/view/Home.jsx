@@ -1,6 +1,7 @@
 import LatestAttestation from './LatestAttestation';
 import LatestCommitment from './LatestCommitment';
 import MainstayInfo from './MainstayInfo';
+
 import React from 'react';
 
 const Home = () => (
@@ -8,10 +9,10 @@ const Home = () => (
         <div className="col-md-12">
             <MainstayInfo/>
         </div>
-        <div className="col-md-6 m-t-15">
+        <div className="col-md-7 m-t-15">
             <LatestAttestation />
         </div>
-        <div className="col-md-6 m-t-15">
+        <div className="col-md-5 m-t-15">
             <LatestCommitment />
         </div>
     </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Logo = () => (
-    <div className="d-flex align-items-center col-3">
+    <div className="d-flex align-items-center col-3 logoImg">
         <div>
             <a href="/" className="logo">
                 <img src="logo.png" alt="logo" />

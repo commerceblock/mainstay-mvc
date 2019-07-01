@@ -39,16 +39,16 @@ class Commitment extends Component {
         return (
             <div className="row">
                 <div className="col-lg-8 col-sm-12" data-controller="homepageMempool">
-                    <h4 className="p-2 m-t-30 m-b-15">Commitment</h4>
+                    <h4 className="p-2 m-t-30 m-b-15 m-l-15">Commitment</h4>
                     <div className="flex-table">
                         <table className="main-second-position-block" width="100%">
                             <tbody>
                             <tr>
-                                <th>Position</th>
+                                <th className="align-end">Position</th>
                                 <td colSpan="2"><span className="hash truncate-hash">{position}</span></td>
                             </tr>
                             <tr>
-                                <th>TxID</th>
+                                <th className="align-end">TxID</th>
                                 <td colSpan="2">
                                     <a href={getRoute(routes.transation, {value: txid})}>
                                         <span className="hash truncate-hash">{txid}</span>
@@ -61,11 +61,11 @@ class Commitment extends Component {
                                 </td>
                             </tr>
                             <tr>
-                                <th>Inserted at</th>
+                                <th className="align-end">Inserted at</th>
                                 <td colSpan="2">{inserted_at}</td>
                             </tr>
                             <tr>
-                                <th>MerkleRoot</th>
+                                <th className="align-end">MerkleRoot</th>
                                 <td colSpan="2">
                                     <a href={getRoute(routes.merkle, {value: merkle_root})}>
                                         <span className="hash truncate-hash">{merkle_root}</span>
@@ -73,7 +73,7 @@ class Commitment extends Component {
                                 </td>
                             </tr>
                             <tr>
-                                <th rowSpan={ops.length + 1} className="tabelOpsName light">Ops</th>
+                                <th rowSpan={ops.length + 1} className="align-end">Ops</th>
                             </tr>
                             {ops.map(({ commitment, append }) =>
                                 <tr key={commitment}>

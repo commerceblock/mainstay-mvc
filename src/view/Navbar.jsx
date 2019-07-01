@@ -106,6 +106,8 @@ class Navbar extends React.Component {
                         </ModalFooter>
                     </Form>
                 </Modal>
+
+                <img src="search.png" alt="search" className="top-search-icon-mobile"/>
             </div>
         );
     }

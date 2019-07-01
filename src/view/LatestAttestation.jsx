@@ -19,7 +19,7 @@ class LatestAttestation extends Component {
       return (
           <div className="column">
               <div className="d-flex align-items-center justify-content-between">
-                  <h4 className="p-2">Latest Attestation</h4>
+                  <h4 className="p-2 customTitleStyle ">Latest Attestation</h4>
                   <a
                       href={routes.attestation}
                       className="pl-2 keyboard-target non-underline"
@@ -34,7 +34,7 @@ class LatestAttestation extends Component {
                           <tr>
                               <th><span className="lh1rem mr-auto">Txid</span></th>
                               <th><span className="lh1rem mr-auto">MerkleRoot</span></th>
-                              <th><span className="lh1rem mr-auto">Date</span></th>
+                              <th className="lastHead"><span className="lh1rem mr-auto ">Date</span></th>
                           </tr>
                       </thead>
                   </table>
