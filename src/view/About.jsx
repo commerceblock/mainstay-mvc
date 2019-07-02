@@ -35,7 +35,7 @@ const About = () => (
                 </p>
             </div>
             <div className="col-7">
-                <img src="about.svg" alt="about" width="100%"/>
+                <img src="about.svg" alt="about" width="80%"/>
             </div>
         </div>
     </div>
