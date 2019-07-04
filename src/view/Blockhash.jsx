@@ -34,18 +34,18 @@ class Blockhash extends Component {
         }
         const { blockhash: {blockhash, txid, confirmed, amount, time} } = data;
         return (
-            <div className="row">
-            <div className="col-lg-7 col-sm-12">
+            <div className="row blockHash">
+            <div className="col-lg-6 col-sm-12">
                 <h4 className="p-2 m-t-30 m-b-15 customTitleStyle">Block</h4>
                 <div className="flex-table">
                     <table className="main-second-position-block block" width="100%">
                         <tbody>
                         <tr>
-                            <th>BlockHash</th>
+                            <th className="align-end">BlockHash</th>
                             <td colSpan="2"><span className="hash truncate-hash">{blockhash}</span></td>
                         </tr>
                         <tr>
-                            <th>TxID</th>
+                            <th className="align-end">TxID</th>
                             <td colSpan="2">
                                 <a href={getRoute(routes.transation, {value: txid})}>
                                     <span className="hash truncate-hash">{txid}</span>
@@ -58,11 +58,11 @@ class Blockhash extends Component {
                             </td>
                         </tr>
                         <tr>
-                            <th>Amount</th>
+                            <th className="align-end">Amount</th>
                             <td>{amount} BTC</td>
                         </tr>
                         <tr>
-                            <th>Time</th>
+                            <th className="align-end">Time</th>
                             <td>{time}</td>
                         </tr>
                         </tbody>

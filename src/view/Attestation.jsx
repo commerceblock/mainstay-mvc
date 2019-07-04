@@ -58,10 +58,6 @@ class Attestation extends Component {
                 </div>
                 <div className="mb-3 flex-table head-table ">
 
-
-
-
-
                 </div>
                 <div className="mb-3 flex-table latestAttestation attestation">
                     <table width="100%" id="table">

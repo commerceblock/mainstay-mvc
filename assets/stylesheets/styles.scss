@@ -1082,9 +1082,6 @@ html {
   overflow: auto;
 }
 
-.column {
-  height: 46vh;
-}
 
 .overflow-auto {
   overflow: auto;
@@ -1118,12 +1115,9 @@ html {
 }
 
 .home-table table td {
-  width: 10vw;
+  width: 9vw;
 }
 
-.pagination {
-  margin-bottom: 50px;
-}
 
 .head-table {
   margin-top: 0.2rem;
@@ -1143,7 +1137,7 @@ html {
 }
 
 .commitment table tr td:nth-child(2) {
-  width: 43vw;
+  width: 33vw;
 }
 
 .commitment table tr td:first-child {
@@ -1427,8 +1421,10 @@ html {
 }
 
 .nav-footer {
+  position:fixed;
   color: #ffffff;
   font-size: 12px;
+  margin-top:20px;
   line-height: 23px;
 
   a {
@@ -1638,8 +1634,6 @@ th, th span {
   border: none;
 }
 #table th {
-  padding-top: 12px;
-  padding-bottom: 12px;
   text-align: left;
   background-color: #f1f2f2;
   color: #1C1C1C;
@@ -1668,7 +1662,16 @@ th, th span {
 }
 
 
+.blockHash {
+  min-height: 80vh;
 
+}
+.txId {
+  min-height: 76vh;
+}
+.container.main {
+  margin-bottom:7%;
+}
 /*responsive*/
 @media only screen and (max-width: 992px) {
   // .container {
@@ -1679,15 +1682,19 @@ th, th span {
 
 @media only screen and (max-width: 768px) {
 
+  .blockHash, .txId {
+    min-height: auto;
+  }
+
+
+
   .footer-content {
     position: relative;
   }
   .privacy-page, .terms-page {
     margin-bottom: -42px;
   }
-  .navbar-fixed-bottom {
-    position: fixed;
-  }
+
   .navbar-fixed-bottom {
     bottom: 0;
     left: 0;
@@ -1721,7 +1728,7 @@ th, th span {
   }
   .container.main {
     margin: 0;
-    padding-bottom: 30%;
+
   }
   .navbar-fixed-bottom .nav-item {
     display: block;
@@ -1770,9 +1777,13 @@ th, th span {
 
 
 @media only screen and (max-width: 475px) {
-  .top-search {
-
+  .full-table .hash.truncate-hash {
+    width: 37vw;
   }
+  .nav-footer {
+    position: relative;
+  }
+
 
   .pricing-content-block {
     max-width: 100%;
@@ -1859,7 +1870,7 @@ th, th span {
   }
 
   .truncate-hash {
-   width: 40vw;
+   width: 35vw;
  
   }
   .top-search-icon-mobile {
@@ -1915,9 +1926,7 @@ th, th span {
   .attestation .truncate-hash {
     width: 20vw;
   }
-  .container.main {
-        padding-bottom: 40%;
-  }
+
 
   .latestCommitementStyle {
     width: 69vw !important;

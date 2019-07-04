@@ -55,23 +55,19 @@ class Position extends Component {
         }
         return (
             <div className="row">
-                <div className="col-lg-8 col-sm-12 m-t-30" data-controller="homepageMempool">
+                <div className="col-lg-6 col-sm-12 m-t-30" data-controller="homepageMempool">
                     <h4 className="p-2"><strong>Position:</strong> {this.state.position}</h4>
                     <div className="commitments_title">
                         <h5 className="align-items-center">Commitments({this.state.totalItemsCount})</h5>
                     </div>
-                    <div className="mb-3 flex-table head-table">
-                        <table width="100%">
-                            <thead>
+
+
+                    <div className="mb-3 flex-table latestAttestation attestation">
+                        <table width="100%" id="table">
                             <tr>
-                                <th><span className="lh1rem">Commitment</span></th>
-                                <th><span className="lh1rem">Date</span></th>
+                                <th>Commitment</th>
+                                <th>Date</th>
                             </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <div className="mb-3 flex-table">
-                        <table width="100%">
                             <tbody>
                             {data.map(data => (
                                 <tr>
@@ -86,6 +82,7 @@ class Position extends Component {
                             </tbody>
                         </table>
                     </div>
+
                     <div className="d-flex justify-content-center">
                         <Pagination
                             activePage={this.state.activePage}

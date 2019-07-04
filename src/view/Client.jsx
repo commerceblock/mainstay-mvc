@@ -36,13 +36,15 @@ class Client extends Component {
                     <table width="100%" id="table">
                         <tbody>
                         <tr className="head-table-row">
-                            <th className="lh2rem p-l-10 ">Pos.</th>
-                            <th className="lh2rem">Commitment</th>
+                            <th className=" p-l-10 ">Pos.</th>
+                            <th>Name</th>
+                            <th className="">Commitment</th>
                         </tr>
 
                         {data.map(data =>
                             <tr key={data.position}>
                                 <td>{data.position}</td>
+                                <td><span className="hash truncate-hash">{data.client_name}</span></td>
                                 <td colSpan="2">
                                     <a href={getRoute(routes.commitment, { value: data.commitment || '/'})}>
                                         <span className="hash truncate-hash">{data.commitment}</span>

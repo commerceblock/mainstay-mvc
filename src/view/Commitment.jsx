@@ -38,7 +38,7 @@ class Commitment extends Component {
         } = data;
         return (
             <div className="row">
-                <div className="col-lg-8 col-sm-12" data-controller="homepageMempool">
+                <div className="col-lg-6 col-sm-12" data-controller="homepageMempool">
                     <h4 className="p-2 m-t-30 m-b-15 m-l-15">Commitment</h4>
                     <div className="flex-table">
                         <table className="main-second-position-block" width="100%">
