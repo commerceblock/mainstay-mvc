@@ -52,7 +52,7 @@ class MerkleRoot extends Component {
                             <th className="align-end">TxID</th>
                             <td colSpan="2">
                                 <a href={getRoute(routes.transation, {value: txid})}>
-                                    <span className="hash truncate-hash">{txid}</span>
+                                    <span className="hash truncate-hash with-status">{txid}</span>
                                 </a>
                                 <Flag
                                     label={confirmed ? 'Confirmed' : 'Pending'}

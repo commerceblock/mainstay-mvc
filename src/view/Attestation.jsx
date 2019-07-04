@@ -56,9 +56,6 @@ class Attestation extends Component {
                 <div className="d-flex align-items-center">
                     <h4 className="p-2 m-t-30 m-b-15">Attestations</h4>
                 </div>
-                <div className="mb-3 flex-table head-table ">
-
-                </div>
                 <div className="mb-3 flex-table latestAttestation attestation">
                     <table width="100%" id="table">
                         <tr>

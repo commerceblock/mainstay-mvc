@@ -1778,8 +1778,13 @@ th, th span {
 
 @media only screen and (max-width: 475px) {
   .full-table .hash.truncate-hash {
-    width: 37vw;
+    width: 45vw;
   }
+
+  .full-table .hash.truncate-hash.with-status {
+    width: 20vw;
+  }
+
   .nav-footer {
     position: relative;
   }
@@ -1870,9 +1875,14 @@ th, th span {
   }
 
   .truncate-hash {
-   width: 35vw;
+   width: 50vw;
  
   }
+
+  .truncate-hash.with-status {
+   width: 35vw;
+  }
+
   .top-search-icon-mobile {
     display: block;
     position: absolute;
@@ -1924,6 +1934,10 @@ th, th span {
     padding: 0;
   }
   .attestation .truncate-hash {
+    width: 20vw;
+  }
+
+  .clientsPage .truncate-hash {
     width: 20vw;
   }
 
