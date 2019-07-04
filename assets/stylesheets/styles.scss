@@ -1290,7 +1290,6 @@ html {
 .privacy-page,
 .terms-page {
   background: #fff;
-  padding-bottom: 50px;
 }
 
 .table-block {
@@ -1585,12 +1584,12 @@ th, th span {
   text-align: right;
 }
 
-.aboutPage {
+.aboutPage, .privacyPolicyPage, .terms-page {
   margin-left: 15px;
   margin-right: 15px;
 }
 
-.aboutPage h4 {
+.aboutPage h4, .privacyPolicyPage h4, .terms-page h4 {
   padding-left: 0 !important;
   margin-top: 40px;
   margin-bottom: 30px;
@@ -1690,9 +1689,6 @@ th, th span {
 
   .footer-content {
     position: relative;
-  }
-  .privacy-page, .terms-page {
-    margin-bottom: -42px;
   }
 
   .navbar-fixed-bottom {
