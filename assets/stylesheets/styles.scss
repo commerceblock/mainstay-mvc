@@ -839,27 +839,12 @@ body.darkBG .keynav-target {
   }
 }
 
-/*responsive*/
-@media only screen and (max-width: 992px) {
-  // .container {
-  //   max-width: 100% !important;
-  // }
-}
 
 .container {
   max-width: 96% !important;
 }
 
 
-@media only screen and (max-width: 576px) {
-  .xs-w91 {
-    width: 91px !important;
-  }
-
-  .xs-w117 {
-    width: 117px;
-  }
-}
 
 /*socket connection*/
 /* Notice: Portions of the connection indicator style come from html5rocks.com */
@@ -1133,7 +1118,7 @@ html {
 }
 
 .home-table table td {
-  width: 17vw;
+  width: 10vw;
 }
 
 .pagination {
@@ -1158,7 +1143,7 @@ html {
 }
 
 .commitment table tr td:nth-child(2) {
-  width: 62vw;
+  width: 43vw;
 }
 
 .commitment table tr td:first-child {
@@ -1206,23 +1191,6 @@ html {
   height: auto !important;
 }
 
-.lastAttestationPage .head-table table {
-  th {
-    text-align: start;
-  }
-
-  :first-child {
-    width: 21vw;
-  }
-
-  :nth-child(2) {
-    width: 20vw;
-  }
-
-  :nth-child(3) {
-    width: 3vw;
-  }
-}
 
 .head-table-row {
   border-radius: 5px;
@@ -1399,93 +1367,6 @@ html {
 }
 
 
-@media only screen and (max-width: 768px) {
-
-  .footer-content {
-    position: relative;
-  }
-  .privacy-page, .terms-page {
-    margin-bottom: -42px;
-  }
-  .navbar-fixed-bottom {
-    position: fixed;
-  }
-  .navbar-fixed-bottom {
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin-bottom: 0;
-
-  }
-  .lastAttestationPage {
-    height: auto !important;
-    margin-bottom: 90px;
-  }
-  #menu {
-    padding-top: 18px;
-  }
-
-  .table {
-    margin-bottom: 0;
-    width: 100%;
-  }
-
-  .sm-fullwidth {
-    width: 100%;
-    max-width: 100% !important;
-  }
-
-  .sm-w151 {
-    width: 151px;
-  }
-  .container.main {
-    margin: 0;
-    padding-bottom: 30%;
-  }
-  .navbar-fixed-bottom .nav-item {
-    display: block;
-  }
-
-  .block-subtitle {
-    padding-left: 20px;
-    overflow: hidden;
-    padding-right: 20px;
-  }
-  .flex-table .lh1rem {
-    width: 30%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .full-table .hash.truncate-hash {
-    width: 40vw;
-  }
-  .full-table .h3 {
-    width: 70vw !important;
-  }
-  .full-table.col3 .hash.truncate-hash {
-    width: 35vw;
-  }
-  .table {
-    margin-bottom: 0;
-    width: 100%;
-  }
-  .sm-fullwidth {
-    width: 100%;
-    max-width: 100% !important;
-  }
-  .sm-w151 {
-    width: 151px;
-  }
-
-  .pricing-content {
-    margin-left: 0;
-
-  }
-  .rotate-txt {
-    left: -80px;
-  }
-}
 
 .p-2 {
   font-size: 22px;
@@ -1665,11 +1546,11 @@ th, th span {
 }
 
 .lastHead {
-  width: 12vw !important;
+  width: 7vw !important;
 }
 
 .latestCommitementStyle {
-  width: 35vw;
+  width: 24vw;
 }
 
 
@@ -1692,12 +1573,242 @@ th, th span {
   order: 1;
 }
 
+.attestationPage-table {
+  margin: 5%;
+}
+
+.pricing-heading h4 {
+  margin-left: 7px;
+  margin-bottom: 30px;
+}
+.pricing-content {
+  display: flex;
+ }
+
+.aboutImg{
+  text-align: right;
+}
+
+.aboutPage {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.aboutPage h4 {
+  padding-left: 0 !important;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+.aboutPage-content b{
+  background-color: rgba(49, 194, 90, 0.1);
+}
+
+.aboutPage-content span {
+  font-weight: 500;
+}
+
+.docDownload a{
+  display: block;
+  margin-top: 20px;
+
+  color: #31C25A;
+}
+
+.docDownload img {
+  margin-right: 5px;
+}
+
+#table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+
+}
+
+#table td, #table th {
+
+  padding: 8px;
+}
+
+.home-table #table td{
+  padding-left: 20px;
+}
+
+#table tr:first-child {
+  border: none;
+}
+#table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #f1f2f2;
+  color: #1C1C1C;
+  border: none;
+  &:first-child{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+  &:last-child{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+}
+
+.clientsPage {
+  margin-bottom: 5%;
+}
+
+.loader {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  text-align: center;
+  top: 30%;
+}
+
+
+
+/*responsive*/
+@media only screen and (max-width: 992px) {
+  // .container {
+  //   max-width: 100% !important;
+  // }
+}
+
+
+@media only screen and (max-width: 768px) {
+
+  .footer-content {
+    position: relative;
+  }
+  .privacy-page, .terms-page {
+    margin-bottom: -42px;
+  }
+  .navbar-fixed-bottom {
+    position: fixed;
+  }
+  .navbar-fixed-bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-bottom: 0;
+
+  }
+  .pricing-content{
+    display: block;
+  }
+  .lastAttestationPage {
+    height: auto !important;
+  }
+
+  #menu {
+    padding-top: 18px;
+  }
+
+  .table {
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  .sm-fullwidth {
+    width: 100%;
+    max-width: 100% !important;
+  }
+
+  .sm-w151 {
+    width: 151px;
+  }
+  .container.main {
+    margin: 0;
+    padding-bottom: 30%;
+  }
+  .navbar-fixed-bottom .nav-item {
+    display: block;
+  }
+
+  .block-subtitle {
+    padding-left: 20px;
+    overflow: hidden;
+    padding-right: 20px;
+  }
+  .flex-table .lh1rem {
+    width: 30%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .full-table .hash.truncate-hash {
+    width: 40vw;
+  }
+  .full-table .h3 {
+    width: 70vw !important;
+  }
+  .full-table.col3 .hash.truncate-hash {
+    width: 35vw;
+  }
+  .table {
+    margin-bottom: 0;
+    width: 100%;
+  }
+  .sm-fullwidth {
+    width: 100%;
+    max-width: 100% !important;
+  }
+  .sm-w151 {
+    width: 151px;
+  }
+
+  .pricing-content {
+    margin-left: 0;
+
+  }
+  .rotate-txt {
+    left: -80px;
+  }
+}
+
+
 @media only screen and (max-width: 475px) {
   .top-search {
 
   }
 
+  .pricing-content-block {
+    max-width: 100%;
 
+    flex: none;
+  }
+  .aboutPage .row {
+    display: block;
+  }
+  .aboutPage-content {
+    max-width: 100%;
+  }
+  .aboutImg {
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20%;
+  }
+  .pricing-heading h4 {
+    margin-left: 7px;
+  }
+
+  .table-block {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 10%;
+
+    flex: none;
+  }
+  .pricing-table {
+    width: 100%;
+  }
+  .rotate-txt {
+    left: -69px;
+  }
   .search {
 
 
@@ -1748,7 +1859,7 @@ th, th span {
   }
 
   .truncate-hash {
-   width: 60vw;
+   width: 40vw;
  
   }
   .top-search-icon-mobile {
@@ -1786,9 +1897,11 @@ th, th span {
   }
   .nav-footer-right {
     flex-wrap: wrap;
+    justify-content: center;
   }
   .nav-footer a {
     margin-right: 10px;
+    font-size: 15px;
 
   }
   
@@ -1796,11 +1909,21 @@ th, th span {
     font-size: 15px;
 
   }
+  .nav-footer-right {
+    padding: 0;
+  }
   .attestation .truncate-hash {
     width: 20vw;
   }
   .container.main {
-        padding-bottom: 50%;
+        padding-bottom: 40%;
+  }
+
+  .latestCommitementStyle {
+    width: 69vw !important;
+  }
+  .home-table table th {
+    width: 16vw;
   }
 
 }

@@ -52,24 +52,25 @@ class Attestation extends Component {
         }
         return (
             <PageSpinner delay={100}>
-            <div className="col-lg-7 col-sm-12 lastAttestationPage">
+            <div className="col-lg-8 col-sm-12 lastAttestationPage">
                 <div className="d-flex align-items-center">
                     <h4 className="p-2 m-t-30 m-b-15">Attestations</h4>
                 </div>
                 <div className="mb-3 flex-table head-table ">
-                    <table width="100%">
-                        <thead>
+
+
+
+
+
+                </div>
+                <div className="mb-3 flex-table latestAttestation attestation">
+                    <table width="100%" id="table">
                         <tr>
                             <th>Txid</th>
                             <th>MerkleRoot</th>
                             <th>Confirmed</th>
                             <th>Date</th>
                         </tr>
-                        </thead>
-                    </table>
-                </div>
-                <div className="mb-3 flex-table latestAttestation attestation">
-                    <table width="100%">
                         <tbody>
                         {data.map(({ txid, merkle_root, confirmed, age }) =>
                             <tr key={txid}>
@@ -102,7 +103,7 @@ class Attestation extends Component {
                         </tbody>
                     </table>
                 </div>
-                <div className="d-flex justify-content-center">
+                <div className="d-flex justify-content-center attestationPage-table">
                     <Pagination
                         activePage={this.state.activePage}
                         itemsCountPerPage={this.state.itemsPerPage}

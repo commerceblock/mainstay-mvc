@@ -30,8 +30,10 @@ const Root = () => (
                     <Searchbar />
                     <Navbar />
                 </div>
+
             </div>
             <div className="container main" data-controller="main">
+
                 <Route
                     exact
                     path={routes.app}
@@ -50,8 +52,14 @@ const Root = () => (
                 <Route path={routes.terms} component={TermsConditions} />
                 <Route path={routes.pricing} component={Pricing} />
                 <Route path={routes.about} component={About} />
+
+
+
+
             </div>
+
             <Footer/>
+
         </div>
     </BrowserRouter>
 );
