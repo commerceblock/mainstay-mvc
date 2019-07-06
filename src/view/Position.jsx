@@ -56,13 +56,13 @@ class Position extends Component {
         return (
             <div className="row">
                 <div className="col-lg-6 col-sm-12 m-t-30" data-controller="homepageMempool">
-                    <h4 className="p-2"><strong>Position:</strong> {this.state.position}</h4>
+                    <h4 className="p-2 m-t-30 m-b-15 m-l-15">Position: {this.state.position}</h4>
+
                     <div className="commitments_title">
-                        <h5 className="align-items-center">Commitments({this.state.totalItemsCount})</h5>
+                        <h5 className="align-items-center m-l-15">Commitments({this.state.totalItemsCount})</h5>
                     </div>
 
-
-                    <div className="mb-3 flex-table latestAttestation attestation">
+                    <div className="mb-4 flex-table col-lg-12 col-sm-12">
                         <table width="100%" id="table">
                             <tr>
                                 <th>Commitment</th>
@@ -71,7 +71,7 @@ class Position extends Component {
                             <tbody>
                             {data.map(data => (
                                 <tr>
-                                    <td className="mono">
+                                    <td>
                                         <a href={getRoute(routes.commitment, {value: data.commitment})}>
                                             <span className="hash truncate-hash">{data.commitment}</span>
                                         </a>

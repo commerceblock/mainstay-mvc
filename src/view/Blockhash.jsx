@@ -36,16 +36,16 @@ class Blockhash extends Component {
         return (
             <div className="row blockHash">
             <div className="col-lg-6 col-sm-12">
-                <h4 className="p-2 m-t-30 m-b-15 customTitleStyle">Block</h4>
+                <h4 className="p-2 m-t-30 m-b-15 customTitleStyle">Block Hash</h4>
                 <div className="flex-table">
-                    <table className="main-second-position-block block" width="100%">
+                    <table className="main-second-position-block block fw-500" width="100%">
                         <tbody>
                         <tr>
-                            <th className="align-end">BlockHash</th>
+                            <th className="align-end">Block Hash</th>
                             <td colSpan="2"><span className="hash truncate-hash">{blockhash}</span></td>
                         </tr>
                         <tr>
-                            <th className="align-end">TxID</th>
+                            <th className="align-end">Txid</th>
                             <td colSpan="2">
                                 <a href={getRoute(routes.transation, {value: txid})}>
                                     <span className="hash truncate-hash with-status">{txid}</span>

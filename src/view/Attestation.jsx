@@ -1,7 +1,6 @@
 import Axios from 'axios';
 import React, { Component } from 'react';
 import Pagination from "react-js-pagination";
-import PageSpinner from './PageSpinner'
 
 class Attestation extends Component {
     constructor(props) {
@@ -51,7 +50,6 @@ class Attestation extends Component {
             return <NotFound message={errorMessage}/>;
         }
         return (
-            <PageSpinner delay={100}>
             <div className="col-lg-8 col-sm-12 lastAttestationPage">
                 <div className="d-flex align-items-center">
                     <h4 className="p-2 m-t-30 m-b-15">Attestations</h4>
@@ -60,7 +58,7 @@ class Attestation extends Component {
                     <table width="100%" id="table">
                         <tr>
                             <th>Txid</th>
-                            <th>MerkleRoot</th>
+                            <th>Merkle Root</th>
                             <th>Confirmed</th>
                             <th>Date</th>
                         </tr>
@@ -86,10 +84,10 @@ class Attestation extends Component {
                                     </a>
                                 </td>
                                 <td>
-                                    <span className="mono text-right ml-1">{`${!!confirmed}`}</span>
+                                    <span className="text-right ml-1">{`${!!confirmed}`}</span>
                                 </td>
                                 <td>
-                                    <span className="mono text-right ml-1">{age}</span>
+                                    <span className="text-right ml-1">{age}</span>
                                 </td>
                             </tr>
                         )}
@@ -108,7 +106,6 @@ class Attestation extends Component {
                     />
                 </div>
             </div>
-            </PageSpinner>
         );
     }
 }

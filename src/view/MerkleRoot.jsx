@@ -38,10 +38,10 @@ class MerkleRoot extends Component {
             <div className="full-table" data-controller="homepageMempool">
                 <h4 className="p-2 m-t-30 m-b-15 m-l-15">MerkleRoot</h4>
                 <div className="flex-table col-md-6 col-sm-12">
-                    <table width="100%">
+                    <table width="100%" className="fw-500">
                         <tbody>
                         <tr>
-                            <th className="align-end">MerkleRoot</th>
+                            <th className="align-end">Merkle Root</th>
                             <td colSpan="2">
                                 <a href={getRoute(routes.merkle, {value: merkle_root})}>
                                     <span className="hash truncate-hash">{merkle_root}</span>
@@ -49,7 +49,7 @@ class MerkleRoot extends Component {
                             </td>
                         </tr>
                         <tr>
-                            <th className="align-end">TxID</th>
+                            <th className="align-end">Txid</th>
                             <td colSpan="2">
                                 <a href={getRoute(routes.transation, {value: txid})}>
                                     <span className="hash truncate-hash with-status">{txid}</span>
@@ -76,7 +76,7 @@ class MerkleRoot extends Component {
                         <thead>
                             <tr className="head-table-row">
                                 <th className="lh2rem p-l-10">Position</th>
-                                <th className="lh2rem">Commitment</th>
+                                <th className="lh2rem p-l-10">Commitment</th>
                             </tr>
                         </thead>
                         <tbody>

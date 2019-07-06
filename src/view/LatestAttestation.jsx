@@ -57,7 +57,7 @@ class LatestAttestation extends Component {
                                   </a>
                               </td>
                               <td>
-                                  <span className="mono text-right ml-1">{age}</span>
+                                  <span className="text-right ml-1">{age}</span>
                               </td>
                           </tr>
                       )}

@@ -19,14 +19,17 @@ class Waiting extends Component {
         return (
             <div className="row" data-controller="homepageMempool">
                 <div className="col-md-12">
-                    <div className="alert alert-danger ">
-                        Search does not match any valid client position, attestation transaction
-                        id or commitment hash, for query: {this.state.value.query}
+                    <div className="search-tooltip ">
+                        Search does not match any valid client position, attestation transaction id or commitment hash.
                     </div>
                 </div>
-                <MainstayInfo/>
-                <div className="col-md-6 home-left">
+                <div className="col-md-12">
+                    <MainstayInfo/>
+                </div>
+                <div className="col-md-7 m-t-15">
                     <LatestAttestation/>
+                </div>
+                <div className="col-md-5 m-t-15">
                     <LatestCommitment/>
                 </div>
             </div>
@@ -47,7 +50,7 @@ class Search extends Component {
     }
 
     componentDidMount() {
-        const { location } = this.props;
+        const {location} = this.props;
 
         const value = QueryString.parse(location.search);
 
@@ -72,10 +75,10 @@ class Search extends Component {
                         this.setState({page: undefined()});
                 })
                 .catch(() => {
-                    this.setState({ page: <Waiting />});
+                    this.setState({page: <Waiting/>});
                 });
         } else {
-            this.setState({ page: <Waiting />});
+            this.setState({page: <Waiting/>});
         }
     }
 

@@ -41,14 +41,14 @@ class Commitment extends Component {
                 <div className="col-lg-6 col-sm-12" data-controller="homepageMempool">
                     <h4 className="p-2 m-t-30 m-b-15 m-l-15">Commitment</h4>
                     <div className="flex-table">
-                        <table className="main-second-position-block" width="100%">
+                        <table className="main-second-position-block fw-500" width="100%">
                             <tbody>
                             <tr>
                                 <th className="align-end">Position</th>
                                 <td colSpan="2"><span className="hash truncate-hash">{position}</span></td>
                             </tr>
                             <tr>
-                                <th className="align-end">TxID</th>
+                                <th className="align-end">Txid</th>
                                 <td colSpan="2">
                                     <a href={getRoute(routes.transation, {value: txid})}>
                                         <span className="hash truncate-hash with-status">{txid}</span>
@@ -65,7 +65,7 @@ class Commitment extends Component {
                                 <td colSpan="2">{inserted_at}</td>
                             </tr>
                             <tr>
-                                <th className="align-end">MerkleRoot</th>
+                                <th className="align-end">Merkle Root</th>
                                 <td colSpan="2">
                                     <a href={getRoute(routes.merkle, {value: merkle_root})}>
                                         <span className="hash truncate-hash">{merkle_root}</span>

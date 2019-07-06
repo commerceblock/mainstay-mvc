@@ -40,9 +40,9 @@ class Transaction extends Component {
                     <h4 className="p-2 m-t-30 m-b-15 m-l-15">Attestation Transaction</h4>
                     <div className="flex-table">
                         <table className="main-second-position-block" width="100%">
-                            <tbody>
+                            <tbody className="fw-500">
                             <tr>
-                                <th className="align-end">TxID</th>
+                                <th className="align-end">Txid</th>
                                 <td colSpan="2">
                                     <a href={getRoute(routes.transation, {value: txid})}>
                                         <span className="hash truncate-hash with-status">{txid}</span>
@@ -55,7 +55,7 @@ class Transaction extends Component {
                                 </td>
                             </tr>
                             <tr>
-                                <th className="align-end">Merkle_root</th>
+                                <th className="align-end">Merkle Root</th>
                                 <td colSpan="2">
                                     <a href={getRoute(routes.merkle, {value: merkle_root})}>
                                         <span className="hash truncate-hash">{merkle_root}</span>
@@ -67,11 +67,11 @@ class Transaction extends Component {
                                 <td colSpan="2">{inserted_at}</td>
                             </tr>
                             <tr>
-                                <th className="align-end">Amount at</th>
-                                <td>{amount}</td>
+                                <th className="align-end">Amount</th>
+                                <td>{amount} BTC</td>
                             </tr>
                             <tr>
-                                <th className="align-end">Blockhash</th>
+                                <th className="align-end">Block Hash</th>
                                 {blockhash && blockhash !== "" ? (
                                     <td colSpan="2">
                                         <a href={getRoute(routes.block, {value: blockhash})}>
