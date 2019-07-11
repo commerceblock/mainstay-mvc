@@ -4,7 +4,7 @@
     "start": "HOST_API='localhost' PORT_API='4000' PORT='80' webpack-dev-server"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "dateformat": "^3.0.3",
     "express": "^4.16.4",
     "history": "^4.9.0",
