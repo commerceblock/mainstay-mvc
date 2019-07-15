@@ -33,7 +33,7 @@ class LatestAttestation extends Component {
                       <thead>
                           <tr>
                               <th><span className="lh1rem mr-auto">Txid</span></th>
-                              <th><span className="lh1rem mr-auto">MerkleRoot</span></th>
+                              <th><span className="lh1rem mr-auto">Merkle Root</span></th>
                               <th className="lastHead"><span className="lh1rem mr-auto ">Date</span></th>
                           </tr>
                       </thead>

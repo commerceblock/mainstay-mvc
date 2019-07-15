@@ -36,7 +36,7 @@ class MerkleRoot extends Component {
         const { attestation: { txid, merkle_root, confirmed, inserted_at }, merkle_commitment } = data;
         return (
             <div className="full-table" data-controller="homepageMempool">
-                <h4 className="p-2 m-t-30 m-b-15 m-l-15">MerkleRoot</h4>
+                <h4 className="p-2 m-t-30 m-b-15 m-l-15">Merkle Root</h4>
                 <div className="flex-table col-md-6 col-sm-12">
                     <table width="100%" className="fw-500">
                         <tbody>
@@ -69,13 +69,13 @@ class MerkleRoot extends Component {
                     </table>
                 </div>
                 <div className="commitments_title">
-                    <h5 className="align-items-center m-l-15">Commitments ({merkle_commitment.length})</h5>
+                    <h4 className="p-2 m-t-30 m-b-15 m-l-15">Commitments ({merkle_commitment.length})</h4>
                 </div>
                 <div className="mb-4 flex-table col-md-6 col-sm-12">
                     <table width="100%">
                         <thead>
                             <tr className="head-table-row">
-                                <th className="lh2rem p-l-10">Position</th>
+                                <th className="lh2rem p-l-10">Pos.</th>
                                 <th className="lh2rem p-l-10">Commitment</th>
                             </tr>
                         </thead>

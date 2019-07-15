@@ -1,6 +1,6 @@
 import React from 'react';
-import { Route, Redirect, BrowserRouter } from 'react-router-dom';
-import { routes } from './routes';
+import {Route, Redirect, BrowserRouter} from 'react-router-dom';
+import {routes} from './routes';
 import Logo from './Logo';
 import Footer from './Footer';
 import Navbar from './Navbar';
@@ -20,15 +20,14 @@ import Pricing from './Pricing'
 import About from './About';
 
 
-
 const Root = () => (
     <BrowserRouter>
         <div className="top-nav">
             <div className="container">
                 <div className="d-flex align-items-center flex-wrap">
-                    <Logo />
-                    <Searchbar />
-                    <Navbar />
+                    <Logo/>
+                    <Searchbar/>
+                    <Navbar/>
                 </div>
 
             </div>
@@ -37,24 +36,21 @@ const Root = () => (
                 <Route
                     exact
                     path={routes.app}
-                    render={() => <Redirect replace to={routes.home} />}
+                    render={() => <Redirect replace to={routes.home}/>}
                 />
-                <Route path={routes.home} component={Home} />
-                <Route path={routes.search} component={Search} />
-                <Route path={routes.position} component={Position} />
-                <Route path={routes.block} component={Blockhash} />
-                <Route path={routes.commitment} component={Commitment} />
-                <Route path={routes.transation} component={Transaction} />
-                <Route path={routes.merkle} component={MerkleRoot} />
-                <Route path={routes.attestation} component={Attestation} />
-                <Route path={routes.client} exac component={Client} />
-                <Route path={routes.privacy} component={PrivacyPolicy} />
-                <Route path={routes.terms} component={TermsConditions} />
-                <Route path={routes.pricing} component={Pricing} />
-                <Route path={routes.about} component={About} />
-
-
-
+                <Route path={routes.home} component={Home}/>
+                <Route path={routes.search} component={Search}/>
+                <Route path={routes.position} component={Position}/>
+                <Route path={routes.block} component={Blockhash}/>
+                <Route path={routes.commitment} component={Commitment}/>
+                <Route path={routes.transation} component={Transaction}/>
+                <Route path={routes.merkle} component={MerkleRoot}/>
+                <Route path={routes.attestation} component={Attestation}/>
+                <Route path={routes.client} exac component={Client}/>
+                <Route path={routes.privacy} component={PrivacyPolicy}/>
+                <Route path={routes.terms} component={TermsConditions}/>
+                <Route path={routes.pricing} component={Pricing}/>
+                <Route path={routes.about} component={About}/>
 
             </div>
 
