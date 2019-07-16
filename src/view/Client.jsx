@@ -3,6 +3,7 @@ import Axios from "axios";
 
 import NoResult from './NoResult';
 import {getRoute, routes} from "./routes";
+import { Link } from 'react-router-dom';
 
 class Client extends Component {
     constructor(props) {
@@ -46,9 +47,9 @@ class Client extends Component {
                                     <td>{data.position}</td>
                                     <td><span className="hash truncate-hash">{data.client_name}</span></td>
                                     <td colSpan="2">
-                                        <a href={getRoute(routes.commitment, {value: data.commitment || '/'})}>
+                                        <Link to={getRoute(routes.commitment, {value: data.commitment || '/'})}>
                                             <span className="hash truncate-hash">{data.commitment}</span>
-                                        </a>
+                                        </Link>
                                     </td>
                                 </tr>
                             )}

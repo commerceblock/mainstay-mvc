@@ -1,6 +1,7 @@
 import Axios from 'axios';
 import React, { Component } from 'react';
 import Pagination from "react-js-pagination";
+import { Link } from 'react-router-dom';
 
 class Attestation extends Component {
     constructor(props) {
@@ -66,22 +67,22 @@ class Attestation extends Component {
                         {data.map(({ txid, merkle_root, confirmed, age }) =>
                             <tr key={txid}>
                                 <td>
-                                    <a
+                                    <Link
                                         className="hash truncate-hash keyboard-target"
-                                        href={`/tx/${txid}`}
+                                        to={`/tx/${txid}`}
                                         title={txid}
                                     >
                                         {txid}
-                                    </a>
+                                    </Link>
                                 </td>
                                 <td>
-                                    <a
+                                    <Link
                                         className="hash truncate-hash keyboard-target"
-                                        href={`/merkle_root/${merkle_root}`}
+                                        to={`/merkle_root/${merkle_root}`}
                                         title={merkle_root}
                                     >
                                         {merkle_root}
-                                    </a>
+                                    </Link>
                                 </td>
                                 <td>
                                     <span className="text-right ml-1">{`${!!confirmed}`}</span>

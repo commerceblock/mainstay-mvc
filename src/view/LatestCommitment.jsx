@@ -1,6 +1,7 @@
 import Axios from 'axios';
 import React, { Component } from 'react';
 import { routes, getRoute } from "./routes";
+import { Link } from 'react-router-dom';
 
 class LatestCommitment extends Component {
     constructor(props) {
@@ -20,13 +21,13 @@ class LatestCommitment extends Component {
             <div className="column">
                 <div className="d-flex align-items-center justify-content-between">
                     <h4 className="p-2 customTitleStyle">Latest Commitment</h4>
-                    <a
-                        href={routes.client}
+                    <Link
+                        to={routes.client}
                         className="pl-2 keyboard-target non-underline "
                         data-keynav-priority
                     >
                         <small className="color-primary">View All &rarr;</small>
-                    </a>
+                    </Link>
                 </div>
                 <div className="mb-3 flex-table home-table commitment head-table">
                     <table width="100%">
@@ -49,10 +50,10 @@ class LatestCommitment extends Component {
                                     </span>
                                 </td>
                                 <td>
-                                    <a className="hash truncate-hash keyboard-target latestCommitementStyle"
-                                       href={getRoute(routes.commitment, { value: data.commitment })}
+                                    <Link className="hash truncate-hash keyboard-target latestCommitementStyle"
+                                       to={getRoute(routes.commitment, { value: data.commitment })}
                                        title={data.commitment}>{data.commitment}
-                                    </a>
+                                    </Link>
                                 </td>
                             </tr>
                         )}

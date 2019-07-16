@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import NotFound from './NotFound';
 import Flag from './Flag';
 import {getRoute, routes} from "./routes";
-
+import { Link } from 'react-router-dom';
 
 class Transaction extends Component {
     constructor(props) {
@@ -44,9 +44,9 @@ class Transaction extends Component {
                             <tr>
                                 <th className="align-end">Txid</th>
                                 <td colSpan="2">
-                                    <a href={getRoute(routes.transation, {value: txid})}>
+                                    <Link to={getRoute(routes.transation, {value: txid})}>
                                         <span className="hash truncate-hash with-status">{txid}</span>
-                                    </a>
+                                    </Link>
                                     <Flag
                                         label={confirmed ? 'Confirmed' : 'Pending'}
                                         viewType={confirmed ? 'success' : 'info'}
@@ -57,9 +57,9 @@ class Transaction extends Component {
                             <tr>
                                 <th className="align-end">Merkle Root</th>
                                 <td colSpan="2">
-                                    <a href={getRoute(routes.merkle, {value: merkle_root})}>
+                                    <Link to={getRoute(routes.merkle, {value: merkle_root})}>
                                         <span className="hash truncate-hash">{merkle_root}</span>
-                                    </a>
+                                    </Link>
                                 </td>
                             </tr>
                             <tr>
@@ -74,9 +74,9 @@ class Transaction extends Component {
                                 <th className="align-end">Block Hash</th>
                                 {blockhash && blockhash !== "" ? (
                                     <td colSpan="2">
-                                        <a href={getRoute(routes.block, {value: blockhash})}>
+                                        <Link to={getRoute(routes.block, {value: blockhash})}>
                                             <span className="hash truncate-hash">{blockhash}</span>
-                                        </a>
+                                        </Link>
                                     </td>
                                 ) : (
                                     <td colSpan="2">

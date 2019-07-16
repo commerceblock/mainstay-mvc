@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, Redirect, BrowserRouter} from 'react-router-dom';
+import {Route, Redirect, Router, Switch} from 'react-router-dom';
 import {routes} from './routes';
 import Logo from './Logo';
 import Footer from './Footer';
@@ -18,10 +18,10 @@ import TermsConditions from "./TermsConditions";
 import Home from './Home'
 import Pricing from './Pricing'
 import About from './About';
-
+import appHistory from './app.history';
 
 const Root = () => (
-    <BrowserRouter>
+    <Router history={appHistory}>
         <div className="top-nav">
             <div className="container">
                 <div className="d-flex align-items-center flex-wrap">
@@ -33,31 +33,33 @@ const Root = () => (
             </div>
             <div className="container main" data-controller="main">
 
-                <Route
-                    exact
-                    path={routes.app}
-                    render={() => <Redirect replace to={routes.home}/>}
-                />
-                <Route path={routes.home} component={Home}/>
-                <Route path={routes.search} component={Search}/>
-                <Route path={routes.position} component={Position}/>
-                <Route path={routes.block} component={Blockhash}/>
-                <Route path={routes.commitment} component={Commitment}/>
-                <Route path={routes.transation} component={Transaction}/>
-                <Route path={routes.merkle} component={MerkleRoot}/>
-                <Route path={routes.attestation} component={Attestation}/>
-                <Route path={routes.client} exac component={Client}/>
-                <Route path={routes.privacy} component={PrivacyPolicy}/>
-                <Route path={routes.terms} component={TermsConditions}/>
-                <Route path={routes.pricing} component={Pricing}/>
-                <Route path={routes.about} component={About}/>
-
+                {/*<Route*/}
+                    {/*exact*/}
+                    {/*path={routes.app}*/}
+                    {/*render={() => <Redirect replace to={routes.home}/>}*/}
+                {/*/>*/}
+                <Switch>
+                    <Route path={routes.home} component={Home}/>
+                    <Route path={routes.search} component={Search}/>
+                    <Route path={routes.position} component={Position}/>
+                    <Route path={routes.block} component={Blockhash}/>
+                    <Route path={routes.commitment} component={Commitment}/>
+                    <Route path={routes.transation} component={Transaction}/>
+                    <Route path={routes.merkle} component={MerkleRoot}/>
+                    <Route path={routes.attestation} component={Attestation}/>
+                    <Route path={routes.client} exac component={Client}/>
+                    <Route path={routes.privacy} component={PrivacyPolicy}/>
+                    <Route path={routes.terms} component={TermsConditions}/>
+                    <Route path={routes.pricing} component={Pricing}/>
+                    <Route path={routes.about} component={About}/>
+                    <Redirect from={routes.app} to={routes.home} />
+                </Switch>
             </div>
 
             <Footer/>
 
         </div>
-    </BrowserRouter>
+    </Router>
 );
 
 export default Root;

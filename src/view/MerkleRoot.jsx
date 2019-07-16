@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import NotFound from './NotFound';
 import { routes, getRoute } from "./routes";
 import Flag from "./Flag";
-
+import { Link } from 'react-router-dom';
 
 class MerkleRoot extends Component {
     constructor(props) {
@@ -43,17 +43,17 @@ class MerkleRoot extends Component {
                         <tr>
                             <th className="align-end">Merkle Root</th>
                             <td colSpan="2">
-                                <a href={getRoute(routes.merkle, {value: merkle_root})}>
+                                <Link to={getRoute(routes.merkle, {value: merkle_root})}>
                                     <span className="hash truncate-hash">{merkle_root}</span>
-                                </a>
+                                </Link>
                             </td>
                         </tr>
                         <tr>
                             <th className="align-end">Txid</th>
                             <td colSpan="2">
-                                <a href={getRoute(routes.transation, {value: txid})}>
+                                <Link to={getRoute(routes.transation, {value: txid})}>
                                     <span className="hash truncate-hash with-status">{txid}</span>
-                                </a>
+                                </Link>
                                 <Flag
                                     label={confirmed ? 'Confirmed' : 'Pending'}
                                     viewType={confirmed ? 'success': 'info'}
@@ -84,9 +84,9 @@ class MerkleRoot extends Component {
                             <tr key={commitment}>
                                 <td>{position}</td>
                                 <td colSpan="2">
-                                    <a href={getRoute(routes.commitment, { value: commitment })}>
+                                    <Link to={getRoute(routes.commitment, { value: commitment })}>
                                         <span className="hash truncate-hash">{commitment}</span>
-                                    </a>
+                                    </Link>
                                 </td>
                             </tr>
                         )}

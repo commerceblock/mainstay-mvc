@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import NotFound from './NotFound';
 import {getRoute, routes} from "./routes";
 import Pagination from "react-js-pagination";
+import { Link } from 'react-router-dom';
 
 class Position extends Component {
     constructor(props) {
@@ -72,9 +73,9 @@ class Position extends Component {
                             {data.map(data => (
                                 <tr>
                                     <td>
-                                        <a href={getRoute(routes.commitment, {value: data.commitment})}>
+                                        <Link to={getRoute(routes.commitment, {value: data.commitment})}>
                                             <span className="hash truncate-hash">{data.commitment}</span>
-                                        </a>
+                                        </Link>
                                     </td>
                                     <td><span className="hash truncate-hash">{data.date}</span></td>
                                 </tr>

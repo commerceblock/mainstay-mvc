@@ -8,6 +8,7 @@ import {
 import { routes } from './routes';
 import Axios from "axios";
 import swal from "sweetalert";
+import { Link } from 'react-router-dom';
 
 const options = [
     { label: 'Position', name: 'position', hint: '0' },
@@ -74,10 +75,10 @@ class Navbar extends React.Component {
                 <NavbarOrigin>
                     <Nav>
                         <NavItem className="col-sm-12 col-lg-3 hover-active">
-                            <NavLink href={routes.attestation}>Attestations</NavLink>
+                            <Link to={routes.attestation}>Attestations</Link>
                         </NavItem>
                         <NavItem  className="col-sm-12 col-lg-3 hover-active">
-                            <NavLink href={routes.client}>Clients</NavLink>
+                            <Link to={routes.client}>Clients</Link>
                         </NavItem>
                         <NavItem  className="col-sm-12 col-lg-6 hover-btn-active">
                             <Button color="success" onClick={this.toggle}>Send Commitment</Button>

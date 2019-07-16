@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 import { routes } from './routes';
 
 
@@ -7,26 +7,26 @@ const Footer = () => (
     <footer className="d-flex navbar-fixed-bottom nav-footer">
         <div className="d-flex align-items-center col-sm-12 nav-footer-right col-lg-6">
             <div className="footer-list-item">
-                <a href={routes.about}>About</a>
+                <Link to={routes.about}>About</Link>
             </div>
             <div className="footer-list-item">
-                <a href={routes.pricing}>Pricing</a>
+                <Link to={routes.pricing}>Pricing</Link>
             </div>
             <div className="footer-list-item">
-                <a href="/">API Information</a>
+                <Link to="/">API Information</Link>
             </div>
             <div className="footer-list-item">
-                <a href={routes.privacy}>Privacy policy</a>
+                <Link to={routes.privacy}>Privacy policy</Link>
             </div>
             <div className="footer-list-item">
-                <a href={routes.terms}>Terms And Conditions</a>
+                <Link to={routes.terms}>Terms And Conditions</Link>
             </div>
         </div>
         <div className="d-flex align-items-center col-sm-12 nav-footer-left col-lg-6">
             <div className="m-auto">
-                <a href="/" className="logo">
+                <Link to="/" className="logo">
                     <img src="favicon.png" alt="favicon"/>
-                </a>
+                </Link>
                 <span>Mainstay-mvc v0.5.0-release © 2019 CommerceBlock Limited. All rights reserved.</span>
             </div>
         </div>

@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import NotFound from './NotFound';
 import { getRoute, routes } from './routes';
 import Flag from "./Flag";
+import { Link } from 'react-router-dom';
 
 class Blockhash extends Component {
     constructor(props) {
@@ -47,9 +48,9 @@ class Blockhash extends Component {
                         <tr>
                             <th className="align-end">Txid</th>
                             <td colSpan="2">
-                                <a href={getRoute(routes.transation, {value: txid})}>
+                                <Link to={getRoute(routes.transation, {value: txid})}>
                                     <span className="hash truncate-hash with-status">{txid}</span>
-                                </a>
+                                </Link>
                                 <Flag
                                     label={confirmed ? 'Confirmed' : 'Pending'}
                                     viewType={confirmed ? 'success': 'info'}

@@ -2,6 +2,7 @@ import Axios from 'axios';
 import React, { Component } from 'react';
 import { getRoute, routes } from "./routes";
 import Flag from "./Flag";
+import { Link } from 'react-router-dom';
 
 class LatestAttestationInfo extends Component {
     constructor(props) {
@@ -53,17 +54,17 @@ class LatestAttestationInfo extends Component {
                 <tr>
                     <th className="align-end">Block Hash</th>
                     <td colSpan="2">
-                        <a href={getRoute(routes.block, {value: blockhash})}>
+                        <Link to={getRoute(routes.block, {value: blockhash})}>
                             <span className="hash truncate-hash">{blockhash}</span>
-                        </a>
+                        </Link>
                     </td>
                 </tr>
                 <tr>
                     <th className="align-end">Latest Txid</th>
                     <td colSpan="2">
-                        <a href={getRoute(routes.transation, {value: txid})}>
+                        <Link to={getRoute(routes.transation, {value: txid})}>
                             <span className="hash truncate-hash">{txid}</span>
-                        </a>
+                        </Link>
                     </td>
                 </tr>
                 <tr>

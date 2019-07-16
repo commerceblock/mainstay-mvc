@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 
 const About = () => (
@@ -36,10 +37,10 @@ const About = () => (
                 <p className="fs14">
                     For further details, please see our MainStay documentation inventory:
                     <span className="docDownload">
-                        <a href="/">
+                        <Link to="/">
                              <img src="doc-icon.png" alt="doc-icon"/>
                         MainStay - Tech Docs
-                        </a>
+                        </Link>
 
                     </span>
                 </p>
