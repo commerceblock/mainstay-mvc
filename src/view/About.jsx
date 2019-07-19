@@ -37,10 +37,10 @@ const About = () => (
                 <p className="fs14">
                     For further details, please see our MainStay documentation inventory:
                     <span className="docDownload">
-                        <Link to="/">
+                        <a href="https://commerceblock.readthedocs.io/en/latest/">
                              <img src="doc-icon.png" alt="doc-icon"/>
                         MainStay - Tech Docs
-                        </Link>
+                        </a>
 
                     </span>
                 </p>

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { routes } from './routes';
+import {Link} from 'react-router-dom';
+import {routes} from './routes';
 
 
 const Footer = () => (
@@ -13,7 +13,8 @@ const Footer = () => (
                 <Link to={routes.pricing}>Pricing</Link>
             </div>
             <div className="footer-list-item">
-                <Link to="/">API Information</Link>
+                <a href="https://github.com/commerceblock/mainstay-mvc/blob/develop/doc/mainstay_api.md">API
+                    Information</a>
             </div>
             <div className="footer-list-item">
                 <Link to={routes.privacy}>Privacy policy</Link>
@@ -27,7 +28,11 @@ const Footer = () => (
                 <Link to="/" className="logo">
                     <img src="favicon.png" alt="favicon"/>
                 </Link>
-                <span>Mainstay-mvc v0.5.0-release © 2019 CommerceBlock Limited. All rights reserved.</span>
+                <span>© 2019 CommerceBlock Limited. All rights reserved.</span>
+                <div className="powered-by">
+                    <span>Powered by </span>
+                    <img src="securosys.png" alt="logo"/>
+                </div>
             </div>
         </div>
 

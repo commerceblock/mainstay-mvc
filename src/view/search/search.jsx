@@ -64,7 +64,7 @@ class Search extends Component {
     render() {
         const isWrongSearchValue = this.state.wrong_search_value;
         return (
-            <div className="col-lg-5 search">
+            <div className="col-lg-6 col-md-5 search">
                 <div className="col pl-2 desktopSearch">
                     <form onSubmit={this.handleSubmit}>
                         <div className="input-group">

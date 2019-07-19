@@ -426,6 +426,11 @@ body.darkBG .progress {
   text-align: center;
 }
 
+.navbar button {
+  white-space: nowrap;
+  text-align: center;
+}
+
 .top-nav a {
   color: #1C1C1C;
 }
@@ -1416,6 +1421,7 @@ html {
 
 .m-auto {
   margin: 0 auto;
+  display: inherit;
 }
 
 .align-end {
@@ -1426,6 +1432,14 @@ html {
 .logo-footer {
   width: 30px;
 }
+
+.powered-by {
+  margin-left: 100px;
+}
+.powered-by img {
+  height: 20px;
+}
+
 
 .nav-footer {
   position: fixed;
@@ -1545,10 +1559,6 @@ th, th span {
 
 .customTitleStyle {
   margin-left: 12px;
-}
-
-.logoImg {
-  margin-left: 5px;
 }
 
 .lastHead {

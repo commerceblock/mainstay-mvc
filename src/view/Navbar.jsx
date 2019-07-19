@@ -71,16 +71,16 @@ class Navbar extends React.Component {
 
     render() {
         return (
-            <div className="col">
+            <div className="col-lg-4 col-md-5">
                 <NavbarOrigin>
-                    <Nav className="col">
-                        <NavItem className="col-sm-12 col-lg-3 hover-active">
+                    <Nav className="col-lg-12 col-md-12">
+                        <NavItem className="col-sm-12 col-lg-3 col-md-3 hover-active">
                             <Link to={routes.attestation}>Attestations</Link>
                         </NavItem>
-                        <NavItem  className="col-sm-12 col-lg-3 hover-active">
+                        <NavItem  className="col-sm-12 col-lg-3 col-md-3 hover-active">
                             <Link to={routes.client}>Clients</Link>
                         </NavItem>
-                        <NavItem  className="col-sm-12 col-lg-5 hover-btn-active">
+                        <NavItem  className="col-sm-12 col-lg-5 col-md-5 hover-btn-active">
                             <Button color="success" onClick={this.toggle}>Send Commitment</Button>
                         </NavItem>
                     </Nav>
