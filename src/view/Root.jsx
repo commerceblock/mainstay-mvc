@@ -4,7 +4,6 @@ import {routes} from './routes';
 import Logo from './Logo';
 import Footer from './Footer';
 import Navbar from './Navbar';
-import Searchbar from './Searchbar';
 import Client from "./Client";
 import PrivacyPolicy from "./PrivacyPolicy";
 import Commitment from './Commitment';
@@ -24,20 +23,15 @@ const Root = () => (
     <Router history={appHistory}>
         <div className="top-nav">
             <div className="container">
-                <div className="d-flex align-items-center flex-wrap">
+                <div className="d-flex m-t-15 align-items-center flex-wrap">
                     <Logo/>
-                    <Searchbar/>
+                    <Search/>
                     <Navbar/>
                 </div>
 
             </div>
             <div className="container main" data-controller="main">
 
-                {/*<Route*/}
-                    {/*exact*/}
-                    {/*path={routes.app}*/}
-                    {/*render={() => <Redirect replace to={routes.home}/>}*/}
-                {/*/>*/}
                 <Switch>
                     <Route path={routes.home} component={Home}/>
                     <Route path={routes.search} component={Search}/>

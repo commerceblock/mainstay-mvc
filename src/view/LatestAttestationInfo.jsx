@@ -1,8 +1,7 @@
 import Axios from 'axios';
-import React, { Component } from 'react';
-import { getRoute, routes } from "./routes";
-import Flag from "./Flag";
-import { Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {getRoute, routes} from "./routes";
+import {Link} from 'react-router-dom';
 
 class LatestAttestationInfo extends Component {
     constructor(props) {
@@ -19,7 +18,7 @@ class LatestAttestationInfo extends Component {
 
     fetchInfo = () => {
         Axios.get('/ctrl/latestattestationinfo')
-            .then(({ data }) => {
+            .then(({data}) => {
                 let feeSum = 0;
                 data.forEach((d, i) => {
                     if (i < data.length - 1) {
@@ -31,24 +30,30 @@ class LatestAttestationInfo extends Component {
                     }
                 });
 
-                this.setState({ data: data[0], fee: feeSum / (data.length - 1) });
+                this.setState({data: data[0], fee: feeSum / (data.length - 1)});
             });
     };
 
     render() {
-        const { data, fee } = this.state;
+        const {data, fee} = this.state;
 
         if (!data) {
             return (
-                <div className="mb-3 flex-table">
-                    <div className="d-flex justify-content-end header">
-                        <span className="lh1rem mr-auto">Block Hash</span>
-                        <span className="lh1rem text-right ml-1"></span>
-                    </div>
-                </div>
+                <>
+                    <tr>
+                        <td>
+                            <div className="mb-3 flex-table">
+                                <div className="d-flex justify-content-end header">
+                                    <span className="lh1rem mr-auto">Block Hash</span>
+                                    <span className="lh1rem text-right ml-1"></span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </>
             );
         }
-        const { blockhash, txid, time, amount } = data;
+        const {blockhash, txid, time, amount} = data;
         return (
             <>
                 <tr>

@@ -20,6 +20,12 @@ class Position extends Component {
         this.fetchPage(1)
     }
 
+    componentDidUpdate(prevProps){
+        if (this.props.match.params.value !== prevProps.match.params.value){
+            this.handlePageChange(1)
+        }
+    };
+
     handlePageChange = (pageNumber) => {
         this.fetchPage(pageNumber);
     };
@@ -29,7 +35,6 @@ class Position extends Component {
             .then(({data}) => {
 
                 if (data?.data) {
-                    console.log(data);
                     this.setState({
                         data: data.data,
                         position: data.position,
@@ -56,11 +61,14 @@ class Position extends Component {
         }
         return (
             <div className="row">
-                <div className="col-lg-6 col-sm-12 m-t-30" data-controller="homepageMempool">
-                    <h4 className="p-2 m-t-30 m-b-15 m-l-15">Position: {this.state.position}</h4>
+                <div className="col-lg-6 col-sm-12" data-controller="homepageMempool">
+
+                    <h4 className="p-2 m-t-30 m-b-30 m-l-15">Client</h4>
+                    <h5 className="m-l-30">Name: {this.state.client}</h5>
+                    <h5 className="m-l-30">Position: {this.state.position}</h5>
 
                     <div className="commitments_title">
-                        <h5 className="align-items-center m-l-15">Commitments({this.state.totalItemsCount})</h5>
+                        <h4 className="p-2 m-b-15 m-l-15">Commitments({this.state.totalItemsCount})</h4>
                     </div>
 
                     <div className="mb-4 flex-table col-lg-12 col-sm-12">

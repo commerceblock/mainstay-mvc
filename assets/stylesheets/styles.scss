@@ -418,6 +418,14 @@ body.darkBG .progress {
   line-height: 22px;
 }
 
+.navbar li a {
+  vertical-align: middle;
+}
+
+.navbar ul li {
+  text-align: center;
+}
+
 .top-nav a {
   color: #052f4b;
 }
@@ -426,7 +434,6 @@ body.darkBG .progress {
   line-height: 15px;
   height: 30px;
   font-size: 14px;
-  margin-top: 5px;
 }
 
 .top-nav .dcricon-decred {
@@ -493,6 +500,10 @@ body.darkBG .progress {
   padding: 0;
   z-index: 2;
   -webkit-touch-callout: none;
+}
+
+.homepageMempool {
+  margin-top: 20px;
 }
 
 .patty {
@@ -1170,15 +1181,6 @@ html {
   background-color: #f2dede;
 }
 
-.lastAttestationPage {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.lastAttestationPage .latestAttestation {
-  height: auto !important;
-}
-
 
 .head-table-row {
   border-radius: 5px;
@@ -1196,9 +1198,10 @@ html {
   padding-left: 15px;
 }
 
-.main table td span, .main table td a {
+.main table td span, .main table td a, .navbar a {
   color: #1c1c1c;
 }
+
 
 .block-title {
   display: block;
@@ -1391,18 +1394,25 @@ html {
   margin-top: 30px;
 }
 
+.m-b-5 {
+  margin-bottom: 5px;
+}
+
 .m-b-15 {
   margin-bottom: 15px;
 }
 
-.m-b-5 {
-  margin-bottom: 5px;
+.m-b-30 {
+  margin-bottom: 30px;
 }
 
 .m-l-15 {
   margin-left: 15px;
 }
 
+.m-l-30 {
+  margin-left: 30px;
+}
 
 .m-auto {
   margin: 0 auto;
@@ -1685,14 +1695,18 @@ th, th span {
 .search-tooltip {
   font-size: 11px;
   position: absolute;
-  left: 0;
+  left: 14px;
   right: 0;
+  top: 40px;
   margin: 0;
-  margin-right:15%;
-  text-align: center;
-  color: red;
+  margin-right: 0;
+  text-align: left;
+  color: #c24231;
 }
 
+.top-search.wrong-search {
+  border-bottom-color: #c24231;
+}
 
 /*responsive*/
 @media only screen and (max-width: 992px) {
@@ -1799,6 +1813,11 @@ th, th span {
     width: 45vw;
   }
 
+  .search-tooltip {
+    position: relative;
+    top: 0;
+  }
+
   .full-table .hash.truncate-hash.with-status {
     width: 20vw;
   }
@@ -1859,6 +1878,9 @@ th, th span {
     &.show {
       display: block;
     }
+  }
+  .navbar ul li {
+    text-align: left;
   }
   .navbar ul li a {
     padding-left: 0;
@@ -1968,6 +1990,7 @@ th, th span {
   }
 
 }
+
 .fw-500 td, .fw-500 td a, .fw-500 td span {
   font-weight: 500;
 }

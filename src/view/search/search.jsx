@@ -1,89 +1,118 @@
 import Axios from 'axios';
-import LatestAttestation from '../LatestAttestation';
-import LatestCommitment from '../LatestCommitment';
-import MainstayInfo from '../MainstayInfo';
 import React, {Component} from 'react';
-import QueryString from 'query-string';
-
-
-class Waiting extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            value: QueryString.parse(location.search)
-        }
-    }
-
-    render() {
-        return (
-            <div className="row" data-controller="homepageMempool">
-                <div className="col-md-12">
-                    <div className="search-tooltip ">
-                        Search does not match any valid client position, attestation transaction id or commitment hash.
-                    </div>
-                </div>
-                <div className="col-md-12">
-                    <MainstayInfo/>
-                </div>
-                <div className="col-md-7 m-t-15">
-                    <LatestAttestation/>
-                </div>
-                <div className="col-md-5 m-t-15">
-                    <LatestCommitment/>
-                </div>
-            </div>
-        );
-    }
-}
-
-const type_unknown = (<div>Page - Type Unknown</div>);
-
-const undefined = (<div>Page - Undefined</div>);
+import history from '../app.history';
 
 class Search extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            page: '',
+            wrong_search_value: false,
+            value: ''
         };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount() {
-        const {location} = this.props;
+    componentWillUpdate() {
+        this.state.value = "";
+        this.state.wrong_search_value = false
+    }
 
-        const value = QueryString.parse(location.search);
+    resetSearch(e) {
+        e.target.value = '';
+        this.state.wrong_search_value = false;
+    }
 
-        if (value.query === undefined)
-            return this.setState({page: page_undefined});
-        if (/[0-9A-Fa-f]{64}/g.test(value.query) || /^\d+$/.test(value.query)) {
-            Axios.get("/ctrl/type?value=" + value.query)
+    handleChange(event) {
+        this.setState({value: event.target.value});
+        if (!event.target.value)
+            this.state.wrong_search_value = false
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+
+        this.state.wrong_search_value = false;
+        const value = this.state.value;
+        if (value && (/[0-9A-Fa-f]{64}/g.test(value) || /^\d+$/.test(value))) {
+            Axios.get("/ctrl/type?value=" + value)
                 .then(response => {
                     if (response.data.response === 'commitment')
-                        this.props.history.replace(`/commitment/${value.query}`);
+                        history.push(`/commitment/${value}`);
                     else if (response.data.response === 'merkle_root')
-                        this.props.history.replace(`/merkle_root/${value.query}`);
+                        history.push(`/merkle_root/${value}`);
                     else if (response.data.response === 'position')
-                        this.props.history.replace(`/position/${value.query}`);
+                        history.push(`/position/${value}`);
                     else if (response.data.response === 'txid')
-                        this.props.history.replace(`/tx/${value.query}`);
+                        history.push(`/tx/${value}`);
                     else if (response.data.response === 'blockhash')
-                        this.props.history.replace(`/block/${value.query}`);
+                        history.push(`/block/${value}`);
                     else if (response.data.response === 'type unknown')
-                        this.setState({page: type_unknown()});
+                        this.setState({wrong_search_value: true});
                     else
-                        this.setState({page: undefined()});
+                        this.setState({wrong_search_value: true});
                 })
                 .catch(() => {
-                    this.setState({page: <Waiting/>});
+                    this.setState({wrong_search_value: true});
                 });
         } else {
-            this.setState({page: <Waiting/>});
+            this.setState({wrong_search_value: true});
         }
     }
 
     render() {
-        return this.state.page;
+        const isWrongSearchValue = this.state.wrong_search_value;
+        return (
+            <div className="col-lg-5 search">
+                <div className="col pl-2 desktopSearch">
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="input-group">
+                            <input
+                                tabIndex="0"
+                                type="text"
+                                name="query"
+                                id="search"
+                                className={"form-control top-search mousetrap " + (isWrongSearchValue && 'wrong-search')}
+                                placeholder="Search for position, commitment, txid, ..."
+                                value={this.state.value} onChange={this.handleChange}
+                            />
+                            <img src="search.png" alt="search" className="top-search-icon"/>
+                            {
+                                isWrongSearchValue &&
+                                <div className="search-tooltip ">
+                                    Search does not match any valid client position, attestation transaction id or
+                                    commitment hash.
+                                </div>
+                            }
+                        </div>
+                    </form>
+                </div>
+                <div className="col-12 mobileSearch">
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="input-group">
+                            <input
+                                tabIndex="0"
+                                type="text"
+                                name="query"
+                                id="search"
+                                className={"form-control top-search mousetrap" + (isWrongSearchValue && 'wrong-search')}
+                                placeholder="Search for position, commitment, txid, ..."
+                                value={this.state.value} onChange={this.handleChange}
+                            />
+                            <img src="search.png" alt="search" className="top-search-icon"/>
+                            {
+                                isWrongSearchValue &&
+                                <div className="search-tooltip ">
+                                    Search does not match any valid client position, attestation transaction id or
+                                    commitment hash.
+                                </div>
+                            }
+                        </div>
+                    </form>
+                </div>
+            </div>
+        )
     }
 }
 

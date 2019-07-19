@@ -71,16 +71,16 @@ class Navbar extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="col">
                 <NavbarOrigin>
-                    <Nav>
+                    <Nav className="col">
                         <NavItem className="col-sm-12 col-lg-3 hover-active">
                             <Link to={routes.attestation}>Attestations</Link>
                         </NavItem>
                         <NavItem  className="col-sm-12 col-lg-3 hover-active">
                             <Link to={routes.client}>Clients</Link>
                         </NavItem>
-                        <NavItem  className="col-sm-12 col-lg-6 hover-btn-active">
+                        <NavItem  className="col-sm-12 col-lg-5 hover-btn-active">
                             <Button color="success" onClick={this.toggle}>Send Commitment</Button>
                         </NavItem>
                     </Nav>
@@ -108,7 +108,6 @@ class Navbar extends React.Component {
                     </Form>
                 </Modal>
 
-                <img src="search.png" alt="search" className="top-search-icon-mobile"/>
             </div>
         );
     }
