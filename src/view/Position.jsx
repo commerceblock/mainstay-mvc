@@ -3,7 +3,8 @@ import React, {Component} from 'react';
 import NotFound from './NotFound';
 import {getRoute, routes} from "./routes";
 import Pagination from "react-js-pagination";
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
+import Flag from "./Flag";
 
 class Position extends Component {
     constructor(props) {
@@ -20,8 +21,8 @@ class Position extends Component {
         this.fetchPage(1)
     }
 
-    componentDidUpdate(prevProps){
-        if (this.props.match.params.value !== prevProps.match.params.value){
+    componentDidUpdate(prevProps) {
+        if (this.props.match.params.value !== prevProps.match.params.value) {
             this.handlePageChange(1)
         }
     };
@@ -63,9 +64,27 @@ class Position extends Component {
             <div className="row">
                 <div className="col-lg-6 col-sm-12" data-controller="homepageMempool">
 
-                    <h4 className="p-2 m-t-30 m-b-30 m-l-15">Client</h4>
-                    <h5 className="m-l-30">Name: {this.state.client}</h5>
-                    <h5 className="m-l-30">Position: {this.state.position}</h5>
+                    <h4 className="p-2 m-t-30 m-b-15 m-l-15">Client</h4>
+                    <div className="flex-table col-md-6 col-sm-12">
+                        <table width="100%" className="fw-500">
+                            <tbody>
+                            <tr>
+                                <th className="align-end">Name</th>
+                                <td colSpan="2">
+                                    <span className="hash truncate-hash">Some Client name</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th className="align-end">Position</th>
+                                <td colSpan="2">
+                                    <span className="hash truncate-hash with-status">{this.state.position}</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    {/*<h5 className="m-l-30">Name: {this.state.client}</h5>*/}
+                    {/*<h5 className="m-l-30">Position: {this.state.position}</h5>*/}
 
                     <div className="commitments_title">
                         <h4 className="p-2 m-b-15 m-l-15">Commitments({this.state.totalItemsCount})</h4>

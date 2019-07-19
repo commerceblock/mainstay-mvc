@@ -14,7 +14,17 @@ class Transaction extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        this.fetchData()
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.match.params.value !== prevProps.match.params.value) {
+            this.fetchData()
+        }
+    };
+
+    fetchData = () => {
         Axios.get("/api/v1/attestation?txid=" + this.props.match.params.value)
             .then(({data, error}) => {
                 if (data?.response) {
@@ -22,7 +32,7 @@ class Transaction extends Component {
                 }
                 this.setState({isReady: true});
             });
-    }
+    };
 
     render() {
         const {isReady, data} = this.state;

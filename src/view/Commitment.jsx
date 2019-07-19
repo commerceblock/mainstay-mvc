@@ -15,6 +15,16 @@ class Commitment extends Component {
     }
 
     componentDidMount() {
+        this.fetchData()
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.match.params.value !== prevProps.match.params.value) {
+            this.fetchData()
+        }
+    };
+
+    fetchData = () => {
         Axios.get(`/api/v1/commitment/commitment?commitment=${this.props.match.params.value}`)
             .then(({ data }) => {
                 if (data?.response) {
@@ -22,7 +32,7 @@ class Commitment extends Component {
                 }
                 this.setState({ isReady: true });
             });
-    }
+    };
 
     render() {
         const { isReady, data } = this.state;
