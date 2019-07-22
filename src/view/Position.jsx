@@ -104,7 +104,7 @@ class Position extends Component {
                                             <span className="hash truncate-hash">{data.commitment}</span>
                                         </Link>
                                     </td>
-                                    <td><span className="hash truncate-hash">{data.date}</span></td>
+                                    <td><span>{data.date}</span></td>
                                 </tr>
                             ))}
                             </tbody>

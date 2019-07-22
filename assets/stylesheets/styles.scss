@@ -1718,11 +1718,21 @@ th, th span {
   border-bottom-color: #c24231;
 }
 
+.form-control:focus {
+  border-color: #ced4da;
+}
+
 /*responsive*/
-@media only screen and (max-width: 992px) {
-  // .container {
-  //   max-width: 100% !important;
-  // }
+@media only screen and (max-width: 1350px) {
+ .search {
+   max-width: 35%;
+   input {
+     font-size: 13px;
+   }
+ }
+  .navbar {
+    width: 50vw;
+  }
 }
 
 
@@ -1731,7 +1741,40 @@ th, th span {
   .blockHash, .txId {
     min-height: auto;
   }
+  .navbar .btn-success:hover,
+  .navbar .btn-success:focus,
+  .navbar .btn-success:not(:disabled):not(.disabled).active,
+  .navbar .btn-success:not(:disabled):not(.disabled):active,
+  .navbar .show>.btn-success.dropdown-toggle {
+    background: #Fff;
+    border-color: #Fff;
+    outline: none;
+    box-shadow:none;
+    color: #1C1C1C;
+  }
+  .search {
+    max-width: 100%;
+  }
 
+  .navbar {
+
+    padding-left: 0;
+
+    &.show {
+      display: block;
+    }
+  }
+  .navbar ul li {
+    text-align: left;
+  }
+  .navbar ul li a {
+    padding-left: 0;
+
+  }
+
+  .nav li button {
+    font-size: 16px;
+  }
 
   .footer-content {
     position: relative;
@@ -1823,6 +1866,7 @@ th, th span {
     width: 45vw;
   }
 
+
   .search-tooltip {
     position: relative;
     top: 0;
@@ -1854,6 +1898,7 @@ th, th span {
     max-width: 100%;
     margin-bottom: 20%;
   }
+
   .pricing-heading h4 {
     margin-left: 7px;
   }
@@ -1881,21 +1926,7 @@ th, th span {
 
 
   }
-  .navbar {
 
-    padding-left: 0;
-
-    &.show {
-      display: block;
-    }
-  }
-  .navbar ul li {
-    text-align: left;
-  }
-  .navbar ul li a {
-    padding-left: 0;
-
-  }
   .mobileSearch {
     display: block;
   }
@@ -1912,10 +1943,10 @@ th, th span {
     margin-bottom: 20px;
   }
   .home-table table td {
-    width: 25vw;
+    width: 21vw;
   }
   .home-table table td a {
-    width: 25vw;
+    width: 19vw;
   }
   .main-second-position-block {
     margin-left: 0;
@@ -1996,9 +2027,32 @@ th, th span {
     width: 69vw !important;
   }
   .home-table table th {
-    width: 16vw;
+    width: 23vw;
+  }
+  .lastHead {
+    width: 22vw !important;
   }
 
+  .powered-by {
+    margin-left: 30px;
+  }
+  .home-table table td span {
+    margin-left: 0 !important;
+  }
+
+}
+
+@media only screen and (max-width: 320px) {
+  h4 {
+    font-size: 18px !important;
+  }
+
+  .truncate-hash.with-status {
+    width: 22vw;
+  }
+  .ops-hash.truncate-hash {
+    width: 30vw;
+  }
 }
 
 .fw-500 td, .fw-500 td a, .fw-500 td span {

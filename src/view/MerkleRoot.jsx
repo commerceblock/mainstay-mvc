@@ -45,63 +45,65 @@ class MerkleRoot extends Component {
         }
         const {attestation: {txid, merkle_root, confirmed, inserted_at}, merkle_commitment} = data;
         return (
-            <div className="full-table" data-controller="homepageMempool">
-                <h4 className="p-2 m-t-30 m-b-15 m-l-15">Merkle Root</h4>
-                <div className="flex-table col-md-6 col-sm-12">
-                    <table width="100%" className="fw-500">
-                        <tbody>
-                        <tr>
-                            <th className="align-end">Merkle Root</th>
-                            <td colSpan="2">
-                                <Link to={getRoute(routes.merkle, {value: merkle_root})}>
-                                    <span className="hash truncate-hash">{merkle_root}</span>
-                                </Link>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="align-end">Txid</th>
-                            <td colSpan="2">
-                                <Link to={getRoute(routes.transation, {value: txid})}>
-                                    <span className="hash truncate-hash with-status">{txid}</span>
-                                </Link>
-                                <Flag
-                                    label={confirmed ? 'Confirmed' : 'Pending'}
-                                    viewType={confirmed ? 'success' : 'info'}
-                                    className="m-l-15"
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="align-end">Time</th>
-                            <td>{inserted_at}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div className="commitments_title">
-                    <h4 className="p-2 m-t-30 m-b-15 m-l-15">Commitments ({merkle_commitment.length})</h4>
-                </div>
-                <div className="mb-4 flex-table col-md-6 col-sm-12">
-                    <table width="100%">
-                        <thead>
-                        <tr className="head-table-row">
-                            <th className="lh2rem p-l-10">Pos.</th>
-                            <th className="lh2rem p-l-10">Commitment</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {merkle_commitment.map(({position, commitment}) =>
-                            <tr key={commitment}>
-                                <td>{position}</td>
+            <div className="row">
+                <div className="col-lg-6 col-sm-12" data-controller="homepageMempool">
+                    <h4 className="p-2 m-t-30 m-b-15 m-l-15">Merkle Root</h4>
+                    <div className="flex-table">
+                        <table width="100%" className="fw-500">
+                            <tbody>
+                            <tr>
+                                <th className="align-end">Merkle Root</th>
                                 <td colSpan="2">
-                                    <Link to={getRoute(routes.commitment, {value: commitment})}>
-                                        <span className="hash truncate-hash">{commitment}</span>
+                                    <Link to={getRoute(routes.merkle, {value: merkle_root})}>
+                                        <span className="hash truncate-hash">{merkle_root}</span>
                                     </Link>
                                 </td>
                             </tr>
-                        )}
-                        </tbody>
-                    </table>
+                            <tr>
+                                <th className="align-end">Txid</th>
+                                <td colSpan="2">
+                                    <Link to={getRoute(routes.transation, {value: txid})}>
+                                        <span className="hash truncate-hash with-status">{txid}</span>
+                                    </Link>
+                                    <Flag
+                                        label={confirmed ? 'Confirmed' : 'Pending'}
+                                        viewType={confirmed ? 'success' : 'info'}
+                                        className="m-l-15"
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th className="align-end">Time</th>
+                                <td>{inserted_at}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="commitments_title">
+                        <h4 className="p-2 m-t-30 m-b-15 m-l-15">Commitments ({merkle_commitment.length})</h4>
+                    </div>
+                    <div className="mb-4 flex-table col-md-6 col-sm-12">
+                        <table width="100%">
+                            <thead>
+                            <tr className="head-table-row">
+                                <th className="lh2rem p-l-10">Pos.</th>
+                                <th className="lh2rem p-l-10">Commitment</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {merkle_commitment.map(({position, commitment}) =>
+                                <tr key={commitment}>
+                                    <td>{position}</td>
+                                    <td colSpan="2">
+                                        <Link to={getRoute(routes.commitment, {value: commitment})}>
+                                            <span className="hash truncate-hash">{commitment}</span>
+                                        </Link>
+                                    </td>
+                                </tr>
+                            )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         );

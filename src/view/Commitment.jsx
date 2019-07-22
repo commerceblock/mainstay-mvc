@@ -91,7 +91,7 @@ class Commitment extends Component {
                                     <td><Flag label={`${!!append}`} viewType={!!append ? 'success' : 'danger'}/></td>
                                     <td>
                                         <Link to={getRoute(routes.commitment, {value: commitment})}>
-                                            <span className="hash truncate-hash">{commitment}</span>
+                                            <span className="hash ops-hash truncate-hash with-status">{commitment}</span>
                                         </Link>
                                     </td>
                                 </tr>
