@@ -61,69 +61,73 @@ class Position extends Component {
             return <NotFound message={errorMessage}/>;
         }
         return (
-            <div className="row">
-                <div className="col-lg-6 col-sm-12" data-controller="homepageMempool">
+            <>
+                <div className="row">
+                    <div className="col-lg-6 col-sm-12" data-controller="homepageMempool">
 
-                    <h4 className="p-2 m-t-30 m-b-15 m-l-15">Client</h4>
-                    <div className="flex-table col-md-6 col-sm-12">
-                        <table width="100%" className="fw-500">
-                            <tbody>
-                            <tr>
-                                <th className="align-end">Name</th>
-                                <td colSpan="2">
-                                    <span className="hash truncate-hash">Some Client name</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th className="align-end">Position</th>
-                                <td colSpan="2">
-                                    <span className="hash truncate-hash with-status">{this.state.position}</span>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    {/*<h5 className="m-l-30">Name: {this.state.client}</h5>*/}
-                    {/*<h5 className="m-l-30">Position: {this.state.position}</h5>*/}
-
-                    <div className="commitments_title">
-                        <h4 className="p-2 m-b-15 m-l-15">Commitments({this.state.totalItemsCount})</h4>
-                    </div>
-
-                    <div className="mb-4 flex-table col-lg-12 col-sm-12">
-                        <table width="100%" id="table">
-                            <tr>
-                                <th>Commitment</th>
-                                <th>Date</th>
-                            </tr>
-                            <tbody>
-                            {data.map(data => (
+                        <h4 className="p-2 m-t-30 m-b-15 m-l-15">Client</h4>
+                        <div className="flex-table col-md-6 col-sm-12">
+                            <table width="100%" className="fw-500">
+                                <tbody>
                                 <tr>
-                                    <td>
-                                        <Link to={getRoute(routes.commitment, {value: data.commitment})}>
-                                            <span className="hash truncate-hash">{data.commitment}</span>
-                                        </Link>
+                                    <th className="align-end">Name</th>
+                                    <td colSpan="2">
+                                        <span className="hash truncate-hash">Some Client name</span>
                                     </td>
-                                    <td><span>{data.date}</span></td>
                                 </tr>
-                            ))}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div className="d-flex justify-content-center">
-                        <Pagination
-                            activePage={this.state.activePage}
-                            itemsCountPerPage={10}
-                            totalItemsCount={this.state.totalItemsCount}
-                            pageRangeDisplayed={5}
-                            onChange={this.handlePageChange}
-                            itemClass='page-item'
-                            linkClass='page-link'
-                        />
+                                <tr>
+                                    <th className="align-end">Position</th>
+                                    <td colSpan="2">
+                                        <span className="hash truncate-hash with-status">{this.state.position}</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                <div className="row">
+                    <div className="col-lg-8 col-sm-12">
+                        <div className="commitments_title">
+                            <h4 className="p-2 m-b-15 m-l-15">Commitments({this.state.totalItemsCount})</h4>
+                        </div>
+
+                        <div className="mb-4 flex-table col-lg-12 col-sm-12">
+                            <table width="100%" id="table">
+                                <tr>
+                                    <th>Commitment</th>
+                                    <th>Date</th>
+                                </tr>
+                                <tbody>
+                                {data.map(data => (
+                                    <tr>
+                                        <td>
+                                            <Link to={getRoute(routes.commitment, {value: data.commitment})}>
+                                                <span className="hash truncate-hash">{data.commitment}</span>
+                                            </Link>
+                                        </td>
+                                        <td><span>{data.date}</span></td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div className="d-flex justify-content-center">
+                            <Pagination
+                                activePage={this.state.activePage}
+                                itemsCountPerPage={10}
+                                totalItemsCount={this.state.totalItemsCount}
+                                pageRangeDisplayed={5}
+                                onChange={this.handlePageChange}
+                                itemClass='page-item'
+                                linkClass='page-link'
+                            />
+                        </div>
+                    </div>
+                </div>
+            </>
         );
     }
 }

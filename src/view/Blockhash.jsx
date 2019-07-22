@@ -46,7 +46,7 @@ class Blockhash extends Component {
         const {blockhash: {blockhash, txid, confirmed, amount, time}} = data;
         return (
             <div className="row blockHash">
-                <div className="col-lg-6 col-sm-12">
+                <div className="col-lg-7 col-sm-12">
                     <h4 className="p-2 m-t-30 m-b-15 customTitleStyle">Block Hash</h4>
                     <div className="flex-table">
                         <table className="main-second-position-block block fw-500" width="100%">

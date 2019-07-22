@@ -31,7 +31,7 @@ const Footer = () => (
                 <span>© 2019 CommerceBlock Limited. All rights reserved.</span>
                 <div className="powered-by">
                     <span>Powered by </span>
-                    <img src="securosys.png" alt="logo"/>
+                    <a href="https://www.securosys.com/en/"><img src="securosys.png" alt="logo"/></a>
                 </div>
             </div>
         </div>
