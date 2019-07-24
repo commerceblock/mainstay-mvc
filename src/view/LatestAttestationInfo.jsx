@@ -82,7 +82,7 @@ class LatestAttestationInfo extends Component {
                 </tr>
                 <tr>
                     <th className="align-end">Average Fee</th>
-                    <td colSpan="2">{fee / 100000000} BTC</td>
+                    <td colSpan="2">{(fee / 100000000).toFixed(8)} BTC</td>
                 </tr>
             </>
         );

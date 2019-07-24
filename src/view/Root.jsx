@@ -33,7 +33,6 @@ const Root = () => (
             <div className="container main" data-controller="main">
 
                 <Switch>
-                    <Route path={routes.home} component={Home}/>
                     <Route path={routes.search} component={Search}/>
                     <Route path={routes.position} component={Position}/>
                     <Route path={routes.block} component={Blockhash}/>
@@ -46,7 +45,7 @@ const Root = () => (
                     <Route path={routes.terms} component={TermsConditions}/>
                     <Route path={routes.pricing} component={Pricing}/>
                     <Route path={routes.about} component={About}/>
-                    <Redirect from={routes.app} to={routes.home} />
+                    <Route path={routes.app} component={Home}/>
                 </Switch>
             </div>
 
