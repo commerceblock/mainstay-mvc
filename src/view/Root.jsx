@@ -45,7 +45,8 @@ const Root = () => (
                     <Route path={routes.terms} component={TermsConditions}/>
                     <Route path={routes.pricing} component={Pricing}/>
                     <Route path={routes.about} component={About}/>
-                    <Route path={routes.app} component={Home}/>
+                    <Route exact path={routes.app} component={Home}/>
+                    <Redirect from="*" to={routes.app} />
                 </Switch>
             </div>
 
