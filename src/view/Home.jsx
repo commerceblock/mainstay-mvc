@@ -1,13 +1,18 @@
 import LatestAttestation from './LatestAttestation';
 import LatestCommitment from './LatestCommitment';
 import MainstayInfo from './MainstayInfo';
+
 import React from 'react';
 
 const Home = () => (
     <div className="row" data-controller="homepageMempool">
-        <MainstayInfo/>
-        <div className="col-md-6  home-left">
+        <div className="col-md-12">
+            <MainstayInfo/>
+        </div>
+        <div className="col-md-7 m-t-15">
             <LatestAttestation />
+        </div>
+        <div className="col-md-5 m-t-15">
             <LatestCommitment />
         </div>
     </div>

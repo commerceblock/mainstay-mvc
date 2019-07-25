@@ -1,6 +1,7 @@
 import Axios from 'axios';
 import React, { Component } from 'react';
 import { routes, getRoute } from "./routes";
+import { Link } from 'react-router-dom';
 
 class LatestCommitment extends Component {
     constructor(props) {
@@ -18,37 +19,41 @@ class LatestCommitment extends Component {
     render() {
         return (
             <div className="column">
-                <div className="d-flex align-items-center">
-                    <h4>Latest Commitment</h4>
-                    <a href={routes.client} className="pl-2 keyboard-target" data-keynav-priority>
-                        <small>see more ...</small>
-                    </a>
+                <div className="d-flex align-items-center justify-content-between">
+                    <h4 className="p-2 customTitleStyle">Latest Commitment</h4>
+                    <Link
+                        to={routes.client}
+                        className="pl-2 keyboard-target non-underline "
+                        data-keynav-priority
+                    >
+                        <small className="color-primary">View All &rarr;</small>
+                    </Link>
                 </div>
-                <div className="mb-3 flex-table LatestCommitment head-table">
+                <div className="mb-3 flex-table home-table commitment head-table">
                     <table width="100%">
                         <thead>
                             <tr>
-                                <th><span className="lh1rem">Position</span></th>
+                                <th><span className="lh1rem">Pos.</span></th>
                                 <th><span className="lh1rem">Commitment</span></th>
                             </tr>
                         </thead>
                     </table>
                 </div>
-                <div className="mb-3 flex-table LatestCommitment">
+                <div className="mb-3 flex-table home-table commitment">
                     <table width="100%">
                         <tbody>
                         {this.state.data.map(data =>
                             <tr key={data.commitment}>
                                 <td>
-                                    <span className="lastCommitement mono text-right ml-1">
+                                    <span>
                                       {data.position}
                                     </span>
                                 </td>
                                 <td>
-                                    <a className="lastCommitement hash truncate-hash keyboard-target"
-                                       href={getRoute(routes.commitment, { value: data.commitment })}
+                                    <Link className="hash truncate-hash keyboard-target latestCommitementStyle"
+                                       to={getRoute(routes.commitment, { value: data.commitment })}
                                        title={data.commitment}>{data.commitment}
-                                    </a>
+                                    </Link>
                                 </td>
                             </tr>
                         )}

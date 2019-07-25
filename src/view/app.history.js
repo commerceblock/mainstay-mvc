@@ -3,7 +3,7 @@ import { createBrowserHistory } from 'history'
 import { routes } from './routes';
 
 const history = createBrowserHistory({
-    basename: routes.home,
+    basename: routes.app,
 });
 
 export default history;

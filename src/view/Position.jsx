@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import NotFound from './NotFound';
 import {getRoute, routes} from "./routes";
 import Pagination from "react-js-pagination";
+import {Link} from 'react-router-dom';
+import Flag from "./Flag";
 
 class Position extends Component {
     constructor(props) {
@@ -19,6 +21,12 @@ class Position extends Component {
         this.fetchPage(1)
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.match.params.value !== prevProps.match.params.value) {
+            this.handlePageChange(1)
+        }
+    };
+
     handlePageChange = (pageNumber) => {
         this.fetchPage(pageNumber);
     };
@@ -28,7 +36,6 @@ class Position extends Component {
             .then(({data}) => {
 
                 if (data?.data) {
-                    console.log(data);
                     this.setState({
                         data: data.data,
                         position: data.position,
@@ -54,48 +61,73 @@ class Position extends Component {
             return <NotFound message={errorMessage}/>;
         }
         return (
-            <div className="full-table" data-controller="homepageMempool">
-                <span className="block-title">Client</span>
-                <span
-                    className="block-subtitle h3 hash truncate-hash"><strong>Name:</strong> {this.state.client}</span>
-                <span className="block-subtitle h3 hash truncate-hash"><strong>Position:</strong> {this.state.position}</span>
-                <div className="commitments_title">
-                    <h5 className="align-items-center">Commitments({this.state.totalItemsCount})</h5>
+            <>
+                <div className="row">
+                    <div className="col-lg-6 col-sm-12" data-controller="homepageMempool">
+
+                        <h4 className="p-2 m-t-30 m-b-15 m-l-15">Client</h4>
+                        <div className="flex-table col-md-6 col-sm-12">
+                            <table width="100%" className="fw-500">
+                                <tbody>
+                                <tr>
+                                    <th className="align-end">Name</th>
+                                    <td colSpan="2">
+                                        <span className="hash truncate-hash">Some Client name</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th className="align-end">Position</th>
+                                    <td colSpan="2">
+                                        <span className="hash truncate-hash with-status">{this.state.position}</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div className="mb-3 flex-table">
-                    <table width="100%">
-                        <thead>
-                        <tr>
-                            <th><span className="lh1rem mr-auto">Commitment</span></th>
-                            <th><span className="lh1rem">Date</span></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {data.map(data => (
-                            <tr>
-                                <td className="mono">
-                                    <a href={getRoute(routes.commitment, {value: data.commitment})}>
-                                        <span className="hash truncate-hash">{data.commitment}</span>
-                                    </a>
-                                </td>
-                                <td><span className="hash truncate-hash">{data.date}</span></td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
+
+                <div className="row">
+                    <div className="col-lg-8 col-sm-12">
+                        <div className="commitments_title">
+                            <h4 className="p-2 m-b-15 m-l-15">Commitments({this.state.totalItemsCount})</h4>
+                        </div>
+
+                        <div className="mb-4 flex-table col-lg-12 col-sm-12">
+                            <table width="100%" id="table">
+                                <tr>
+                                    <th>Commitment</th>
+                                    <th>Date</th>
+                                </tr>
+                                <tbody>
+                                {data.map(data => (
+                                    <tr>
+                                        <td>
+                                            <Link to={getRoute(routes.commitment, {value: data.commitment})}>
+                                                <span className="hash truncate-hash">{data.commitment}</span>
+                                            </Link>
+                                        </td>
+                                        <td><span>{data.date}</span></td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div className="d-flex justify-content-center">
+                            <Pagination
+                                activePage={this.state.activePage}
+                                itemsCountPerPage={10}
+                                totalItemsCount={this.state.totalItemsCount}
+                                pageRangeDisplayed={5}
+                                onChange={this.handlePageChange}
+                                itemClass='page-item'
+                                linkClass='page-link'
+                            />
+                        </div>
+                    </div>
                 </div>
-                <div className="d-flex justify-content-center">
-                    <Pagination
-                        activePage={this.state.activePage}
-                        itemsCountPerPage={10}
-                        totalItemsCount={this.state.totalItemsCount}
-                        pageRangeDisplayed={5}
-                        onChange={this.handlePageChange}
-                        itemClass='page-item'
-                        linkClass='page-link'
-                    />
-                </div>
-            </div>
+            </>
         );
     }
 }
