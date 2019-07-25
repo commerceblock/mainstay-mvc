@@ -16,6 +16,7 @@ import Search from "./search/search";
 import TermsConditions from "./TermsConditions";
 import Home from './Home'
 import Pricing from './Pricing'
+import Subscribe from "./Subscribe";
 import About from './About';
 import appHistory from './app.history';
 
@@ -45,6 +46,7 @@ const Root = () => (
                     <Route path={routes.terms} component={TermsConditions}/>
                     <Route path={routes.pricing} component={Home}/>
                     <Route path={routes.about} component={About}/>
+                    <Route path={routes.subscribe} component={Subscribe} />
                     <Route exact path={routes.app} component={Home}/>
                     <Redirect from="*" to={routes.app} />
                 </Switch>
