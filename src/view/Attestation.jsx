@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import React, { Component } from 'react';
 import Pagination from "react-js-pagination";
-import PageSpinner from './PageSpinner'
+import { Link } from 'react-router-dom';
 
 class Attestation extends Component {
     constructor(props) {
@@ -51,54 +51,51 @@ class Attestation extends Component {
             return <NotFound message={errorMessage}/>;
         }
         return (
-            <PageSpinner delay={100}>
-            <div className="column lastAttestationPage">
+            <div className="col-lg-8 col-sm-12">
                 <div className="d-flex align-items-center">
-                    <span className="block-title">Attestations</span>
+                    <h4 className="p-2 m-t-30 m-b-15">Attestations</h4>
                 </div>
-                <div className="mb-3 flex-table latestAttestation">
-                    <table width="100%">
-                        <thead>
-                        <tr className="mr-auto">
+                <div className="mb-3 flex-table latestAttestation attestation">
+                    <table width="100%" id="table">
+                        <tr>
                             <th>Txid</th>
-                            <th>MerkleRoot</th>
+                            <th>Merkle Root</th>
                             <th>Confirmed</th>
                             <th>Date</th>
                         </tr>
-                        </thead>
                         <tbody>
                         {data.map(({ txid, merkle_root, confirmed, age }) =>
                             <tr key={txid}>
                                 <td>
-                                    <a
+                                    <Link
                                         className="hash truncate-hash keyboard-target"
-                                        href={`/tx/${txid}`}
+                                        to={`/tx/${txid}`}
                                         title={txid}
                                     >
                                         {txid}
-                                    </a>
+                                    </Link>
                                 </td>
                                 <td>
-                                    <a
+                                    <Link
                                         className="hash truncate-hash keyboard-target"
-                                        href={`/merkle_root/${merkle_root}`}
+                                        to={`/merkle_root/${merkle_root}`}
                                         title={merkle_root}
                                     >
                                         {merkle_root}
-                                    </a>
+                                    </Link>
                                 </td>
                                 <td>
-                                    <span className="mono text-right ml-1">{`${!!confirmed}`}</span>
+                                    <span className="text-right ml-1">{`${!!confirmed}`}</span>
                                 </td>
                                 <td>
-                                    <span className="mono text-right ml-1">{age}</span>
+                                    <span className="text-right ml-1">{age}</span>
                                 </td>
                             </tr>
                         )}
                         </tbody>
                     </table>
                 </div>
-                <div className="d-flex justify-content-center">
+                <div className="d-flex justify-content-center attestationPage-table">
                     <Pagination
                         activePage={this.state.activePage}
                         itemsCountPerPage={this.state.itemsPerPage}
@@ -110,7 +107,6 @@ class Attestation extends Component {
                     />
                 </div>
             </div>
-            </PageSpinner>
         );
     }
 }

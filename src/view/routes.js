@@ -11,11 +11,11 @@ export const routes = {
     commitment: '/commitment/:value',
     transation: '/tx/:value',
     merkle: '/merkle_root/:value',
-    attestation: '/attestation/:value?',
+    attestation: '/attestation',
     client: '/client',
     privacy: '/privacy',
     terms: '/terms',
     pricing: '/pricing',
-    notFound: '/not-found',
-    subscribe: '/subscribe'
+    about: '/about',
+    notFound: '/not-found'
 };

@@ -1,16 +1,17 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Logo = () => (
-    <div className="d-flex align-items-center">
+    <div className="d-flex align-items-center col-lg-2 col-md-2 logoImg">
         <div>
-            <a href="/" className="logo">
-                <img src="favicon.png" alt="favicon" width="30px"/>
-            </a>
+            <Link to="/" className="logo">
+                <img src="logo.png" alt="logo" />
+            </Link>
         </div>
-        <div className="col-sm-auto">
-            <a href="/" className="logo_securosys">
-                <img src="securosys.png" alt="favicon" width="100px"/>
-            </a>
+        <div>
+            <Link to="/">
+                <h4 className="p-2">MainStay</h4>
+            </Link>
         </div>
     </div>
 );
