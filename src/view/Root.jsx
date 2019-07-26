@@ -18,6 +18,7 @@ import Home from './Home'
 import Pricing from './Pricing'
 import About from './About';
 import appHistory from './app.history';
+import Subscribe from "./Subscribe";
 
 const Root = () => (
     <Router history={appHistory}>
@@ -45,6 +46,7 @@ const Root = () => (
                     <Route path={routes.terms} component={TermsConditions}/>
                     <Route path={routes.pricing} component={Pricing}/>
                     <Route path={routes.about} component={About}/>
+                    <Route path={routes.subscribe} component={Subscribe} />
                     <Route exact path={routes.app} component={Home}/>
                     <Redirect from="*" to={routes.app} />
                 </Switch>

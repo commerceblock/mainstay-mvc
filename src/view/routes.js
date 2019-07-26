@@ -17,5 +17,6 @@ export const routes = {
     terms: '/terms',
     pricing: '/pricing',
     about: '/about',
+    subscribe: '/subscribe',
     notFound: '/not-found'
 };
