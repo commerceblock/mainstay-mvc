@@ -1722,6 +1722,10 @@ th, th span {
   border-color: #ced4da;
 }
 
+
+.subscribe-modal.modal-dialog {
+  max-width: 225px;
+}
 /*responsive*/
 @media only screen and (max-width: 1350px) {
  .search {

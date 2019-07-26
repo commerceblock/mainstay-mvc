@@ -37,7 +37,7 @@ class Subscribe extends React.Component {
     render() {
         return (
             <div>
-                <Modal isOpen={true}>
+                <Modal isOpen={true} className="subscribe-modal">
                     <Form>
                         <ModalFooter>
                             <a href="javascript:void(0)" data-cb-type="checkout" data-cb-plan-id="mainstay-standard" className="swal-button">subscribe</a>
