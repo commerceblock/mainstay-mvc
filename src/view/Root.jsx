@@ -19,6 +19,7 @@ import Pricing from './Pricing'
 import Subscribe from "./Subscribe";
 import About from './About';
 import appHistory from './app.history';
+import Subscribe from "./Subscribe";
 
 const Root = () => (
     <Router history={appHistory}>
