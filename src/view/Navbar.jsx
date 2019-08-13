@@ -129,7 +129,7 @@ class Navbar extends React.Component {
 
     render() {
         return (
-            <div className="col-lg-4 col-md-5">
+            <div className="col-lg-5 col-md-5">
                 <NavbarOrigin>
                     <Nav className="col-lg-12 col-md-12">
                         <NavItem className="col-sm-12 col-lg-3 col-md-3 hover-active">
@@ -141,7 +141,7 @@ class Navbar extends React.Component {
                         <NavItem className="col-sm-12 col-lg-5 col-md-5 hover-btn-active">
                             <Button color="success" onClick={this.toggle}>Send Commitment</Button>
                         </NavItem>
-                        <NavItem className="col-sm-12 col-lg-5 col-md-5 hover-btn-active">
+                        <NavItem className="col-sm-12 col-lg-3 col-md-5 hover-btn-active">
                             <Button color="success" onClick={this.toggleLogin}>Login</Button>
                         </NavItem>
                     </Nav>
