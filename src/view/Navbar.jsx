@@ -22,12 +22,20 @@ class Navbar extends React.Component {
         super(props);
         this.state = {
             modal: false,
+            modalLogin: false,
             position: undefined,
             token: undefined,
             commitment: undefined,
             signature: undefined,
             isMenuOpened: false,
+            name: undefined,
+            email: undefined,
+            address: undefined,
+            key: undefined,
+            image: undefined
         };
+
+        this.loginImageFileInput = React.createRef();
     }
 
     handleChange = (event) => {
@@ -65,8 +73,58 @@ class Navbar extends React.Component {
         this.toggle();
     };
 
+    handleSubmitLogin = (e) => {
+        e.preventDefault();
+
+        const {name, email, address, key} = this.state;
+
+
+        if (!this.loginImageFileInput.current.files[0]) {
+            return swal({
+                text: "No image selected",
+                icon: "error",
+                className: "error",
+                closeOnClickOutside: true
+            });
+        }
+
+        const formData = new FormData();
+        formData.set('full_name', name);
+        formData.set('email', email);
+        formData.set('address', address);
+        formData.set('pubkey', key);
+        formData.append('image', this.loginImageFileInput.current.files[0]);
+
+        Axios({
+            url: '/ctrl/usersignup',
+            method: 'post',
+            data: formData,
+            config: {headers: {'Content-Type': 'multipart/form-data'}}
+        }).then(res => {
+            this.setState({modalLogin: false});
+            swal({
+                text: "Success!",
+                icon: "success",
+                className: "success",
+                closeOnClickOutside: true
+            });
+        }).catch(error => {
+
+            return swal({
+                text: error.response.data.message || 'Something get wrong',
+                icon: "error",
+                className: "error",
+                closeOnClickOutside: true
+            });
+        });
+    };
+
     toggle = () => {
         this.setState({modal: !this.state.modal});
+    };
+
+    toggleLogin = () => {
+        this.setState({modalLogin: !this.state.modalLogin});
     };
 
     render() {
@@ -82,6 +140,9 @@ class Navbar extends React.Component {
                         </NavItem>
                         <NavItem className="col-sm-12 col-lg-5 col-md-5 hover-btn-active">
                             <Button color="success" onClick={this.toggle}>Send Commitment</Button>
+                        </NavItem>
+                        <NavItem className="col-sm-12 col-lg-5 col-md-5 hover-btn-active">
+                            <Button color="success" onClick={this.toggleLogin}>Login</Button>
                         </NavItem>
                     </Nav>
                 </NavbarOrigin>
@@ -102,6 +163,68 @@ class Navbar extends React.Component {
                         </ModalBody>
                         <ModalFooter>
                             <Button color="none" onClick={this.toggle}>Cancel</Button>
+                            <Button color="success" type="submit">Send</Button>
+                        </ModalFooter>
+                    </Form>
+                </Modal>
+
+                <Modal isOpen={this.state.modalLogin} toggle={this.toggleLogin}>
+
+                    <Form onSubmit={this.handleSubmitLogin} encType="multipart/form-data">
+                        <ModalBody>
+                            <FormGroup>
+                                <Label className="f-bold fs14">Full Name</Label>
+                                <Input
+                                    name="name"
+                                    required
+                                    bsSize="sm"
+                                    onChange={this.handleChange}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Label className="f-bold fs14">Address</Label>
+                                <Input
+                                    name="address"
+                                    required
+                                    bsSize="sm"
+                                    onChange={this.handleChange}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Label className="f-bold fs14">Email</Label>
+                                <Input
+                                    name="email"
+                                    required
+                                    type="email"
+                                    bsSize="sm"
+                                    onChange={this.handleChange}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Label className="f-bold fs14">Public key</Label>
+                                <Input
+                                    name="key"
+                                    required
+                                    bsSize="sm"
+                                    onChange={this.handleChange}
+                                />
+                            </FormGroup>
+
+                            <FormGroup>
+                                <label className="fileContainer">
+                                    <span className="fileContainer-txt">
+                                    Upload Passport / ID image
+                                    </span>
+                                    <input type="file" id="upload" ref={this.loginImageFileInput}/>
+                                </label>
+                            </FormGroup>
+
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="none" onClick={this.toggleLogin}>Cancel</Button>
                             <Button color="success" type="submit">Send</Button>
                         </ModalFooter>
                     </Form>

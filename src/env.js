@@ -8,5 +8,8 @@ module.exports = {
     },
     server: {
         port: process.env.LISTEN_API
+    },
+    sign_up: {
+        admin_email: process.env.ADMIN_EMAIL
     }
 };

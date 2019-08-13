@@ -1,6 +1,13 @@
-const models = require('../models/models');
 const elliptic = require('elliptic');
 const dateFormat = require('dateformat');
+const mongoose = require('mongoose');
+const Grid = require('gridfs-stream');
+const fs = require('fs');
+const nodemailer = require("nodemailer");
+const fileType = require('file-type');
+
+const models = require('../models/models');
+const {isValidEmail} = require('../utils/validators');
 
 const ec = new elliptic.ec('secp256k1');
 
@@ -96,7 +103,7 @@ module.exports = {
 
         try {
             const data = await models.attestation
-                .find({confirmed:true})
+                .find({confirmed: true})
                 .sort({inserted_at: -1})
                 .limit(1)
                 .exec();
@@ -175,6 +182,82 @@ module.exports = {
         });
     },
 
+    ctrl_client_signup: async (req, res) => {
+
+        const payload = req.body;
+
+        if (!payload.full_name || !payload.full_name.trim()) {
+            return res.status(400).json({error: 'full_name'});
+        }
+        if (!payload.address || !payload.address.trim()) {
+            return res.status(400).json({error: 'address'});
+        }
+        if (!payload.email || !payload.email.trim() && !isValidEmail(payload.email.trim())) {
+            return res.status(400).json({error: 'email'});
+        }
+        if (!payload.pubkey || !payload.pubkey.trim()) {
+            return res.status(400).json({error: 'pubkey'});
+        }
+        if (!req.file) {
+            return res.status(400).json({error: 'image'});
+        }
+
+        payload.full_name = payload.full_name.trim();
+        payload.address = payload.address.trim();
+        payload.email = payload.email.trim();
+        payload.pubkey = payload.pubkey.trim();
+
+        try {
+            // check true file type using magic number
+            const fileTypeStream = await fileType.stream(fs.createReadStream(req.file.path));
+            if (!['image/jpeg', 'image/png'].includes(fileTypeStream.fileType.mime)) {
+                return res.status(400).json({
+                    error: 'img',
+                    message: 'Wrong file type. Only jpeg and png files allowed.'
+                });
+            }
+
+            // TODO: get pubkey hex
+            // const pubkey = ec.keyFromPublic(payload.pubkey, 'hex');
+            // if (!ec.verify(payload.commitment, sig, pubkey)) {
+            //     return res.json({error: 'signature'});
+            // }
+
+            // get user by emil to check if user already logged in
+            const userByEmail = await models.clientSignup.findOne({email: payload.email});
+            if (userByEmail) {
+                return res.status(400).json({
+                    error: 'api',
+                    message: 'User already exists with this email.'
+                });
+            }
+
+            // upload image to grid-fs
+            const image = await saveFileInGridFs(req.file.path, {
+                content_type: fileTypeStream.fileType.mime,
+                filename: req.file.filename,
+                metadata: {
+                    ext: fileTypeStream.fileType.ext
+                }
+            });
+            // save user
+            const user = await models.clientSignup.create({
+                full_name: payload.full_name,
+                address: payload.address,
+                email: payload.email,
+                public_key: payload.pubkey,
+                img: image._id,
+            });
+
+            // send email, maybe we need to send email after response o_O? no need to wait for email response
+            sendNewSignUpEmail(user, image, req.file.path);
+            // send the response
+            res.send({user});
+        } catch (error) {
+            res.json({error: 'api', message: error.message});
+        }
+    },
+
 
     ctrl_type: (req, res) => {
         const startTime = start_time();
@@ -190,6 +273,83 @@ module.exports = {
     },
 
 };
+
+/**
+ * save file in the monogdb gridfs
+ * @param path
+ * @param data
+ * @returns {Promise<any>}
+ */
+function saveFileInGridFs(path, data) {
+    Grid.mongo = mongoose.mongo;
+    const gridFs = Grid(mongoose.connection.db);
+
+    const fileData = {
+        mode: 'w',
+        ...data
+    };
+
+    return new Promise((resolve, reject) => {
+        const writeStream = gridFs.createWriteStream(fileData);
+        fs.createReadStream(path).pipe(writeStream);
+        writeStream.on('close', resolve);
+        writeStream.on("error", reject);
+    });
+}
+
+/**
+ * create email transport
+ * @param service transport service. i.e. gmail, sendmail
+ * work in progress
+ *
+ * @returns {*}
+ */
+function getMailTransport(service) {
+    let transporter;
+    transporter = nodemailer.createTransport({
+        sendmail: true,
+        newline: 'unix',
+        path: '/usr/sbin/sendmail'
+    });
+
+    return transporter;
+}
+
+function sendNewSignUpEmail(user, image, imagePath) {
+    const env = require('../../src/env');
+
+    const transporter = getMailTransport('gmail');
+
+    const html = `
+        <b>Full Name</b>: ${user.full_name},<br>
+        <b>Email</b>: ${user.email},<br>
+        <b>Address</b>: ${user.address},<br>
+        <b>Image</b>: <img src="cid:${image.md5}"/>
+    `;
+
+    return new Promise((resolve, reject) => {
+        transporter.sendMail({
+            from: {
+                name: user.full_name,
+                address: user.email
+            },
+            to: env.sign_up.admin_email,
+            subject: 'New SignUp',
+            html: html,
+            attachments: [{
+                filename: image.filename,
+                path: imagePath,
+                cid: image.md5,
+                contentType: image.contentType
+            }],
+        }, (error, info) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(info);
+        });
+    });
+}
 
 async function find_type_hash(res, paramValue, startTime) {
     try {

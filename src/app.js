@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 const express = require('express');
-const env = require('../src/env');
 const mongoose = require('mongoose');
+
+const env = require('../src/env');
+const routes = require('./routes');
+
 const app = express();
+
 //const mainstay_websocket = require('./websocket/mainstay_websocket').mainstay_websocket;
 
-const routes = require('./routes');
 
 function connect_mongo() {
     let url = 'mongodb://';

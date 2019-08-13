@@ -1,3 +1,7 @@
+const os = require('os');
+const multer = require('multer');
+const upload = multer({dest: `${os.tmpdir()}/mainstayx`, limits: {fileSize: 10 * 1024 * 1024}});
+
 const api_controller = require('./controllers/api_controller');
 const ctrl_controller = require('./controllers/ctrl_controller');
 
@@ -32,6 +36,14 @@ function ctrl(app) {
     app.get(CTRL + '/type', ctrl_controller.ctrl_type);
 
     app.post(CTRL + '/sendcommitment', ctrl_controller.ctrl_send_commitment);
+    app.post(CTRL + '/usersignup', upload.single('image'), ctrl_controller.ctrl_client_signup);
+    app.use((error, req, res, next) => {
+        if (error.code) {
+            res.status(400).json({error: error.code, message: error.message})
+        } else {
+            res.status(500).json({error: 'api', message: error.message})
+        }
+    });
 }
 
 module.exports = {

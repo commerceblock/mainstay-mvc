@@ -1,5 +1,6 @@
-const mongoose = require('mongoose')
-    , Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const ObjectId = Schema.ObjectId;
 
 /**
  *
@@ -50,12 +51,36 @@ const schemaMerkleProof = new Schema({
 }, {collection: 'MerkleProof'});
 schemaMerkleProof.index({'merkle_root': 1, 'commitment': 1});
 
+const schemaClientSignup = new Schema({
+    full_name: String,
+    address: String,
+    email: String,
+    img: {type: ObjectId, ref: 'PassportImage'},
+    public_key: String
+}, {collection: 'ClientSignup'});
+schemaClientSignup.index({'email': 1}, {unique: true});
+
+
+const schemaPassportImage = new Schema({
+    aliases: [String],
+    chunkSize: {type: Number},
+    contentType: {type: String},
+    filename: {type: String},
+    length: {type: Number},
+    md5: {type: String},
+    metadata: {},
+    uploadDate: {type: Date}
+}, {collection: "fs.files"});
+
+
 const attestation = mongoose.model('Attestation', schemaAttestation);
 const attestationInfo = mongoose.model('AttestationInfo', schemaAttestationInfo);
 const clientCommitment = mongoose.model('ClientCommitment', schemaClientCommitment);
 const clientDetails = mongoose.model('ClientDetails', schemaClientDetails);
 const merkleCommitment = mongoose.model('MerkleCommitment', schemaMerkleCommitment);
 const merkleProof = mongoose.model('MerkleProof', schemaMerkleProof);
+const clientSignup = mongoose.model('ClientSignup', schemaClientSignup);
+const passportImage = mongoose.model('PassportImage', schemaPassportImage);
 
 module.exports = {
     attestation,
@@ -64,4 +89,6 @@ module.exports = {
     clientDetails,
     merkleCommitment,
     merkleProof,
+    clientSignup,
+    passportImage
 };
