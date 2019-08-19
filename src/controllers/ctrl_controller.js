@@ -208,6 +208,9 @@ module.exports = {
         payload.pubkey = payload.pubkey.trim();
 
         try {
+
+            ec.keyFromPublic(payload.pubkey, 'hex');
+
             // check true file type using magic number
             const fileTypeStream = await fileType.stream(fs.createReadStream(req.file.path));
             if (!['image/jpeg', 'image/png'].includes(fileTypeStream.fileType.mime)) {
