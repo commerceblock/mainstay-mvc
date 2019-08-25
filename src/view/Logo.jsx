@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Logo = () => (
-    <div className="d-flex align-items-center col-lg-2 col-md-2 logoImg">
+    <div className="d-flex align-items-center logoImg">
         <div>
             <Link to="/" className="logo">
                 <img src="logo.png" alt="logo" />

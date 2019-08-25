@@ -23,15 +23,15 @@ const Root = () => (
     <Router history={appHistory}>
         <div className="top-nav">
             <div className="container">
-                <div className="d-flex m-t-15 align-items-center flex-wrap">
+                <div className="d-flex m-t-15 align-items-center">
                     <Logo/>
-                    <Search/>
+                    <div className="flex-grow-1">
+                        <Search/>
+                    </div>
                     <Navbar/>
                 </div>
-
             </div>
             <div className="container main" data-controller="main">
-
                 <Switch>
                     <Route path={routes.search} component={Search}/>
                     <Route path={routes.position} component={Position}/>
@@ -45,14 +45,12 @@ const Root = () => (
                     <Route path={routes.terms} component={TermsConditions}/>
                     <Route path={routes.pricing} component={Home}/>
                     <Route path={routes.about} component={About}/>
-                    <Route path={routes.subscribe} component={Subscribe} />
+                    <Route path={routes.subscribe} component={Subscribe}/>
                     <Route exact path={routes.app} component={Home}/>
-                    <Redirect from="*" to={routes.app} />
+                    <Redirect from="*" to={routes.app}/>
                 </Switch>
             </div>
-
             <Footer/>
-
         </div>
     </Router>
 );

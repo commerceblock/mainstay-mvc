@@ -1391,6 +1391,15 @@ html {
   color: #00BF55;
 }
 
+.m-x-5 {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.m-t-5 {
+  margin-top: 5px;
+}
+
 .m-t-15 {
   margin-top: 15px;
 }
@@ -1436,6 +1445,7 @@ html {
 .powered-by {
   margin-left: 100px;
 }
+
 .powered-by img {
   height: 20px;
 }
@@ -1740,10 +1750,12 @@ th, th span {
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
+
   &:hover {
     background: #3fc39a;
     border-color: #3fc39a;
   }
+
   &-txt {
     svg {
       margin-right: 10px;
@@ -1767,15 +1779,15 @@ th, th span {
 }
 
 
-
 /*responsive*/
 @media only screen and (max-width: 1350px) {
- .search {
-   max-width: 35%;
-   input {
-     font-size: 13px;
-   }
- }
+  .search {
+    //max-width: 35%;
+
+    input {
+      font-size: 13px;
+    }
+  }
   .navbar {
     width: 35vw;
   }
@@ -1789,6 +1801,7 @@ th, th span {
     width: 48vw;
   }
 }
+
 @media only screen and (max-width: 768px) {
 
   .blockHash, .txId {
@@ -1799,11 +1812,11 @@ th, th span {
   .navbar .btn-success:focus,
   .navbar .btn-success:not(:disabled):not(.disabled).active,
   .navbar .btn-success:not(:disabled):not(.disabled):active,
-  .navbar .show>.btn-success.dropdown-toggle {
+  .navbar .show > .btn-success.dropdown-toggle {
     background: #Fff;
     border-color: #Fff;
     outline: none;
-    box-shadow:none;
+    box-shadow: none;
     color: #1C1C1C;
   }
   .search {
@@ -1913,7 +1926,6 @@ th, th span {
     left: -80px;
   }
 }
-
 
 
 @media only screen and (max-width: 475px) {

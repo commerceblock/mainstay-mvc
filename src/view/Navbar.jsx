@@ -1,9 +1,7 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 
 import swal from "sweetalert";
 import {
-    Navbar as NavbarOrigin,
     Nav, NavItem,
     Button,
 } from 'reactstrap';
@@ -12,6 +10,7 @@ import {routes} from './routes';
 
 import SignUpModal from './modals/SignUpModal';
 import SendCommitmentModal from "./modals/SendCommitmentModal";
+import NavLink from "reactstrap/es/NavLink";
 
 class Navbar extends React.Component {
     constructor(props) {
@@ -70,26 +69,27 @@ class Navbar extends React.Component {
         });
     };
 
-
     render() {
         return (
-            <div className="col-lg-4 col-md-5">
-                <NavbarOrigin>
-                    <Nav className="col-lg-12 col-md-12">
-                        <NavItem className="col-sm-12 col-lg-3 col-md-3 hover-active">
-                            <Link to={routes.attestation}>Attestations</Link>
-                        </NavItem>
-                        <NavItem className="col-sm-12 col-lg-3 col-md-3 hover-active">
-                            <Link to={routes.client}>Clients</Link>
-                        </NavItem>
-                        <NavItem className="col-sm-12 col-lg-5 col-md-5 hover-btn-active">
-                            <Button color="success" onClick={this.toggleCommitmentModal}>Send Commitment</Button>
-                        </NavItem>
-                        <NavItem className="col-sm-12 col-lg-5 col-md-5 hover-btn-active">
-                            <Button color="success" onClick={this.toggleSignUpModal}>Sign Up</Button>
-                        </NavItem>
-                    </Nav>
-                </NavbarOrigin>
+            <>
+                <Nav>
+                    <NavItem className="hover-active">
+                        <NavLink href={routes.attestation}>Attestations</NavLink>
+                    </NavItem>
+                    <NavItem className="hover-active">
+                        <NavLink href={routes.client}>Clients</NavLink>
+                    </NavItem>
+                    <NavItem className="hover-btn-active">
+                        <Button className="m-t-5 m-x-5" color="success" onClick={this.toggleCommitmentModal}>
+                            Send Commitment
+                        </Button>
+                    </NavItem>
+                    <NavItem className="hover-btn-active">
+                        <Button className="m-t-5 m-x-5" color="success" onClick={this.toggleSignUpModal}>
+                            Sign Up
+                        </Button>
+                    </NavItem>
+                </Nav>
 
                 <SendCommitmentModal
                     isOpen={this.state.modal}
@@ -104,8 +104,7 @@ class Navbar extends React.Component {
                     onSuccess={this.onSignUpSuccess}
                     onError={this.onSignUpError}
                 />
-
-            </div>
+            </>
         );
     }
 }
