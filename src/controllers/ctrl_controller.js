@@ -12,7 +12,6 @@ const {isValidEmail} = require('../utils/validators');
 const ec = new elliptic.ec('secp256k1');
 
 const {
-    SIGNATURE_INVALID,
     VALUE,
     PARAM_UNDEFINED,
     TYPE_ERROR,
@@ -170,7 +169,7 @@ module.exports = {
                             return res.json({error: 'signature'});
                         }
                     } catch (error) {
-                        return res.json({error: SIGNATURE_INVALID, message: error.message});
+                        return res.json({error: 'signature', message: error.message});
                     }
                 }
                 await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
@@ -208,8 +207,14 @@ module.exports = {
         payload.pubkey = payload.pubkey.trim();
 
         try {
-
-            ec.keyFromPublic(payload.pubkey, 'hex');
+            const pubkey = ec.keyFromPublic(payload.pubkey, 'hex');
+            const {result, reason} = pubkey.validate();
+            if (!result) {
+                return res.status(400).json({
+                    error: 'pubkey',
+                    message: reason
+                });
+            }
 
             // check true file type using magic number
             const fileTypeStream = await fileType.stream(fs.createReadStream(req.file.path));
@@ -219,12 +224,6 @@ module.exports = {
                     message: 'Wrong file type. Only jpeg and png files allowed.'
                 });
             }
-
-            // TODO: get pubkey hex
-            // const pubkey = ec.keyFromPublic(payload.pubkey, 'hex');
-            // if (!ec.verify(payload.commitment, sig, pubkey)) {
-            //     return res.json({error: 'signature'});
-            // }
 
             // get user by emil to check if user already logged in
             const userByEmail = await models.clientSignup.findOne({email: payload.email});
@@ -252,12 +251,11 @@ module.exports = {
                 img: image._id,
             });
 
-            // send email, maybe we need to send email after response o_O? no need to wait for email response
             sendNewSignUpEmail(user, image, req.file.path);
             // send the response
-            res.send({user});
+            res.status(201).send({user});
         } catch (error) {
-            res.json({error: 'api', message: error.message});
+            res.status(500).json({error: 'api', message: error.message});
         }
     },
 

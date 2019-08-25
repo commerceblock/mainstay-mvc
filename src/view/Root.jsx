@@ -15,7 +15,6 @@ import Attestation from "./Attestation";
 import Search from "./search/search";
 import TermsConditions from "./TermsConditions";
 import Home from './Home'
-import Pricing from './Pricing'
 import Subscribe from "./Subscribe";
 import About from './About';
 import appHistory from './app.history';

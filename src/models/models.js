@@ -55,13 +55,13 @@ const schemaClientSignup = new Schema({
     full_name: String,
     address: String,
     email: String,
-    img: {type: ObjectId, ref: 'PassportImage'},
+    img: {type: ObjectId, ref: 'File'},
     public_key: String
 }, {collection: 'ClientSignup'});
 schemaClientSignup.index({'email': 1}, {unique: true});
 
 
-const schemaPassportImage = new Schema({
+const schemaFile = new Schema({
     aliases: [String],
     chunkSize: {type: Number},
     contentType: {type: String},
@@ -80,7 +80,7 @@ const clientDetails = mongoose.model('ClientDetails', schemaClientDetails);
 const merkleCommitment = mongoose.model('MerkleCommitment', schemaMerkleCommitment);
 const merkleProof = mongoose.model('MerkleProof', schemaMerkleProof);
 const clientSignup = mongoose.model('ClientSignup', schemaClientSignup);
-const passportImage = mongoose.model('PassportImage', schemaPassportImage);
+const file = mongoose.model('File', schemaFile);
 
 module.exports = {
     attestation,
@@ -90,5 +90,5 @@ module.exports = {
     merkleCommitment,
     merkleProof,
     clientSignup,
-    passportImage
+    file
 };
