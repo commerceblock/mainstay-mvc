@@ -93,14 +93,14 @@ class Navbar extends React.Component {
 
                 <SendCommitmentModal
                     isOpen={this.state.modal}
-                    closeModalHandler={this.toggleCommitmentModal}
+                    onModalClose={this.toggleCommitmentModal}
                     onSuccess={this.onSendCommitmentSuccess}
                     onError={this.onSendCommitmentError}
                 />
 
                 <SignUpModal
                     isOpen={this.state.modalLogin}
-                    closeModalHandler={this.toggleSignUpModal}
+                    onModalClose={this.toggleSignUpModal}
                     onSuccess={this.onSignUpSuccess}
                     onError={this.onSignUpError}
                 />

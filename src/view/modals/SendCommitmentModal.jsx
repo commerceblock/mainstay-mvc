@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Axios from "axios";
 
 import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
+import swal from "sweetalert";
 
 const options = [
     {label: 'Position', name: 'position', hint: '0'},
@@ -23,6 +24,7 @@ class SendCommitmentModal extends React.PureComponent {
                 signature: undefined,
             }
         };
+        this.formRef = React.createRef();
     }
 
     handleChange = (event) => {
@@ -36,10 +38,37 @@ class SendCommitmentModal extends React.PureComponent {
         });
     };
 
+    showErrorAlert = (message) => {
+        return swal({
+            text: message,
+            icon: "error",
+            className: "error",
+            closeOnClickOutside: true
+        });
+    };
+
     handleSubmit = (event) => {
         event.preventDefault();
 
         const {position, token, commitment, signature} = this.state.inputs;
+
+        if (!position || !position.trim()) {
+            return this.showErrorAlert('Position is empty');
+        }
+
+        if (Number.isNaN(+position)) {
+            return this.showErrorAlert('Position is not numeric');
+        }
+
+        if (!token || !token.trim()) {
+            return this.showErrorAlert('Token is empty');
+        }
+        if (!commitment || !commitment.trim()) {
+            return this.showErrorAlert('Commitment is empty');
+        }
+        if (!signature || !signature.trim()) {
+            return this.showErrorAlert('Signature is empty');
+        }
 
         Axios.post('/ctrl/sendcommitment', {
             position,
@@ -59,13 +88,25 @@ class SendCommitmentModal extends React.PureComponent {
         });
     };
 
+    resetFormState = () => {
+        this.formRef.current.reset();
+        this.setState({inputs: {}});
+    };
+
+    handleModalClose = () => {
+        this.resetFormState();
+        if (this.props.onModalClose) {
+            this.props.onModalClose();
+        }
+    };
+
     render() {
-        const {isOpen, closeModalHandler} = this.props;
+        const {isOpen} = this.props;
 
         return (
-            <Modal isOpen={isOpen} toggle={closeModalHandler}>
-                <ModalHeader toggle={closeModalHandler}>Send Commitment</ModalHeader>
-                <Form onSubmit={this.handleSubmit}>
+            <Modal isOpen={isOpen} toggle={this.handleModalClose}>
+                <ModalHeader toggle={this.handleModalClose}>Send Commitment</ModalHeader>
+                <Form onSubmit={this.handleSubmit} innerRef={this.formRef}>
                     <ModalBody>
                         {options.map(({label, name, hint}) => (
                             <FormGroup key={name}>
@@ -74,13 +115,12 @@ class SendCommitmentModal extends React.PureComponent {
                                     name={name}
                                     bsSize="sm"
                                     onChange={this.handleChange}
-                                    placeholder={hint}
                                 />
                             </FormGroup>
                         ))}
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="none" onClick={closeModalHandler}>Cancel</Button>
+                        <Button color="none" onClick={this.handleModalClose}>Cancel</Button>
                         <Button color="success" type="submit">Send</Button>
                     </ModalFooter>
                 </Form>
@@ -91,7 +131,7 @@ class SendCommitmentModal extends React.PureComponent {
 
 SendCommitmentModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
-    closeModalHandler: PropTypes.func.isRequired,
+    onModalClose: PropTypes.func.isRequired,
     onSuccess: PropTypes.func,
     onError: PropTypes.func
 };

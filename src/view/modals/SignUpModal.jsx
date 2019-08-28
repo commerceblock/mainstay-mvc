@@ -27,6 +27,7 @@ class SignUpModal extends React.PureComponent {
         };
 
         this.loginImageFileInputRef = React.createRef();
+        this.formRef = React.createRef();
     }
 
     handleChange = (event) => {
@@ -52,7 +53,7 @@ class SignUpModal extends React.PureComponent {
             filePathLabel = input.value;
         }
         this.setState({filePathLabel})
-    }
+    };
 
     showErrorAlert = (message) => {
         return swal({
@@ -74,16 +75,16 @@ class SignUpModal extends React.PureComponent {
             return this.showErrorAlert('Full Name is empty');
         }
 
+        if (!address || !address.trim()) {
+            return this.showErrorAlert('Address is empty');
+        }
+
         if (!email || !email.trim()) {
             return this.showErrorAlert('Email is empty');
         }
 
         if (!isValidEmail(email)) {
             return this.showErrorAlert('Email is no valid.');
-        }
-
-        if (!address || !address.trim()) {
-            return this.showErrorAlert('Address is empty');
         }
 
         if (!key || !key.trim()) {
@@ -112,8 +113,7 @@ class SignUpModal extends React.PureComponent {
                 this.props.onSuccess(res);
             }
             // reset the form
-            form.reset();
-            this.setState({filePathLabel: ''});
+            this.resetFormState()
         }).catch(error => {
             if (this.props.onError) {
                 this.props.onError(error);
@@ -121,17 +121,30 @@ class SignUpModal extends React.PureComponent {
         });
     };
 
+    resetFormState = () => {
+        this.formRef.current.reset();
+        this.setState({filePathLabel: ''});
+        this.setState({inputs: {}});
+    };
+
+    handleModalClose = () => {
+        this.resetFormState();
+        if (this.props.onModalClose) {
+            this.props.onModalClose();
+        }
+    };
+
     render() {
         const {
             isOpen,
-            closeModalHandler
         } = this.props;
         return (
-            <Modal isOpen={isOpen} toggle={closeModalHandler}>
+            <Modal isOpen={isOpen} toggle={this.handleModalClose}>
 
-                <ModalHeader toggle={closeModalHandler}>Sign Up</ModalHeader>
+                <ModalHeader toggle={this.handleModalClose}>Sign Up</ModalHeader>
 
                 <Form
+                    innerRef={this.formRef}
                     onSubmit={this.handleSubmitLogin}
                     encType="multipart/form-data"
                 >
@@ -176,6 +189,7 @@ class SignUpModal extends React.PureComponent {
                         <FormGroup>
                             <Label className="f-bold fs14">Upload Passport / ID image</Label>
                             <CustomInput
+                                id="image-file-input"
                                 onChange={this.handleFileChange}
                                 type="file"
                                 label={this.state.filePathLabel}
@@ -186,7 +200,7 @@ class SignUpModal extends React.PureComponent {
 
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="none" onClick={closeModalHandler}>Cancel</Button>
+                        <Button color="none" onClick={this.handleModalClose}>Cancel</Button>
                         <Button color="success" type="submit">Submit</Button>
                     </ModalFooter>
                 </Form>
@@ -197,7 +211,7 @@ class SignUpModal extends React.PureComponent {
 
 SignUpModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
-    closeModalHandler: PropTypes.func.isRequired,
+    onModalClose: PropTypes.func.isRequired,
     onSuccess: PropTypes.func,
     onError: PropTypes.func
 };

@@ -212,10 +212,14 @@ module.exports = {
             if (!result) {
                 return res.status(400).json({
                     error: 'pubkey',
-                    message: reason
+                    message: 'Invalid Public Key'
                 });
             }
+        } catch (error) {
+            return res.status(500).json({error: 'api', message: 'Invalid Public Key'});
+        }
 
+        try {
             // check true file type using magic number
             const fileTypeStream = await fileType.stream(fs.createReadStream(req.file.path));
             if (!['image/jpeg', 'image/png'].includes(fileTypeStream.fileType.mime)) {
@@ -322,9 +326,9 @@ function sendNewSignUpEmail(user, image, imagePath) {
     const transporter = getMailTransport('gmail');
 
     const html = `
-        <b>Full Name</b>: ${user.full_name},<br>
-        <b>Email</b>: ${user.email},<br>
-        <b>Address</b>: ${user.address},<br>
+        <b>Full Name</b>: ${user.full_name}<br>
+        <b>Email</b>: ${user.email}<br>
+        <b>Address</b>: ${user.address}<br>
         <b>Image</b>: <img src="cid:${image.md5}"/>
     `;
 
