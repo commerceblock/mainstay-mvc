@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const express = require('express');
 const mongoose = require('mongoose');
-
+const morgan = require('morgan');
 const env = require('../src/env');
 const routes = require('./routes');
 
@@ -9,8 +9,7 @@ const app = express();
 
 //const mainstay_websocket = require('./websocket/mainstay_websocket').mainstay_websocket;
 
-
-function connect_mongo() {
+function connect_mongo () {
     let url = 'mongodb://';
     if (env.db.user && env.db.password) {
         url += env.db.user + ':' + env.db.password;
@@ -20,7 +19,7 @@ function connect_mongo() {
     return mongoose.connection;
 }
 
-function __MAIN__() {
+function __MAIN__ () {
     const db = connect_mongo();
 
     mongoose.set('debug', function (coll, method, query, doc) {
@@ -39,8 +38,10 @@ function __MAIN__() {
     db.on('error', console.error.bind(console, 'Connection Error:'));
     db.once('open', () => {
         // mainstay_websocket();
-        routes.api(app);
-        routes.ctrl(app);
+        app.use(morgan('combined'));
+
+        routes.makeApiRoutes(app);
+        routes.makeCtrlRoutes(app);
 
         app.get('*', (req, res) => {
             res.status(404).send('404 Not Found');

@@ -1,19 +1,19 @@
 import React from 'react';
 
-import swal from "sweetalert";
+import swal from 'sweetalert';
 import {
-    Nav, NavItem,
-    Button,
+    Nav, NavItem, Button
 } from 'reactstrap';
 
 import {routes} from './routes';
 
 import SignUpModal from './modals/SignUpModal';
-import SendCommitmentModal from "./modals/SendCommitmentModal";
-import NavLink from "reactstrap/es/NavLink";
+import SendCommitmentModal from './modals/SendCommitmentModal';
+import NavLink from 'reactstrap/es/NavLink';
+import {Link} from 'react-router-dom';
 
 class Navbar extends React.Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
         this.state = {
             modal: false,
@@ -33,26 +33,26 @@ class Navbar extends React.Component {
     onSignUpSuccess = (res) => {
         this.setState({modalLogin: false});
         swal({
-            text: "Success!",
-            icon: "success",
-            className: "success",
+            text: 'Success!',
+            icon: 'success',
+            className: 'success',
             closeOnClickOutside: true
         });
     };
     onSignUpError = (error) => {
         swal({
             text: error.response.data.message || 'Something get wrong',
-            icon: "error",
-            className: "error",
+            icon: 'error',
+            className: 'error',
             closeOnClickOutside: true
         });
     };
 
     onSendCommitmentSuccess = (res) => {
         swal({
-            text: "Success!",
-            icon: "success",
-            className: "success",
+            text: 'Success!',
+            icon: 'success',
+            className: 'success',
             closeOnClickOutside: true
         });
     };
@@ -63,21 +63,21 @@ class Navbar extends React.Component {
             : `Incorrect ${res.data.error}`;
         swal({
             text: errorMessage,
-            icon: "error",
-            className: "error",
+            icon: 'error',
+            className: 'error',
             closeOnClickOutside: true
         });
     };
 
-    render() {
+    render () {
         return (
             <>
                 <Nav>
                     <NavItem className="hover-active">
-                        <NavLink href={routes.attestation}>Attestations</NavLink>
+                        <Link className="nav-link" to={routes.attestation}>Attestations</Link>
                     </NavItem>
                     <NavItem className="hover-active">
-                        <NavLink href={routes.client}>Clients</NavLink>
+                        <Link className="nav-link" to={routes.client}>Clients</Link>
                     </NavItem>
                     <NavItem className="hover-btn-active">
                         <Button className="m-t-5 m-x-5" color="success" onClick={this.toggleCommitmentModal}>

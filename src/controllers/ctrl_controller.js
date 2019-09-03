@@ -1,10 +1,6 @@
 const elliptic = require('elliptic');
 const dateFormat = require('dateformat');
-const mongoose = require('mongoose');
-const Grid = require('gridfs-stream');
-const fs = require('fs');
-const nodemailer = require("nodemailer");
-const fileType = require('file-type');
+const nodemailer = require('nodemailer');
 
 const models = require('../models/models');
 const {isValidEmail} = require('../utils/validators');
@@ -57,23 +53,24 @@ module.exports = {
             const now = new Date();
 
             response['data'] = data.map(item => ({
-                    txid: item.txid,
-                    merkle_root: item.merkle_root,
-                    confirmed: item.confirmed,
-                    age: (now.toDateString() === item.inserted_at.toDateString()) ? dateFormat(item.inserted_at, 'HH:MM:ss') : dateFormat(item.inserted_at, 'HH:MM:ss dd/mm/yy')
-                }
-            ));
+                txid: item.txid,
+                merkle_root: item.merkle_root,
+                confirmed: item.confirmed,
+                age: (now.toDateString() === item.inserted_at.toDateString()) ? dateFormat(item.inserted_at, 'HH:MM:ss') : dateFormat(item.inserted_at, 'HH:MM:ss dd/mm/yy')
+            }));
 
             res.json(response);
 
         } catch (error) {
-            res.json({error: 'api', message: error.message});
+            res.json({
+                error: 'api',
+                message: error.message
+            });
         }
     },
 
     ctrl_latest_attestation_info: async (req, res) => {
         res.header('Access-Control-Allow-Origin', '*');
-
 
         try {
             const data = await models.attestationInfo
@@ -91,7 +88,10 @@ module.exports = {
 
             res.json(response);
         } catch (error) {
-            res.json({error: 'api', message: error.message});
+            res.json({
+                error: 'api',
+                message: error.message
+            });
         }
     },
 
@@ -124,7 +124,10 @@ module.exports = {
             }
             res.json(response);
         } catch (error) {
-            res.json({error: 'api', message: error.message});
+            res.json({
+                error: 'api',
+                message: error.message
+            });
         }
     },
 
@@ -169,14 +172,20 @@ module.exports = {
                             return res.json({error: 'signature'});
                         }
                     } catch (error) {
-                        return res.json({error: 'signature', message: error.message});
+                        return res.json({
+                        error: 'signature',
+                        message: error.message
+                    });
                     }
                 }
                 await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
                 return res.send();
 
             } catch (error) {
-                res.json({error: 'api', message: error.message});
+                res.json({
+                    error: 'api',
+                    message: error.message
+                });
             }
         });
     },
@@ -188,47 +197,34 @@ module.exports = {
         if (!payload.full_name || !payload.full_name.trim()) {
             return res.status(400).json({error: 'full_name'});
         }
-        if (!payload.address || !payload.address.trim()) {
-            return res.status(400).json({error: 'address'});
-        }
         if (!payload.email || !payload.email.trim() && !isValidEmail(payload.email.trim())) {
             return res.status(400).json({error: 'email'});
         }
         if (!payload.pubkey || !payload.pubkey.trim()) {
             return res.status(400).json({error: 'pubkey'});
         }
-        if (!req.file) {
-            return res.status(400).json({error: 'image'});
-        }
 
         payload.full_name = payload.full_name.trim();
-        payload.address = payload.address.trim();
         payload.email = payload.email.trim();
         payload.pubkey = payload.pubkey.trim();
 
         try {
             const pubkey = ec.keyFromPublic(payload.pubkey, 'hex');
-            const {result, reason} = pubkey.validate();
+            const {result, reasonIgnored} = pubkey.validate();
             if (!result) {
                 return res.status(400).json({
                     error: 'pubkey',
                     message: 'Invalid Public Key'
                 });
             }
-        } catch (error) {
-            return res.status(500).json({error: 'api', message: 'Invalid Public Key'});
+        } catch (errorIgnored) {
+            return res.status(500).json({
+                error: 'api',
+                message: 'Invalid Public Key'
+            });
         }
 
         try {
-            // check true file type using magic number
-            const fileTypeStream = await fileType.stream(fs.createReadStream(req.file.path));
-            if (!['image/jpeg', 'image/png'].includes(fileTypeStream.fileType.mime)) {
-                return res.status(400).json({
-                    error: 'img',
-                    message: 'Wrong file type. Only jpeg and png files allowed.'
-                });
-            }
-
             // get user by emil to check if user already logged in
             const userByEmail = await models.clientSignup.findOne({email: payload.email});
             if (userByEmail) {
@@ -238,31 +234,23 @@ module.exports = {
                 });
             }
 
-            // upload image to grid-fs
-            const image = await saveFileInGridFs(req.file.path, {
-                content_type: fileTypeStream.fileType.mime,
-                filename: req.file.filename,
-                metadata: {
-                    ext: fileTypeStream.fileType.ext
-                }
-            });
-            // save user
-            const user = await models.clientSignup.create({
-                full_name: payload.full_name,
-                address: payload.address,
-                email: payload.email,
-                public_key: payload.pubkey,
-                img: image._id,
-            });
+            // // save user
+            // const user = await models.clientSignup.create({
+            //     full_name: payload.full_name,
+            //     email: payload.email,
+            //     public_key: payload.pubkey,
+            // });
 
-            sendNewSignUpEmail(user, image, req.file.path);
+            sendNewSignUpEmail(user);
             // send the response
             res.status(201).send({user});
         } catch (error) {
-            res.status(500).json({error: 'api', message: error.message});
+            res.status(500).json({
+                error: 'api',
+                message: error.message
+            });
         }
     },
-
 
     ctrl_type: (req, res) => {
         const startTime = start_time();
@@ -280,36 +268,12 @@ module.exports = {
 };
 
 /**
- * save file in the monogdb gridfs
- * @param path
- * @param data
- * @returns {Promise<any>}
- */
-function saveFileInGridFs(path, data) {
-    Grid.mongo = mongoose.mongo;
-    const gridFs = Grid(mongoose.connection.db);
-
-    const fileData = {
-        mode: 'w',
-        ...data
-    };
-
-    return new Promise((resolve, reject) => {
-        const writeStream = gridFs.createWriteStream(fileData);
-        fs.createReadStream(path).pipe(writeStream);
-        writeStream.on('close', resolve);
-        writeStream.on("error", reject);
-    });
-}
-
-/**
  * create email transport
- * @param service transport service. i.e. gmail, sendmail
  * work in progress
  *
  * @returns {*}
  */
-function getMailTransport(service) {
+function getMailTransport () {
     let transporter;
     transporter = nodemailer.createTransport({
         sendmail: true,
@@ -320,7 +284,7 @@ function getMailTransport(service) {
     return transporter;
 }
 
-function sendNewSignUpEmail(user, image, imagePath) {
+function sendNewSignUpEmail (user) {
     const env = require('../../src/env');
 
     const transporter = getMailTransport('gmail');
@@ -328,8 +292,6 @@ function sendNewSignUpEmail(user, image, imagePath) {
     const html = `
         <b>Full Name</b>: ${user.full_name}<br>
         <b>Email</b>: ${user.email}<br>
-        <b>Address</b>: ${user.address}<br>
-        <b>Image</b>: <img src="cid:${image.md5}"/>
     `;
 
     return new Promise((resolve, reject) => {
@@ -341,12 +303,6 @@ function sendNewSignUpEmail(user, image, imagePath) {
             to: env.sign_up.admin_email,
             subject: 'New SignUp',
             html: html,
-            attachments: [{
-                filename: image.filename,
-                path: imagePath,
-                cid: image.md5,
-                contentType: image.contentType
-            }],
         }, (error, info) => {
             if (error) {
                 return reject(error);
@@ -356,7 +312,7 @@ function sendNewSignUpEmail(user, image, imagePath) {
     });
 }
 
-async function find_type_hash(res, paramValue, startTime) {
+async function find_type_hash (res, paramValue, startTime) {
     try {
         let data;
         data = await models.merkleProof.find({commitment: paramValue});
@@ -376,19 +332,19 @@ async function find_type_hash(res, paramValue, startTime) {
             return reply_msg(res, 'blockhash', startTime);
         }
         reply_err(res, TYPE_UNKNOWN, startTime);
-    } catch (error) {
+    } catch (errorIgnored) {
         return reply_err(res, INTERNAL_ERROR_API, startTime);
     }
 }
 
-async function find_type_number(res, paramValue, startTime) {
+async function find_type_number (res, paramValue, startTime) {
     try {
         const data = await models.clientDetails.find({client_position: paramValue});
         if (data.length !== 0) {
             return reply_msg(res, 'position', startTime);
         }
         reply_err(res, 'Not found', startTime);
-    } catch (error) {
+    } catch (errorIgnored) {
         return reply_err(res, INTERNAL_ERROR_API, startTime);
     }
 }

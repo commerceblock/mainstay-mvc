@@ -1,32 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Axios from "axios";
+import Axios from 'axios';
 
 import {isValidEmail} from '../../utils/validators';
 
-import swal from "sweetalert";
+import swal from 'sweetalert';
 import {
     Button, ModalHeader, Form, ModalBody, FormGroup, Label, Input, ModalFooter, Modal, CustomInput
 } from 'reactstrap';
 
-
 class SignUpModal extends React.PureComponent {
 
-    constructor(props) {
+    constructor (props) {
         super(props);
 
         this.state = {
             inputs: {
-                name: '',
+                full_name: '',
                 email: '',
-                address: '',
-                key: '',
-                image: null
+                pubkey: '',
             },
             filePathLabel: ''
         };
 
-        this.loginImageFileInputRef = React.createRef();
         this.formRef = React.createRef();
     }
 
@@ -41,25 +37,11 @@ class SignUpModal extends React.PureComponent {
         });
     };
 
-    handleFileChange = (event) => {
-
-        const input = event.target;
-
-        let filePathLabel = '';
-        if (input.value.indexOf('fakepath') !== -1) {
-            let parts = input.value.split('\\');
-            filePathLabel = parts[parts.length - 1];
-        } else {
-            filePathLabel = input.value;
-        }
-        this.setState({filePathLabel})
-    };
-
     showErrorAlert = (message) => {
         return swal({
             text: message,
-            icon: "error",
-            className: "error",
+            icon: 'error',
+            className: 'error',
             closeOnClickOutside: true
         });
     };
@@ -69,14 +51,10 @@ class SignUpModal extends React.PureComponent {
 
         const form = event.target;
 
-        const {name, email, address, key} = this.state.inputs;
+        const {full_name, email, pubkey} = this.state.inputs;
 
-        if (!name || !name.trim()) {
+        if (!full_name || !full_name.trim()) {
             return this.showErrorAlert('Full Name is empty');
-        }
-
-        if (!address || !address.trim()) {
-            return this.showErrorAlert('Address is empty');
         }
 
         if (!email || !email.trim()) {
@@ -87,33 +65,26 @@ class SignUpModal extends React.PureComponent {
             return this.showErrorAlert('Email is no valid.');
         }
 
-        if (!key || !key.trim()) {
+        if (!pubkey || !pubkey.trim()) {
             return this.showErrorAlert('Public key is empty');
         }
 
-        if (this.loginImageFileInputRef.current.files.length === 0) {
-            return this.showErrorAlert('No image selected');
-        }
-
-        const formData = new FormData();
-        formData.set('full_name', name);
-        formData.set('email', email);
-        formData.set('address', address);
-        formData.set('pubkey', key);
-        formData.append('image', this.loginImageFileInputRef.current.files[0]);
+        const data = {
+            full_name,
+            email,
+            pubkey
+        };
 
         Axios({
             url: '/ctrl/usersignup',
             method: 'post',
-            data: formData,
-            config: {headers: {'Content-Type': 'multipart/form-data'}}
+            data: data,
         }).then(res => {
-
             if (this.props.onSuccess) {
                 this.props.onSuccess(res);
             }
             // reset the form
-            this.resetFormState()
+            this.resetFormState();
         }).catch(error => {
             if (this.props.onError) {
                 this.props.onError(error);
@@ -134,7 +105,7 @@ class SignUpModal extends React.PureComponent {
         }
     };
 
-    render() {
+    render () {
         const {
             isOpen,
         } = this.props;
@@ -152,21 +123,11 @@ class SignUpModal extends React.PureComponent {
                         <FormGroup>
                             <Label className="f-bold fs14">Full Name</Label>
                             <Input
-                                name="name"
+                                name="full_name"
                                 bsSize="sm"
                                 onChange={this.handleChange}
                             />
                         </FormGroup>
-
-                        <FormGroup>
-                            <Label className="f-bold fs14">Address</Label>
-                            <Input
-                                name="address"
-                                bsSize="sm"
-                                onChange={this.handleChange}
-                            />
-                        </FormGroup>
-
                         <FormGroup>
                             <Label className="f-bold fs14">Email</Label>
                             <Input
@@ -176,28 +137,14 @@ class SignUpModal extends React.PureComponent {
                                 onChange={this.handleChange}
                             />
                         </FormGroup>
-
                         <FormGroup>
                             <Label className="f-bold fs14">Public key</Label>
                             <Input
-                                name="key"
+                                name="pubkey"
                                 bsSize="sm"
                                 onChange={this.handleChange}
                             />
                         </FormGroup>
-
-                        <FormGroup>
-                            <Label className="f-bold fs14">Upload Passport / ID image</Label>
-                            <CustomInput
-                                id="image-file-input"
-                                onChange={this.handleFileChange}
-                                type="file"
-                                label={this.state.filePathLabel}
-                                multiple={false}
-                                innerRef={this.loginImageFileInputRef}
-                            />
-                        </FormGroup>
-
                     </ModalBody>
                     <ModalFooter>
                         <Button color="none" onClick={this.handleModalClose}>Cancel</Button>

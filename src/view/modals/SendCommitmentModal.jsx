@@ -115,6 +115,7 @@ class SendCommitmentModal extends React.PureComponent {
                                     name={name}
                                     bsSize="sm"
                                     onChange={this.handleChange}
+                                    placeholder={hint}
                                 />
                             </FormGroup>
                         ))}

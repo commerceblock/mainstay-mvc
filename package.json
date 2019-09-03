@@ -1,17 +1,20 @@
 {
   "name": "mainstay-mvc",
   "scripts": {
-    "start": "HOST_API='localhost' PORT_API='4000' PORT='80' webpack-dev-server"
+    "start": "HOST_API='localhost' PORT_API='4000' PORT='80' webpack-dev-server",
+    "dev": "HOST_API='localhost' PORT_API='4000' PORT='8080' webpack-dev-server"
   },
   "dependencies": {
     "axios": "^0.18.1",
     "dateformat": "^3.0.3",
+    "elliptic": "^6.5.0",
     "express": "^4.16.4",
     "file-type": "^12.1.0",
     "gridfs-stream": "^1.1.1",
     "history": "^4.9.0",
     "js-sha3": "^0.8.0",
     "mongoose": "^5.3.14",
+    "morgan": "^1.9.1",
     "multer": "^1.4.2",
     "nodejs-base64": "^1.0.3",
     "nodemailer": "^6.3.0",
