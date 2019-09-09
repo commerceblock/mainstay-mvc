@@ -1,0 +1,8 @@
+1. Install Mongodb (https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/)   (One time work)
+2. Run command `sudo mongod --replSet "rs"`
+3. Run command `mongo`
+   - Inside mongo run `rs.initiate()`  (One time work)
+5. Run command `mongorestore -d "mainstayX" ./dbTest`  (One time work)
+
+6. To run backend run command `DB_NAME="mainstayX" DB_PORT="27017" DB_HOST="127.0.0.1" LISTEN_API="4000" node ./src/app.js`
+7. To run frontend run command `HOST_API="localhost" PORT_API="4000" PORT="8080"`
