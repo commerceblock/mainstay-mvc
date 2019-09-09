@@ -2,12 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Axios from 'axios';
 
-import {isValidEmail} from '../../utils/validators';
-
 import swal from 'sweetalert';
-import {
-    Button, ModalHeader, Form, ModalBody, FormGroup, Label, Input, ModalFooter, Modal, CustomInput
-} from 'reactstrap';
+import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
+
+import {isValidEmail} from '../../utils/validators';
 
 class SignUpModal extends React.PureComponent {
 
@@ -18,6 +16,7 @@ class SignUpModal extends React.PureComponent {
             inputs: {
                 full_name: '',
                 email: '',
+                company: '',
                 pubkey: '',
             },
             filePathLabel: ''
@@ -49,9 +48,7 @@ class SignUpModal extends React.PureComponent {
     handleSubmitLogin = (event) => {
         event.preventDefault();
 
-        const form = event.target;
-
-        const {full_name, email, pubkey} = this.state.inputs;
+        const {full_name, email, company, pubkey} = this.state.inputs;
 
         if (!full_name || !full_name.trim()) {
             return this.showErrorAlert('Full Name is empty');
@@ -65,13 +62,10 @@ class SignUpModal extends React.PureComponent {
             return this.showErrorAlert('Email is no valid.');
         }
 
-        if (!pubkey || !pubkey.trim()) {
-            return this.showErrorAlert('Public key is empty');
-        }
-
         const data = {
             full_name,
             email,
+            company,
             pubkey
         };
 
@@ -121,7 +115,7 @@ class SignUpModal extends React.PureComponent {
                 >
                     <ModalBody>
                         <FormGroup>
-                            <Label className="f-bold fs14">Full Name</Label>
+                            <Label className="f-bold fs14">Full Name*</Label>
                             <Input
                                 name="full_name"
                                 bsSize="sm"
@@ -129,7 +123,7 @@ class SignUpModal extends React.PureComponent {
                             />
                         </FormGroup>
                         <FormGroup>
-                            <Label className="f-bold fs14">Email</Label>
+                            <Label className="f-bold fs14">Email*</Label>
                             <Input
                                 name="email"
                                 type="email"
@@ -138,7 +132,16 @@ class SignUpModal extends React.PureComponent {
                             />
                         </FormGroup>
                         <FormGroup>
-                            <Label className="f-bold fs14">Public key</Label>
+                            <Label className="f-bold fs14">Company Name (optional)</Label>
+                            <Input
+                                name="company"
+                                type="text"
+                                bsSize="sm"
+                                onChange={this.handleChange}
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label className="f-bold fs14">Public Key (optional)</Label>
                             <Input
                                 name="pubkey"
                                 bsSize="sm"

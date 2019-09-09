@@ -200,28 +200,31 @@ module.exports = {
         if (!payload.email || !payload.email.trim() && !isValidEmail(payload.email.trim())) {
             return res.status(400).json({error: 'email'});
         }
-        if (!payload.pubkey || !payload.pubkey.trim()) {
-            return res.status(400).json({error: 'pubkey'});
-        }
 
         payload.full_name = payload.full_name.trim();
         payload.email = payload.email.trim();
-        payload.pubkey = payload.pubkey.trim();
 
-        try {
-            const pubkey = ec.keyFromPublic(payload.pubkey, 'hex');
-            const {result, reasonIgnored} = pubkey.validate();
-            if (!result) {
-                return res.status(400).json({
-                    error: 'pubkey',
+        if (payload.company && payload.company.trim()) {
+            payload.company = payload.company.trim();
+        }
+
+        if (payload.pubkey && payload.pubkey.trim()) {
+            payload.pubkey = payload.pubkey.trim();
+            try {
+                const pubkey = ec.keyFromPublic(payload.pubkey, 'hex');
+                const {result, reasonIgnored} = pubkey.validate();
+                if (!result) {
+                    return res.status(400).json({
+                        error: 'pubkey',
+                        message: 'Invalid Public Key'
+                    });
+                }
+            } catch (errorIgnored) {
+                return res.status(500).json({
+                    error: 'api',
                     message: 'Invalid Public Key'
                 });
             }
-        } catch (errorIgnored) {
-            return res.status(500).json({
-                error: 'api',
-                message: 'Invalid Public Key'
-            });
         }
 
         try {
@@ -233,11 +236,11 @@ module.exports = {
                     message: 'User already exists with this email.'
                 });
             }
-
-            // // save user
+            // save user
             // const user = await models.clientSignup.create({
             //     full_name: payload.full_name,
             //     email: payload.email,
+            //     company: payload.company,
             //     public_key: payload.pubkey,
             // });
 
@@ -273,7 +276,7 @@ module.exports = {
  *
  * @returns {*}
  */
-function getMailTransport () {
+function getMailTransport() {
     let transporter;
     transporter = nodemailer.createTransport({
         sendmail: true,
@@ -284,7 +287,7 @@ function getMailTransport () {
     return transporter;
 }
 
-function sendNewSignUpEmail (user) {
+function sendNewSignUpEmail(user) {
     const env = require('../../src/env');
 
     const transporter = getMailTransport('gmail');
@@ -312,7 +315,7 @@ function sendNewSignUpEmail (user) {
     });
 }
 
-async function find_type_hash (res, paramValue, startTime) {
+async function find_type_hash(res, paramValue, startTime) {
     try {
         let data;
         data = await models.merkleProof.find({commitment: paramValue});
@@ -337,7 +340,7 @@ async function find_type_hash (res, paramValue, startTime) {
     }
 }
 
-async function find_type_number (res, paramValue, startTime) {
+async function find_type_number(res, paramValue, startTime) {
     try {
         const data = await models.clientDetails.find({client_position: paramValue});
         if (data.length !== 0) {

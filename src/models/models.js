@@ -69,6 +69,7 @@ schemaMerkleProof.index({
 const schemaClientSignup = new Schema({
     full_name: String,
     email: String,
+    company: String,
     public_key: String
 }, {collection: 'ClientSignup'});
 schemaClientSignup.index({'email': 1}, {unique: true});
