@@ -238,10 +238,6 @@ module.exports = {
             }
 
             // check payload components are defined
-            const signatureCommitment = data[MAINSTAY_SIGNATURE];
-            if (signatureCommitment === undefined) {
-                return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
-            }
             if (payload.commitment === undefined) {
                 return reply_err(res, MISSING_PAYLOAD_COMMITMENT, startTime);
             }
@@ -251,7 +247,7 @@ module.exports = {
             if (payload.token === undefined) {
                 return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
             }
-
+            const signatureCommitment = data[MAINSTAY_SIGNATURE];
             try {
                 // try get client details
                 const data = await models.clientDetails.find({client_position: payload.position});
@@ -261,18 +257,23 @@ module.exports = {
                 if (data[0].auth_token !== payload.token) {
                     return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
                 }
-                try {
-                    // get pubkey hex
-                    const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
+                if (data[0].pubkey && data[0].pubkey != "") {
+                    if (signatureCommitment === undefined) {
+                        return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
+                    }
+                    try {
+                        // get pubkey hex
+                        const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
 
-                    // get base64 signature
-                    let sig = Buffer.from(signatureCommitment, 'base64');
+                        // get base64 signature
+                        let sig = Buffer.from(signatureCommitment, 'base64');
 
-                    if (!ec.verify(payload.commitment, sig, pubkey)) {
+                        if (!ec.verify(payload.commitment, sig, pubkey)) {
+                            return reply_err(res, SIGNATURE_INVALID, startTime);
+                        }
+                    } catch (error) {
                         return reply_err(res, SIGNATURE_INVALID, startTime);
                     }
-                } catch (error) {
-                    return reply_err(res, SIGNATURE_INVALID, startTime);
                 }
                 await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
                 reply_msg(res, 'feedback', startTime);

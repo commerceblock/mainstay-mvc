@@ -140,36 +140,34 @@ module.exports = {
                 if (payload.commitment === undefined) {
                     return res.json({error: 'commitment'});
                 }
-                if (payload.signature === undefined) {
-                    return res.json({error: 'signature'});
-                }
 
                 const data = await models.clientDetails.find({client_position: payload.position});
-
                 if (data.length === 0) {
                     return res.json({error: 'position'});
                 }
-
                 if (data[0].auth_token !== payload.token) {
                     return res.json({error: 'token'});
                 }
-
-                try {
-                    // get pubkey hex
-                    const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
-
-                    // get base64 signature
-                    const sig = Buffer.from(payload.signature, 'base64');
-
-                    if (!ec.verify(payload.commitment, sig, pubkey)) {
+                if (data[0].pubkey && data[0].pubkey != "") {
+                    if (payload.signature === undefined) {
                         return res.json({error: 'signature'});
                     }
+                    try {
+                        // get pubkey hex
+                        const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
 
-                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
-                    return res.send();
-                } catch (error) {
-                    return res.json({error: SIGNATURE_INVALID, message: error.message});
+                        // get base64 signature
+                        const sig = Buffer.from(payload.signature, 'base64');
+
+                        if (!ec.verify(payload.commitment, sig, pubkey)) {
+                            return res.json({error: 'signature'});
+                        }
+                    } catch (error) {
+                        return res.json({error: SIGNATURE_INVALID, message: error.message});
+                    }
                 }
+                await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
+                return res.send();
 
             } catch (error) {
                 res.json({error: 'api', message: error.message});
