@@ -1,0 +1,121 @@
+const mongoose = require('mongoose');
+const uuidv4 = require('uuid/v4');
+const jwt = require('jsonwebtoken');
+const elliptic = require('elliptic');
+
+const env = require('../env');
+
+const ec = new elliptic.ec('secp256k1');
+
+class AdminController {
+
+    async login (req, res, next) {
+        const adminCredentials = env.admin;
+        const jwtSecret = env.jwt.secret;
+
+        // send error response if login or pass are incorrect
+        if (req.body.login !== adminCredentials.login || req.body.password !== adminCredentials.password) {
+            return res.status(400).json({
+                error: {
+                    code: 'wrong_login_credentials',
+                    message: 'wrong login or password'
+                }
+            });
+        }
+        // generate jwt token and via header
+        const token = jwt.sign({
+            data: 'logged-in'
+        }, jwtSecret, {expiresIn: '1h'});
+        return res.set('Access-Token', token).json({data: null});
+    }
+
+    async client_details (req, res, next) {
+        const clientDetailsModel = mongoose.model('ClientDetails');
+        try {
+            const list = await clientDetailsModel.find();
+            res.json({data: list});
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async add_client_details (req, res, next) {
+        const clientDetailsModel = mongoose.model('ClientDetails');
+        const clientCommitmentModel = mongoose.model('ClientCommitment');
+        let clientName;
+        let publicKey;
+        let authToken;
+
+        if (req.body.public_key && req.body.public_key.trim()) {
+            publicKey = req.body.public_key.trim();
+            try {
+                const publicKeyEc = ec.keyFromPublic(req.body.pubkey, 'hex');
+                const {result, reason} = publicKeyEc.validate();
+                if (!result) {
+                    return res.status(400).json({
+                        error: 'error_public_key',
+                        message: `Invalid Public Key: ${reason}`
+                    });
+                }
+            } catch (error) {
+                return res.status(400).json({
+                    error: 'error_public_key',
+                    message: `Invalid Public Key: ${error.message}`
+                });
+            }
+        }
+
+        if (req.body.client_name && req.body.client_name.trim()) {
+            clientName = req.body.client_name.trim();
+        }
+
+        if (req.body.auth_token && req.body.auth_token.trim()) {
+            authToken = req.body.auth_token.trim();
+        } else {
+            authToken = uuidv4();
+        }
+
+        try {
+            // fetch item with max client_position
+            const maxPositionClientDetails = await clientDetailsModel
+                .findOne()
+                .sort({client_position: -1})
+                .limit(1);
+
+            let nextClientPosition;
+            if (maxPositionClientDetails === null) {
+                nextClientPosition = 0;
+            } else {
+                nextClientPosition = maxPositionClientDetails.client_position + 1;
+            }
+            // create new client-detail
+            const clientDetailsData = {
+                client_position: nextClientPosition,
+                auth_token: authToken,
+                client_name: clientName,
+                pubkey: publicKey,
+            };
+            const clientDetails = new clientDetailsModel(clientDetailsData);
+            await clientDetails.save();
+
+            // create client-commitment
+            const clientCommitmentData = {
+                client_position: clientDetails.client_position,
+                commitment: '0000000000000000000000000000000000000000000000000000000000000000'
+            };
+            const clientCommitment = new clientCommitmentModel(clientCommitmentData);
+            await clientCommitment.save();
+
+            res.status(201).json({
+                data: {
+                    clientDetails,
+                    clientCommitment
+                }
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+}
+
+module.exports = new AdminController();

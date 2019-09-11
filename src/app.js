@@ -42,6 +42,7 @@ function __MAIN__ () {
 
         routes.makeApiRoutes(app);
         routes.makeCtrlRoutes(app);
+        routes.makeAdminRoutes(app);
 
         app.get('*', (req, res) => {
             res.status(404).send('404 Not Found');

@@ -14,7 +14,8 @@ module.exports = () => {
 
     return {
         entry: {
-            main: './src/main.jsx'
+            main: './src/main.jsx',
+            admin: './src/admin.jsx',
         },
         output: {
             path: path.resolve(__dirname, './public'),
@@ -69,7 +70,13 @@ module.exports = () => {
             new MiniCssExtractPlugin({filename: '[name].styles.css'}),
             new htmlWebPackPlugin({
                 template: './src/index.html',
-                filename: './index.html'
+                filename: './index.html',
+                chunks: ['main']
+            }),
+            new htmlWebPackPlugin({
+                template: './src/admin.html',
+                filename: './admin.html',
+                chunks: ['admin']
             }),
             new webpack.HotModuleReplacementPlugin(),
             new webpack.ProgressPlugin()
@@ -77,7 +84,14 @@ module.exports = () => {
         devServer: {
             contentBase: './public',
             disableHostCheck: true,
-            historyApiFallback: true,
+            historyApiFallback: {
+                rewrites: [
+                    {
+                        from: /^\/admin\/?.*$/,
+                        to: 'admin.html'
+                    }
+                ]
+            },
             inline: true,
             open: false,
             writeToDisk: true,
@@ -85,8 +99,9 @@ module.exports = () => {
             host: devServerHost,
             port: devServerPort,
             proxy: {
-                '/api': `http://${serverHost}:${serverPort}`,
-                '/ctrl': `http://${serverHost}:${serverPort}`
+                '/api': 'http://' + serverHost + ':' + serverPort,
+                '/ctrl': 'http://' + serverHost + ':' + serverPort,
+                '/suadmin': 'http://' + serverHost + ':' + serverPort,
             }
         },
         devtool: 'eval-source-map'

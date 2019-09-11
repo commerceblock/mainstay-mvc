@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 
 const models = require('../models/models');
 const {isValidEmail} = require('../utils/validators');
+const env = require('../../src/env');
 
 const ec = new elliptic.ec('secp256k1');
 
@@ -227,32 +228,9 @@ module.exports = {
             }
         }
 
-        try {
-            // get user by emil to check if user already logged in
-            const userByEmail = await models.clientSignup.findOne({email: payload.email});
-            if (userByEmail) {
-                return res.status(400).json({
-                    error: 'api',
-                    message: 'User already exists with this email.'
-                });
-            }
-            // save user
-            // const user = await models.clientSignup.create({
-            //     full_name: payload.full_name,
-            //     email: payload.email,
-            //     company: payload.company,
-            //     public_key: payload.pubkey,
-            // });
-
-            sendNewSignUpEmail(user);
-            // send the response
-            res.status(201).send({user});
-        } catch (error) {
-            res.status(500).json({
-                error: 'api',
-                message: error.message
-            });
-        }
+        sendNewSignUpEmail(payload);
+        // send the response
+        res.status(201).send({user: payload});
     },
 
     ctrl_type: (req, res) => {
@@ -276,7 +254,7 @@ module.exports = {
  *
  * @returns {*}
  */
-function getMailTransport() {
+function getMailTransport () {
     let transporter;
     transporter = nodemailer.createTransport({
         sendmail: true,
@@ -287,14 +265,14 @@ function getMailTransport() {
     return transporter;
 }
 
-function sendNewSignUpEmail(user) {
-    const env = require('../../src/env');
-
-    const transporter = getMailTransport('gmail');
+function sendNewSignUpEmail (user) {
+    const transporter = getMailTransport();
 
     const html = `
         <b>Full Name</b>: ${user.full_name}<br>
         <b>Email</b>: ${user.email}<br>
+        ${user.company ? '<b>Company</b>: ${user.company}<br>' : ''}
+        ${user.public_key ? '<b>Public Key</b>: ${user.public_key}<br>' : ''}
     `;
 
     return new Promise((resolve, reject) => {
@@ -315,7 +293,7 @@ function sendNewSignUpEmail(user) {
     });
 }
 
-async function find_type_hash(res, paramValue, startTime) {
+async function find_type_hash (res, paramValue, startTime) {
     try {
         let data;
         data = await models.merkleProof.find({commitment: paramValue});
@@ -340,7 +318,7 @@ async function find_type_hash(res, paramValue, startTime) {
     }
 }
 
-async function find_type_number(res, paramValue, startTime) {
+async function find_type_number (res, paramValue, startTime) {
     try {
         const data = await models.clientDetails.find({client_position: paramValue});
         if (data.length !== 0) {

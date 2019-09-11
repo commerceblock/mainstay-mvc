@@ -1,0 +1,6 @@
+export const FETCH_IN_PROGRESS = 'FETCH_IN_PROGRESS';
+export const FETCHED = 'FETCHED';
+export const FETCH_ERROR = 'FETCH_ERROR';
+
+export const CLIENT_CREATED = 'CLIENT_CREATED';
+export const CLIENT_CREATE_ERROR = 'CLIENT_CREATE_ERROR';

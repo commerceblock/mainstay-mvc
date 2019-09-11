@@ -44,7 +44,7 @@ $ mongorestore -d "mainstayX" ./dbTest
 
 Run App
 ```perl
-$ DB_NAME="mainstayX" DB_PORT="27017" DB_HOST="127.0.0.1" LISTEN_API="4000" node ./src/app.js
+$ JWT_SECRET="dhe?3wfje;wf1" DB_NAME="mainstayX" DB_PORT="27017" DB_HOST="127.0.0.1" LISTEN_API="4000" node ./src/app.js
 ```
 
 Run Webpack dev server

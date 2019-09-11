@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
 
 const schemaAttestation = new Schema({
     merkle_root: String,
@@ -80,7 +79,6 @@ const clientCommitment = mongoose.model('ClientCommitment', schemaClientCommitme
 const clientDetails = mongoose.model('ClientDetails', schemaClientDetails);
 const merkleCommitment = mongoose.model('MerkleCommitment', schemaMerkleCommitment);
 const merkleProof = mongoose.model('MerkleProof', schemaMerkleProof);
-const clientSignup = mongoose.model('ClientSignup', schemaClientSignup);
 
 module.exports = {
     attestation,
@@ -89,5 +87,4 @@ module.exports = {
     clientDetails,
     merkleCommitment,
     merkleProof,
-    clientSignup,
 };
