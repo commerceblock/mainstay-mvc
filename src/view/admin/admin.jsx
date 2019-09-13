@@ -4,13 +4,12 @@ import {connect, Provider} from 'react-redux';
 
 import {Container,} from 'semantic-ui-react';
 import {Navigation} from './components';
-import Auth from './pages/Auth';
-import {Footer} from '../admin/components';
 import ClientDetailsList from '../admin/pages/ClientDetailsList';
 
 import store from './store';
-import {HashRouter, Route, Switch, Redirect} from 'react-router-dom';
+import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
 import PageNotFound from './pages/PageNotFound';
+import Auth from './pages/Auth';
 
 // this is the default behavior
 function getConfirmation (message, callback) {
@@ -22,29 +21,42 @@ class App extends React.Component {
 
     constructor (props) {
         super(props);
-        this.state = {showFooter: false};
     }
 
     render () {
+        const {isLoggedIn} = this.props;
+
+        let routes;
+        if (isLoggedIn) {
+            routes = (
+                <Switch>
+                    <Route exact path="/client-details" component={ClientDetailsList} />
+                    <Redirect from="/" to="/client-details" />
+                    <Route component={PageNotFound} />
+                </Switch>
+            );
+        } else {
+            routes = (
+                <Switch>
+                    <Route exact path="/login" component={Auth} />
+                    <Redirect from="/" to="/login" />
+                </Switch>
+            );
+        }
+
         return (
-            <>
-                {!this.props.isLoggedIn && <Container><Auth /></Container>}
-                {this.props.isLoggedIn && (
-                    <HashRouter getUserConfirmation={getConfirmation}>
-                        <>
-                            <Navigation />
-                            <Container style={{marginTop: '7em'}}>
-                                <Switch>
-                                    <Route exact path="/client-details" component={ClientDetailsList} />
-                                    <Redirect from="/" to="/client-details" />
-                                    <Route component={PageNotFound} />
-                                </Switch>
-                            </Container>
-                            {this.state.showFooter && <Footer />}
-                        </>
-                    </HashRouter>
-                )}
-            </>);
+            <BrowserRouter
+                basename={'/admin'}
+                getUserConfirmation={getConfirmation}
+            >
+                <>
+                    {isLoggedIn && <Navigation />}
+                    <Container style={{marginTop: '7em'}}>
+                        {routes}
+                    </Container>
+                </>
+            </BrowserRouter>
+        );
     }
 }
 

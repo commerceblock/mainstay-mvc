@@ -93,8 +93,8 @@ class AddClientModal extends React.Component {
                     {errorMessage && <Message color='red'>{errorMessage}</Message>}
                     <Form>
                         <Form.Field>
-                            <label>Client Name</label>
-                            <input placeholder='John Smith' disabled value={clientPosition} />
+                            <label>Client Position</label>
+                            <input placeholder='0' disabled value={clientPosition} />
                         </Form.Field>
 
                         <Form.Field>
@@ -103,12 +103,12 @@ class AddClientModal extends React.Component {
                         </Form.Field>
 
                         <Form.Field>
-                            <label>Client Name</label>
+                            <label>Client Name (optional)</label>
                             <input name="clientName" placeholder='John Smith' onChange={this.handleChange} />
                         </Form.Field>
 
                         <Form.Field>
-                            <label>Public Key</label>
+                            <label>Public Key (optional)</label>
                             <input name="publicKey" placeholder='' onChange={this.handleChange} />
                         </Form.Field>
 
@@ -164,10 +164,10 @@ class ClientDetailsList extends React.Component {
         return (
             <>
                 <div>
-                    <Header as='h1'>User Details</Header>
+                    <Header as='h2'>Client Details</Header>
                     {this.props.loading && <Loader active inline />}
 
-                    <Button icon labelPosition='left' onClick={this.handleShowModal}>
+                    <Button primary icon labelPosition='left' onClick={this.handleShowModal}>
                         <Icon name='user' />
                         Add Client
                     </Button>
@@ -207,7 +207,7 @@ const mapStateToProps = (state) => {
 
     return {
         items: state.clientDetails.items,
-        loading: state.clientDetails.loading,
+        loading: state.clientDetails.loading || false,
         maxClientPosition,
         errorMessage: state.clientDetails.error || null,
     };

@@ -14,13 +14,6 @@ module.exports = {
     sign_up: {
         admin_email: process.env.ADMIN_EMAIL
     },
-    email: {
-        MS_SMTP_ENABLED: true,
-        MS_SMTP_FROM_ADDRESS: 'ill_input_email_here@mainstay.xyz',
-        MS_SMTP_FROM_NAME: 'MainStay Name',
-        MS_SMTP_HOST: 'email-smtp.eu-west-1.amazonaws.com:465',
-        MS_SMTP_USER: 'WEFEWFGWERGWERGEWEWGWEGWEQ',
-    },
     admin: {
         login: process.env.ADMIN_LOGIN,
         password: process.env.ADMIN_PASSWORD

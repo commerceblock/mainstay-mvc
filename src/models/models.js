@@ -66,7 +66,7 @@ schemaMerkleProof.index({
 });
 
 const schemaClientSignup = new Schema({
-    full_name: String,
+    client_name: String,
     email: String,
     company: String,
     public_key: String

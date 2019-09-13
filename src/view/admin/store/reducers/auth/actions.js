@@ -31,6 +31,7 @@ export const login = (login, password) => (dispatch) => {
 };
 
 export const logout = () => (dispatch) => {
+    localStorage.removeItem('access_token');
     dispatch({
         type: types.LOGOUT,
         payload: 'logged-out'

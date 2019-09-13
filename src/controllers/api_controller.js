@@ -257,7 +257,7 @@ module.exports = {
                 if (data[0].auth_token !== payload.token) {
                     return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
                 }
-                if (data[0].pubkey && data[0].pubkey != "") {
+                if (data[0].pubkey && data[0].pubkey !== "") {
                     if (signatureCommitment === undefined) {
                         return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
                     }

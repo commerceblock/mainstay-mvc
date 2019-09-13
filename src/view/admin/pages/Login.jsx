@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import {login} from '../store/reducers/auth/actions';
 
-import {Button, Form, Grid, Header, Image, Message} from 'semantic-ui-react';
+import {Button, Form, Grid, Header, Message} from 'semantic-ui-react';
 
 class LoginForm extends React.Component {
 
@@ -42,7 +42,6 @@ class LoginForm extends React.Component {
             <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle'>
                 <Grid.Column style={{maxWidth: 450}}>
                     <Header as='h2' color='teal' textAlign='center'>
-                        <Image src='/logo.png' width={32} />
                         Admin Login
                     </Header>
                     {this.props.errorMessage && <Message color='red'>{this.props.errorMessage}</Message>}
@@ -88,7 +87,6 @@ LoginForm.propTypes = {
 };
 
 const mapStateToProps = state => {
-    console.log('mapStateToProps', state);
     return {
         isLoggedIn: state.auth.isLoggedIn || false,
         errorMessage: state.auth.error

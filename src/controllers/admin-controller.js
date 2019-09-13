@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
 const uuidv4 = require('uuid/v4');
 const jwt = require('jsonwebtoken');
 const elliptic = require('elliptic');
+const models = require('../models/models');
 
 const env = require('../env');
 
@@ -30,7 +30,7 @@ class AdminController {
     }
 
     async client_details (req, res, next) {
-        const clientDetailsModel = mongoose.model('ClientDetails');
+        const clientDetailsModel = models.clientDetails;
         try {
             const list = await clientDetailsModel.find();
             res.json({data: list});
@@ -40,16 +40,17 @@ class AdminController {
     }
 
     async add_client_details (req, res, next) {
-        const clientDetailsModel = mongoose.model('ClientDetails');
-        const clientCommitmentModel = mongoose.model('ClientCommitment');
-        let clientName;
-        let publicKey;
+        const clientDetailsModel = models.clientDetails;
+        const clientCommitmentModel = models.clientCommitment;
+
+        let clientName = '';
+        let publicKey = '';
         let authToken;
 
         if (req.body.public_key && req.body.public_key.trim()) {
             publicKey = req.body.public_key.trim();
             try {
-                const publicKeyEc = ec.keyFromPublic(req.body.pubkey, 'hex');
+                const publicKeyEc = ec.keyFromPublic(publicKey, 'hex');
                 const {result, reason} = publicKeyEc.validate();
                 if (!result) {
                     return res.status(400).json({

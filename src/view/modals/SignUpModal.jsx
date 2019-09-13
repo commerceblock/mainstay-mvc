@@ -14,7 +14,7 @@ class SignUpModal extends React.PureComponent {
 
         this.state = {
             inputs: {
-                full_name: '',
+                client_name: '',
                 email: '',
                 company: '',
                 pubkey: '',
@@ -48,10 +48,10 @@ class SignUpModal extends React.PureComponent {
     handleSubmitLogin = (event) => {
         event.preventDefault();
 
-        const {full_name, email, company, pubkey} = this.state.inputs;
+        const {client_name, email, company, pubkey} = this.state.inputs;
 
-        if (!full_name || !full_name.trim()) {
-            return this.showErrorAlert('Full Name is empty');
+        if (!client_name || !client_name.trim()) {
+            return this.showErrorAlert('Client Name is empty');
         }
 
         if (!email || !email.trim()) {
@@ -63,7 +63,7 @@ class SignUpModal extends React.PureComponent {
         }
 
         const data = {
-            full_name,
+            client_name,
             email,
             company,
             pubkey
@@ -115,9 +115,9 @@ class SignUpModal extends React.PureComponent {
                 >
                     <ModalBody>
                         <FormGroup>
-                            <Label className="f-bold fs14">Full Name*</Label>
+                            <Label className="f-bold fs14">Client Name*</Label>
                             <Input
-                                name="full_name"
+                                name="client_name"
                                 bsSize="sm"
                                 onChange={this.handleChange}
                             />

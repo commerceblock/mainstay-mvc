@@ -5,11 +5,10 @@ import {
     Nav, NavItem, Button
 } from 'reactstrap';
 
-import {routes} from './routes';
+import {getRoute, routes} from './routes';
 
 import SignUpModal from './modals/SignUpModal';
 import SendCommitmentModal from './modals/SendCommitmentModal';
-import NavLink from 'reactstrap/es/NavLink';
 import {Link} from 'react-router-dom';
 
 class Navbar extends React.Component {
@@ -59,7 +58,7 @@ class Navbar extends React.Component {
 
     onSendCommitmentError = (res) => {
         const errorMessage = res.data.error === 'undefined'
-            ? `Something went wrong`
+            ? 'Something went wrong'
             : `Incorrect ${res.data.error}`;
         swal({
             text: errorMessage,
@@ -74,7 +73,7 @@ class Navbar extends React.Component {
             <>
                 <Nav>
                     <NavItem className="hover-active">
-                        <Link className="nav-link" to={routes.attestation}>Attestations</Link>
+                        <Link className="nav-link" to={getRoute(routes.attestation, {value: null})}>Attestations</Link>
                     </NavItem>
                     <NavItem className="hover-active">
                         <Link className="nav-link" to={routes.client}>Clients</Link>

@@ -195,14 +195,14 @@ module.exports = {
 
         const payload = req.body;
 
-        if (!payload.full_name || !payload.full_name.trim()) {
-            return res.status(400).json({error: 'full_name'});
+        if (!payload.client_name || !payload.client_name.trim()) {
+            return res.status(400).json({error: 'client_name'});
         }
         if (!payload.email || !payload.email.trim() && !isValidEmail(payload.email.trim())) {
             return res.status(400).json({error: 'email'});
         }
 
-        payload.full_name = payload.full_name.trim();
+        payload.client_name = payload.client_name.trim();
         payload.email = payload.email.trim();
 
         if (payload.company && payload.company.trim()) {
@@ -269,7 +269,7 @@ function sendNewSignUpEmail (user) {
     const transporter = getMailTransport();
 
     const html = `
-        <b>Full Name</b>: ${user.full_name}<br>
+        <b>Client Name</b>: ${user.client_name}<br>
         <b>Email</b>: ${user.email}<br>
         ${user.company ? '<b>Company</b>: ${user.company}<br>' : ''}
         ${user.public_key ? '<b>Public Key</b>: ${user.public_key}<br>' : ''}
@@ -278,7 +278,7 @@ function sendNewSignUpEmail (user) {
     return new Promise((resolve, reject) => {
         transporter.sendMail({
             from: {
-                name: user.full_name,
+                name: user.client_name,
                 address: user.email
             },
             to: env.sign_up.admin_email,
