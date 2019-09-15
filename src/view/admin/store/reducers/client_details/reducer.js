@@ -12,6 +12,13 @@ function clientDetails (state = defaultState, action) {
                 error: null
             };
 
+        case types.CLIENT_UPDATED:
+        case types.CLIENT_CREATED:
+            return {
+                ...state,
+                loading: false,
+                error: null
+            };
         case types.FETCHED:
             return {
                 ...state,
@@ -22,6 +29,7 @@ function clientDetails (state = defaultState, action) {
 
         case types.FETCH_ERROR:
         case types.CLIENT_CREATE_ERROR:
+        case types.CLIENT_UPDATE_ERROR:
             return {
                 ...state,
                 loading: false,

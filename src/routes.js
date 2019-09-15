@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const api_controller = require('./controllers/api_controller');
 const ctrl_controller = require('./controllers/ctrl_controller');
-const admin_controller = require('./controllers/admin-controller');
+const admin_controller = require('./controllers/admin_controller');
 
 const {jwt: {secret: jwtSecret}} = require('./env');
 
@@ -89,8 +89,9 @@ function makeAdminRoutes (app) {
         });
     });
 
-    router.get('/client_details', admin_controller.client_details);
-    router.post('/client_details', admin_controller.add_client_details);
+    router.get('/client_details', admin_controller.clientDetails);
+    router.post('/client_details', admin_controller.addClientDetails);
+    router.put('/client_details', admin_controller.updateClientDetails);
 
     // error handler middleware
     router.use((error, req, res, next) => {

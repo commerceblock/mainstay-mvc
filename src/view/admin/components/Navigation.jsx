@@ -11,6 +11,7 @@ class Navigation extends React.Component {
     handleLogoutClick = () => {
         if (confirm('Are you sure you want to logout?')) {
             this.props.logoutAction();
+            window.location.href = '/';
         }
     };
 
@@ -18,15 +19,15 @@ class Navigation extends React.Component {
         return (
             <Menu fixed='top' inverted>
                 <Container>
-                    <Menu.Item as={Link} to="/" header>
+                    <Menu.Item as={Link} to="/client-details" header>
                         <Image
                             src='/logo.png'
                             style={{
-                                marginRight: '1.5em',
+                                marginRight: '.5em',
                                 width: '30px'
                             }}
                         />
-                        Mainstay
+                        <span style={{fontSize: '22px'}}>MainStay</span>
                     </Menu.Item>
                     <Menu.Item
                         active

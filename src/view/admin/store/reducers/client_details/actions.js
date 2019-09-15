@@ -74,3 +74,34 @@ export const addClient = (postData) => (dispatch) => {
         }
     });
 };
+
+export const updateClient = (clientData) => (dispatch) => {
+    dispatch({
+        type: types.FETCH_IN_PROGRESS,
+    });
+
+    const accessToken = localStorage.getItem('access_token');
+
+    return axios({
+        url: '/suadmin/client_details',
+        method: 'put',
+        data: clientData,
+        headers: {
+            'Access-Token': accessToken
+        }
+    }).then((response) => {
+        dispatch({
+            type: types.CLIENT_UPDATED,
+            payload: response.data.data
+        });
+    }).catch(error => {
+        const handled = handle401Error(error, dispatch);
+        if (!handled) {
+            dispatch({
+                type: types.CLIENT_UPDATE_ERROR,
+                payload: error.response.data.message
+            });
+            throw error;
+        }
+    });
+};

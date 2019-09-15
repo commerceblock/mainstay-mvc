@@ -11,6 +11,8 @@ import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
 import PageNotFound from './pages/PageNotFound';
 import Auth from './pages/Auth';
 
+import '../../../assets/stylesheets/admin.scss';
+
 // this is the default behavior
 function getConfirmation (message, callback) {
     const allowTransition = window.confirm(message);

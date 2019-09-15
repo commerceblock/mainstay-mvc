@@ -29,7 +29,7 @@ class AdminController {
         return res.set('Access-Token', token).json({data: null});
     }
 
-    async client_details (req, res, next) {
+    async clientDetails (req, res, next) {
         const clientDetailsModel = models.clientDetails;
         try {
             const list = await clientDetailsModel.find();
@@ -39,7 +39,7 @@ class AdminController {
         }
     }
 
-    async add_client_details (req, res, next) {
+    async addClientDetails (req, res, next) {
         const clientDetailsModel = models.clientDetails;
         const clientCommitmentModel = models.clientCommitment;
 
@@ -117,6 +117,58 @@ class AdminController {
             next(error);
         }
     }
+
+    async updateClientDetails (req, res, next) {
+        const clientDetailsModel = models.clientDetails;
+        const _id = req.body._id;
+        let clientName = '';
+        let publicKey = '';
+
+        if (req.body.public_key && req.body.public_key.trim()) {
+            publicKey = req.body.public_key.trim();
+            try {
+                const publicKeyEc = ec.keyFromPublic(publicKey, 'hex');
+                const {result, reason} = publicKeyEc.validate();
+                if (!result) {
+                    return res.status(400).json({
+                        error: 'error_public_key',
+                        message: `Invalid Public Key: ${reason}`
+                    });
+                }
+            } catch (error) {
+                return res.status(400).json({
+                    error: 'error_public_key',
+                    message: `Invalid Public Key: ${error.message}`
+                });
+            }
+        }
+
+        if (req.body.client_name && req.body.client_name.trim()) {
+            clientName = req.body.client_name.trim();
+        }
+
+        try {
+            const clientDetails = await clientDetailsModel.findOne({_id});
+            if (!clientDetails) {
+                return res.status(404).json({
+                    error: {
+                        code: 'client_not_found',
+                        message: 'Client not found'
+                    }
+                });
+            }
+
+            clientDetails.public_key = publicKey;
+            clientDetails.client_name = clientName;
+            await clientDetails.save();
+            return res.json({
+                data: clientDetails
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
 }
 
 module.exports = new AdminController();

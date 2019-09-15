@@ -41,7 +41,7 @@ class LoginForm extends React.Component {
         return (
             <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle'>
                 <Grid.Column style={{maxWidth: 450}}>
-                    <Header as='h2' color='teal' textAlign='center'>
+                    <Header as='h4' color='teal' textAlign='center'>
                         Admin Login
                     </Header>
                     {this.props.errorMessage && <Message color='red'>{this.props.errorMessage}</Message>}
