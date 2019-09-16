@@ -254,7 +254,7 @@ module.exports = {
  *
  * @returns {*}
  */
-function getMailTransport () {
+function getMailTransport() {
     let transporter;
     transporter = nodemailer.createTransport({
         sendmail: true,
@@ -265,7 +265,7 @@ function getMailTransport () {
     return transporter;
 }
 
-function sendNewSignUpEmail (user) {
+function sendNewSignUpEmail(user) {
     const transporter = getMailTransport();
 
     const html = `
@@ -293,7 +293,7 @@ function sendNewSignUpEmail (user) {
     });
 }
 
-async function find_type_hash (res, paramValue, startTime) {
+async function find_type_hash(res, paramValue, startTime) {
     try {
         let data;
         data = await models.merkleProof.find({commitment: paramValue});
@@ -318,7 +318,7 @@ async function find_type_hash (res, paramValue, startTime) {
     }
 }
 
-async function find_type_number (res, paramValue, startTime) {
+async function find_type_number(res, paramValue, startTime) {
     try {
         const data = await models.clientDetails.find({client_position: paramValue});
         if (data.length !== 0) {

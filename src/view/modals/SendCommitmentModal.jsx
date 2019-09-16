@@ -6,10 +6,10 @@ import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, Mo
 import swal from "sweetalert";
 
 const options = [
-    {label: 'Position', name: 'position', hint: '0'},
-    {label: 'Token', name: 'token', hint: '4c8c006d-4cee-4fef-8e06-bb8112db6314'},
-    {label: 'Commitment', name: 'commitment', hint: '6a855c1c70849ed28eb51cffd808ccd4e45c4cdddfa17495ccf98856b2421b8e'},
-    {label: 'Signature', name: 'signature', hint: '7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090'},
+    {label: 'Position*', name: 'position', hint: '0'},
+    {label: 'Token*', name: 'token', hint: '4c8c006d-4cee-4fef-8e06-bb8112db6314'},
+    {label: 'Commitment*', name: 'commitment', hint: '6a855c1c70849ed28eb51cffd808ccd4e45c4cdddfa17495ccf98856b2421b8e'},
+    {label: 'Signature (optional)', name: 'signature', hint: '7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090'},
 ];
 
 class SendCommitmentModal extends React.PureComponent {
