@@ -123,6 +123,7 @@ class AdminController {
         const _id = req.body._id;
         let clientName = '';
         let publicKey = '';
+        let authToken = '';
 
         if (req.body.public_key && req.body.public_key.trim()) {
             publicKey = req.body.public_key.trim();
@@ -147,6 +148,12 @@ class AdminController {
             clientName = req.body.client_name.trim();
         }
 
+        if (req.body.auth_token && req.body.auth_token.trim()) {
+            authToken = req.body.auth_token.trim();
+        } else {
+            authToken = uuidv4();
+        }
+
         try {
             const clientDetails = await clientDetailsModel.findOne({_id});
             if (!clientDetails) {
@@ -158,6 +165,7 @@ class AdminController {
                 });
             }
 
+            clientDetails.auth_token = authToken;
             clientDetails.public_key = publicKey;
             clientDetails.client_name = clientName;
             await clientDetails.save();

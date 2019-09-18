@@ -66,9 +66,6 @@ class SendCommitmentModal extends React.PureComponent {
         if (!commitment || !commitment.trim()) {
             return this.showErrorAlert('Commitment is empty');
         }
-        if (!signature || !signature.trim()) {
-            return this.showErrorAlert('Signature is empty');
-        }
 
         Axios.post('/ctrl/sendcommitment', {
             position,

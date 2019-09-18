@@ -1,7 +1,7 @@
 import React from 'react';
 import uuidv4 from 'uuid/v4';
 import {connect} from 'react-redux';
-import {Button, Form, Message, Modal} from 'semantic-ui-react';
+import {Button, Form, Input, Message, Modal} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import {addClient, updateClient} from '../../store/reducers/client_details/actions';
 
@@ -35,6 +35,15 @@ class AddClientDetailsModal extends React.Component {
             inputs: {
                 ...this.state.inputs,
                 [name]: value
+            }
+        });
+    };
+
+    handleGenerateAuthToken = () => {
+        this.setState({
+            inputs: {
+                ...this.state.inputs,
+                authToken: uuidv4()
             }
         });
     };
@@ -78,17 +87,12 @@ class AddClientDetailsModal extends React.Component {
                     <Form>
                         <Form.Field>
                             <label>Position</label>
-                            <input placeholder='0' disabled value={clientPosition} />
-                        </Form.Field>
-
-                        <Form.Field>
-                            <label>Auth Token</label>
-                            <input value={authToken} disabled />
+                            <Form.Input placeholder='0' disabled value={clientPosition} />
                         </Form.Field>
 
                         <Form.Field>
                             <label>Client Name (optional)</label>
-                            <input
+                            <Form.Input
                                 name="clientName"
                                 placeholder='John Smith'
                                 onChange={this.handleChange}
@@ -97,8 +101,21 @@ class AddClientDetailsModal extends React.Component {
                         </Form.Field>
 
                         <Form.Field>
+                            <label>Auth Token</label>
+                            <Input type="text" value={authToken} action>
+                                <Input disabled value={authToken} />
+                                <Button content="Generate" primary onClick={this.handleGenerateAuthToken} />
+                            </Input>
+                        </Form.Field>
+
+                        <Form.Field>
                             <label>Public Key (optional)</label>
-                            <input name="publicKey" placeholder='' onChange={this.handleChange} value={publicKey} />
+                            <Form.Input
+                                name="publicKey"
+                                placeholder=''
+                                onChange={this.handleChange}
+                                value={publicKey}
+                            />
                         </Form.Field>
 
                     </Form>
