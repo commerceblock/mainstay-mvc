@@ -166,7 +166,7 @@ class AdminController {
             }
 
             clientDetails.auth_token = authToken;
-            clientDetails.public_key = publicKey;
+            clientDetails.pubkey = publicKey;
             clientDetails.client_name = clientName;
             await clientDetails.save();
             return res.json({
