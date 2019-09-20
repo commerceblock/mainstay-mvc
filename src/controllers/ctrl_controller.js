@@ -132,24 +132,19 @@ module.exports = {
         }
     },
 
-    ctrl_send_commitment: (req, res) => {
-        let rawRequestData = '';
-        req.on('data', chunk => {
-            rawRequestData += chunk.toString();
-        });
+    ctrl_send_commitment: async (req, res) => {
 
-        req.on('end', async () => {
-            try {
-                const payload = JSON.parse(rawRequestData);
-                if (payload.position === undefined) {
-                    return res.json({error: 'position'});
-                }
-                if (payload.token === undefined) {
-                    return res.json({error: 'token'});
-                }
-                if (payload.commitment === undefined) {
-                    return res.json({error: 'commitment'});
-                }
+        try {
+            const payload = req.body;
+            if (payload.position === undefined) {
+                return res.json({error: 'position'});
+            }
+            if (payload.token === undefined) {
+                return res.json({error: 'token'});
+            }
+            if (payload.commitment === undefined) {
+                return res.json({error: 'commitment'});
+            }
 
                 const data = await models.clientDetails.find({client_position: payload.position});
                 if (data.length === 0) {
@@ -166,29 +161,29 @@ module.exports = {
                         // get pubkey hex
                         const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
 
-                        // get base64 signature
-                        const sig = Buffer.from(payload.signature, 'base64');
+                    // get base64 signature
+                    const sig = Buffer.from(payload.signature, 'base64');
+                    if (!ec.verify(payload.commitment, sig, pubkey)) {
+                        return res.json({error: 'signature'});
+                    }
 
-                        if (!ec.verify(payload.commitment, sig, pubkey)) {
-                            return res.json({error: 'signature'});
-                        }
-                    } catch (error) {
-                        return res.json({
+                } catch (error) {
+                    return res.json({
                         error: 'signature',
                         message: error.message
-                    });
-                    }
-                }
-                await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
-                return res.send();
 
-            } catch (error) {
-                res.json({
-                    error: 'api',
-                    message: error.message
                 });
             }
-        });
+}
+            await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
+            return res.send();
+
+        } catch (error) {
+            res.json({
+                error: 'api',
+                message: error.message
+            });
+        }
     },
 
     ctrl_client_signup: async (req, res) => {
