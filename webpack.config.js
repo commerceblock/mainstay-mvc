@@ -94,7 +94,7 @@ module.exports = () => {
             },
             inline: true,
             open: false,
-            writeToDisk: false,
+            writeToDisk: true,
             hot: true,
             host: devServerHost,
             port: devServerPort,

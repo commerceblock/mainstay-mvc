@@ -77,7 +77,7 @@ class ClientDetailsList extends React.Component {
         const {items, maxClientPosition} = this.props;
         return (
             <>
-                <div>
+                <div style={{marginBottom: '20px'}}>
                     <Header as='h4'>Client Details</Header>
                     {this.props.loading && <Loader active inline />}
 

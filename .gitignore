@@ -27,3 +27,6 @@ yarn-debug.log*
 yarn-error.log*
 
 /data
+/public/*.html
+/public/*.js*
+/public/*.styles.css
