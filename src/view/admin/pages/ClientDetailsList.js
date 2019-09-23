@@ -79,13 +79,13 @@ class ClientDetailsList extends React.Component {
             <>
                 <div style={{marginBottom: '20px'}}>
                     <Header as='h4'>Client Details</Header>
-                    {this.props.loading && <Loader active inline />}
 
                     <Button primary icon labelPosition='left' onClick={this.handleShowModal}>
                         <Icon name='user' />
                         Add Client
                     </Button>
 
+                    {this.props.loading && <Loader active />}
                     {this.renderList(items)}
                 </div>
                 {this.state.showAddModal && <AddClientDetailsModal

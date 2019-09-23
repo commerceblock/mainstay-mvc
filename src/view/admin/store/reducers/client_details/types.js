@@ -1,4 +1,5 @@
 export const FETCH_IN_PROGRESS = 'FETCH_IN_PROGRESS';
+export const SAVE_IN_PROGRESS = 'SAVE_IN_PROGRESS';
 export const FETCHED = 'FETCHED';
 export const FETCH_ERROR = 'FETCH_ERROR';
 

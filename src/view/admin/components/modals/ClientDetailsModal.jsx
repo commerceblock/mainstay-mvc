@@ -8,22 +8,24 @@ import {addClient, updateClient} from '../../store/reducers/client_details/actio
 class AddClientDetailsModal extends React.Component {
     constructor (props) {
         super(props);
+        this.state = {
+            errorMessage: null,
+            saving: false,
+            inputs: {},
+        };
+
         if (props.item) {
-            this.state = {
-                inputs: {
-                    _id: props.item._id,
-                    authToken: props.item.auth_token,
-                    clientPosition: props.item.client_position,
-                    clientName: props.item.client_name,
-                    publicKey: props.item.pubkey,
-                }
+            this.state.inputs = {
+                _id: props.item._id,
+                authToken: props.item.auth_token,
+                clientPosition: props.item.client_position,
+                clientName: props.item.client_name,
+                publicKey: props.item.pubkey,
             };
         } else {
-            this.state = {
-                inputs: {
-                    authToken: uuidv4(),
-                    clientPosition: props.clientPosition,
-                }
+            this.state.inputs = {
+                authToken: uuidv4(),
+                clientPosition: props.clientPosition,
             };
         }
     }
@@ -48,7 +50,19 @@ class AddClientDetailsModal extends React.Component {
         });
     };
 
-    handleSubmit = () => {
+    handleFormKeypress = (e) => {
+        const code = e.keyCode || e.which;
+        if (code === 13) {
+            this.handleSubmit(e);
+        }
+    };
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        if (this.props.saving) {
+            return;
+        }
+
         const {_id, authToken, clientPosition, clientName, publicKey} = this.state.inputs;
         let request;
         if (_id) {
@@ -67,24 +81,30 @@ class AddClientDetailsModal extends React.Component {
                 public_key: publicKey,
             });
         }
+        this.setState({saving: true});
+        // send request
         request.then(() => {
             this.props.handleCreateSuccess();
         }).catch(error => {
-            console.log(error);
-            // todo show error
+            this.setState({
+                errorMessage: error.response.data.message
+            });
+        }).finally(() => {
+            this.setState({saving: false});
         });
     };
 
     render () {
-        const {authToken, clientPosition, clientName, publicKey} = this.state.inputs;
-        const {handleCloseModal, errorMessage} = this.props;
+        const {inputs, errorMessage, saving} = this.state;
+        const {authToken, clientPosition, clientName, publicKey} = inputs;
+        const {handleCloseModal} = this.props;
+
         return (
             <Modal open size="small" onClose={handleCloseModal}>
-
                 <Modal.Header>Add Client Details</Modal.Header>
                 <Modal.Content>
                     {errorMessage && <Message color='red'>{errorMessage}</Message>}
-                    <Form>
+                    <Form onSubmit={this.handleSubmit} onKeyPress={this.handleFormKeypress}>
                         <Form.Field>
                             <label>Position</label>
                             <Form.Input placeholder='0' disabled value={clientPosition} />
@@ -104,7 +124,8 @@ class AddClientDetailsModal extends React.Component {
                             <label>Auth Token</label>
                             <Input type="text" value={authToken} action>
                                 <Input disabled value={authToken} />
-                                <Button content="Generate" primary onClick={this.handleGenerateAuthToken} />
+                                <Button content="Generate" primary onClick={this.handleGenerateAuthToken}
+                                        type="button" />
                             </Input>
                         </Form.Field>
 
@@ -122,7 +143,7 @@ class AddClientDetailsModal extends React.Component {
                 </Modal.Content>
                 <Modal.Actions>
                     <Button onClick={handleCloseModal}>Cancel</Button>
-                    <Button primary onClick={this.handleSubmit}>Save</Button>
+                    <Button primary onClick={this.handleSubmit} disabled={saving} loading={saving}>Save</Button>
                 </Modal.Actions>
             </Modal>
         );
@@ -131,7 +152,7 @@ class AddClientDetailsModal extends React.Component {
 
 AddClientDetailsModal.propTypes = {
     // state props
-    errorMessage: PropTypes.string,
+    saving: PropTypes.string,
     // dispatch props
     addClientAction: PropTypes.func.isRequired,
     updateClientAction: PropTypes.func.isRequired,
@@ -144,7 +165,7 @@ AddClientDetailsModal.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        errorMessage: state.clientDetails.error || null,
+        saving: state.clientDetails.saving || false,
     };
 };
 

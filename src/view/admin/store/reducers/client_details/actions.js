@@ -46,7 +46,7 @@ export const getList = () => (dispatch) => {
 
 export const addClient = (postData) => (dispatch) => {
     dispatch({
-        type: types.FETCH_IN_PROGRESS,
+        type: types.SAVE_IN_PROGRESS,
     });
 
     const accessToken = localStorage.getItem('access_token');
@@ -77,7 +77,7 @@ export const addClient = (postData) => (dispatch) => {
 
 export const updateClient = (clientData) => (dispatch) => {
     dispatch({
-        type: types.FETCH_IN_PROGRESS,
+        type: types.SAVE_IN_PROGRESS,
     });
 
     const accessToken = localStorage.getItem('access_token');

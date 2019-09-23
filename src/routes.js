@@ -81,7 +81,6 @@ function makeAdminRoutes (app) {
         }
         jwt.verify(accessToken, jwtSecret, function (error, payloadIgnored) {
             if (error) {
-                console.error(error);
                 return res.status(401).end();
             } else {
                 next();

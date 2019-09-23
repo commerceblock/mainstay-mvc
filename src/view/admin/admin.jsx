@@ -68,7 +68,7 @@ App.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.auth.isLoggedIn || !!localStorage.getItem('access_token') || false
+        isLoggedIn: !!(state.auth.isLoggedIn && localStorage.getItem('access_token'))
     };
 };
 

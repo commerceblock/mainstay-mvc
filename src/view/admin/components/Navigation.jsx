@@ -10,7 +10,7 @@ class Navigation extends React.Component {
 
     handleLogoutClick = () => {
         if (confirm('Are you sure you want to logout?')) {
-            this.props.logoutAction();
+            localStorage.removeItem('access_token');
             window.location.href = '/';
         }
     };
