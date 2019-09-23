@@ -43,7 +43,7 @@ class Commitment extends Component {
             const errorMessage = `A commitment with ${this.props.match.params.value} id does not exist`;
             return <NotFound message={errorMessage} />;
         }
-        const { 
+        const {
             merkleproof: { commitment, position, merkle_root, ops },
             attestation: { txid, confirmed, inserted_at }
         } = data;
@@ -51,6 +51,7 @@ class Commitment extends Component {
             <div className="row">
                 <div className="col-lg-7 col-sm-12" data-controller="homepageMempool">
                     <h4 className="p-2 m-t-30 m-b-15 m-l-15">Commitment</h4>
+                    <h3 className="block-subtitle hash truncate-hash"><strong>Hash:</strong> {commitment}</h3>
                     <div className="flex-table">
                         <table className="main-second-position-block fw-500" width="100%">
                             <tbody>
