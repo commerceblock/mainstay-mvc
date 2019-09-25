@@ -19,9 +19,10 @@ module.exports = () => {
         },
         output: {
             path: path.resolve(__dirname, './public'),
-            filename: './[name].bundle.js'
+            filename: './[name].bundle.[hash].js'
         },
         optimization: {
+            namedModules: true,
             minimizer: [new UglifyJsPlugin()],
         },
         module: {
@@ -67,7 +68,7 @@ module.exports = () => {
             extensions: ['*', '.js', '.jsx']
         },
         plugins: [
-            new MiniCssExtractPlugin({filename: '[name].styles.css'}),
+            new MiniCssExtractPlugin({filename: '[name].styles.[hash].css'}),
             new htmlWebPackPlugin({
                 template: './src/index.html',
                 filename: './index.html',
