@@ -53,10 +53,7 @@ class App extends React.Component {
             >
                 <>
                     {isLoggedIn && <Navigation />}
-                    <Container style={{
-                        marginTop: '7em',
-                        marginBottom: '7em'
-                    }}>
+                    <Container className='main-container'>
                         {routes}
                     </Container>
                 </>
