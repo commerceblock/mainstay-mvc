@@ -20,11 +20,17 @@ class ClientDetailsList extends React.Component {
     }
 
     handleShowModal = () => {
-        this.setState({showAddModal: true});
+        this.setState({
+            showAddModal: true,
+            itemToEdit: null
+        });
     };
 
     handleCloseModal = () => {
-        this.setState({showAddModal: false});
+        this.setState({
+            showAddModal: false,
+            itemToEdit: null
+        });
     };
 
     handleCreateSuccess = () => {
