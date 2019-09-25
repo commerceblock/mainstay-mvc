@@ -83,7 +83,7 @@ class ClientDetailsList extends React.Component {
         const {items, maxClientPosition} = this.props;
         return (
             <>
-                <div style={{marginBottom: '20px'}}>
+                <div>
                     <Header as='h4'>Client Details</Header>
 
                     <Button primary icon labelPosition='left' onClick={this.handleShowModal}>
