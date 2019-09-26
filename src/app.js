@@ -28,6 +28,10 @@ function __MAIN__() {
         console.log("Connection with database lost");
         process.exit(1);
     });
+    
+    mongoose.connection.on('error', function (err) {
+        if (err) console.log(err);
+    });
 
     db.on('error', console.error.bind(console, 'Connection Error:'));
     db.once('open', () => {
