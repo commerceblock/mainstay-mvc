@@ -19,6 +19,16 @@ function connect_mongo() {
 
 function __MAIN__() {
     const db = connect_mongo();
+
+    mongoose.set('debug', function (coll, method, query, doc) {
+        console.log(coll, query);
+    });
+
+    mongoose.connection.on('disconnected', function(ref) {
+        console.log("Connection with database lost");
+        process.exit(1);
+    });
+
     db.on('error', console.error.bind(console, 'Connection Error:'));
     db.once('open', () => {
         // mainstay_websocket();
