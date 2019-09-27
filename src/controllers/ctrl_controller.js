@@ -146,20 +146,20 @@ module.exports = {
                 return res.json({error: 'commitment'});
             }
 
-                const data = await models.clientDetails.find({client_position: payload.position});
-                if (data.length === 0) {
-                    return res.json({error: 'position'});
+            const data = await models.clientDetails.find({client_position: payload.position});
+            if (data.length === 0) {
+                return res.json({error: 'position'});
+            }
+            if (data[0].auth_token !== payload.token) {
+                return res.json({error: 'token'});
+            }
+            if (data[0].pubkey && data[0].pubkey != "") {
+                if (payload.signature === undefined) {
+                    return res.json({error: 'signature'});
                 }
-                if (data[0].auth_token !== payload.token) {
-                    return res.json({error: 'token'});
-                }
-                if (data[0].pubkey && data[0].pubkey != "") {
-                    if (payload.signature === undefined) {
-                        return res.json({error: 'signature'});
-                    }
-                    try {
-                        // get pubkey hex
-                        const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
+                try {
+                    // get pubkey hex
+                    const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
 
                     // get base64 signature
                     const sig = Buffer.from(payload.signature, 'base64');
@@ -169,12 +169,12 @@ module.exports = {
 
                 } catch (error) {
                     return res.json({
-                        error: 'signature',
+                        error: SIGNATURE_INVALID,
                         message: error.message
-
-                });
+                    });
+                }
             }
-}
+
             await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
             return res.send();
 
