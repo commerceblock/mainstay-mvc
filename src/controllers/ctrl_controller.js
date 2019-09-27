@@ -245,33 +245,27 @@ module.exports = {
 
 /**
  * create email transport
- * work in progress
- *
  * @returns {*}
  */
-function getMailTransport() {
-    let transporter;
-    transporter = nodemailer.createTransport({
-        sendmail: true,
-        newline: 'unix',
-        path: '/usr/sbin/sendmail'
-    });
-
-    return transporter;
+function getMailTransport () {
+    return nodemailer.createTransport(env.mail_server.smtp);
 }
 
-function sendNewSignUpEmail(user) {
-    const transporter = getMailTransport();
-
+/**
+ * send email
+ * @param user
+ * @returns {Promise<unknown>}
+ */
+function sendNewSignUpEmail (user) {
     const html = `
         <b>Client Name</b>: ${user.client_name}<br>
         <b>Email</b>: ${user.email}<br>
-        ${user.company ? '<b>Company</b>: ${user.company}<br>' : ''}
-        ${user.public_key ? '<b>Public Key</b>: ${user.public_key}<br>' : ''}
+        ${user.company ? `<b>Company</b>: ${user.company}<br>` : ''}
+        ${user.public_key ? `<b>Public Key</b>: ${user.public_key}<br>` : ''}
     `;
 
     return new Promise((resolve, reject) => {
-        transporter.sendMail({
+        getMailTransport().sendMail({
             from: {
                 name: user.client_name,
                 address: user.email
@@ -288,7 +282,7 @@ function sendNewSignUpEmail(user) {
     });
 }
 
-async function find_type_hash(res, paramValue, startTime) {
+async function find_type_hash (res, paramValue, startTime) {
     try {
         let data;
         data = await models.merkleProof.find({commitment: paramValue});
@@ -313,7 +307,7 @@ async function find_type_hash(res, paramValue, startTime) {
     }
 }
 
-async function find_type_number(res, paramValue, startTime) {
+async function find_type_number (res, paramValue, startTime) {
     try {
         const data = await models.clientDetails.find({client_position: paramValue});
         if (data.length !== 0) {
