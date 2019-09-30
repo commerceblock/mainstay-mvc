@@ -72,7 +72,7 @@ class Position extends Component {
                                 <tr>
                                     <th className="align-end">Name</th>
                                     <td colSpan="2">
-                                        <span className="hash truncate-hash">Some Client name</span>
+                                        <span className="hash truncate-hash">{this.state.client}</span>
                                     </td>
                                 </tr>
                                 <tr>
