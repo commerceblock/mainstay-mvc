@@ -267,8 +267,8 @@ function sendNewSignUpEmail (user) {
     return new Promise((resolve, reject) => {
         getMailTransport().sendMail({
             from: {
-                name: user.client_name,
-                address: user.email
+                name: env.mail_server.smtp.from_name,
+                address: env.mail_server.smtp.from_address
             },
             to: env.sign_up.admin_email,
             subject: 'New SignUp',
