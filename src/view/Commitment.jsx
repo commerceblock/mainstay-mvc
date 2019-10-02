@@ -92,7 +92,7 @@ class Commitment extends Component {
                             </tr>
                             {ops.map(({ commitment, append }) =>
                                 <tr key={commitment}>
-                                    <td><Flag label={!!append ? 'Append' : 'Not prepend'} viewType={!!append ? 'success' : 'danger'}/></td>
+                                    <td><Flag label={!!append ? 'Append' : 'Prepend'} viewType={!!append ? 'success' : 'danger'}/></td>
                                     <td>
                                         <Link to={getRoute(routes.commitment, {value: commitment})}>
                                             <span className="hash ops-hash truncate-hash with-status">{commitment}</span>
