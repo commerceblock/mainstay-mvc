@@ -5,16 +5,16 @@ import {
     Button, ModalHeader, Form, ModalBody, FormGroup, Label, Input, ModalFooter, Modal,
 } from 'reactstrap';
 
-import { routes } from './routes';
+import {routes} from './routes';
 import Axios from "axios";
 import swal from "sweetalert";
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 const options = [
-    { label: 'Position*', name: 'position', hint: '0' },
-    { label: 'Token*', name: 'token', hint: '4c8c006d-4cee-4fef-8e06-bb8112db6314' },
-    { label: 'Commitment*', name: 'commitment', hint: '6a855c1c70849ed28eb51cffd808ccd4e45c4cdddfa17495ccf98856b2421b8e' },
-    { label: 'Signature (optional)', name: 'signature', hint: '7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090' },
+    {label: 'Position*', name: 'position'},
+    {label: 'Token*', name: 'token'},
+    {label: 'Commitment*', name: 'commitment'},
+    {label: 'Signature (optional)', name: 'signature'},
 ];
 
 class Navbar extends React.Component {
@@ -36,7 +36,7 @@ class Navbar extends React.Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        const { position, token, commitment, signature } = this.state;
+        const {position, token, commitment, signature} = this.state;
         Axios.post('/ctrl/sendcommitment', {
             position,
             token,
@@ -66,7 +66,7 @@ class Navbar extends React.Component {
     };
 
     toggle = () => {
-        this.setState({ modal: !this.state.modal });
+        this.setState({modal: !this.state.modal});
     };
 
     render() {
@@ -77,10 +77,10 @@ class Navbar extends React.Component {
                         <NavItem className="col-sm-12 col-lg-3 col-md-3 hover-active">
                             <Link to={routes.attestation}>Attestations</Link>
                         </NavItem>
-                        <NavItem  className="col-sm-12 col-lg-3 col-md-3 hover-active">
+                        <NavItem className="col-sm-12 col-lg-3 col-md-3 hover-active">
                             <Link to={routes.client}>Clients</Link>
                         </NavItem>
-                        <NavItem  className="col-sm-12 col-lg-5 col-md-5 hover-btn-active">
+                        <NavItem className="col-sm-12 col-lg-5 col-md-5 hover-btn-active">
                             <Button color="success" onClick={this.toggle}>Send Commitment</Button>
                         </NavItem>
                     </Nav>
@@ -89,14 +89,13 @@ class Navbar extends React.Component {
                     <ModalHeader toggle={this.toggle}>Send Commitment</ModalHeader>
                     <Form onSubmit={this.handleSubmit}>
                         <ModalBody>
-                            {options.map(({ label, name, hint }) => (
+                            {options.map(({label, name}) => (
                                 <FormGroup key={name}>
                                     <Label className="f-bold fs14">{label}</Label>
                                     <Input
                                         name={name}
                                         bsSize="sm"
                                         onChange={this.handleChange}
-                                        placeholder={hint}
                                     />
                                 </FormGroup>
                             ))}
