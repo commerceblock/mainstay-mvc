@@ -98,7 +98,12 @@ class MerkleRoot extends Component {
                                 <tbody>
                                 {merkle_commitment.map(({position, commitment}) =>
                                     <tr key={commitment}>
-                                        <td>{position}</td>
+                                        <td>
+                                            <Link
+                                                to={getRoute(routes.position, {value: position})}
+                                                title={position}>{position}
+                                            </Link>
+                                        </td>
                                         <td colSpan="2">
                                             <Link to={getRoute(routes.commitment, {value: commitment})}>
                                                 <span className="hash truncate-hash">{commitment}</span>

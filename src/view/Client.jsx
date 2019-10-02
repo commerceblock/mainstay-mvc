@@ -44,7 +44,12 @@ class Client extends Component {
 
                             {data.map(data =>
                                 <tr key={data.position}>
-                                    <td>{data.position}</td>
+                                    <td>
+                                        <Link
+                                            to={getRoute(routes.position, { value: data.position })}
+                                            title={data.position}>{data.position}
+                                        </Link>
+                                    </td>
                                     <td><span className="hash truncate-hash">{data.client_name}</span></td>
                                     <td colSpan="2">
                                         <Link to={getRoute(routes.commitment, {value: data.commitment || '/'})}>
