@@ -1,6 +1,10 @@
 import * as types from './types';
 
-function auth (state = {}, action) {
+const initialState = {
+    isLoggedIn: localStorage.getItem('access_token')
+};
+
+function auth (state = initialState, action) {
     switch (action.type) {
         case types.LOGIN:
             return {

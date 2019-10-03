@@ -55,6 +55,7 @@ class ClientDetailsList extends React.Component {
             <Table celled striped>
                 <Table.Header>
                     <Table.Row>
+                        <Table.HeaderCell>Id</Table.HeaderCell>
                         <Table.HeaderCell>Position</Table.HeaderCell>
                         <Table.HeaderCell>Client Name</Table.HeaderCell>
                         <Table.HeaderCell>Auth Token</Table.HeaderCell>
@@ -65,6 +66,7 @@ class ClientDetailsList extends React.Component {
                 <Table.Body>
                     {items.map(item => (
                         <Table.Row key={item._id}>
+                            <Table.Cell>{item._id}</Table.Cell>
                             <Table.Cell>{item.client_position}</Table.Cell>
                             <Table.Cell>{item.client_name}</Table.Cell>
                             <Table.Cell>{item.auth_token}</Table.Cell>
