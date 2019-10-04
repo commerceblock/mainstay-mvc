@@ -247,6 +247,7 @@ module.exports = {
             if (payload.token === undefined) {
                 return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
             }
+
             const signatureCommitment = data[MAINSTAY_SIGNATURE];
             try {
                 // try get client details
@@ -257,10 +258,12 @@ module.exports = {
                 if (data[0].auth_token !== payload.token) {
                     return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
                 }
-                if (data[0].pubkey && data[0].pubkey != "") {
+
+                if (data[0].pubkey && data[0].pubkey !== "") {
                     if (signatureCommitment === undefined) {
                         return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
                     }
+
                     try {
                         // get pubkey hex
                         const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
@@ -275,6 +278,7 @@ module.exports = {
                         return reply_err(res, SIGNATURE_INVALID, startTime);
                     }
                 }
+
                 await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
                 reply_msg(res, 'feedback', startTime);
 

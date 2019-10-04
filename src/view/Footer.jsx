@@ -2,7 +2,6 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {routes} from './routes';
 
-
 const Footer = () => (
     <footer className="d-flex navbar-fixed-bottom nav-footer">
         <div className="d-flex align-items-center col-sm-12 nav-footer-right col-lg-6">
@@ -26,16 +25,15 @@ const Footer = () => (
         <div className="d-flex align-items-center col-sm-12 nav-footer-left col-lg-6">
             <div className="m-auto">
                 <Link to="/" className="logo">
-                    <img src="favicon.png" alt="favicon"/>
+                    <img src="favicon.png" alt="favicon" />
                 </Link>
                 <span>© 2019 CommerceBlock Limited. All rights reserved.</span>
                 <div className="powered-by">
                     <span>Powered by </span>
-                    <a href="https://www.securosys.com/en/"><img src="securosys.png" alt="logo"/></a>
+                    <a href="https://www.securosys.com/en/"><img src="securosys.png" alt="logo" /></a>
                 </div>
             </div>
         </div>
-
     </footer>
 );
 export default Footer;

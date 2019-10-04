@@ -1,114 +1,109 @@
 import React from 'react';
+
+import swal from 'sweetalert';
 import {
-    Navbar as NavbarOrigin,
-    Nav, NavItem, NavLink,
-    Button, ModalHeader, Form, ModalBody, FormGroup, Label, Input, ModalFooter, Modal,
+    Nav, NavItem, Button
 } from 'reactstrap';
 
-import { routes } from './routes';
-import Axios from "axios";
-import swal from "sweetalert";
-import { Link } from 'react-router-dom';
+import {getRoute, routes} from './routes';
 
-const options = [
-    { label: 'Position*', name: 'position', hint: '0' },
-    { label: 'Token*', name: 'token', hint: '4c8c006d-4cee-4fef-8e06-bb8112db6314' },
-    { label: 'Commitment*', name: 'commitment', hint: '6a855c1c70849ed28eb51cffd808ccd4e45c4cdddfa17495ccf98856b2421b8e' },
-    { label: 'Signature (optional)', name: 'signature', hint: '7cca9448ad3b3bc68c7b01405ccb8bd784f2673533024445f259389a5ad3d090' },
-];
+import SignUpModal from './modals/SignUpModal';
+import SendCommitmentModal from './modals/SendCommitmentModal';
+import {Link} from 'react-router-dom';
 
 class Navbar extends React.Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
         this.state = {
             modal: false,
-            position: undefined,
-            token: undefined,
-            commitment: undefined,
-            signature: undefined,
+            modalLogin: false,
             isMenuOpened: false,
         };
     }
 
-    handleChange = (event) => {
-        this.setState({[event.target.name]: event.target.value});
+    toggleCommitmentModal = () => {
+        this.setState({modal: !this.state.modal});
     };
 
-    handleSubmit = (event) => {
-        event.preventDefault();
-        const { position, token, commitment, signature } = this.state;
-        Axios.post('/ctrl/sendcommitment', {
-            position,
-            token,
-            commitment,
-            signature,
-        }).then(res => {
-            if (res.data?.error) {
-                const errorMessage = res.data.error === 'undefined'
-                    ? `Something went wrong`
-                    : `Incorrect ${res.data.error}`;
-                swal({
-                    text: errorMessage,
-                    icon: "error",
-                    className: "error",
-                    closeOnClickOutside: true
-                });
-            } else {
-                swal({
-                    text: "Success!",
-                    icon: "success",
-                    className: "success",
-                    closeOnClickOutside: true
-                });
-            }
+    toggleSignUpModal = () => {
+        this.setState({modalLogin: !this.state.modalLogin});
+    };
+
+    onSignUpSuccess = (res) => {
+        this.setState({modalLogin: false});
+        swal({
+            text: 'Success!',
+            icon: 'success',
+            className: 'success',
+            closeOnClickOutside: true
         });
-        this.toggle();
+    };
+    onSignUpError = (error) => {
+        swal({
+            text: error.response.data.message || 'Something get wrong',
+            icon: 'error',
+            className: 'error',
+            closeOnClickOutside: true
+        });
     };
 
-    toggle = () => {
-        this.setState({ modal: !this.state.modal });
+    onSendCommitmentSuccess = (res) => {
+        swal({
+            text: 'Success!',
+            icon: 'success',
+            className: 'success',
+            closeOnClickOutside: true
+        });
     };
 
-    render() {
+    onSendCommitmentError = (res) => {
+        const errorMessage = res.data.error === 'undefined'
+            ? 'Something went wrong'
+            : `Incorrect ${res.data.error}`;
+        swal({
+            text: errorMessage,
+            icon: 'error',
+            className: 'error',
+            closeOnClickOutside: true
+        });
+    };
+
+    render () {
         return (
-            <div className="col-lg-4 col-md-5">
-                <NavbarOrigin>
-                    <Nav className="col-lg-12 col-md-12">
-                        <NavItem className="col-sm-12 col-lg-3 col-md-3 hover-active">
-                            <Link to={routes.attestation}>Attestations</Link>
-                        </NavItem>
-                        <NavItem  className="col-sm-12 col-lg-3 col-md-3 hover-active">
-                            <Link to={routes.client}>Clients</Link>
-                        </NavItem>
-                        <NavItem  className="col-sm-12 col-lg-5 col-md-5 hover-btn-active">
-                            <Button color="success" onClick={this.toggle}>Send Commitment</Button>
-                        </NavItem>
-                    </Nav>
-                </NavbarOrigin>
-                <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>Send Commitment</ModalHeader>
-                    <Form onSubmit={this.handleSubmit}>
-                        <ModalBody>
-                            {options.map(({ label, name, hint }) => (
-                                <FormGroup key={name}>
-                                    <Label className="f-bold fs14">{label}</Label>
-                                    <Input
-                                        name={name}
-                                        bsSize="sm"
-                                        onChange={this.handleChange}
-                                        placeholder={hint}
-                                    />
-                                </FormGroup>
-                            ))}
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button color="none" onClick={this.toggle}>Cancel</Button>
-                            <Button color="success" type="submit">Send</Button>
-                        </ModalFooter>
-                    </Form>
-                </Modal>
+            <>
+                <Nav>
+                    <NavItem className="hover-active">
+                        <Link className="nav-link" to={getRoute(routes.attestation, {value: null})}>Attestations</Link>
+                    </NavItem>
+                    <NavItem className="hover-active">
+                        <Link className="nav-link" to={routes.client}>Clients</Link>
+                    </NavItem>
+                    <NavItem className="hover-btn-active">
+                        <Button className="m-t-5 m-x-5" color="success" onClick={this.toggleCommitmentModal}>
+                            Send Commitment
+                        </Button>
+                    </NavItem>
+                    <NavItem className="hover-btn-active">
+                        <Button className="m-t-5 m-x-5" color="success" onClick={this.toggleSignUpModal}>
+                            Sign Up
+                        </Button>
+                    </NavItem>
+                </Nav>
 
-            </div>
+                <SendCommitmentModal
+                    isOpen={this.state.modal}
+                    onModalClose={this.toggleCommitmentModal}
+                    onSuccess={this.onSendCommitmentSuccess}
+                    onError={this.onSendCommitmentError}
+                />
+
+                <SignUpModal
+                    isOpen={this.state.modalLogin}
+                    onModalClose={this.toggleSignUpModal}
+                    onSuccess={this.onSignUpSuccess}
+                    onError={this.onSignUpError}
+                />
+            </>
         );
     }
 }

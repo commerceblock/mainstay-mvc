@@ -60,7 +60,12 @@ class Commitment extends Component {
                             </tr>
                             <tr>
                                 <th className="align-end">Position</th>
-                                <td colSpan="2"><span className="hash truncate-hash">{position}</span></td>
+                                <td colSpan="2">
+                                    <Link
+                                        to={getRoute(routes.position, { value: position })}
+                                        title={position}>{position}
+                                    </Link>
+                                </td>
                             </tr>
                             <tr>
                                 <th className="align-end">Txid</th>
@@ -92,7 +97,7 @@ class Commitment extends Component {
                             </tr>
                             {ops.map(({ commitment, append }) =>
                                 <tr key={commitment}>
-                                    <td><Flag label={`${!!append}`} viewType={!!append ? 'success' : 'danger'}/></td>
+                                    <td><Flag label={!!append ? 'Append' : 'Prepend'} viewType={!!append ? 'success' : 'danger'}/></td>
                                     <td>
                                         <Link to={getRoute(routes.commitment, {value: commitment})}>
                                             <span className="hash ops-hash truncate-hash with-status">{commitment}</span>

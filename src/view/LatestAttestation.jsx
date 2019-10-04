@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import React, {Component} from 'react';
-import { routes } from "./routes";
+import {getRoute, routes} from './routes';
 import { Link } from 'react-router-dom';
 
 class LatestAttestation extends Component {
@@ -22,7 +22,7 @@ class LatestAttestation extends Component {
               <div className="d-flex align-items-center justify-content-between">
                   <h4 className="p-2 customTitleStyle ">Latest Attestation</h4>
                   <Link
-                      to={routes.attestation}
+                      to={getRoute(routes.attestation, {value: 'showFailed'})}
                       className="pl-2 keyboard-target non-underline"
                       data-keynav-priority
                   >

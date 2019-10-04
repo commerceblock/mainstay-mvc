@@ -45,9 +45,10 @@ class LatestCommitment extends Component {
                         {this.state.data.map(data =>
                             <tr key={data.commitment}>
                                 <td>
-                                    <span>
-                                      {data.position}
-                                    </span>
+                                    <Link
+                                          to={getRoute(routes.position, { value: data.position })}
+                                          title={data.position}>{data.position}
+                                    </Link>
                                 </td>
                                 <td>
                                     <Link className="hash truncate-hash keyboard-target latestCommitementStyle"
