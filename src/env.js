@@ -10,6 +10,20 @@ if (env.MS_SMTP_PASSWORD) {
     smtpPassword = fs.readFileSync(env.MS_SMTP_PASSWORD__FILE);
 }
 
+let adminPassword = '';
+if (env.ADMIN_PASSWORD) {
+    adminPassword = env.ADMIN_PASSWORD;
+} else if (env.ADMIN_PASSWORD__FILE) {
+    adminPassword = fs.readFileSync(env.ADMIN_PASSWORD__FILE);
+}
+
+let jwtSecret = '';
+if (env.JWT_SECRET) {
+    jwtSecret = env.JWT_SECRET;
+} else if (env.JWT_SECRET__FILE) {
+    jwtSecret = fs.readFileSync(env.JWT_SECRET__FILE);
+}
+
 module.exports = {
     db: {
         user: process.env.DB_USER,
@@ -26,10 +40,10 @@ module.exports = {
     },
     admin: {
         login: process.env.ADMIN_LOGIN,
-        password: process.env.ADMIN_PASSWORD
+        password: adminPassword
     },
     jwt: {
-        secret: process.env.JWT_SECRET
+        secret: jwtSecret
     },
     mail_server: {
         smtp: {
