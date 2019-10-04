@@ -1,78 +1,110 @@
 const webpack = require('webpack');
-const path = require("path");
-const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const htmlWebPackPlugin = require('html-webpack-plugin');
 
-const htmlWebPackPlugin = require("html-webpack-plugin");
+module.exports = () => {
+    const serverHost = process.env.HOST_API || 'localhost';
+    const serverPort = process.env.PORT_API || '3000';
 
-module.exports = {
-    entry: './src/view.jsx',
-    module: {
-        rules: [
-            {
-                test: /\.(js|jsx)$/,
-                exclude: /(node_modules|bower_components)/,
-                use: ['babel-loader']
-            },
-            {
-                test: /\.html$/,
-                use: [
+    const devServerHost = process.env.HOST || '0.0.0.0';
+    const devServerPort = parseInt(process.env.PORT) || 80;
+
+    return {
+        entry: {
+            main: './src/main.jsx',
+            admin: './src/admin.jsx',
+        },
+        output: {
+            path: path.resolve(__dirname, './public'),
+            filename: './[name].bundle.[hash].js'
+        },
+        optimization: {
+            namedModules: true,
+            minimizer: [new UglifyJsPlugin()],
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.(js|jsx)$/,
+                    exclude: /(node_modules|bower_components)/,
+                    use: ['babel-loader']
+                },
+                {
+                    test: /\.html$/,
+                    use: [{loader: 'html-loader'}]
+                },
+                {
+                    test: /\.s?[ac]ss$/,
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                url: false,
+                                sourceMap: true
+                            }
+                        },
+                        {
+                            loader: 'sass-loader',
+                            options: {sourceMap: true}
+                        }
+                    ],
+                },
+                {
+                    test: /\.(gif|png|jpe?g|svg)$/i,
+                    use: [
+                        'file-loader',
+                        {
+                            loader: 'image-webpack-loader',
+                        }
+                    ]
+                }
+            ]
+        },
+        resolve: {
+            extensions: ['*', '.js', '.jsx']
+        },
+        plugins: [
+            new MiniCssExtractPlugin({filename: '[name].styles.[hash].css'}),
+            new htmlWebPackPlugin({
+                template: './src/index.html',
+                filename: './index.html',
+                chunks: ['main']
+            }),
+            new htmlWebPackPlugin({
+                template: './src/admin.html',
+                filename: './admin.html',
+                chunks: ['admin']
+            }),
+            new webpack.HotModuleReplacementPlugin(),
+            new webpack.ProgressPlugin()
+        ],
+        devServer: {
+            contentBase: './public',
+            disableHostCheck: true,
+            historyApiFallback: {
+                rewrites: [
                     {
-                        loader: "html-loader"
+                        from: /^\/admin\/?.*$/,
+                        to: 'admin.html'
                     }
                 ]
             },
-            {
-                test: /\.s?[ac]ss$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    {loader: 'css-loader', options: {url: false, sourceMap: true}},
-                    {loader: 'sass-loader', options: {sourceMap: true}}
-                ],
-            },
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: "babel-loader"
-            },
-            {
-                test: /\.(gif|png|jpe?g|svg)$/i,
-                use: [
-                    'file-loader',
-                    {
-                        loader: 'image-webpack-loader',
-                    }
-                ]
+            inline: true,
+            open: false,
+            writeToDisk: true,
+            hot: true,
+            host: devServerHost,
+            port: devServerPort,
+            proxy: {
+                '/api': 'http://' + serverHost + ':' + serverPort,
+                '/ctrl': 'http://' + serverHost + ':' + serverPort,
+                '/suadmin': 'http://' + serverHost + ':' + serverPort,
             }
-        ]
-    },
-    resolve: {
-        extensions: ['*', '.js', '.jsx']
-    },
-    output: {
-        path: path.resolve(__dirname, "./public"),
-        filename: './bundle.js'
-    },
-    plugins: [
-        new MiniCssExtractPlugin({filename: "main.css"}),
-        new UglifyJSPlugin(),
-        new htmlWebPackPlugin({template: "./public/index.html", filename: "./index.html"}),
-        new webpack.HotModuleReplacementPlugin()
-    ],
-    devServer: {
-        contentBase: path.resolve(__dirname, "./public"),
-        disableHostCheck: true,
-        historyApiFallback: true,
-        inline: true,
-        open: false,
-        hot: true,
-        host: (process.env.HOST || "0.0.0.0"),
-        port: (parseInt(process.env.PORT) || 80),
-        proxy: {
-            "/api": "http://" + (process.env.HOST_API || "localhost") + ":" + (process.env.PORT_API || "3000"),
-            "/ctrl": "http://" + (process.env.HOST_API || "localhost") + ":" + (process.env.PORT_API || "3000")
-        }
-    },
-    devtool: "eval-source-map"
+        },
+        devtool: 'eval-source-map'
+    };
 };

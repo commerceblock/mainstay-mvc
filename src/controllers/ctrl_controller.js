@@ -1,11 +1,14 @@
-const models = require('../models/models');
 const elliptic = require('elliptic');
 const dateFormat = require('dateformat');
+const nodemailer = require('nodemailer');
+
+const models = require('../models/models');
+const {isValidEmail} = require('../utils/validators');
+const env = require('../../src/env');
 
 const ec = new elliptic.ec('secp256k1');
 
 const {
-    SIGNATURE_INVALID,
     VALUE,
     PARAM_UNDEFINED,
     TYPE_ERROR,
@@ -51,23 +54,24 @@ module.exports = {
             const now = new Date();
 
             response['data'] = data.map(item => ({
-                    txid: item.txid,
-                    merkle_root: item.merkle_root,
-                    confirmed: item.confirmed,
-                    age: (now.toDateString() === item.inserted_at.toDateString()) ? dateFormat(item.inserted_at, 'HH:MM:ss') : dateFormat(item.inserted_at, 'HH:MM:ss dd/mm/yy')
-                }
-            ));
+                txid: item.txid,
+                merkle_root: item.merkle_root,
+                confirmed: item.confirmed,
+                age: (now.toDateString() === item.inserted_at.toDateString()) ? dateFormat(item.inserted_at, 'HH:MM:ss') : dateFormat(item.inserted_at, 'HH:MM:ss dd/mm/yy')
+            }));
 
             res.json(response);
 
         } catch (error) {
-            res.json({error: 'api', message: error.message});
+            res.json({
+                error: 'api',
+                message: error.message
+            });
         }
     },
 
     ctrl_latest_attestation_info: async (req, res) => {
         res.header('Access-Control-Allow-Origin', '*');
-
 
         try {
             const data = await models.attestationInfo
@@ -85,7 +89,10 @@ module.exports = {
 
             res.json(response);
         } catch (error) {
-            res.json({error: 'api', message: error.message});
+            res.json({
+                error: 'api',
+                message: error.message
+            });
         }
     },
 
@@ -96,7 +103,7 @@ module.exports = {
 
         try {
             const data = await models.attestation
-                .find({confirmed:true})
+                .find({confirmed: true})
                 .sort({inserted_at: -1})
                 .limit(1)
                 .exec();
@@ -118,63 +125,108 @@ module.exports = {
             }
             res.json(response);
         } catch (error) {
-            res.json({error: 'api', message: error.message});
+            res.json({
+                error: 'api',
+                message: error.message
+            });
         }
     },
 
-    ctrl_send_commitment: (req, res) => {
-        let rawRequestData = '';
-        req.on('data', chunk => {
-            rawRequestData += chunk.toString();
-        });
+    ctrl_send_commitment: async (req, res) => {
 
-        req.on('end', async () => {
-            try {
-                const payload = JSON.parse(rawRequestData);
-                if (payload.position === undefined) {
-                    return res.json({error: 'position'});
-                }
-                if (payload.token === undefined) {
-                    return res.json({error: 'token'});
-                }
-                if (payload.commitment === undefined) {
-                    return res.json({error: 'commitment'});
-                }
+        try {
+            const payload = req.body;
+            if (payload.position === undefined) {
+                return res.json({error: 'position'});
+            }
+            if (payload.token === undefined) {
+                return res.json({error: 'token'});
+            }
+            if (payload.commitment === undefined) {
+                return res.json({error: 'commitment'});
+            }
 
-                const data = await models.clientDetails.find({client_position: payload.position});
-                if (data.length === 0) {
-                    return res.json({error: 'position'});
+            const data = await models.clientDetails.find({client_position: payload.position});
+            if (data.length === 0) {
+                return res.json({error: 'position'});
+            }
+            if (data[0].auth_token !== payload.token) {
+                return res.json({error: 'token'});
+            }
+            if (data[0].pubkey && data[0].pubkey != "") {
+                if (payload.signature === undefined) {
+                    return res.json({error: 'signature'});
                 }
-                if (data[0].auth_token !== payload.token) {
-                    return res.json({error: 'token'});
-                }
-                if (data[0].pubkey && data[0].pubkey != "") {
-                    if (payload.signature === undefined) {
+                try {
+                    // get pubkey hex
+                    const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
+
+                    // get base64 signature
+                    const sig = Buffer.from(payload.signature, 'base64');
+                    if (!ec.verify(payload.commitment, sig, pubkey)) {
                         return res.json({error: 'signature'});
                     }
-                    try {
-                        // get pubkey hex
-                        const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
 
-                        // get base64 signature
-                        const sig = Buffer.from(payload.signature, 'base64');
-
-                        if (!ec.verify(payload.commitment, sig, pubkey)) {
-                            return res.json({error: 'signature'});
-                        }
-                    } catch (error) {
-                        return res.json({error: SIGNATURE_INVALID, message: error.message});
-                    }
+                } catch (error) {
+                    return res.json({
+                        error: SIGNATURE_INVALID,
+                        message: error.message
+                    });
                 }
-                await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
-                return res.send();
-
-            } catch (error) {
-                res.json({error: 'api', message: error.message});
             }
-        });
+
+            await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
+            return res.send();
+
+        } catch (error) {
+            res.json({
+                error: 'api',
+                message: error.message
+            });
+        }
     },
 
+    ctrl_client_signup: async (req, res) => {
+
+        const payload = req.body;
+
+        if (!payload.client_name || !payload.client_name.trim()) {
+            return res.status(400).json({error: 'client_name'});
+        }
+        if (!payload.email || !payload.email.trim() && !isValidEmail(payload.email.trim())) {
+            return res.status(400).json({error: 'email'});
+        }
+
+        payload.client_name = payload.client_name.trim();
+        payload.email = payload.email.trim();
+
+        if (payload.company && payload.company.trim()) {
+            payload.company = payload.company.trim();
+        }
+
+        if (payload.pubkey && payload.pubkey.trim()) {
+            payload.pubkey = payload.pubkey.trim();
+            try {
+                const pubkey = ec.keyFromPublic(payload.pubkey, 'hex');
+                const {result, reasonIgnored} = pubkey.validate();
+                if (!result) {
+                    return res.status(400).json({
+                        error: 'pubkey',
+                        message: 'Invalid Public Key'
+                    });
+                }
+            } catch (errorIgnored) {
+                return res.status(500).json({
+                    error: 'api',
+                    message: 'Invalid Public Key'
+                });
+            }
+        }
+
+        sendNewSignUpEmail(payload);
+        // send the response
+        res.status(201).send({user: payload});
+    },
 
     ctrl_type: (req, res) => {
         const startTime = start_time();
@@ -191,7 +243,46 @@ module.exports = {
 
 };
 
-async function find_type_hash(res, paramValue, startTime) {
+/**
+ * create email transport
+ * @returns {*}
+ */
+function getMailTransport () {
+    return nodemailer.createTransport(env.mail_server.smtp);
+}
+
+/**
+ * send email
+ * @param user
+ * @returns {Promise<unknown>}
+ */
+function sendNewSignUpEmail (user) {
+    const html = `
+        <b>Client Name</b>: ${user.client_name}<br>
+        <b>Email</b>: ${user.email}<br>
+        ${user.company ? `<b>Company</b>: ${user.company}<br>` : ''}
+        ${user.public_key ? `<b>Public Key</b>: ${user.public_key}<br>` : ''}
+    `;
+
+    return new Promise((resolve, reject) => {
+        getMailTransport().sendMail({
+            from: {
+                name: env.mail_server.smtp.from_name,
+                address: env.mail_server.smtp.from_address
+            },
+            to: env.sign_up.admin_email,
+            subject: 'New SignUp',
+            html: html,
+        }, (error, info) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(info);
+        });
+    });
+}
+
+async function find_type_hash (res, paramValue, startTime) {
     try {
         let data;
         data = await models.merkleProof.find({commitment: paramValue});
@@ -211,19 +302,19 @@ async function find_type_hash(res, paramValue, startTime) {
             return reply_msg(res, 'blockhash', startTime);
         }
         reply_err(res, TYPE_UNKNOWN, startTime);
-    } catch (error) {
+    } catch (errorIgnored) {
         return reply_err(res, INTERNAL_ERROR_API, startTime);
     }
 }
 
-async function find_type_number(res, paramValue, startTime) {
+async function find_type_number (res, paramValue, startTime) {
     try {
         const data = await models.clientDetails.find({client_position: paramValue});
         if (data.length !== 0) {
             return reply_msg(res, 'position', startTime);
         }
         reply_err(res, 'Not found', startTime);
-    } catch (error) {
+    } catch (errorIgnored) {
         return reply_err(res, INTERNAL_ERROR_API, startTime);
     }
 }
