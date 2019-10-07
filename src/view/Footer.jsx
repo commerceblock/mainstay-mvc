@@ -8,12 +8,13 @@ const Footer = () => (
             <div className="footer-list-item">
                 <Link to={routes.about}>About</Link>
             </div>
+            {/*<div className="footer-list-item">*/}
+            {/*    <Link to={routes.pricing}>Pricing</Link>*/}
+            {/*</div>*/}
             <div className="footer-list-item">
-                <Link to={routes.pricing}>Pricing</Link>
-            </div>
-            <div className="footer-list-item">
-                <a href="https://github.com/commerceblock/mainstay-mvc/blob/develop/doc/mainstay_api.md">API
-                    Information</a>
+                <a href="https://github.com/commerceblock/mainstay-mvc/blob/develop/doc/mainstay_api.md">
+                    API Information
+                </a>
             </div>
             <div className="footer-list-item">
                 <Link to={routes.privacy}>Privacy policy</Link>
