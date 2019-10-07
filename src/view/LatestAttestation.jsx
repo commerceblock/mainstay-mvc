@@ -10,7 +10,7 @@ class LatestAttestation extends Component {
           data: []
       };
   }
-  
+
   componentDidMount() {
       Axios.get('/ctrl/latestattestation')
           .then(response => this.setState({data: response.data['data']}));
@@ -22,7 +22,7 @@ class LatestAttestation extends Component {
               <div className="d-flex align-items-center justify-content-between">
                   <h4 className="p-2 customTitleStyle ">Latest Attestation</h4>
                   <Link
-                      to={getRoute(routes.attestation, {value: 'showFailed'})}
+                      to={getRoute(routes.attestation)}
                       className="pl-2 keyboard-target non-underline"
                       data-keynav-priority
                   >
