@@ -44,7 +44,7 @@ const Root = () => (
                     <Route path={routes.client} exac component={Client} />
                     <Route path={routes.privacy} component={PrivacyPolicy} />
                     <Route path={routes.terms} component={TermsConditions} />
-                    <Route path={routes.pricing} component={Home} />
+                    {/*<Route path={routes.pricing} component={Pricing} />*/}
                     <Route path={routes.about} component={About} />
                     <Route path={routes.subscribe} component={Subscribe} />
                     <Route exact path={routes.app} component={Home} />
