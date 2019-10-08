@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const env = require('../src/env');
@@ -36,6 +37,7 @@ function __MAIN__ () {
     db.once('open', () => {
         // mainstay_websocket();
         app.use(morgan('combined'));
+        app.use(cors());
 
         routes.makeApiRoutes(app);
         routes.makeCtrlRoutes(app);

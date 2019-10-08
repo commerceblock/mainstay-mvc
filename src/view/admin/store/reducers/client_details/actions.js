@@ -1,6 +1,6 @@
 import * as types from './types';
 import * as authTypes from '../auth/types';
-import axios from 'axios';
+import apiService from '../../../../../helpers/api-service';
 
 const handle401Error = (error, dispatch) => {
     if (error.response.status === 401) {
@@ -21,8 +21,8 @@ export const getList = () => (dispatch) => {
 
     const accessToken = localStorage.getItem('access_token');
 
-    return axios({
-        url: '/suadmin/client_details',
+    return apiService.axiosClient({
+        url: '/admin/client_details',
         method: 'get',
         headers: {
             'Access-Token': accessToken
@@ -51,8 +51,8 @@ export const addClient = (postData) => (dispatch) => {
 
     const accessToken = localStorage.getItem('access_token');
 
-    return axios({
-        url: '/suadmin/client_details',
+    return apiService.axiosClient({
+        url: '/admin/client_details',
         method: 'post',
         data: postData,
         headers: {
@@ -82,8 +82,8 @@ export const updateClient = (clientData) => (dispatch) => {
 
     const accessToken = localStorage.getItem('access_token');
 
-    return axios({
-        url: '/suadmin/client_details',
+    return apiService.axiosClient({
+        url: '/admin/client_details',
         method: 'put',
         data: clientData,
         headers: {

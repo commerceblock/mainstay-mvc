@@ -111,7 +111,7 @@ function makeAdminRoutes (app) {
         }
     });
 
-    app.use('/suadmin', router);
+    app.use('/admin', router);
 }
 
 module.exports = {

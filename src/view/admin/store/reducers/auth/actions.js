@@ -1,5 +1,5 @@
 import * as types from './types';
-import axios from 'axios';
+import apiService from '../../../../../helpers/api-service';
 
 export const login = (login, password) => (dispatch) => {
     const data = {
@@ -7,8 +7,8 @@ export const login = (login, password) => (dispatch) => {
         password
     };
 
-    return axios({
-        url: '/suadmin/login',
+    return apiService.axiosClient({
+        url: '/admin/login',
         method: 'post',
         data: data,
     }).then(response => {
