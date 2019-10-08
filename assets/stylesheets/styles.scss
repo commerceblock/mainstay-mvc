@@ -1298,6 +1298,22 @@ html {
   background: #fff;
 }
 
+.terms-page {
+  ol {
+    counter-reset: list;
+    padding-inline-start: 20px;
+  }
+
+  ol > li {
+    list-style: none;
+  }
+
+  ol > li:before {
+    content: counter(list, lower-alpha) ") ";
+    counter-increment: list;
+  }
+}
+
 .table-block {
   display: flex;
   overflow: auto;
