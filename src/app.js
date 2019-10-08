@@ -37,7 +37,10 @@ function __MAIN__ () {
     db.once('open', () => {
         // mainstay_websocket();
         app.use(morgan('combined'));
-        app.use(cors());
+        app.use(cors({
+            allowedHeaders: ['*'],
+            exposedHeaders: ['*']
+        }));
 
         routes.makeApiRoutes(app);
         routes.makeCtrlRoutes(app);
