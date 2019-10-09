@@ -32,7 +32,7 @@ class Navbar extends React.Component {
     onSignUpSuccess = (res) => {
         this.setState({modalLogin: false});
         swal({
-            text: 'Success!',
+            text: 'Thank you!\nYou will shortly receive an email from us with information about the next steps.',
             icon: 'success',
             className: 'success',
             closeOnClickOutside: true
