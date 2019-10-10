@@ -1,9 +1,9 @@
+import Axios from "axios";
 import React, { Component } from "react";
 import { getRoute, routes } from "./routes";
 import NotFound from "./NotFound";
 import Flag from './Flag';
 import { Link } from 'react-router-dom';
-import apiService from '../helpers/api-service';
 
 class Commitment extends Component {
     constructor(props) {
@@ -25,7 +25,7 @@ class Commitment extends Component {
     };
 
     fetchData = () => {
-        apiService.axiosClient.get(`/api/v1/commitment/commitment?commitment=${this.props.match.params.value}`)
+        Axios.get(`/api/v1/commitment/commitment?commitment=${this.props.match.params.value}`)
             .then(({ data }) => {
                 if (data?.response) {
                     this.setState({ data: data.response, isReady: true });

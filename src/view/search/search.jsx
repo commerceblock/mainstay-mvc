@@ -1,7 +1,6 @@
 import Axios from 'axios';
 import React, {Component} from 'react';
 import history from '../app.history';
-import apiService from '../../helpers/api-service';
 
 class Search extends Component {
     constructor(props) {
@@ -37,7 +36,7 @@ class Search extends Component {
         this.state.wrong_search_value = false;
         const value = this.state.value;
         if (value && (/[0-9A-Fa-f]{64}/g.test(value) || /^\d+$/.test(value))) {
-            apiService.axiosClient.get('/ctrl/type?value=' + value)
+            Axios.get("/ctrl/type?value=" + value)
                 .then(response => {
                     if (response.data.response === 'commitment')
                         history.push(`/commitment/${value}`);

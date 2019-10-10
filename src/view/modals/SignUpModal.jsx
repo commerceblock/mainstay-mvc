@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Axios from 'axios';
 
 import swal from 'sweetalert';
 import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 
 import {isValidEmail} from '../../utils/validators';
-import apiService from '../../helpers/api-service';
 
 class SignUpModal extends React.PureComponent {
 
@@ -69,7 +69,7 @@ class SignUpModal extends React.PureComponent {
             pubkey
         };
 
-        apiService.axiosClient({
+        Axios({
             url: '/ctrl/usersignup',
             method: 'post',
             data: data,

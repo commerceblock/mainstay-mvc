@@ -26,7 +26,7 @@ class AdminController {
         const token = jwt.sign({
             data: 'logged-in'
         }, jwtSecret, {expiresIn: '1h'});
-        return res.set('X-Access-Token', token).json({data: null});
+        return res.set('Access-Token', token).json({data: null});
     }
 
     async clientDetails (req, res, next) {

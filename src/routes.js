@@ -75,7 +75,7 @@ function makeAdminRoutes (app) {
 
     // middleware to check access-token
     router.use((req, res, next) => {
-        const accessToken = req.headers['x-access-token'];
+        const accessToken = req.headers['access-token'];
         if (!accessToken) {
             return res.status(401).end();
         }
@@ -111,7 +111,7 @@ function makeAdminRoutes (app) {
         }
     });
 
-    app.use('/admin', router);
+    app.use('/suadmin', router);
 }
 
 module.exports = {

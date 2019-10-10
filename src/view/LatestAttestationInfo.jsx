@@ -1,7 +1,7 @@
+import Axios from 'axios';
 import React, {Component} from 'react';
 import {getRoute, routes} from "./routes";
 import {Link} from 'react-router-dom';
-import apiService from '../helpers/api-service';
 
 class LatestAttestationInfo extends Component {
     constructor(props) {
@@ -17,7 +17,7 @@ class LatestAttestationInfo extends Component {
     }
 
     fetchInfo = () => {
-        apiService.axiosClient.get('/ctrl/latestattestationinfo')
+        Axios.get('/ctrl/latestattestationinfo')
             .then(({data}) => {
                 let feeSum = 0;
                 data.forEach((d, i) => {
