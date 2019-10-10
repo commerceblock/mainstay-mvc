@@ -1176,6 +1176,13 @@ html {
   background-color: #dff0d8;
 }
 
+.swal-modal.success {
+  .swal-text {
+    text-align: center;
+  }
+}
+
+
 .error .swal-button {
   color: #b84442;
   background-color: #fff;

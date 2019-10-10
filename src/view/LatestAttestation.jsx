@@ -1,7 +1,7 @@
-import Axios from 'axios';
 import React, {Component} from 'react';
 import {getRoute, routes} from './routes';
 import { Link } from 'react-router-dom';
+import apiService from '../helpers/api-service';
 
 class LatestAttestation extends Component {
   constructor() {
@@ -12,7 +12,7 @@ class LatestAttestation extends Component {
   }
 
   componentDidMount() {
-      Axios.get('/ctrl/latestattestation')
+      apiService.axiosClient.get('/ctrl/latestattestation')
           .then(response => this.setState({data: response.data['data']}));
   }
 

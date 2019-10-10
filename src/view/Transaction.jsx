@@ -1,9 +1,9 @@
-import Axios from "axios";
 import React, {Component} from "react";
 import NotFound from './NotFound';
 import Flag from './Flag';
 import {getRoute, routes} from "./routes";
 import { Link } from 'react-router-dom';
+import apiService from '../helpers/api-service';
 
 class Transaction extends Component {
     constructor(props) {
@@ -25,7 +25,7 @@ class Transaction extends Component {
     };
 
     fetchData = () => {
-        Axios.get("/api/v1/attestation?txid=" + this.props.match.params.value)
+        apiService.axiosClient.get("/api/v1/attestation?txid=" + this.props.match.params.value)
             .then(({data, error}) => {
                 if (data?.response) {
                     this.setState({data: data.response, isReady: true});

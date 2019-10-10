@@ -1,5 +1,5 @@
 import * as types from './types';
-import axios from 'axios';
+import apiService from '../../../../../helpers/api-service';
 
 export const login = (login, password) => (dispatch) => {
     const data = {
@@ -7,15 +7,15 @@ export const login = (login, password) => (dispatch) => {
         password
     };
 
-    return axios({
-        url: '/suadmin/login',
+    return apiService.axiosClient({
+        url: '/admin/login',
         method: 'post',
         data: data,
     }).then(response => {
         // fetch access token and store in local-storage
-        const accessToken = response.headers['access-token'];
-
+        const accessToken = response.headers['x-access-token'];
         localStorage.setItem('access_token', accessToken);
+        apiService.setAccessToken(accessToken);
 
         dispatch({
             type: types.LOGIN,
@@ -32,6 +32,8 @@ export const login = (login, password) => (dispatch) => {
 
 export const logout = () => (dispatch) => {
     localStorage.removeItem('access_token');
+    apiService.removeAccessToken();
+
     dispatch({
         type: types.LOGOUT,
         payload: 'logged-out'

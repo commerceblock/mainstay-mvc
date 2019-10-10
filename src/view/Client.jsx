@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import Axios from "axios";
-
 import NoResult from './NoResult';
 import {getRoute, routes} from "./routes";
 import { Link } from 'react-router-dom';
+import apiService from '../helpers/api-service';
 
 class Client extends Component {
     constructor(props) {
@@ -14,7 +13,7 @@ class Client extends Component {
     }
 
     componentDidMount() {
-        Axios.get('/api/v1/clients')
+        apiService.axiosClient.get('/api/v1/clients')
             .then(({data}) => {
                 if (!!data) {
                     this.setState({data, isReady: true});
