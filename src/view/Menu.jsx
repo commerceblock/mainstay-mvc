@@ -1,4 +1,3 @@
-import Axios from 'axios';
 import React, {Component} from 'react';
 import swal from 'sweetalert';
 import {
@@ -10,6 +9,7 @@ import {
     Dropdown, DropdownMenu, DropdownToggle, DropdownItem,
 } from 'reactstrap';
 import {routes} from './routes';
+import apiService from '../helpers/api-service';
 
 
 const options = [
@@ -39,7 +39,7 @@ class Menu extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
         const {position, token, commitment, signature} = this.state;
-        Axios.post('/ctrl/sendcommitment', {
+        apiService.axiosClient.post('/ctrl/sendcommitment', {
             position,
             token,
             commitment,

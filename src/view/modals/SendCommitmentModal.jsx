@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types';
-import Axios from "axios";
 
 import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import swal from "sweetalert";
+import apiService from '../../helpers/api-service';
 
 const options = [
     {label: 'Position*', name: 'position'},
@@ -67,7 +67,7 @@ class SendCommitmentModal extends React.PureComponent {
             return this.showErrorAlert('Commitment is empty');
         }
 
-        Axios.post('/ctrl/sendcommitment', {
+        apiService.axiosClient.post('/ctrl/sendcommitment', {
             position,
             token,
             commitment,

@@ -1,9 +1,9 @@
-import Axios from "axios";
 import React, {Component} from "react";
 import NotFound from './NotFound';
 import {routes, getRoute} from "./routes";
 import Flag from "./Flag";
 import {Link} from 'react-router-dom';
+import apiService from '../helpers/api-service';
 
 class MerkleRoot extends Component {
     constructor(props) {
@@ -25,7 +25,7 @@ class MerkleRoot extends Component {
     };
 
     fetchData = () => {
-        Axios.get(`/api/v1/merkleroot?merkle_root=${this.props.match.params.value}`)
+        apiService.axiosClient.get(`/api/v1/merkleroot?merkle_root=${this.props.match.params.value}`)
             .then(({data, error}) => {
                 if (data) {
                     this.setState({data: data.response});

@@ -1,10 +1,10 @@
-import Axios from 'axios';
 import React, {Component} from 'react';
 import NotFound from './NotFound';
 import {getRoute, routes} from "./routes";
 import Pagination from "react-js-pagination";
 import {Link} from 'react-router-dom';
 import Flag from "./Flag";
+import apiService from '../helpers/api-service';
 
 class Position extends Component {
     constructor(props) {
@@ -32,7 +32,7 @@ class Position extends Component {
     };
 
     fetchPage = (page) => {
-        Axios.get(`/api/v1/position?position=` + this.props.match.params.value + `&page=${page}`)
+        apiService.axiosClient.get(`/api/v1/position?position=` + this.props.match.params.value + `&page=${page}`)
             .then(({data}) => {
 
                 if (data?.data) {

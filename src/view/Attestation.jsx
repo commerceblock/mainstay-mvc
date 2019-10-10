@@ -1,7 +1,7 @@
-import Axios from 'axios';
 import React, { Component } from 'react';
 import Pagination from "react-js-pagination";
 import { Link } from 'react-router-dom';
+import apiService from '../helpers/api-service';
 
 class Attestation extends Component {
     constructor(props) {
@@ -26,7 +26,7 @@ class Attestation extends Component {
     fetchPage = (page) => {
         const failedArg = this.props.match.params?.value === 'showFailed' ? '&failed=true' : '';
 
-        Axios.get(`/ctrl/latestattestation?page=${page}${failedArg}`)
+        apiService.axiosClient.get(`/ctrl/latestattestation?page=${page}${failedArg}`)
             .then(({ data }) => {
                 if (data?.data) {
                     this.setState({
