@@ -105,7 +105,7 @@ module.exports = () => {
             host: devServerHost,
             port: devServerPort,
             proxy: [{
-                context: ['/auth', '/api'],
+                context: ['/ctrl', '/api'],
                 target: 'http://' + serverHost + ':' + serverPort
             }, {
                 context: ['/admin/client_details', '/admin/login'],
