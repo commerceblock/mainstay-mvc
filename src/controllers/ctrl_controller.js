@@ -153,7 +153,7 @@ module.exports = {
             if (data[0].auth_token !== payload.token) {
                 return res.json({error: 'token'});
             }
-            if (data[0].pubkey && data[0].pubkey != "") {
+            if (data[0].pubkey && data[0].pubkey !== '') {
                 if (payload.signature === undefined) {
                     return res.json({error: 'signature'});
                 }
@@ -190,14 +190,18 @@ module.exports = {
 
         const payload = req.body;
 
-        if (!payload.client_name || !payload.client_name.trim()) {
-            return res.status(400).json({error: 'client_name'});
+        if (!payload.first_name || !payload.first_name.trim()) {
+            return res.status(400).json({error: 'first_name'});
+        }
+        if (!payload.last_name || !payload.last_name.trim()) {
+            return res.status(400).json({error: 'last_name'});
         }
         if (!payload.email || !payload.email.trim() && !isValidEmail(payload.email.trim())) {
             return res.status(400).json({error: 'email'});
         }
 
-        payload.client_name = payload.client_name.trim();
+        payload.first_name = payload.first_name.trim();
+        payload.last_name = payload.last_name.trim();
         payload.email = payload.email.trim();
 
         if (payload.company && payload.company.trim()) {
@@ -223,9 +227,33 @@ module.exports = {
             }
         }
 
-        sendNewSignUpEmail(payload);
-        // send the response
-        res.status(201).send({user: payload});
+        try {
+            // get user by emil to check if user already logged in
+            const userByEmail = await models.clientSignup.findOne({email: payload.email});
+            if (userByEmail) {
+                return res.status(400).json({
+                    error: 'api',
+                    message: 'Client already exists with this email.'
+                });
+            }
+            // save user
+            const user = await models.clientSignup.create({
+                first_name: payload.first_name,
+                last_name: payload.last_name,
+                email: payload.email,
+                company: payload.company,
+                public_key: payload.pubkey,
+            });
+
+            sendNewSignUpEmail(payload);
+            // send the response
+            res.status(201).send({user: payload});
+        } catch (error) {
+            return res.status(500).json({
+                error: 'api',
+                message: error.message
+            });
+        }
     },
 
     ctrl_type: (req, res) => {
@@ -256,9 +284,10 @@ function getMailTransport () {
  * @param user
  * @returns {Promise<unknown>}
  */
-function sendNewSignUpEmail (user) {
+function sendNewSignUpEmail(user) {
     const html = `
-        <b>Client Name</b>: ${user.client_name}<br>
+        <b>First Name</b>: ${user.first_name}<br>
+        <b>Last Name</b>: ${user.last_name}<br>
         <b>Email</b>: ${user.email}<br>
         ${user.company ? `<b>Company</b>: ${user.company}<br>` : ''}
         ${user.public_key ? `<b>Public Key</b>: ${user.public_key}<br>` : ''}
@@ -282,7 +311,7 @@ function sendNewSignUpEmail (user) {
     });
 }
 
-async function find_type_hash (res, paramValue, startTime) {
+async function find_type_hash(res, paramValue, startTime) {
     try {
         let data;
         data = await models.merkleProof.find({commitment: paramValue});
@@ -307,7 +336,7 @@ async function find_type_hash (res, paramValue, startTime) {
     }
 }
 
-async function find_type_number (res, paramValue, startTime) {
+async function find_type_number(res, paramValue, startTime) {
     try {
         const data = await models.clientDetails.find({client_position: paramValue});
         if (data.length !== 0) {
