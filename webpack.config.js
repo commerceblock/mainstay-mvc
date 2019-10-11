@@ -68,11 +68,6 @@ module.exports = () => {
             extensions: ['*', '.js', '.jsx']
         },
         plugins: [
-            new webpack.EnvironmentPlugin({
-                NODE_ENV: process.env.NODE_ENV || 'development',
-                HOST_API: serverHost,
-                PORT_API: serverPort,
-            }),
             new MiniCssExtractPlugin({filename: '[name].styles.[hash].css'}),
             new htmlWebPackPlugin({
                 template: './src/index.html',
