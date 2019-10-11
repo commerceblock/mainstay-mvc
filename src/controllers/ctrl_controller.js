@@ -233,7 +233,7 @@ module.exports = {
             if (userByEmail) {
                 return res.status(400).json({
                     error: 'api',
-                    message: 'Client already exists with this email.'
+                    message: 'A user with this email already exists.'
                 });
             }
             // save user
