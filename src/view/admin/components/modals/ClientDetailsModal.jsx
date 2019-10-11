@@ -3,7 +3,7 @@ import uuidv4 from 'uuid/v4';
 import {connect} from 'react-redux';
 import {Button, Form, Input, Message, Modal} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import {addClient, updateClient} from '../../store/reducers/client_details/actions';
+import {addClient, updateClient} from '../../store/reducers/client-details/actions';
 
 class AddClientDetailsModal extends React.Component {
     constructor (props) {
@@ -152,7 +152,7 @@ class AddClientDetailsModal extends React.Component {
 
 AddClientDetailsModal.propTypes = {
     // state props
-    saving: PropTypes.string,
+    saving: PropTypes.bool,
     // dispatch props
     addClientAction: PropTypes.func.isRequired,
     updateClientAction: PropTypes.func.isRequired,

@@ -94,7 +94,7 @@ function makeAdminRoutes(app) {
     router.post('/client_details', adminClientDetailsController.post);
     router.put('/client_details', adminClientDetailsController.put);
 
-    router.put('/client_signup', adminClientSignUpsController.list);
+    router.get('/client_sign_up', adminClientSignUpsController.list);
 
     // error handler middleware
     router.use((error, req, res, next) => {

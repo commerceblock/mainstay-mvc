@@ -103,7 +103,11 @@ module.exports = () => {
                 context: ['/ctrl', '/api'],
                 target: 'http://' + serverHost + ':' + serverPort
             }, {
-                context: ['/admin/client_details', '/admin/login'],
+                context: [
+                    '/admin/login',
+                    '/admin/client_details',
+                    '/admin/client_sign_up'
+                ],
                 target: 'http://' + serverHost + ':' + serverPort
             }],
         },
