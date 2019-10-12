@@ -123,7 +123,7 @@ class SignUpModal extends React.PureComponent {
                         <Row form>
                             <Col md={6}>
                                 <FormGroup>
-                                    <Label className="f-bold fs14">First Name</Label>
+                                    <Label className="f-bold fs14">First Name*</Label>
                                     <Input name="first_name"
                                            bsSize="sm"
                                            onChange={this.handleChange}
@@ -132,7 +132,7 @@ class SignUpModal extends React.PureComponent {
                             </Col>
                             <Col md={6}>
                                 <FormGroup>
-                                    <Label className="f-bold fs14">Last Name</Label>
+                                    <Label className="f-bold fs14">Last Name*</Label>
                                     <Input name="last_name"
                                            bsSize="sm"
                                            onChange={this.handleChange}

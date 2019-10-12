@@ -245,9 +245,9 @@ module.exports = {
                 public_key: payload.pubkey,
             });
 
-            sendNewSignUpEmail(payload);
+            sendNewSignUpEmail(user);
             // send the response
-            res.status(201).send({user: payload});
+            res.status(201).send({user});
         } catch (error) {
             return res.status(500).json({
                 error: 'api',
