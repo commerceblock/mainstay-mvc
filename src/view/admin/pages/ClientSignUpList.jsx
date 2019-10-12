@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Table} from 'semantic-ui-react';
+import {Header, Table} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import {getList} from '../store/reducers/client-sign-up/actions';
@@ -42,9 +42,12 @@ class ClientSignUpList extends React.Component {
 
     render() {
         const {items} = this.props;
-        return <div>
-            {this.renderList(items)}
-        </div>;
+        return (
+            <div>
+                <Header as='h4'>Client Sign-ups</Header>
+                {this.renderList(items)}
+            </div>
+        );
     }
 }
 
