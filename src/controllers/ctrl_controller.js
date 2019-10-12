@@ -242,7 +242,7 @@ module.exports = {
                 last_name: payload.last_name,
                 email: payload.email,
                 company: payload.company,
-                public_key: payload.pubkey,
+                pubkey: payload.pubkey,
             });
 
             sendNewSignUpEmail(user);
@@ -290,7 +290,7 @@ function sendNewSignUpEmail(user) {
         <b>Last Name</b>: ${user.last_name}<br>
         <b>Email</b>: ${user.email}<br>
         ${user.company ? `<b>Company</b>: ${user.company}<br>` : ''}
-        ${user.public_key ? `<b>Public Key</b>: ${user.public_key}<br>` : ''}
+        ${user.pubkey ? `<b>Public Key</b>: ${user.pubkey}<br>` : ''}
     `;
 
     return new Promise((resolve, reject) => {

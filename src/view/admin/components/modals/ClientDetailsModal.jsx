@@ -71,14 +71,14 @@ class AddClientDetailsModal extends React.Component {
                 auth_token: authToken,
                 client_position: clientPosition,
                 client_name: clientName,
-                public_key: publicKey,
+                pubkey: publicKey,
             });
         } else {
             request = this.props.addClientAction({
                 auth_token: authToken,
                 client_position: clientPosition,
                 client_name: clientName,
-                public_key: publicKey,
+                pubkey: publicKey,
             });
         }
         this.setState({saving: true});

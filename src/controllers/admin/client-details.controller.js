@@ -24,8 +24,8 @@ class ClientDetailsController {
         let publicKey = '';
         let authToken;
 
-        if (req.body.public_key && req.body.public_key.trim()) {
-            publicKey = req.body.public_key.trim();
+        if (req.body.pubkey && req.body.pubkey.trim()) {
+            publicKey = req.body.pubkey.trim();
             try {
                 const publicKeyEc = ec.keyFromPublic(publicKey, 'hex');
                 const {result, reason} = publicKeyEc.validate();
@@ -102,8 +102,8 @@ class ClientDetailsController {
         let publicKey = '';
         let authToken = '';
 
-        if (req.body.public_key && req.body.public_key.trim()) {
-            publicKey = req.body.public_key.trim();
+        if (req.body.pubkey && req.body.pubkey.trim()) {
+            publicKey = req.body.pubkey.trim();
             try {
                 const publicKeyEc = ec.keyFromPublic(publicKey, 'hex');
                 const {result, reason} = publicKeyEc.validate();

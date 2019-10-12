@@ -70,7 +70,7 @@ const schemaClientSignup = new Schema({
     last_name: String,
     email: String,
     company: String,
-    public_key: String
+    pubkey: String
 }, {collection: 'ClientSignup'});
 schemaClientSignup.index({'email': 1}, {unique: true});
 
