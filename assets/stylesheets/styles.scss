@@ -1418,6 +1418,7 @@ html {
   margin-right: 5px;
   margin-left: 5px;
 }
+
 .m-r-5 {
   margin-right: 16px;
 }
@@ -1453,6 +1454,7 @@ html {
 .m-l-15 {
   margin-left: 15px;
 }
+
 .m-r-15 {
   margin-right: 15px;
 }
@@ -1811,9 +1813,20 @@ th, th span {
   width: 100%;
 }
 
-.navbar-nav{
+.navbar-nav {
   width: 100%;
 }
+
+.navbar .nav-item {
+  padding-left: 15px;
+  padding-right: 15px;
+
+  .nav-link {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
+
 
 /*responsive*/
 @media only screen and (max-width: 1350px) {
@@ -1864,7 +1877,14 @@ th, th span {
   }
   .navbar ul li a {
     padding-left: 0;
+  }
 
+  .nav-item button {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1rem;
+    padding-left: 0;
   }
 
   .nav li button {
