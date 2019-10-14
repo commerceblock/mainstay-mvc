@@ -1621,10 +1621,6 @@ th, th span {
   display: none;
 }
 
-.mobileSearch {
-  display: none;
-}
-
 .nav-footer-right {
   order: 2;
 }
@@ -2026,15 +2022,9 @@ th, th span {
 
   }
 
-  .mobileSearch {
-    display: block;
-  }
   .search {
     flex: none;
     padding: 0;
-  }
-  .desktopSearch {
-    display: none;
   }
   .logoImg {
     margin-left: 0;
