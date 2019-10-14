@@ -5,7 +5,7 @@ const apiController = require('./controllers/api_controller');
 const ctrlController = require('./controllers/ctrl_controller');
 const adminAuthController = require('./controllers/admin/auth.controller');
 const adminClientDetailsController = require('./controllers/admin/client-details.controller');
-const adminClientSignUpsController = require('./controllers/admin/client-sign-ups.controller');
+const adminClientSignUpController = require('./controllers/admin/client-sign-up.controller');
 
 const {jwt: {secret: jwtSecret}} = require('./env');
 
@@ -94,7 +94,7 @@ function makeAdminRoutes(app) {
     router.post('/client_details', adminClientDetailsController.post);
     router.put('/client_details', adminClientDetailsController.put);
 
-    router.get('/client_sign_up', adminClientSignUpsController.list);
+    router.get('/client_sign_up', adminClientSignUpController.list);
 
     // error handler middleware
     router.use((error, req, res, next) => {

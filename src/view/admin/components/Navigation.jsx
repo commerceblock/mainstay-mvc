@@ -42,7 +42,7 @@ class Navigation extends React.Component {
                         active={location.pathname === '/client-sign-up'}
                         as={Link}
                         to="/client-sign-up">
-                        Client Sign-up
+                        Client Sign up
                     </Menu.Item>
 
                     <Menu.Menu position='right' onClick={this.handleLogoutClick}>

@@ -3,7 +3,7 @@ const elliptic = require('elliptic');
 const models = require('../../models/models');
 const ec = new elliptic.ec('secp256k1');
 
-class ClientSignUpsController {
+class ClientSignUpController {
 
     async list(req, res, next) {
         try {
@@ -16,4 +16,4 @@ class ClientSignUpsController {
 
 }
 
-module.exports = new ClientSignUpsController();
+module.exports = new ClientSignUpController();

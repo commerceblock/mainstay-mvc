@@ -44,7 +44,7 @@ class ClientSignUpList extends React.Component {
         const {items} = this.props;
         return (
             <div>
-                <Header as='h4'>Client Sign-ups</Header>
+                <Header as='h4'>Client Sign up</Header>
                 {this.renderList(items)}
             </div>
         );
