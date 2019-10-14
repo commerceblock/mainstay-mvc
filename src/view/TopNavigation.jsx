@@ -1,23 +1,23 @@
 import React from 'react';
 
 import swal from 'sweetalert';
-import {
-    Nav, NavItem, Button
-} from 'reactstrap';
+import {Button, Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem} from 'reactstrap';
 
 import {getRoute, routes} from './routes';
 
 import SignUpModal from './modals/SignUpModal';
 import SendCommitmentModal from './modals/SendCommitmentModal';
 import {Link} from 'react-router-dom';
+import Logo from './Logo';
+import Search from './search/search';
 
-class Navbar extends React.Component {
-    constructor (props) {
+class TopNavigation extends React.Component {
+    constructor(props) {
         super(props);
         this.state = {
             modal: false,
             modalLogin: false,
-            isMenuOpened: false,
+            isNavbarOpened: true,
         };
     }
 
@@ -68,28 +68,43 @@ class Navbar extends React.Component {
         });
     };
 
-    render () {
+    toggleNavbarHandler = () => {
+        this.setState({
+            isNavbarOpened: !this.state.isNavbarOpened
+        });
+    };
+
+    render() {
         return (
             <>
-                <Nav>
-                    <NavItem className="hover-active">
-                        <Link className="nav-link" to={getRoute(routes.attestation, {value: null})}>Attestations</Link>
-                    </NavItem>
-                    <NavItem className="hover-active">
-                        <Link className="nav-link" to={routes.client}>Clients</Link>
-                    </NavItem>
-                    <NavItem className="hover-btn-active">
-                        <Button className="m-t-5 m-x-5" color="success" onClick={this.toggleCommitmentModal}>
-                            Send Commitment
-                        </Button>
-                    </NavItem>
-                    <NavItem className="hover-btn-active">
-                        <Button className="m-t-5 m-x-5" color="success" onClick={this.toggleSignUpModal}>
-                            Sign Up
-                        </Button>
-                    </NavItem>
-                </Nav>
-
+                <Navbar color="faded" light expand="md">
+                    <NavbarBrand className="mr-auto"><Logo /></NavbarBrand>
+                    <NavbarToggler onClick={this.toggleNavbarHandler} className="mr-2" />
+                    <Collapse isOpen={this.state.isNavbarOpened}>
+                        <Nav navbar>
+                            <NavItem className="search-item">
+                                <Search />
+                            </NavItem>
+                            <NavItem className="hover-active">
+                                <Link className="nav-link"
+                                      to={getRoute(routes.attestation, {value: null})}>Attestations</Link>
+                            </NavItem>
+                            <NavItem className="hover-active">
+                                <Link className="nav-link" to={routes.client}>Clients</Link>
+                            </NavItem>
+                            <NavItem className="hover-btn-active">
+                                <Button className="m-r-15" color="success" onClick={this.toggleCommitmentModal}>
+                                    Send Commitment
+                                </Button>
+                            </NavItem>
+                            <NavItem className="hover-btn-active">
+                                <Button className="m-r-15" color="success" onClick={this.toggleSignUpModal}>
+                                    Sign Up
+                                </Button>
+                            </NavItem>
+                        </Nav>
+                    </Collapse>
+                </Navbar>
                 <SendCommitmentModal
                     isOpen={this.state.modal}
                     onModalClose={this.toggleCommitmentModal}
@@ -108,4 +123,4 @@ class Navbar extends React.Component {
     }
 }
 
-export default Navbar;
+export default TopNavigation;
