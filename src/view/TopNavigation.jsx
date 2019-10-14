@@ -17,7 +17,7 @@ class TopNavigation extends React.Component {
         this.state = {
             modal: false,
             modalLogin: false,
-            isNavbarOpened: true,
+            isNavbarOpened: false,
         };
     }
 
@@ -80,8 +80,8 @@ class TopNavigation extends React.Component {
                 <Navbar color="faded" light expand="md">
                     <NavbarBrand className="mr-auto"><Logo /></NavbarBrand>
                     <NavbarToggler onClick={this.toggleNavbarHandler} className="mr-2" />
-                    <Collapse isOpen={this.state.isNavbarOpened}>
-                        <Nav navbar>
+                    <Collapse isOpen={this.state.isNavbarOpened} navbar>
+                        <Nav className="ml-auto" navbar>
                             <NavItem className="search-item">
                                 <Search />
                             </NavItem>

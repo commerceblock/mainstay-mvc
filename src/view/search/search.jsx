@@ -93,7 +93,9 @@ class Search extends Component {
     render() {
         return (
             <div className="search">
-                {this.renderSearchForm()}
+                <div className="col pl-2 desktopSearch">
+                    {this.renderSearchForm()}
+                </div>
             </div>
         );
     }
