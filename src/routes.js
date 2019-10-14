@@ -1,34 +1,36 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 
-const api_controller = require('./controllers/api_controller');
-const ctrl_controller = require('./controllers/ctrl_controller');
-const admin_controller = require('./controllers/admin_controller');
+const apiController = require('./controllers/api_controller');
+const ctrlController = require('./controllers/ctrl_controller');
+const adminAuthController = require('./controllers/admin/auth.controller');
+const adminClientDetailsController = require('./controllers/admin/client-details.controller');
+const adminClientSignUpController = require('./controllers/admin/client-sign-up.controller');
 
 const {jwt: {secret: jwtSecret}} = require('./env');
 
-function makeApiRoutes (app) {
+function makeApiRoutes(app) {
     const router = express.Router();
 
-    router.get('/', api_controller.index);
-    router.get('/latestattestation', api_controller.latest_attestation);
-    router.get('/latestcommitment', api_controller.latest_commitment);
-    router.get('/commitment', api_controller.commitment);
-    router.get('/commitment/latestproof', api_controller.commitment_latest_proof);
-    router.get('/commitment/verify', api_controller.commitment_verify);
-    router.get('/commitment/proof', api_controller.commitment_proof);
-    router.get('/commitment/commitment', api_controller.commitment_commitment);
-    router.get('/merkleroot', api_controller.merkleroot);
-    router.get('/position', api_controller.position);
-    router.get('/attestation', api_controller.attestation);
-    router.get('/blockhash', api_controller.blockhash);
-    router.get('/clients', api_controller.clients);
-    router.post('/commitment/send', api_controller.commitment_send);
+    router.get('/', apiController.index);
+    router.get('/latestattestation', apiController.latest_attestation);
+    router.get('/latestcommitment', apiController.latest_commitment);
+    router.get('/commitment', apiController.commitment);
+    router.get('/commitment/latestproof', apiController.commitment_latest_proof);
+    router.get('/commitment/verify', apiController.commitment_verify);
+    router.get('/commitment/proof', apiController.commitment_proof);
+    router.get('/commitment/commitment', apiController.commitment_commitment);
+    router.get('/merkleroot', apiController.merkleroot);
+    router.get('/position', apiController.position);
+    router.get('/attestation', apiController.attestation);
+    router.get('/blockhash', apiController.blockhash);
+    router.get('/clients', apiController.clients);
+    router.post('/commitment/send', apiController.commitment_send);
 
     app.use('/api/v1', router);
 }
 
-function makeCtrlRoutes (app) {
+function makeCtrlRoutes(app) {
     const router = express.Router();
 
     // for parsing application/json
@@ -36,14 +38,14 @@ function makeCtrlRoutes (app) {
     // for parsing application/x-www-form-urlencoded
     router.use(express.urlencoded({extended: true}));
 
-    router.get('/latestattestation', ctrl_controller.ctrl_latest_attestation);
-    router.get('/latestattestationinfo', ctrl_controller.ctrl_latest_attestation_info);
-    router.get('/latestcommitment', ctrl_controller.ctrl_latest_commitment);
+    router.get('/latestattestation', ctrlController.ctrl_latest_attestation);
+    router.get('/latestattestationinfo', ctrlController.ctrl_latest_attestation_info);
+    router.get('/latestcommitment', ctrlController.ctrl_latest_commitment);
 
-    router.get('/type', ctrl_controller.ctrl_type);
+    router.get('/type', ctrlController.ctrl_type);
 
-    router.post('/sendcommitment', ctrl_controller.ctrl_send_commitment);
-    router.post('/usersignup', ctrl_controller.ctrl_client_signup);
+    router.post('/sendcommitment', ctrlController.ctrl_send_commitment);
+    router.post('/usersignup', ctrlController.ctrl_client_signup);
 
     // error handler middleware
     router.use((error, req, res, next) => {
@@ -63,7 +65,7 @@ function makeCtrlRoutes (app) {
     app.use('/ctrl', router);
 }
 
-function makeAdminRoutes (app) {
+function makeAdminRoutes(app) {
     const router = express.Router();
 
     // for parsing application/json
@@ -71,7 +73,7 @@ function makeAdminRoutes (app) {
     // for parsing application/x-www-form-urlencoded
     router.use(express.urlencoded({extended: true}));
 
-    router.post('/login', admin_controller.login);
+    router.post('/login', adminAuthController.login);
 
     // middleware to check access-token
     router.use((req, res, next) => {
@@ -79,7 +81,7 @@ function makeAdminRoutes (app) {
         if (!accessToken) {
             return res.status(401).end();
         }
-        jwt.verify(accessToken, jwtSecret, function (error, payloadIgnored) {
+        jwt.verify(accessToken, jwtSecret, function(error, payloadIgnored) {
             if (error) {
                 return res.status(401).end();
             } else {
@@ -88,9 +90,11 @@ function makeAdminRoutes (app) {
         });
     });
 
-    router.get('/client_details', admin_controller.clientDetails);
-    router.post('/client_details', admin_controller.addClientDetails);
-    router.put('/client_details', admin_controller.updateClientDetails);
+    router.get('/client_details', adminClientDetailsController.list);
+    router.post('/client_details', adminClientDetailsController.post);
+    router.put('/client_details', adminClientDetailsController.put);
+
+    router.get('/client_sign_up', adminClientSignUpController.list);
 
     // error handler middleware
     router.use((error, req, res, next) => {

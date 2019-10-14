@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Button, Header, Icon, Loader, Table} from 'semantic-ui-react';
 
-import {addClient, getList, updateClient} from '../store/reducers/client_details/actions';
+import {addClient, getList, updateClient} from '../store/reducers/client-details/actions';
 import AddClientDetailsModal from '../components/modals/ClientDetailsModal';
 
 class ClientDetailsList extends React.Component {

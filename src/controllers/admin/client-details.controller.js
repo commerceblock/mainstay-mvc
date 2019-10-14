@@ -1,35 +1,12 @@
 const uuidv4 = require('uuid/v4');
-const jwt = require('jsonwebtoken');
 const elliptic = require('elliptic');
-const models = require('../models/models');
-
-const env = require('../env');
+const models = require('../../models/models');
 
 const ec = new elliptic.ec('secp256k1');
 
-class AdminController {
+class ClientDetailsController {
 
-    async login (req, res, next) {
-        const adminCredentials = env.admin;
-        const jwtSecret = env.jwt.secret;
-
-        // send error response if login or pass are incorrect
-        if (req.body.login !== adminCredentials.login || req.body.password !== adminCredentials.password) {
-            return res.status(400).json({
-                error: {
-                    code: 'wrong_login_credentials',
-                    message: 'wrong login or password'
-                }
-            });
-        }
-        // generate jwt token and via header
-        const token = jwt.sign({
-            data: 'logged-in'
-        }, jwtSecret, {expiresIn: '1h'});
-        return res.set('X-Access-Token', token).json({data: null});
-    }
-
-    async clientDetails (req, res, next) {
+    async list(req, res, next) {
         const clientDetailsModel = models.clientDetails;
         try {
             const list = await clientDetailsModel.find();
@@ -39,7 +16,7 @@ class AdminController {
         }
     }
 
-    async addClientDetails (req, res, next) {
+    async post(req, res, next) {
         const clientDetailsModel = models.clientDetails;
         const clientCommitmentModel = models.clientCommitment;
 
@@ -47,8 +24,8 @@ class AdminController {
         let publicKey = '';
         let authToken;
 
-        if (req.body.public_key && req.body.public_key.trim()) {
-            publicKey = req.body.public_key.trim();
+        if (req.body.pubkey && req.body.pubkey.trim()) {
+            publicKey = req.body.pubkey.trim();
             try {
                 const publicKeyEc = ec.keyFromPublic(publicKey, 'hex');
                 const {result, reason} = publicKeyEc.validate();
@@ -118,15 +95,15 @@ class AdminController {
         }
     }
 
-    async updateClientDetails (req, res, next) {
+    async put(req, res, next) {
         const clientDetailsModel = models.clientDetails;
         const _id = req.body._id;
         let clientName = '';
         let publicKey = '';
         let authToken = '';
 
-        if (req.body.public_key && req.body.public_key.trim()) {
-            publicKey = req.body.public_key.trim();
+        if (req.body.pubkey && req.body.pubkey.trim()) {
+            publicKey = req.body.pubkey.trim();
             try {
                 const publicKeyEc = ec.keyFromPublic(publicKey, 'hex');
                 const {result, reason} = publicKeyEc.validate();
@@ -179,4 +156,4 @@ class AdminController {
 
 }
 
-module.exports = new AdminController();
+module.exports = new ClientDetailsController();
