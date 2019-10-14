@@ -2,19 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import swal from 'sweetalert';
-import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
+import {Button, Col, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row} from 'reactstrap';
 
 import {isValidEmail} from '../../utils/validators';
 import apiService from '../../helpers/api-service';
 
 class SignUpModal extends React.PureComponent {
 
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.state = {
             inputs: {
-                client_name: '',
+                first_name: '',
+                last_name: '',
                 email: '',
                 company: '',
                 pubkey: '',
@@ -48,10 +49,14 @@ class SignUpModal extends React.PureComponent {
     handleSubmitLogin = (event) => {
         event.preventDefault();
 
-        const {client_name, email, company, pubkey} = this.state.inputs;
+        const {first_name, last_name, email, company, pubkey} = this.state.inputs;
 
-        if (!client_name || !client_name.trim()) {
-            return this.showErrorAlert('Client Name is empty');
+        if (!first_name || !first_name.trim()) {
+            return this.showErrorAlert('First Name is empty');
+        }
+
+        if (!last_name || !last_name.trim()) {
+            return this.showErrorAlert('Last Name is empty');
         }
 
         if (!email || !email.trim()) {
@@ -63,7 +68,8 @@ class SignUpModal extends React.PureComponent {
         }
 
         const data = {
-            client_name,
+            first_name,
+            last_name,
             email,
             company,
             pubkey
@@ -99,7 +105,7 @@ class SignUpModal extends React.PureComponent {
         }
     };
 
-    render () {
+    render() {
         const {
             isOpen,
         } = this.props;
@@ -114,14 +120,26 @@ class SignUpModal extends React.PureComponent {
                     encType="multipart/form-data"
                 >
                     <ModalBody>
-                        <FormGroup>
-                            <Label className="f-bold fs14">Client Name*</Label>
-                            <Input
-                                name="client_name"
-                                bsSize="sm"
-                                onChange={this.handleChange}
-                            />
-                        </FormGroup>
+                        <Row form>
+                            <Col md={6}>
+                                <FormGroup>
+                                    <Label className="f-bold fs14">First Name*</Label>
+                                    <Input name="first_name"
+                                           bsSize="sm"
+                                           onChange={this.handleChange}
+                                    />
+                                </FormGroup>
+                            </Col>
+                            <Col md={6}>
+                                <FormGroup>
+                                    <Label className="f-bold fs14">Last Name*</Label>
+                                    <Input name="last_name"
+                                           bsSize="sm"
+                                           onChange={this.handleChange}
+                                    />
+                                </FormGroup>
+                            </Col>
+                        </Row>
                         <FormGroup>
                             <Label className="f-bold fs14">Email*</Label>
                             <Input

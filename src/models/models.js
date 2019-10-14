@@ -66,10 +66,11 @@ schemaMerkleProof.index({
 });
 
 const schemaClientSignup = new Schema({
-    client_name: String,
+    first_name: String,
+    last_name: String,
     email: String,
     company: String,
-    public_key: String
+    pubkey: String
 }, {collection: 'ClientSignup'});
 schemaClientSignup.index({'email': 1}, {unique: true});
 
@@ -79,6 +80,7 @@ const clientCommitment = mongoose.model('ClientCommitment', schemaClientCommitme
 const clientDetails = mongoose.model('ClientDetails', schemaClientDetails);
 const merkleCommitment = mongoose.model('MerkleCommitment', schemaMerkleCommitment);
 const merkleProof = mongoose.model('MerkleProof', schemaMerkleProof);
+const clientSignup = mongoose.model('ClientSignup', schemaClientSignup);
 
 module.exports = {
     attestation,
@@ -87,4 +89,5 @@ module.exports = {
     clientDetails,
     merkleCommitment,
     merkleProof,
+    clientSignup,
 };

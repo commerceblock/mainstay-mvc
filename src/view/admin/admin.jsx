@@ -4,13 +4,14 @@ import {connect, Provider} from 'react-redux';
 
 import {Container,} from 'semantic-ui-react';
 import {Navigation} from './components';
-import ClientDetailsList from '../admin/pages/ClientDetailsList';
+import ClientDetailsList from './pages/ClientDetailsList';
+import ClientSignUpList from './pages/ClientSignUpList';
 
 import store from './store';
 import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
 import PageNotFound from './pages/PageNotFound';
-import Auth from './pages/Auth';
 
+import Auth from './pages/Auth';
 import '../../../assets/stylesheets/admin.scss';
 
 // this is the default behavior
@@ -33,6 +34,7 @@ class App extends React.Component {
             routes = (
                 <Switch>
                     <Route exact path="/client-details" component={ClientDetailsList} />
+                    <Route exact path="/client-sign-up" component={ClientSignUpList} />
                     <Redirect from="/" to="/client-details" />
                     <Route component={PageNotFound} />
                 </Switch>
