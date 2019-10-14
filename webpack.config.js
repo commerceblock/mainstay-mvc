@@ -104,6 +104,13 @@ module.exports = () => {
             hot: true,
             host: devServerHost,
             port: devServerPort,
+            proxy: [{
+                context: ['/ctrl', '/api'],
+                target: 'http://' + serverHost + ':' + serverPort
+            }, {
+                context: ['/admin/client_details', '/admin/login'],
+                target: 'http://' + serverHost + ':' + serverPort
+            }],
         },
         devtool: 'eval-source-map'
     };

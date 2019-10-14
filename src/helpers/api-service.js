@@ -6,9 +6,7 @@ const port = process.env.PORT_API;
 class ApiService {
 
     constructor() {
-        this.client = axios.create({
-            baseURL: `http://${host}:${port}`,
-        });
+        this.client = axios.create();
         const accessToken = localStorage.getItem('access_token');
         if (accessToken) {
             this.setAccessToken(accessToken);
