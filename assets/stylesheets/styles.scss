@@ -435,10 +435,11 @@ body.darkBG .progress {
   color: #1C1C1C;
 }
 
-.nav li button {
+.navbar-nav li button {
   line-height: 15px;
   height: 30px;
   font-size: 14px;
+  margin-top: 5px;
 }
 
 .top-nav .dcricon-decred {
@@ -1842,6 +1843,11 @@ th, th span {
     flex-wrap: wrap;
   }
 }
+@media only screen and (min-width: 769px) {
+  .navbar {
+    margin-top: 7px;
+  }
+}
 
 @media only screen and (max-width: 768px) {
 
@@ -1887,7 +1893,7 @@ th, th span {
     padding-left: 0;
   }
 
-  .nav li button {
+  .bavbar-nav li button {
     font-size: 16px;
   }
 
