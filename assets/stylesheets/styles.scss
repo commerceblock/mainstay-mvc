@@ -1829,6 +1829,18 @@ th, th span {
 }
 
 
+.mobile-search {
+  display: none;
+  width: 100%;
+}
+.collapse {
+  display: block !important;
+  width: 100%;
+}
+.navbar-toggler {
+  outline: none;
+}
+
 /*responsive*/
 @media only screen and (max-width: 1350px) {
   .search {
@@ -1849,7 +1861,11 @@ th, th span {
   }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1023px) {
+
+  .latestCommitementStyle {
+    width: 100vw;
+  }
 
   .blockHash, .txId {
     min-height: auto;
@@ -1979,12 +1995,52 @@ th, th span {
   .rotate-txt {
     left: -80px;
   }
+  .search-item
+  {
+    display: none;
+  }
+  .mobile-search {
+    display: block;
+  }
+  .collapse {
+    display: none !important;
+  }
+
+  .collapse.show {
+    display: block !important;
+  }
+  .navbar-brand  {
+
+    width: 75%;
+  }
+
+  .top-search-icon-mobile {
+    display: block;
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    margin-top: 0;
+    width: 30px;
+    height: 30px;
+  }
+
+  .nav-item button {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1rem;
+    padding-left: 0;
+  }
+
 }
 
 
 @media only screen and (max-width: 475px) {
   .full-table .hash.truncate-hash {
     width: 45vw;
+  }
+  .navbar-brand {
+    width: 60%;
   }
 
 
@@ -2079,23 +2135,7 @@ th, th span {
     width: 35vw;
   }
 
-  .top-search-icon-mobile {
-    display: block;
-    position: absolute;
-    right: 30px;
-    top: 20px;
-    margin-top: 0;
-    width: 30px;
-    height: 30px;
-  }
 
-  .nav-item button {
-    background: none;
-    border: none;
-    color: inherit;
-    font-size: 1rem;
-    padding-left: 0;
-  }
   .nav-footer {
     display: block !important;
   }

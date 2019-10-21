@@ -77,7 +77,7 @@ class TopNavigation extends React.Component {
     render() {
         return (
             <>
-                <Navbar color="faded" light expand="md">
+                <Navbar color="faded" light expand="lg">
                     <NavbarBrand className="mr-auto"><Logo /></NavbarBrand>
                     <NavbarToggler onClick={this.toggleNavbarHandler} className="mr-2" />
                     <Collapse isOpen={this.state.isNavbarOpened} navbar>
@@ -104,6 +104,9 @@ class TopNavigation extends React.Component {
                             </NavItem>
                         </Nav>
                     </Collapse>
+                    <div className="mobile-search">
+                        <Search />
+                    </div>
                 </Navbar>
                 <SendCommitmentModal
                     isOpen={this.state.modal}
