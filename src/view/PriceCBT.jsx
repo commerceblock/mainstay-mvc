@@ -7,7 +7,7 @@ class PriceCBT extends Component {
     this.state = {
       channel: 0,
       priceCBT: 0,
-      ws: new Sockette('wss://api.ethfinex.com/ws/2', {
+      ws: new Sockette('wss://api-pub.bitfinex.com/ws/2', {
         timeout: 5e3,
         maxAttempts: 10,
         onopen: e => console.log('Connected!', e),
