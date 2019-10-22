@@ -1,9 +1,8 @@
 import React from 'react';
 import {Redirect, Route, Router, Switch} from 'react-router-dom';
 import {routes} from './routes';
-import Logo from './Logo';
 import Footer from './Footer';
-import Navbar from './Navbar';
+import TopNavigation from './TopNavigation';
 import Client from './Client';
 import PrivacyPolicy from './PrivacyPolicy';
 import Commitment from './Commitment';
@@ -23,13 +22,7 @@ const Root = () => (
     <Router history={appHistory}>
         <div className="top-nav">
             <div className="container">
-                <div className="d-flex m-t-15 align-items-center">
-                    <Logo />
-                    <div className="flex-grow-1">
-                        <Search />
-                    </div>
-                    <Navbar />
-                </div>
+                <TopNavigation />
             </div>
             <div className="container main" data-controller="main">
                 <Switch>
