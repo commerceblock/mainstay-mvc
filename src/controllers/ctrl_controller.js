@@ -22,6 +22,8 @@ const {
     reply_msg,
 } = require('../utils/controller_helpers');
 
+const DATE_FORMAT = 'HH:MM:ss dd/mm/yy';
+
 module.exports = {
     ctrl_latest_attestation: async (req, res) => {
 
@@ -84,7 +86,7 @@ module.exports = {
                 txid: item.txid,
                 blockhash: item.blockhash,
                 amount: item.amount,
-                time: item.time
+                time: dateFormat(item.time, DATE_FORMAT)
             }));
 
             res.json(response);
@@ -275,7 +277,7 @@ module.exports = {
  * create email transport
  * @returns {*}
  */
-function getMailTransport () {
+function getMailTransport() {
     return nodemailer.createTransport(env.mail_server.smtp);
 }
 

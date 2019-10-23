@@ -39,7 +39,7 @@ class PriceCBT extends Component {
   render() {
     return (
         <tr>
-          <th className="align-end">Price</th>
+          <th className="align-end">BTC Price</th>
           <td colSpan="2">{this.state.priceCBT} $</td>
         </tr>
     );
