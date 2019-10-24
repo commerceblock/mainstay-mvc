@@ -1,5 +1,5 @@
 const elliptic = require('elliptic');
-const dateFormat = require('dateformat');
+const moment = require('moment');
 const nodemailer = require('nodemailer');
 
 const models = require('../models/models');
@@ -22,7 +22,7 @@ const {
     reply_msg,
 } = require('../utils/controller_helpers');
 
-const DATE_FORMAT = 'HH:MM:ss dd/mm/yy';
+const DATE_FORMAT = 'HH:mm:ss, L';
 
 module.exports = {
     ctrl_latest_attestation: async (req, res) => {
@@ -59,7 +59,7 @@ module.exports = {
                 txid: item.txid,
                 merkle_root: item.merkle_root,
                 confirmed: item.confirmed,
-                age: (now.toDateString() === item.inserted_at.toDateString()) ? dateFormat(item.inserted_at, 'HH:MM:ss') : dateFormat(item.inserted_at, 'HH:MM:ss dd/mm/yy')
+                age: (now.toDateString() === item.inserted_at.toDateString()) ? moment(item.inserted_at).format('HH:mm:ss') : moment(item.inserted_at).format(DATE_FORMAT)
             }));
 
             res.json(response);
@@ -86,7 +86,7 @@ module.exports = {
                 txid: item.txid,
                 blockhash: item.blockhash,
                 amount: item.amount,
-                time: dateFormat(item.time, DATE_FORMAT)
+                time: moment(item.time).format(DATE_FORMAT)
             }));
 
             res.json(response);
