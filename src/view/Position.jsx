@@ -97,7 +97,7 @@ class Position extends Component {
                             <table width="100%" id="table">
                                 <tr>
                                     <th>Commitment</th>
-                                    <th>Date</th>
+                                    <th>Time</th>
                                 </tr>
                                 <tbody>
                                 {data.map(data => (

@@ -1,5 +1,5 @@
 const elliptic = require('elliptic');
-const dateFormat = require('dateformat');
+const moment = require('moment');
 const nodemailer = require('nodemailer');
 
 const models = require('../models/models');
@@ -21,6 +21,8 @@ const {
     reply_err,
     reply_msg,
 } = require('../utils/controller_helpers');
+
+const DATE_FORMAT = 'HH:mm:ss L z';
 
 module.exports = {
     ctrl_latest_attestation: async (req, res) => {
@@ -57,7 +59,7 @@ module.exports = {
                 txid: item.txid,
                 merkle_root: item.merkle_root,
                 confirmed: item.confirmed,
-                age: (now.toDateString() === item.inserted_at.toDateString()) ? dateFormat(item.inserted_at, 'HH:MM:ss') : dateFormat(item.inserted_at, 'HH:MM:ss dd/mm/yy')
+                age: (now.toDateString() === item.inserted_at.toDateString()) ? moment.utc(item.inserted_at).format('HH:mm:ss z') : moment.utc(item.inserted_at).format(DATE_FORMAT)
             }));
 
             res.json(response);
@@ -84,7 +86,7 @@ module.exports = {
                 txid: item.txid,
                 blockhash: item.blockhash,
                 amount: item.amount,
-                time: item.time
+                time: moment.utc(item.time * 1000).format(DATE_FORMAT)
             }));
 
             res.json(response);
@@ -275,7 +277,7 @@ module.exports = {
  * create email transport
  * @returns {*}
  */
-function getMailTransport () {
+function getMailTransport() {
     return nodemailer.createTransport(env.mail_server.smtp);
 }
 

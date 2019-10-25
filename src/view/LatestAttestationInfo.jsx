@@ -77,7 +77,7 @@ class LatestAttestationInfo extends Component {
                     <td colSpan="2">{time}</td>
                 </tr>
                 <tr>
-                    <th className="align-end">Amount</th>
+                    <th className="align-end">Staychain Balance</th>
                     <td colSpan="2">{amount / 100000000} BTC</td>
                 </tr>
                 <tr>

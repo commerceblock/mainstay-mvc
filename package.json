@@ -15,6 +15,7 @@
     "history": "^4.9.0",
     "js-sha3": "^0.8.0",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
     "mongoose": "^5.3.14",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
