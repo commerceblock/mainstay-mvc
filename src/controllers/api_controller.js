@@ -34,7 +34,7 @@ const {
     reply_msg,
 } = require('../utils/controller_helpers');
 
-const DATE_FORMAT = 'HH:mm:ss, L';
+const DATE_FORMAT = 'HH:mm:ss z, L';
 
 module.exports = {
     index: (req, res) => {
@@ -311,7 +311,7 @@ module.exports = {
                     merkle_root: attestationData[0].merkle_root,
                     txid: attestationData[0].txid,
                     confirmed: attestationData[0].confirmed,
-                    inserted_at: moment(attestationData[0].inserted_at).format(DATE_FORMAT)
+                    inserted_at: moment.utc(attestationData[0].inserted_at).format(DATE_FORMAT)
                 },
                 merkleproof: {
                     position: response.client_position,
@@ -356,7 +356,7 @@ module.exports = {
                     merkle_root: attestationData[0].merkle_root,
                     txid: attestationData[0].txid,
                     confirmed: attestationData[0].confirmed,
-                    inserted_at: moment(attestationData[0].inserted_at).format(DATE_FORMAT)
+                    inserted_at: moment.utc(attestationData[0].inserted_at).format(DATE_FORMAT)
                 },
                 merkle_commitment: array
             }, startTime);
@@ -414,7 +414,7 @@ module.exports = {
                 } else {
                     response['data'].push({
                         commitment: data[itr].commitment,
-                        date: moment(attestation.inserted_at).format(DATE_FORMAT)
+                        date: moment.utc(attestation.inserted_at).format(DATE_FORMAT)
                     });
                 }
             }
@@ -451,7 +451,7 @@ module.exports = {
                         merkle_root: response.merkle_root,
                         txid: response.txid,
                         confirmed: response.confirmed,
-                        inserted_at: moment(response.inserted_at).format(DATE_FORMAT)
+                        inserted_at: moment.utc(response.inserted_at).format(DATE_FORMAT)
                     },
                     attestationInfo: {
                         txid: response.txid,
@@ -466,7 +466,7 @@ module.exports = {
                         merkle_root: response.merkle_root,
                         txid: response.txid,
                         confirmed: response.confirmed,
-                        inserted_at: moment(response.inserted_at).format(DATE_FORMAT)
+                        inserted_at: moment.utc(response.inserted_at).format(DATE_FORMAT)
                     },
                     attestationInfo: {
                         txid: data[0].txid,
@@ -498,7 +498,7 @@ module.exports = {
                     txid: data[0].txid,
                     amount: data[0].amount / 100000000,
                     blockhash: data[0].blockhash,
-                    time: moment(data[0].time * 1000).format(DATE_FORMAT)
+                    time: moment.utc(data[0].time * 1000).format(DATE_FORMAT)
                 }
             }, startTime);
         } catch (error) {
