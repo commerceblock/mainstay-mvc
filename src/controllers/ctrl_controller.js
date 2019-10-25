@@ -22,7 +22,7 @@ const {
     reply_msg,
 } = require('../utils/controller_helpers');
 
-const DATE_FORMAT = 'HH:mm:ss z, L';
+const DATE_FORMAT = 'HH:mm:ss L z';
 
 module.exports = {
     ctrl_latest_attestation: async (req, res) => {
