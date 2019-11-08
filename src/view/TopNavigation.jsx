@@ -18,12 +18,22 @@ class TopNavigation extends React.Component {
             modal: false,
             modalLogin: false,
             isNavbarOpened: false,
+            darkMode: false,
+            theme_name: false
         };
     }
 
     toggleCommitmentModal = () => {
         this.setState({modal: !this.state.modal});
     };
+    setDark = () => {
+
+        let body;
+        body = document.getElementById('body');
+        body.classList.toggle("darkMode");
+        this.setState({theme_name: !this.state.theme_name});
+
+    }
 
     toggleSignUpModal = () => {
         this.setState({modalLogin: !this.state.modalLogin});
@@ -78,12 +88,12 @@ class TopNavigation extends React.Component {
         return (
             <>
                 <Navbar color="faded" light expand="lg">
-                    <NavbarBrand className="mr-auto"><Logo /></NavbarBrand>
-                    <NavbarToggler onClick={this.toggleNavbarHandler} className="mr-2" />
+                    <NavbarBrand className="mr-auto"><Logo/></NavbarBrand>
+                    <NavbarToggler onClick={this.toggleNavbarHandler} className="mr-2"/>
                     <Collapse isOpen={this.state.isNavbarOpened} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem className="search-item">
-                                <Search />
+                                <Search/>
                             </NavItem>
                             <NavItem className="hover-active">
                                 <Link className="nav-link"
@@ -102,10 +112,18 @@ class TopNavigation extends React.Component {
                                     Sign Up
                                 </Button>
                             </NavItem>
+                            <NavItem className="hover-btn-active hideMenuItem">
+                                <Button onClick={this.setDark}>
+                                    {this.state.theme_name ?
+                                        <img src="sun.svg" alt="moon"/> : <img src="moon.svg" alt="moon"/>
+                                    }
+                                </Button>
+                            </NavItem>
+
                         </Nav>
                     </Collapse>
                     <div className="mobile-search">
-                        <Search />
+                        <Search/>
                     </div>
                 </Navbar>
                 <SendCommitmentModal

@@ -1841,6 +1841,121 @@ th, th span {
   outline: none;
 }
 
+
+/*Dark mode New*/
+
+.darkMode {
+  background-color:  #3B3F45;
+  .page-item.disabled .page-link {
+    background-color:  #3B3F45;
+    color: #ffffff;
+  }
+
+  .top-nav {
+    background-color:  #3B3F45;
+    color: #ffffff;
+    .privacy-page, .terms-page {
+      background-color: #3B3F45;
+    }
+    .navbar-toggler {
+      background-color: #Ffffff;
+      color: #ffffff;
+    }
+    table  {
+      tr {
+        background-color:  #3B3F45;
+        color: #ffffff;
+      }
+      th, td {
+        background-color:  #3B3F45;
+        color: #ffffff;
+        span {
+          color: #ffffff !important;
+        }
+        a {
+          color: #ffffff !important;
+          span {
+            color: #ffffff !important;
+          }
+        }
+      }
+    }
+    #table th {
+      background-color:  #3B3F45;
+      color: #ffffff;
+    }
+    .logoImg h4 {
+      color: #ffffff;
+      
+    }
+    .nav-item {
+      color: #ffffff !important;
+      background-color: transparent !important;
+      a {
+        color: #ffffff !important;
+      }
+      button {
+        color: #ffffff;
+        background-color: transparent;
+      }
+      &:focus {
+        color: #ffffff !important;
+        background-color: transparent !important;
+      }
+    }
+    form {
+      input {
+        color: #ffffff;
+      }
+    }
+
+  }
+  .modal-content {
+    background-color:  #3B3F45;
+    color: #ffffff;
+    button {
+      color: #ffffff;
+    }
+    .form-control {
+      background-color:  #3B3F45;
+      color: #ffffff;
+      input {
+        border: 1px solid #ffffff;
+      }
+
+    }
+  }
+}
+
+.hideMenuItem {
+  button {
+    background: transparent;
+    border: none;
+    color: #1C1C1C;
+    outline: none;
+    box-shadow: none;
+    &:focus, &:hover  {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #1C1C1C;
+      box-shadow: none;
+    }
+    img {
+      width: 25px;
+      position: relative;
+      bottom: 3px;
+    }
+    svg {
+      fill:#Ffffff;
+      width: 25px;
+      position: relative;
+      bottom: 3px;
+    }
+  }
+}
+
+
 /*responsive*/
 @media only screen and (max-width: 1350px) {
   .search {
@@ -1854,10 +1969,14 @@ th, th span {
   .nav {
     flex-wrap: wrap;
   }
+  .hideMenuItem {
+    display: block;
+  }
+
 }
 @media only screen and (min-width: 769px) {
   .navbar {
-    margin-top: 7px;
+    padding-top: 7px;
   }
 }
 
