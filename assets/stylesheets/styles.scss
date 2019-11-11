@@ -1862,11 +1862,16 @@ th, th span {
       color: #ffffff;
     }
     table  {
+      thead {
+        tr {
+          background-color: #4d525a !important;
+        }
+      }
       tr {
         background-color:  #3B3F45;
         color: #ffffff;
       }
-      th, td {
+       td {
         background-color:  #3B3F45;
         color: #ffffff;
         span {
@@ -1879,9 +1884,32 @@ th, th span {
           }
         }
       }
+      th {
+        background-color: #4d525a !important;
+        span {
+          color: #ffffff !important;
+        }
+        a {
+          color: #ffffff !important;
+        }
+      }
+    }
+    .overflow-info, .flex-table  {
+      table {
+        th {
+          background-color: transparent !important;
+          color: #ffffff;
+        }
+      }
+    }
+    .main-second-position-block {
+      th {
+        background-color: transparent !important;
+        color: #ffffff;
+      }
     }
     #table th {
-      background-color:  #3B3F45;
+      background-color:  #4d525a !important;
       color: #ffffff;
     }
     .logoImg h4 {
@@ -1947,10 +1975,13 @@ th, th span {
       bottom: 3px;
     }
     svg {
-      fill:#Ffffff;
+      fill:#000000;
       width: 25px;
       position: relative;
       bottom: 3px;
+      &.sun {
+        fill:#ffffff;
+      }
     }
   }
 }
