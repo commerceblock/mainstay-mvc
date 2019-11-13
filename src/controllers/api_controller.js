@@ -300,7 +300,7 @@ module.exports = {
             if (merkleProofData.length === 0) {
                 return reply_err(res, 'Not found', startTime);
             }
-            const response = merkleProofData[merkleProofData.length - 1]; // get latest
+            const response = merkleProofData[0]; // get earliest
             const attestationData = await models.attestation.find({merkle_root: response.merkle_root});
 
             if (attestationData.length === 0) {
@@ -405,7 +405,6 @@ module.exports = {
 
             for (let itr = 0; itr < data.length; ++itr) {
                 const attestation = await models.attestation.findOne({merkle_root: data[itr].merkle_root});
-
                 if (!attestation) {
                     response['data'].push({
                         commitment: data[itr].commitment,
@@ -414,6 +413,10 @@ module.exports = {
                 } else {
                     response['data'].push({
                         commitment: data[itr].commitment,
+                        merkle_root: data[itr].merkle_root,
+                        txid: attestation.txid,
+                        confirmed: attestation.confirmed,
+                        ops: data[itr].ops
                         date: moment.utc(attestation.inserted_at).format(DATE_FORMAT)
                     });
                 }
