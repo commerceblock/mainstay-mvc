@@ -416,7 +416,7 @@ module.exports = {
                         merkle_root: data[itr].merkle_root,
                         txid: attestation.txid,
                         confirmed: attestation.confirmed,
-                        ops: data[itr].ops
+                        ops: data[itr].ops,
                         date: moment.utc(attestation.inserted_at).format(DATE_FORMAT)
                     });
                 }
