@@ -306,12 +306,16 @@ module.exports = {
             if (attestationData.length === 0) {
                 return reply_err(res, 'Not found', startTime);
             }
+
+            let index = attestationData.findIndex((item) => item.confirmed === true);
+            if(index === -1) { index = attestationData.length - 1 };
+
             reply_msg(res, {
                 attestation: {
-                    merkle_root: attestationData[0].merkle_root,
-                    txid: attestationData[0].txid,
-                    confirmed: attestationData[0].confirmed,
-                    inserted_at: moment.utc(attestationData[0].inserted_at).format(DATE_FORMAT)
+                    merkle_root: attestationData[index].merkle_root,
+                    txid: attestationData[index].txid,
+                    confirmed: attestationData[index].confirmed,
+                    inserted_at: moment.utc(attestationData[index].inserted_at).format(DATE_FORMAT)
                 },
                 merkleproof: {
                     position: response.client_position,
@@ -351,12 +355,15 @@ module.exports = {
             if (attestationData.length === 0) {
                 return reply_err(res, 'No attestation found for merkle_root provided', startTime);
             }
+            let index = attestationData.findIndex((item) => item.confirmed === true);
+            if(index === -1) { index = attestationData.length - 1 };
+
             reply_msg(res, {
                 attestation: {
-                    merkle_root: attestationData[0].merkle_root,
-                    txid: attestationData[0].txid,
-                    confirmed: attestationData[0].confirmed,
-                    inserted_at: moment.utc(attestationData[0].inserted_at).format(DATE_FORMAT)
+                    merkle_root: attestationData[index].merkle_root,
+                    txid: attestationData[index].txid,
+                    confirmed: attestationData[index].confirmed,
+                    inserted_at: moment.utc(attestationData[index].inserted_at).format(DATE_FORMAT)
                 },
                 merkle_commitment: array
             }, startTime);
@@ -404,20 +411,23 @@ module.exports = {
             }
 
             for (let itr = 0; itr < data.length; ++itr) {
-                const attestation = await models.attestation.findOne({merkle_root: data[itr].merkle_root});
-                if (!attestation) {
+                const attestationData = await models.attestation.find({merkle_root: data[itr].merkle_root});
+                if (attestationData.length === 0) {
                     response['data'].push({
                         commitment: data[itr].commitment,
                         date: ''
                     });
                 } else {
+                    let index = attestationData.findIndex((item) => item.confirmed === true);
+                    if(index === -1) { index = attestationData.length - 1 };
+
                     response['data'].push({
                         commitment: data[itr].commitment,
                         merkle_root: data[itr].merkle_root,
-                        txid: attestation.txid,
-                        confirmed: attestation.confirmed,
+                        txid: attestationData[index].txid,
+                        confirmed: attestationData[index].confirmed,
                         ops: data[itr].ops,
-                        date: moment.utc(attestation.inserted_at).format(DATE_FORMAT)
+                        date: moment.utc(attestationData[index].inserted_at).format(DATE_FORMAT)
                     });
                 }
             }
