@@ -1769,6 +1769,15 @@ th, th span {
   max-width: 225px;
 }
 
+.signup-modal p {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.signup-modal p:last-of-type {
+  margin-bottom: 30px;
+}
+
 .nav {
   flex-wrap: nowrap;
 }
@@ -1833,10 +1842,12 @@ th, th span {
   display: none;
   width: 100%;
 }
+
 .collapse {
   display: block !important;
   width: 100%;
 }
+
 .navbar-toggler {
   outline: none;
 }
@@ -1845,56 +1856,69 @@ th, th span {
 /*Dark mode New*/
 
 .darkMode {
-  background-color:  #3B3F45;
+  background-color: #3B3F45;
+
   .page-item.disabled .page-link {
-    background-color:  #3B3F45;
+    background-color: #3B3F45;
     color: #ffffff;
   }
 
   .top-nav {
-    background-color:  #3B3F45;
+    background-color: #3B3F45;
     color: #ffffff;
+
     .privacy-page, .terms-page {
       background-color: #3B3F45;
     }
+
     .navbar-toggler {
       background-color: #Ffffff;
       color: #ffffff;
     }
-    table  {
+
+    table {
       thead {
         tr {
           background-color: #4d525a !important;
         }
       }
+
       tr {
-        background-color:  #3B3F45;
+        background-color: #3B3F45;
         color: #ffffff;
       }
-       td {
-        background-color:  #3B3F45;
+
+      td {
+        background-color: #3B3F45;
         color: #ffffff;
+
         span {
           color: #ffffff !important;
         }
+
         a {
           color: #ffffff !important;
+
           span {
             color: #ffffff !important;
           }
         }
       }
+
       th {
         background-color: #4d525a !important;
+
         span {
           color: #ffffff !important;
         }
+
         a {
           color: #ffffff !important;
         }
       }
     }
-    .overflow-info, .flex-table  {
+
+    .overflow-info, .flex-table {
       table {
         th {
           background-color: transparent !important;
@@ -1902,35 +1926,43 @@ th, th span {
         }
       }
     }
+
     .main-second-position-block {
       th {
         background-color: transparent !important;
         color: #ffffff;
       }
     }
+
     #table th {
-      background-color:  #4d525a !important;
+      background-color: #4d525a !important;
       color: #ffffff;
     }
+
     .logoImg h4 {
       color: #ffffff;
-      
+
     }
+
     .nav-item {
       color: #ffffff !important;
       background-color: transparent !important;
+
       a {
         color: #ffffff !important;
       }
+
       button {
         color: #ffffff;
         background-color: transparent;
       }
+
       &:focus {
         color: #ffffff !important;
         background-color: transparent !important;
       }
     }
+
     form {
       input {
         color: #ffffff;
@@ -1938,15 +1970,19 @@ th, th span {
     }
 
   }
+
   .modal-content {
-    background-color:  #3B3F45;
+    background-color: #3B3F45;
     color: #ffffff;
+
     button {
       color: #ffffff;
     }
+
     .form-control {
-      background-color:  #3B3F45;
+      background-color: #3B3F45;
       color: #ffffff;
+
       input {
         border: 1px solid #ffffff;
       }
@@ -1962,25 +1998,29 @@ th, th span {
     color: #1C1C1C;
     outline: none;
     box-shadow: none;
-    &:focus, &:hover  {
+
+    &:focus, &:hover {
       background: transparent;
       border: none;
       outline: none;
       color: #1C1C1C;
       box-shadow: none;
     }
+
     img {
       width: 25px;
       position: relative;
       bottom: 3px;
     }
+
     svg {
-      fill:#000000;
+      fill: #000000;
       width: 25px;
       position: relative;
       bottom: 3px;
+
       &.sun {
-        fill:#ffffff;
+        fill: #ffffff;
       }
     }
   }
@@ -2005,6 +2045,7 @@ th, th span {
   }
 
 }
+
 @media only screen and (min-width: 769px) {
   .navbar {
     padding-top: 7px;
@@ -2145,8 +2186,7 @@ th, th span {
   .rotate-txt {
     left: -80px;
   }
-  .search-item
-  {
+  .search-item {
     display: none;
   }
   .mobile-search {
@@ -2159,7 +2199,7 @@ th, th span {
   .collapse.show {
     display: block !important;
   }
-  .navbar-brand  {
+  .navbar-brand {
 
     width: 75%;
   }
