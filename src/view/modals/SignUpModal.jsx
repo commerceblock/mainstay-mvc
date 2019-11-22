@@ -110,7 +110,7 @@ class SignUpModal extends React.PureComponent {
             isOpen,
         } = this.props;
         return (
-            <Modal isOpen={isOpen} toggle={this.handleModalClose}>
+            <Modal isOpen={isOpen} toggle={this.handleModalClose} className="signup-modal">
 
                 <ModalHeader toggle={this.handleModalClose}>Sign Up</ModalHeader>
 
@@ -120,6 +120,13 @@ class SignUpModal extends React.PureComponent {
                     encType="multipart/form-data"
                 >
                     <ModalBody>
+                        <p>1. Please provide your details below</p>
+                        <p>2. You will receive an email confirmation with a link to KYC verification</p>
+                        <p>3. Perform KYC verification via OnFido</p>
+                        <p>4. You will receive a confirmation email with a link to the payment setup</p>
+                        <p>5. Please provide your payment details</p>
+                        <p>6. You will received your attestation slot via email</p>
+                        <p>7. Start securing your data!</p>
                         <Row form>
                             <Col md={6}>
                                 <FormGroup>
