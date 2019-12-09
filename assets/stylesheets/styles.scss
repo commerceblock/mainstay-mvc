@@ -1856,12 +1856,18 @@ th, th span {
 /*Dark mode New*/
 
 .darkMode {
-  background-color: #3B3F45;
+  background-color: #2f2f2f;
 
-  .page-item.disabled .page-link {
+  .page-item .page-link {
     background-color: #3B3F45;
     color: #ffffff;
   }
+
+  .page-item.disabled .page-link {
+    background-color: #636971;
+    color: #ffffff;
+  }
+
 
   .top-nav {
     background-color: #3B3F45;
