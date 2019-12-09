@@ -6,6 +6,8 @@ const Terms = () => (
             <div className="row">
                 <div className="col-12 fs14">
                     <h4 className="p-2">Terms and Conditions</h4>
+                    <p> Last updated: 09.12.2019
+                    </p>
                     <p><b>1.Introduction and Acceptance.</b><br /> CommerceBlock is pleased to offer you access to its
                         MainStay Services. When we refer to our “Services” in these Terms and Conditions, we mean to
                         include everything — our platform services, all of our programs, features, functions and
@@ -555,7 +557,7 @@ const Terms = () => (
                     <p>
                         <u>17.3 Notices.</u> Except as otherwise permitted in this Agreement, notices under this
                         Agreement shall be in writing and shall be deemed to have been given (i) five (5) business days
-                        after mailing if sent by registered or certified U.S. mail, (ii) when transmitted if sent by
+                        after mailing if sent by registered or certified mail, (ii) when transmitted if sent by
                         email, provided that a copy of the notice is promptly sent by another means specified in this
                         section, or (iii) when delivered if delivered personally or sent by express courier service. All
                         notices will be sent to you at the postal or email address indicated when you create an account
