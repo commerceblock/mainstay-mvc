@@ -21,8 +21,10 @@ import appHistory from './app.history';
 const Root = () => (
     <Router history={appHistory}>
         <div className="top-nav">
-            <div className="container">
-                <TopNavigation />
+            <div className="navigation">
+                <div className="container">
+                    <TopNavigation />
+                </div>
             </div>
             <div className="container main" data-controller="main">
                 <Switch>
