@@ -97,7 +97,7 @@ class Position extends Component {
                             <table width="100%" id="table">
                                 <tr>
                                     <th>Commitment</th>
-                                    <th>TxId</th>
+                                    <th className="head-half-width">TxId</th>
                                     <th className="lastHead">Time</th>
                                 </tr>
                                 <tbody>
