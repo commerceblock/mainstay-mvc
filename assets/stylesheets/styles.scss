@@ -2033,6 +2033,27 @@ th, th span {
 }
 
 
+.position-commitment-table {
+  #table {
+    table-layout: fixed;
+
+    td {
+      .txid, .hash {
+        width: 90%;
+      }
+    }
+
+    th {
+      width: 20vw;
+    }
+
+    th.head-half-width {
+      width: 8vw;
+    }
+  }
+
+}
+
 /*responsive*/
 @media only screen and (max-width: 1350px) {
   .search {
@@ -2389,6 +2410,18 @@ th, th span {
   }
   .home-table table td span {
     margin-left: 0 !important;
+  }
+  .position-commitment-table {
+    #table {
+      table-layout: fixed;
+
+      td {
+
+        .txid, .hash {
+          width: 100%;
+        }
+      }
+    }
   }
 
 }
