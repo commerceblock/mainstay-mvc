@@ -1604,7 +1604,15 @@ th, th span {
 
 
 .customTitleStyle {
-  margin-left: 12px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 29px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  @media (min-width: 992px) {
+    margin-top: 50px;
+  }
 }
 
 .lastHead {
@@ -2410,12 +2418,18 @@ th, th span {
 }
 
 .navigation {
+
+  @media (min-width: 415px) {
+    padding: 20px 0;
+  }
+
   @media (min-width: 1024px) {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 999;
+    padding: 0;
   }
 }
 
@@ -2423,8 +2437,17 @@ th, th span {
   margin-top: 60px;
   min-height: 550px;
 
+  @media (min-width: 992px) {
+    padding-left: 60px;
+  }
+
   .slider-hidden & {
-    margin-top: 0;
+    padding-left: 15px;
+    min-height: auto;
+
+    @media (max-width: 991px) {
+      margin-top: 0;
+    }
   }
 }
 
@@ -2505,6 +2528,7 @@ th, th span {
     opacity: 0;
     visibility: hidden;
     transition: 0.5s;
+    min-height: auto;
   }
 }
 
@@ -2772,7 +2796,10 @@ th, th span {
   display: block;
 
   .slider-hidden & {
-    display: none;
+
+    @media (min-width: 992px) {
+      display: none;
+    }
   }
 }
 
@@ -2795,5 +2822,84 @@ th, th span {
   .slider-hidden & {
     opacity: 0;
     visibility: hidden;
+  }
+}
+
+.sendCommitment {
+  padding-right: 0 !important;
+
+  .slider-hidden & {
+    padding-right: 15px !important;
+  }
+}
+
+.overview-item {
+  flex: 0 50%;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+
+  @media (min-width: 992px) {
+    &:nth-child(2n) {
+      justify-content: flex-end;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    &:nth-child(2n) {
+      div {
+        width: 55%;
+      }
+    }
+  }
+
+  p {
+    margin-bottom: 0;
+    font-size: 14px;
+    line-height: 18px;
+    color: #737373;
+
+    & + p {
+      margin-left: 10px;
+      color: #1C1C1C;
+    }
+  }
+
+  a, strong {
+    font-size: 27px;
+    line-height: 35px;
+    color: #1C1C1C;
+    font-weight: 500;
+  }
+
+  a {
+    text-decoration: underline !important;
+    transition: 0.25s;
+
+    &:hover {
+      color: #3D9155 !important;
+    }
+  }
+
+  &--time {
+    padding-top: 20px;
+    flex: 0 100%;
+  }
+}
+
+.latestattestation, .latestcommitment {
+
+  h4 {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 0;
+  }
+
+  a {
+    &:hover {
+      small {
+        text-decoration: underline;
+      }
+    }
   }
 }

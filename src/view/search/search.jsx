@@ -93,7 +93,7 @@ class Search extends Component {
     render() {
         return (
             <div className="search">
-                <div className="col pl-2 desktopSearch">
+                <div className="col px-0 desktopSearch">
                     {this.renderSearchForm()}
                 </div>
             </div>

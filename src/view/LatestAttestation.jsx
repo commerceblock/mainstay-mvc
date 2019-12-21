@@ -20,7 +20,7 @@ class LatestAttestation extends Component {
       return (
           <div className="column">
               <div className="d-flex align-items-center justify-content-between">
-                  <h4 className="p-2 customTitleStyle ">Latest Attestation</h4>
+                  <h4>Latest Attestation</h4>
                   <Link
                       to={getRoute(routes.attestation)}
                       className="pl-2 keyboard-target non-underline"

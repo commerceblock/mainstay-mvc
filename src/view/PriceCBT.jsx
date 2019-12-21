@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Sockette from 'sockette'
+import Sockette from 'sockette';
+import {Link} from 'react-router-dom';
 
 class PriceCBT extends Component {
   constructor() {
@@ -38,10 +39,10 @@ class PriceCBT extends Component {
 
   render() {
     return (
-        <tr>
-          <th className="align-end">BTC Price</th>
-          <td colSpan="2">{this.state.priceCBT} $</td>
-        </tr>
+      <div className="overview-item">
+        <p>BTC Price</p>
+        <Link to={'/'}>{this.state.priceCBT} USD</Link>
+      </div>
     );
   }
 }

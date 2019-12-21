@@ -201,10 +201,10 @@ class Home extends React.Component {
                   <div className="block-on-slider"><Search/></div>
                   <MainstayInfo/>
               </div>
-              <div className="col-md-12 col-lg-7 m-t-15">
+              <div className="col-md-12 col-lg-7 m-t-15 latestattestation">
                   <LatestAttestation />
               </div>
-              <div className="col-md-12 col-lg-5 m-t-15">
+              <div className="col-md-12 col-lg-5 m-t-15 latestcommitment">
                   <LatestCommitment />
               </div>
               <SignUpModal

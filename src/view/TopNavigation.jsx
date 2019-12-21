@@ -146,12 +146,12 @@ class TopNavigation extends React.Component {
                             <NavItem className="hover-active">
                                 <Link className="nav-link" to={routes.client}>Clients</Link>
                             </NavItem>
-                            <NavItem className="hover-btn-active">
+                            <NavItem className="hover-btn-active sendCommitment">
                                 <Button color="success" onClick={this.toggleCommitmentModal}>
                                     Send Commitment
                                 </Button>
                             </NavItem>
-                            <NavItem className="hover-btn-active none-on-slider px-0">
+                            <NavItem className="hover-btn-active none-on-slider px-lg-0">
                                 <Button color="secondary" onClick={this.toggleSignUpModal}>
                                     Sign Up
                                 </Button>
