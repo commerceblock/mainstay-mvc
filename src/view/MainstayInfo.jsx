@@ -1,5 +1,4 @@
 import React from 'react';
-import PriceCBT from './PriceCBT';
 import LatestAttestationInfo from './LatestAttestationInfo';
 import Sockette from 'sockette';
 
@@ -26,7 +25,6 @@ class MainstayInfo extends React.PureComponent {
 
     message(data) {
         data = JSON.parse(data);
-        console.log('>>>', data);
         if (data.event === 'info') {
             this.ws.send('{"event":"subscribe","channel":"trades","symbol":"tBTCUSD"}');
         }
@@ -58,7 +56,6 @@ class MainstayInfo extends React.PureComponent {
                         <div className="flex-table overflow-info">
                             <table width="100%">
                                 <tbody>
-                                <PriceCBT priceCBT={this.state.priceCBT} />
                                 <LatestAttestationInfo priceCBT={this.state.priceCBT} />
                                 </tbody>
                             </table>

@@ -59,11 +59,15 @@ class LatestAttestationInfo extends Component {
             );
         }
         const {blockhash, txid, time, amount} = data;
-        const amountUsd = ((amount / 100000000) * this.props.priceCBT).toFixed(8);
-        const feeUsd = ((fee / 100000000) * this.props.priceCBT).toFixed(8);
+        const amountUsd = ((amount / 100000000) * this.props.priceCBT).toFixed(5);
+        const feeUsd = ((fee / 100000000) * this.props.priceCBT).toFixed(5);
 
         return (
             <>
+                <tr>
+                    <th className="align-end">BTC Price</th>
+                    <td colSpan="2">{this.props.priceCBT} $</td>
+                </tr>
                 <tr>
                     <th className="align-end">Block Hash</th>
                     <td colSpan="2">
