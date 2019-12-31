@@ -52,7 +52,6 @@ class MainstayInfo extends React.PureComponent {
                         <h4 className="p-2 m-t-30 table-title customTitleStyle ">Overview</h4>
                     </div>
                     <div className="mb-3">
-                        {/*<TotalSupplyBTC/>*/}
                         <div className="flex-table overflow-info">
                             <table width="100%">
                                 <tbody>
