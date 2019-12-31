@@ -8,7 +8,7 @@ class MainstayInfo extends React.PureComponent {
         super(props);
         this.state = {
             channel: 0,
-            priceCBT: 0,
+            priceBTC: 0,
         };
 
         this.ws = new Sockette('wss://api-pub.bitfinex.com/ws/2', {
@@ -34,11 +34,11 @@ class MainstayInfo extends React.PureComponent {
         if (Array.isArray(data)) {
             if (Array.isArray(data[1])) {
                 if (data[0] === this.state.channel) {
-                    this.setState({priceCBT: data[1][0][3]});
+                    this.setState({priceBTC: data[1][0][3]});
                 }
             } else if (data[1] === 'te' || data[1] === 'tu') {
                 if (data[0] === this.state.channel) {
-                    this.setState({priceCBT: data[2][3]});
+                    this.setState({priceBTC: data[2][3]});
                 }
             }
         }
@@ -52,11 +52,11 @@ class MainstayInfo extends React.PureComponent {
                         <h4 className="p-2 m-t-30 table-title customTitleStyle ">Overview</h4>
                     </div>
                     <div className="mb-3">
-                        {/*<TotalSupplyCBT/>*/}
+                        {/*<TotalSupplyBTC/>*/}
                         <div className="flex-table overflow-info">
                             <table width="100%">
                                 <tbody>
-                                <LatestAttestationInfo priceCBT={this.state.priceCBT} />
+                                <LatestAttestationInfo priceBTC={this.state.priceBTC} />
                                 </tbody>
                             </table>
                         </div>

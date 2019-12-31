@@ -89,7 +89,7 @@ function subscribe_channel_price_BTC(client) {
 
 }
 
-function subscribe_channel_price_CBT(client) {
+function subscribe_channel_price_BTC(client) {
 
 }
 
@@ -161,10 +161,6 @@ function unsubscribe_channel_price_BTC(client) {
 
 }
 
-function unsubscribe_channel_price_CBT(client) {
-
-}
-
 
 function subscribe(client, data) {
   if (data.channel === CHANNEL_ATTESTATION)
@@ -177,8 +173,8 @@ function subscribe(client, data) {
     subscribe_channel_merkleproof(client);
   else if (data.channel === CHANNEL_PRICE_BTC)
     subscribe_channel_price_BTC(client);
-  else if (data.channel === CHANNEL_PRICE_CBT)
-    subscribe_channel_price_CBT(client);
+  else if (data.channel === CHANNEL_PRICE_BTC)
+    subscribe_channel_price_BTC(client);
   else
     console.log("ERROR FDP");
 }
@@ -194,8 +190,8 @@ function unsubscribe(client, data) {
     unsubscribe_channel_merkleproof(client, data.id);
   else if (data.channel === CHANNEL_PRICE_BTC)
     unsubscribe_channel_price_BTC(client);
-  else if (data.channel === CHANNEL_PRICE_CBT)
-    unsubscribe_channel_price_CBT(client);
+  else if (data.channel === CHANNEL_PRICE_BTC)
+    unsubscribe_channel_price_BTC(client);
   else
     console.log("ERROR FDP");
 }
