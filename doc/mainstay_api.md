@@ -378,6 +378,45 @@ Get information on an attestation.
 }
 ```
 
+#### Attestation Proof
+
+Get the merkle commitment proof for a specific position and attestation txid.
+
+**request:** https://testnet.mainstay.xyz/api/v1/attestation/proof?position=1&txid=2042562f90a5f8905f9af9931e6274deaa2cce70028821bd4bf3c176bc08f460
+
+*response*
+```
+{
+    "response": {
+        "txid": "2042562f90a5f8905f9af9931e6274deaa2cce70028821bd4bf3c176bc08f460",
+        "merkle_root": "394d281d269493b82820befa7278baa0a836b8af42341c48c9a86681dfceeccd",
+        "commitment": "9a39a34e322e4aa1e6cdc3418b54aa57747106bc75e9e8a02666327a9aada3b7",
+        "ops": [
+            {
+                "append": true,
+                "commitment": "2b49e32e223d4aa1d6cdc3418b54aa57747106bc75e9e8a03666127f8aad43b8"
+            },
+            {
+                "append": true,
+                "commitment": "1fdd8326e34d00097f86815d8b0c951adb4c0b86f00776ca2436b9d08aecc6ec"
+            },
+            {
+                "append": true,
+                "commitment": "24c8288a859847fa7c60255a3968e17d1ea57d28ba485313077013e8db2df913"
+            },
+            {
+                "append": true,
+                "commitment": "af351174026bc8dcc72b8f0a45afc3432cbd3b46d8d7e4df206990da7f6e580f"
+            }
+        ]
+    },
+    "timestamp": 1578302486385,
+    "allowance": {
+        "cost": 5721095
+    }
+}
+```
+
 #### Block
 
 Get information on a bitcoin block if it contains a mainstay attestation.

@@ -21,6 +21,7 @@ const {
     MISSING_PAYLOAD_TOKEN,
     PAYLOAD_TOKEN_ERROR,
     SIGNATURE_INVALID,
+    TXID_UNKNOWN
 } = require('../utils/constants');
 
 const {
@@ -49,7 +50,10 @@ module.exports = {
             if (data.length === 0) {
                 reply_msg(res, {}, startTime);
             } else {
-                reply_msg(res, {merkle_root: data[0].merkle_root, txid: data[0].txid}, startTime);
+                reply_msg(res, {
+                    merkle_root: data[0].merkle_root,
+                    txid: data[0].txid
+                }, startTime);
             }
         } catch (error) {
             reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -215,6 +219,44 @@ module.exports = {
         }
     },
 
+    attestation_proof: async (req, res) => {
+        const startTime = start_time();
+        let position = get_position_arg(req, res, startTime);
+        if (res.headersSent) {
+            return;
+        }
+
+        const txid = get_txid_arg(req, res, startTime);
+        if (res.headersSent) {
+            return;
+        }
+
+        try {
+            const attestation = await models.attestation.findOne({
+                txid: txid
+            });
+            if (!attestation) {
+                return reply_err(res, TXID_UNKNOWN, startTime);
+            }
+            const merkle_root = attestation.merkle_root;
+            const merkleProof = await models.merkleProof.findOne({
+                client_position: position,
+                merkle_root: merkle_root
+            });
+            if (!merkleProof) {
+                return reply_err(res, POSITION_UNKNOWN, startTime);
+            }
+            reply_msg(res, {
+                txid: txid,
+                merkle_root: merkle_root,
+                commitment: merkleProof.commitment,
+                ops: merkleProof.ops
+            }, startTime);
+        } catch (error) {
+            return reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
+    },
+
     commitment_send: async (req, res) => {
         const startTime = start_time();
         let rawRequestData = '';
@@ -259,7 +301,7 @@ module.exports = {
                     return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
                 }
 
-                if (data[0].pubkey && data[0].pubkey !== "") {
+                if (data[0].pubkey && data[0].pubkey !== '') {
                     if (signatureCommitment === undefined) {
                         return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
                     }
@@ -308,7 +350,10 @@ module.exports = {
             }
 
             let index = attestationData.findIndex((item) => item.confirmed === true);
-            if(index === -1) { index = attestationData.length - 1 };
+            if (index === -1) {
+                index = attestationData.length - 1;
+            }
+            ;
 
             reply_msg(res, {
                 attestation: {
@@ -346,7 +391,7 @@ module.exports = {
                 return {
                     position: item.client_position,
                     commitment: item.commitment
-                }
+                };
             });
 
             const response = merkleCommitmentData[0];
@@ -356,7 +401,10 @@ module.exports = {
                 return reply_err(res, 'No attestation found for merkle_root provided', startTime);
             }
             let index = attestationData.findIndex((item) => item.confirmed === true);
-            if(index === -1) { index = attestationData.length - 1 };
+            if (index === -1) {
+                index = attestationData.length - 1;
+            }
+            ;
 
             reply_msg(res, {
                 attestation: {
@@ -419,7 +467,10 @@ module.exports = {
                     });
                 } else {
                     let index = attestationData.findIndex((item) => item.confirmed === true);
-                    if(index === -1) { index = attestationData.length - 1 };
+                    if (index === -1) {
+                        index = attestationData.length - 1;
+                    }
+                    ;
 
                     response['data'].push({
                         commitment: data[itr].commitment,

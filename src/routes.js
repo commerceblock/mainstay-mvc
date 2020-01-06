@@ -19,6 +19,7 @@ function makeApiRoutes(app) {
     router.get('/commitment/latestproof', apiController.commitment_latest_proof);
     router.get('/commitment/verify', apiController.commitment_verify);
     router.get('/commitment/proof', apiController.commitment_proof);
+    router.get('/attestation/proof', apiController.attestation_proof);
     router.get('/commitment/commitment', apiController.commitment_commitment);
     router.get('/merkleroot', apiController.merkleroot);
     router.get('/position', apiController.position);
