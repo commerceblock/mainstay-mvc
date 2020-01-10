@@ -87,7 +87,7 @@ class Position extends Component {
                     </div>
                 </div>
 
-                <div className="row">
+                <div className="row position-commitment-table ">
                     <div className="col-lg-8 col-sm-12">
                         <div className="commitments_title">
                             <h4 className="p-2 m-b-15 m-l-15">Commitments({this.state.totalItemsCount})</h4>
@@ -97,7 +97,8 @@ class Position extends Component {
                             <table width="100%" id="table">
                                 <tr>
                                     <th>Commitment</th>
-                                    <th>Time</th>
+                                    <th className="head-half-width">TxId</th>
+                                    <th className="lastHead">Time</th>
                                 </tr>
                                 <tbody>
                                 {data.map(data => (
@@ -106,6 +107,13 @@ class Position extends Component {
                                             <Link to={getRoute(routes.commitment, {value: data.commitment})}>
                                                 <span className="hash truncate-hash">{data.commitment}</span>
                                             </Link>
+                                        </td>
+                                        <td>
+
+                                             <Link to={getRoute(routes.transation, {value: data.txid})}>
+                                                <span className="hash truncate-hash">{data.txid}</span>
+                                            </Link>
+
                                         </td>
                                         <td><span>{data.date}</span></td>
                                     </tr>
