@@ -90,8 +90,8 @@ class Home extends React.Component {
                 </div>
                 <div className="carousel-cell">
                     <div className="carousel-box">
-                        <div className="container">
-                            <div className="row">
+                        <div className="container px-0">
+                            <div className="row no-gutters">
                               <div className="col-12"><h1>Use Cases</h1></div>
                               <div className="col-6 col-md-4">
                                 <div className="carousel-box__item">
@@ -147,8 +147,8 @@ class Home extends React.Component {
                 </div>
                 <div className="carousel-cell">
                     <div className="carousel-how-it-works">
-                        <div className="container">
-                            <div className="row">
+                        <div className="container px-0">
+                            <div className="row no-gutters">
                               <div className="col-12"><h1>How MainStay works?</h1></div>
                               <div className="col-12 col-md-4">
                                 <p><strong>1. Generate cryptographic hash</strong> of your data</p>
@@ -173,8 +173,8 @@ class Home extends React.Component {
                 </div>
                 <div className="carousel-cell">
                     <div className="carousel-pricing">
-                        <div className="container">
-                            <div className="row">
+                        <div className="container px-0">
+                            <div className="row no-gutters">
                               <div className="col-12"><h1>Sign-up to MainStay and start<br/> generating Your data proofs</h1></div>
                               <div className="col-12 carousel-pricing__price">
                                 <p><p>Flat fee</p><span>£</span><span>20</span><span>/Month</span></p>

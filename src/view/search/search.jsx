@@ -77,7 +77,7 @@ class Search extends Component {
                         placeholder="Search for position, commitment, txid, ..."
                         value={this.state.value} onChange={this.handleChange}
                     />
-                    <img src="search.png" alt="search" className="top-search-icon" />
+                    <img src="search.svg" alt="search" className="top-search-icon" />
                     {
                         isWrongSearchValue &&
                         <div className="search-tooltip ">
