@@ -97,20 +97,26 @@ class LatestAttestationInfo extends Component {
                 </div>
                 <div className="overview-item">
                     <div>
-                        <p>Time</p>
-                        <Link className="truncate-hash">{time}</Link>
+                        <p>Average Fee (BTC)</p>
+                        <strong>{(fee / 100000000).toFixed(8)} BTC</strong>
+                    </div>
+                </div>
+                <div className="overview-item">
+                    <div>
+                        <p>Average Fee (USD)</p>
+                        <strong>{feeUsd} USD</strong>
+                    </div>
+                </div>
+                <div className="overview-item">
+                    <div>
+                        <p>BTC Price</p>
+                        <strong>{(this.props.priceBTC).toFixed(2)} USD</strong>
                     </div>
                 </div>
                 <div className="overview-item">
                     <div>
                         <p>Staychain Balance</p>
-                        <Link className="truncate-hash">{amount / 100000000} BTC</Link>
-                    </div>
-                </div>
-                <div className="overview-item">
-                    <div>
-                        <p>Average Fee</p>
-                        <Link className="truncate-hash">{(fee / 100000000).toFixed(8)} BTC</Link>
+                        <strong>{amount / 100000000} BTC</strong>
                     </div>
                 </div>
             </>
