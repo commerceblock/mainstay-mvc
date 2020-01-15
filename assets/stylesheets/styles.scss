@@ -2939,6 +2939,12 @@ th, th span {
     padding-top: 20px;
     flex: 0 100%;
   }
+
+  .darkMode & {
+    a, p, strong {
+      color: #fff;
+    }
+  }
 }
 
 .latestattestation, .latestcommitment {
@@ -2976,4 +2982,9 @@ th, th span {
 
 div#root {
   background: #EBEBEB;
+
+  .darkMode & {
+    background: #3B3F45;
+    color: #ffffff;
+  }
 }
