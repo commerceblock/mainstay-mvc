@@ -62,10 +62,12 @@ tr, td, tr, li, span, a {
 }
 
 body, html {
-  min-height: 100%;
+  height: 100vh;
   margin: 0;
   padding: 0;
   color: #1C1C1C;
+  background: #EBEBEB;
+  overflow-y: scroll;
 }
 
 a, a:hover {
@@ -1748,7 +1750,7 @@ th, th span {
 }
 
 .container.main {
-  margin-bottom: 7%;
+  margin-bottom: 65px;
 }
 
 
@@ -2693,8 +2695,8 @@ th, th span {
       margin-bottom: 10px;
 
       @media (min-width: 992px) {
-        width: 44px !important;
-        height: 44px;
+        width: 50px !important;
+        height: 50px;
       }
     }
 
@@ -2704,7 +2706,7 @@ th, th span {
       overflow-wrap: break-word;
 
       strong {
-        font-weight: 500;
+        font-weight: 600;
       }
 
       &:last-child {
@@ -2959,5 +2961,19 @@ th, th span {
 .container.main, .navigation .container {
   @media (min-width: 992px) {
     padding: 0 !important;
+    max-width: 1396px !important;
   }
+}
+
+.top-nav, footer {
+  @media (min-width: 992px) {
+    max-width: 1396px !important;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+  }
+}
+
+div#root {
+  background: #EBEBEB;
 }
