@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {getRoute, routes} from "./routes";
+import {getRoute, routes} from './routes';
 import {Link} from 'react-router-dom';
 import apiService from '../helpers/api-service';
+import PropTypes from 'prop-types';
 
 class LatestAttestationInfo extends Component {
     constructor(props) {
@@ -25,12 +26,16 @@ class LatestAttestationInfo extends Component {
                         const feeDiff = data[i + 1].amount - d.amount;
                         // check for diffs larger than zero so that fee sum
                         // is not negative when there is a topup transaction
-                        if (feeDiff > 0)
+                        if (feeDiff > 0) {
                             feeSum += feeDiff;
+                        }
                     }
                 });
 
-                this.setState({data: data[0], fee: feeSum / (data.length - 1)});
+                this.setState({
+                    data: data[0],
+                    fee: feeSum / (data.length - 1)
+                });
             });
     };
 
@@ -54,8 +59,15 @@ class LatestAttestationInfo extends Component {
             );
         }
         const {blockhash, txid, time, amount} = data;
+        const amountUsd = ((amount / 100000000) * this.props.priceBTC).toFixed(2);
+        const feeUsd = ((fee / 100000000) * this.props.priceBTC).toFixed(2);
+
         return (
             <>
+                <tr>
+                    <th className="align-end">BTC Price</th>
+                    <td colSpan="2">{this.props.priceBTC} $</td>
+                </tr>
                 <tr>
                     <th className="align-end">Block Hash</th>
                     <td colSpan="2">
@@ -78,15 +90,19 @@ class LatestAttestationInfo extends Component {
                 </tr>
                 <tr>
                     <th className="align-end">Staychain Balance</th>
-                    <td colSpan="2">{amount / 100000000} BTC</td>
+                    <td colSpan="2">{amount / 100000000} BTC ({amountUsd} $)</td>
                 </tr>
                 <tr>
                     <th className="align-end">Average Fee</th>
-                    <td colSpan="2">{(fee / 100000000).toFixed(8)} BTC</td>
+                    <td colSpan="2">{(fee / 100000000).toFixed(8)} BTC ({feeUsd} $)</td>
                 </tr>
             </>
         );
     }
 }
+
+LatestAttestationInfo.propTypes = {
+    priceBTC: PropTypes.number
+};
 
 export default LatestAttestationInfo;
