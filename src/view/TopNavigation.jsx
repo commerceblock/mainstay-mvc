@@ -161,7 +161,7 @@ class TopNavigation extends React.Component {
                                     <img src="icon-eye.svg" />
                                 </Button>
                             </NavItem>
-                            <NavItem className="hover-btn-active hideMenuItem">
+                            <NavItem className="hover-btn-active hideMenuItem" >
                                 <Button >
                                     {this.getTheme() === 'dark' ?
                                         <div onClick={this.setLight}>

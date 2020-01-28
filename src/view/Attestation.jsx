@@ -51,7 +51,7 @@ class Attestation extends Component {
             return <NotFound message={errorMessage}/>;
         }
         return (
-            <div className="col-lg-8 col-sm-12">
+            <div className="col-lg-8 col-sm-12 attestationPage">
                 <div className="d-flex align-items-center">
                     <h4 className="p-2 m-t-30 m-b-15">Attestations</h4>
                 </div>
@@ -61,7 +61,7 @@ class Attestation extends Component {
                             <th>Txid</th>
                             <th>Merkle Root</th>
                             <th>Confirmed</th>
-                            <th>Time</th>
+                            <th>Time UTC</th>
                         </tr>
                         <tbody>
                         {data.map(({ txid, merkle_root, confirmed, age }) =>

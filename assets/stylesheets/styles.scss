@@ -66,8 +66,6 @@ body, html {
   margin: 0;
   padding: 0;
   color: #1C1C1C;
-  background: #EBEBEB;
-  overflow-y: scroll;
 }
 
 a, a:hover {
@@ -1604,6 +1602,15 @@ th, th span {
   color: #3D9155 !important;
 }
 
+/*.home-content {
+  margin-top: -70px;
+}*/
+
+.carousel-how-it-works ol li {
+  font-size: 12px;
+  line-height: 14px;
+  margin-bottom: 10px;
+}
 
 .customTitleStyle {
   font-size: 22px;
@@ -1660,6 +1667,7 @@ th, th span {
 }
 
 .aboutPage, .privacyPolicyPage, .terms-page {
+
   margin-left: 15px;
   margin-right: 15px;
 }
@@ -1751,6 +1759,7 @@ th, th span {
 
 .container.main {
   margin-bottom: 65px;
+
 }
 
 
@@ -2582,7 +2591,7 @@ th, th span {
   background: #737373;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
-  z-index: 999999999;
+  z-index: 1000;
   padding: 5px 10px;
 }
 
@@ -2967,13 +2976,13 @@ th, th span {
 .container.main, .navigation .container {
   @media (min-width: 992px) {
     padding: 0 !important;
-    max-width: 1396px !important;
+
   }
 }
 
 .top-nav, footer {
   @media (min-width: 992px) {
-    max-width: 1396px !important;
+
     margin: 0 auto;
     left: 0;
     right: 0;
@@ -2987,4 +2996,46 @@ div#root {
     background: #3B3F45;
     color: #ffffff;
   }
+}
+
+.overview-item:first-child div,
+.overview-item:nth-child(2) div {
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 50%;
+}
+.overview-item {
+  display: block;
+}
+.overview-item a, .overview-item strong {
+  font-size: 20px;
+}
+
+.hideMenuItem {
+  display: none;
+}
+
+.privacy-page,
+.terms-page,
+.aboutPage,
+.attestationPage,
+.clientsPage,
+.txid,
+.markleRoot,
+.commitmentPage, .position {
+  padding-top: 50px;
+}
+
+.blockhash {
+  padding-top: 15px;
+}
+
+.navigation.scroll {
+  position: fixed;
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 1px 1px 1px #0000001a;
+  z-index: 10000;
 }

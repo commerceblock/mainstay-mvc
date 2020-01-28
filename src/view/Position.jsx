@@ -63,7 +63,7 @@ class Position extends Component {
         return (
             <>
                 <div className="row">
-                    <div className="col-lg-6 col-sm-12" data-controller="homepageMempool">
+                    <div className="col-lg-6 col-sm-12 position" data-controller="homepageMempool">
 
                         <h4 className="p-2 m-t-30 m-b-15 m-l-15">Client</h4>
                         <div className="flex-table col-md-6 col-sm-12">

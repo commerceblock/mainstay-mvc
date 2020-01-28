@@ -63,7 +63,7 @@ class Home extends React.Component {
 
     render() {
         return (
-            <div className="row mx-0" data-controller="homepageMempool">
+            <div className="row mx-0 home-content" data-controller="homepageMempool">
               <div className="col-12 col-lg-6 px-0 carousel-wrapper">
                 <div className="carousel-toggle" onClick={this.toggleSlider}><img src="icon-eye-close.svg" /></div>
                 <Flickity flickityRef={c => this.flkty = c}
@@ -151,12 +151,17 @@ class Home extends React.Component {
                             <div className="row no-gutters">
                               <div className="col-12"><h1>How MainStay works?</h1></div>
                               <div className="col-12 col-md-4">
-                                <p><strong>1. Generate cryptographic hash</strong> of your data</p>
-                                <p><strong>2. Commit hash</strong> using your slot authentication</p>
-                                <p><strong>3.</strong> Your <strong>hash is attested</strong> into the Bitcoin blockchain</p>
-                                <p><strong>4.</strong> Retrieve <strong>your proof</strong></p>
-                                <p><strong>5.</strong> Compare and verify your <strong>cryptographic proof</strong></p>
-                                <a href="#" className="carousel-how-it-works__button"><img src="icon-whitepaper.svg" /><span>Technical Docs</span></a>
+                                  <ol>
+                                      <li><strong>Generate cryptographic hash</strong> of your data</li>
+                                      <li><strong>Commit hash</strong> using your slot authentication</li>
+                                      <li>Your <strong>hash is attested</strong> into the Bitcoin blockchain</li>
+                                      <li>Retrieve <strong>your proof</strong></li>
+                                      <li>Compare and verify your <strong>cryptographic proof</strong></li>
+                                  </ol>
+
+
+
+                                <a href="https://commerceblock.readthedocs.io/en/latest/mainstay/index.html" target="_blank" className="carousel-how-it-works__button"><img src="icon-whitepaper.svg" /><span>Technical Documentation</span></a>
                               </div>
                               <div className="col-12 col-md-8">
                                 <img src="how-mainstay-works.png" className="w-100 mt-4 mt-md-0"/>

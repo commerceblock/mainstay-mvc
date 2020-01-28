@@ -86,13 +86,13 @@ class LatestAttestationInfo extends Component {
                 <div className="overview-item">
                     <div>
                         <p>Block Hash</p>
-                        <Link to={getRoute(routes.block, {value: blockhash})} className="truncate-hash">{blockhash}</Link>
+                        <Link to={getRoute(routes.block, {value: blockhash})} className="truncate-hash">{blockhash.slice(0, 4)}...{blockhash.slice(-4)}</Link>
                     </div>
                 </div>
                 <div className="overview-item">
                     <div>
                         <p>Latest Txid</p>
-                        <Link to={getRoute(routes.transation, {value: txid})} className="truncate-hash">{txid}</Link>
+                        <Link to={getRoute(routes.transation, {value: txid})} className="truncate-hash">{txid.slice(0, 4)}...{txid.slice(-4)}</Link>
                     </div>
                 </div>
                 <div className="overview-item">
@@ -107,18 +107,18 @@ class LatestAttestationInfo extends Component {
                         <strong>{feeUsd} USD</strong>
                     </div>
                 </div>
-                <div className="overview-item">
-                    <div>
-                        <p>BTC Price</p>
-                        <strong>{(this.props.priceBTC).toFixed(2)} USD</strong>
-                    </div>
-                </div>
-                <div className="overview-item">
-                    <div>
-                        <p>Staychain Balance</p>
-                        <strong>{amount / 100000000} BTC</strong>
-                    </div>
-                </div>
+                {/*<div className="overview-item">*/}
+                {/*    <div>*/}
+                {/*        <p>BTC Price</p>*/}
+                {/*        <strong>{(this.props.priceBTC).toFixed(2)} USD</strong>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+                {/*<div className="overview-item">*/}
+                {/*    <div>*/}
+                {/*        <p>Staychain Balance</p>*/}
+                {/*        <strong>{amount / 100000000} BTC</strong>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
             </>
         );
     }
