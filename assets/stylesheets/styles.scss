@@ -2151,8 +2151,8 @@ th, th span {
     border-color: #6c757d;
     padding: 7px;
   }
-  .logoImg{
-    margin-left:15px;
+  .logoImg {
+    margin-left: 15px;
   }
 
   .bavbar-nav li button {
@@ -2510,9 +2510,13 @@ th, th span {
 }
 
 /* inherit height from parent */
-.carousel { height: 100%; }
+.carousel {
+  height: 100%;
+}
 
-.carousel-cell { height: 100% }
+.carousel-cell {
+  height: 100%
+}
 
 .carousel {
   max-width: 100vw;
@@ -2536,7 +2540,7 @@ th, th span {
       }
     }
 
-    &+ .btn {
+    & + .btn {
       margin-left: 7px;
     }
   }
@@ -2665,7 +2669,7 @@ th, th span {
   h1 {
     font-size: 22px;
     margin-bottom: 20px;
-  } 
+  }
 
   .container {
     max-width: 100% !important;
@@ -2694,13 +2698,13 @@ th, th span {
       padding-left: 5px;
       padding-right: 5px;
       margin-bottom: 10px;
-    } 
+    }
 
     @media (min-width: 992px) {
       padding-left: 5px;
       padding-right: 5px;
       margin-bottom: 10px;
-    } 
+    }
   }
 
   &__item {
@@ -2757,7 +2761,7 @@ th, th span {
   h1 {
     font-size: 22px;
     margin-bottom: 20px;
-  } 
+  }
 
   p {
     font-size: 12px;
@@ -2802,7 +2806,7 @@ th, th span {
     font-size: 22px;
     line-height: 29px;
     margin-bottom: 20px;
-  } 
+  }
 
   &__feature {
     margin-bottom: 0;
@@ -2819,12 +2823,12 @@ th, th span {
       vertical-align: middle;
     }
 
-    &+ .btn {
+    & + .btn {
       min-width: 200px;
       margin-top: 12px;
     }
   }
-    
+
   &__price {
     display: flex;
     justify-content: center;
@@ -2867,6 +2871,10 @@ th, th span {
   .slider-hidden & {
     display: block;
   }
+}
+
+#show-slider-btn.hide.none-on-slider {
+  display: none;
 }
 
 .block-on-slider {
@@ -3020,9 +3028,11 @@ div#root {
   overflow: hidden;
   width: 50%;
 }
+
 .overview-item {
   display: block;
 }
+
 .overview-item a, .overview-item strong {
   font-size: 20px;
 }
@@ -3041,7 +3051,7 @@ div#root {
 .commitmentPage, .position {
   padding-top: 50px;
   @media (max-width: 575px) {
-   padding-top: 0;
+    padding-top: 0;
   }
 }
 
@@ -3062,6 +3072,7 @@ div#root {
   font-size: 18px;
   margin-top: 20px;
 }
+
 .carousel-box h1 {
   font-weight: bold;
 }

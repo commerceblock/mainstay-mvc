@@ -128,6 +128,27 @@ class TopNavigation extends React.Component {
         });
     };
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+
+        if (window.location.pathname !== '/') {
+            document.getElementById('top-search').classList.remove('hide-on-slider');
+            document.getElementById('show-slider-btn').classList.remove('hide');
+            document.getElementById('show-slider-btn').classList.add('hide')
+
+
+        } else {
+            document.getElementById('show-slider-btn').classList.remove('hide');
+            document.getElementById('top-search').classList.remove('hide-on-slider');
+            document.getElementById('top-search').classList.add('hide-on-slider')
+        }
+    }
+
+    componentDidMount() {
+        if (window.location.pathname !== '/') {
+            document.getElementById('top-search').classList.remove('hide-on-slider')
+        }
+    }
+
     render() {
         return (
             <>
@@ -136,7 +157,7 @@ class TopNavigation extends React.Component {
                     <NavbarToggler onClick={this.toggleNavbarHandler}/>
                     <Collapse isOpen={this.state.isNavbarOpened} navbar>
                         <Nav className="ml-auto d-flex justify-content-end" navbar>
-                            <NavItem className="search-item hide-on-slider">
+                            <NavItem className="search-item hide-on-slider" id="top-search">
                                 <Search/>
                             </NavItem>
                             <NavItem className="hover-active">
@@ -156,22 +177,25 @@ class TopNavigation extends React.Component {
                                     Sign Up
                                 </Button>
                             </NavItem>
-                            <NavItem className="hover-btn-active none-on-slider">
+                            <NavItem className="hover-btn-active none-on-slider" id="show-slider-btn">
                                 <Button color="secondary" onClick={this.toggleSlider}>
-                                    <img src="icon-eye.svg" />
+                                    <img src="icon-eye.svg"/>
                                 </Button>
                             </NavItem>
-                            <NavItem className="hover-btn-active hideMenuItem" >
-                                <Button >
+                            <NavItem className="hover-btn-active hideMenuItem">
+                                <Button>
                                     {this.getTheme() === 'dark' ?
                                         <div onClick={this.setLight}>
-                                            <svg className="sun" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 1000 1000" >
-                                                <path d="M815.2 499.7c0-42.7-8.3-83.4-24.9-122.3-16.6-38.8-39-72.4-67.3-100.7-28.3-28.3-61.8-50.7-100.7-67.3-38.9-16.6-79.6-24.9-122.3-24.9s-83.4 8.3-122.3 24.9c-38.8 16.6-72.4 39-100.7 67.3-28.3 28.3-50.7 61.8-67.3 100.7-16.6 38.9-24.9 79.6-24.9 122.3s8.3 83.4 24.9 122.3c16.6 38.9 39 72.4 67.3 100.7 28.3 28.3 61.8 50.7 100.7 67.3 38.9 16.6 79.6 24.9 122.3 24.9s83.4-8.3 122.3-24.9c38.8-16.6 72.4-39 100.7-67.3 28.3-28.3 50.7-61.8 67.3-100.7 16.6-38.8 24.9-79.6 24.9-122.3zm151 151.6c-1.5 5.5-5.1 9.1-10.9 10.9l-159.8 52.5v167.4c0 5.8-2.4 10.6-7.1 14.2-5.5 3.6-10.8 4.4-15.9 2.2l-159.8-51.4-98.5 135.7c-3.6 4.7-8.4 7.1-14.2 7.1s-10.6-2.4-14.2-7.1l-98.5-135.7-159.8 51.4c-5.1 2.2-10.4 1.5-15.9-2.2-4.7-3.6-7.1-8.4-7.1-14.2V714.8L44.7 662.2c-5.8-1.8-9.5-5.5-10.9-10.9-1.8-6.2-1.1-11.5 2.2-15.9l98.5-135.7L36 364c-3.3-4.7-4-10-2.2-15.9 1.5-5.5 5.1-9.1 10.9-10.9l159.8-52.5V117.2c0-5.8 2.4-10.6 7.1-14.2 5.5-3.6 10.8-4.4 15.9-2.2l159.8 51.4 98.5-135.7c3.3-4.4 8-6.6 14.2-6.6s10.9 2.2 14.2 6.6l98.5 135.7 159.8-51.4c5.1-2.2 10.4-1.5 15.9 2.2 4.7 3.6 7.1 8.4 7.1 14.2v167.4l159.8 52.5c5.8 1.8 9.5 5.5 10.9 10.9 1.8 5.8 1.1 11.1-2.2 15.9l-98.5 135.7L964 635.4c3.3 4.4 4 9.7 2.2 15.9z"></path>
+                                            <svg className="sun" xmlns="http://www.w3.org/2000/svg" x="0" y="0"
+                                                 viewBox="0 0 1000 1000">
+                                                <path
+                                                    d="M815.2 499.7c0-42.7-8.3-83.4-24.9-122.3-16.6-38.8-39-72.4-67.3-100.7-28.3-28.3-61.8-50.7-100.7-67.3-38.9-16.6-79.6-24.9-122.3-24.9s-83.4 8.3-122.3 24.9c-38.8 16.6-72.4 39-100.7 67.3-28.3 28.3-50.7 61.8-67.3 100.7-16.6 38.9-24.9 79.6-24.9 122.3s8.3 83.4 24.9 122.3c16.6 38.9 39 72.4 67.3 100.7 28.3 28.3 61.8 50.7 100.7 67.3 38.9 16.6 79.6 24.9 122.3 24.9s83.4-8.3 122.3-24.9c38.8-16.6 72.4-39 100.7-67.3 28.3-28.3 50.7-61.8 67.3-100.7 16.6-38.8 24.9-79.6 24.9-122.3zm151 151.6c-1.5 5.5-5.1 9.1-10.9 10.9l-159.8 52.5v167.4c0 5.8-2.4 10.6-7.1 14.2-5.5 3.6-10.8 4.4-15.9 2.2l-159.8-51.4-98.5 135.7c-3.6 4.7-8.4 7.1-14.2 7.1s-10.6-2.4-14.2-7.1l-98.5-135.7-159.8 51.4c-5.1 2.2-10.4 1.5-15.9-2.2-4.7-3.6-7.1-8.4-7.1-14.2V714.8L44.7 662.2c-5.8-1.8-9.5-5.5-10.9-10.9-1.8-6.2-1.1-11.5 2.2-15.9l98.5-135.7L36 364c-3.3-4.7-4-10-2.2-15.9 1.5-5.5 5.1-9.1 10.9-10.9l159.8-52.5V117.2c0-5.8 2.4-10.6 7.1-14.2 5.5-3.6 10.8-4.4 15.9-2.2l159.8 51.4 98.5-135.7c3.3-4.4 8-6.6 14.2-6.6s10.9 2.2 14.2 6.6l98.5 135.7 159.8-51.4c5.1-2.2 10.4-1.5 15.9 2.2 4.7 3.6 7.1 8.4 7.1 14.2v167.4l159.8 52.5c5.8 1.8 9.5 5.5 10.9 10.9 1.8 5.8 1.1 11.1-2.2 15.9l-98.5 135.7L964 635.4c3.3 4.4 4 9.7 2.2 15.9z"></path>
                                             </svg>
                                         </div>
-                                         :  <div onClick={this.setDark}>
-                                            <svg  xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 1000 1000">
-                                                <path d="M525.3 989.5C241.2 989.5 10 758.3 10 474.1c0-196.8 109.6-373.6 285.9-461.4 7.9-3.9 17.5-2.4 23.7 3.8 6.2 6.2 7.9 15.8 4 23.7-32.2 65.4-48.5 135.7-48.5 208.9 0 261.4 212.7 474.1 474.1 474.1 74 0 145-16.7 211-49.5 7.9-3.9 17.5-2.4 23.7 3.8 6.3 6.3 7.9 15.8 3.9 23.7C900.5 879 723.3 989.5 525.3 989.5z"></path>
+                                        : <div onClick={this.setDark}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 1000 1000">
+                                                <path
+                                                    d="M525.3 989.5C241.2 989.5 10 758.3 10 474.1c0-196.8 109.6-373.6 285.9-461.4 7.9-3.9 17.5-2.4 23.7 3.8 6.2 6.2 7.9 15.8 4 23.7-32.2 65.4-48.5 135.7-48.5 208.9 0 261.4 212.7 474.1 474.1 474.1 74 0 145-16.7 211-49.5 7.9-3.9 17.5-2.4 23.7 3.8 6.3 6.3 7.9 15.8 3.9 23.7C900.5 879 723.3 989.5 525.3 989.5z"></path>
                                             </svg>
                                         </div>
                                     }
