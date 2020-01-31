@@ -69,7 +69,7 @@ class LatestAttestationInfo extends Component {
                             <strong>0.34 USD</strong>
                         </div>
                     </div>
-                    
+
                     <div className="overview-item overview-item--time">
                         <p>Time</p>
                         <p>10:28:05 10/29/2019 UTC</p>
@@ -86,13 +86,15 @@ class LatestAttestationInfo extends Component {
                 <div className="overview-item">
                     <div>
                         <p>Block Hash</p>
-                        <Link to={getRoute(routes.block, {value: blockhash})} className="truncate-hash">{blockhash.slice(0, 4)}...{blockhash.slice(-4)}</Link>
+                        <Link to={getRoute(routes.block, {value: blockhash})}
+                              className="truncate-hash">{blockhash.slice(0, 4)}...{blockhash.slice(-4)}</Link>
                     </div>
                 </div>
                 <div className="overview-item">
                     <div>
                         <p>Latest Txid</p>
-                        <Link to={getRoute(routes.transation, {value: txid})} className="truncate-hash">{txid.slice(0, 4)}...{txid.slice(-4)}</Link>
+                        <Link to={getRoute(routes.transation, {value: txid})}
+                              className="truncate-hash">{txid.slice(0, 4)}...{txid.slice(-4)}</Link>
                     </div>
                 </div>
                 <div className="overview-item">
@@ -107,6 +109,13 @@ class LatestAttestationInfo extends Component {
                         <strong>{feeUsd} USD</strong>
                     </div>
                 </div>
+                <div className="overview-item">
+                    <div>
+                        <p>Time</p>
+                        <strong>{time}</strong>
+                    </div>
+                </div>
+
                 {/*<div className="overview-item">*/}
                 {/*    <div>*/}
                 {/*        <p>BTC Price</p>*/}
