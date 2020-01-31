@@ -22,7 +22,7 @@ class Root extends React.Component {
     constructor() {
         super();
         this.state = {
-            isScrolled: false,
+            isScrolled: false
         };
     }
 

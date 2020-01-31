@@ -1758,7 +1758,7 @@ th, th span {
 }
 
 .container.main {
-  margin-bottom: 65px;
+  margin-bottom: 100px;
 
 }
 
@@ -2090,6 +2090,7 @@ th, th span {
     display: block;
   }
 
+
 }
 
 @media only screen and (min-width: 769px) {
@@ -2143,6 +2144,15 @@ th, th span {
     color: inherit;
     font-size: 1rem;
     padding-left: 0;
+  }
+  .none-on-slider.nav-item .btn-secondary {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+    padding: 7px;
+  }
+  .logoImg{
+    margin-left:15px;
   }
 
   .bavbar-nav li button {
@@ -2442,6 +2452,7 @@ th, th span {
     }
   }
 
+
 }
 
 @media only screen and (max-width: 320px) {
@@ -2483,6 +2494,9 @@ th, th span {
 
   @media (min-width: 992px) {
     padding-left: 60px;
+  }
+  @media (max-width: 575px) {
+    min-height: auto;
   }
 
   .slider-hidden & {
@@ -3026,6 +3040,9 @@ div#root {
 .markleRoot,
 .commitmentPage, .position {
   padding-top: 50px;
+  @media (max-width: 575px) {
+   padding-top: 0;
+  }
 }
 
 .blockhash {
@@ -3034,8 +3051,27 @@ div#root {
 
 .navigation.scroll {
   position: fixed;
+  top: 0;
   width: 100%;
   background-color: #ffffff;
   box-shadow: 0 1px 1px 1px #0000001a;
   z-index: 10000;
+}
+
+.carousel-how-it-works h1 {
+  font-size: 18px;
+  margin-top: 20px;
+}
+.carousel-box h1 {
+  font-weight: bold;
+}
+
+.carousel-pricing__feature {
+  width: 175px;
+  text-align: left;
+  margin: 0 auto;
+}
+
+.error {
+  padding-top: 80px;
 }
