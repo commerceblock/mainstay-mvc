@@ -27,9 +27,7 @@ class Root extends React.Component {
     }
 
     handleScroll = (event) => {
-            console.log(window.pageYOffset);
         if (window.pageYOffset >= 5) {
-            console.log(window.pageYOffset);
 
             this.setState({
                 isScrolled: true
@@ -42,7 +40,6 @@ class Root extends React.Component {
     };
 
     componentDidMount ()  {
-        console.log(window.pageYOffset);
         window.addEventListener('scroll', this.handleScroll);
     };
 

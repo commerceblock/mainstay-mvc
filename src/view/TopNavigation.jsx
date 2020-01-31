@@ -46,7 +46,7 @@ class TopNavigation extends React.Component {
 
     };
 
-    setLight = () =>  {
+    setLight = () => {
         this.setTheme('light');
         this.setState({theme_name: !this.state.theme_name});
         const localData = localStorage.setItem("preference-theme", 'light')
@@ -76,10 +76,10 @@ class TopNavigation extends React.Component {
     };
 
     toggleSlider = () => {
-        if(document.querySelector('body').classList.contains('slider-hidden')) {
-          document.querySelector('body').classList.remove('slider-hidden');
+        if (document.querySelector('body').classList.contains('slider-hidden')) {
+            document.querySelector('body').classList.remove('slider-hidden');
         } else {
-          document.querySelector('body').classList.add('slider-hidden');
+            document.querySelector('body').classList.add('slider-hidden');
         }
     };
 
@@ -128,6 +128,12 @@ class TopNavigation extends React.Component {
         });
     };
 
+    hideMobileMenu = (event) => {
+        this.setState({
+            isNavbarOpened: false
+        });
+    };
+
     componentDidUpdate(prevProps, prevState, snapshot) {
 
         if (window.location.pathname !== '/') {
@@ -144,9 +150,14 @@ class TopNavigation extends React.Component {
     }
 
     componentDidMount() {
+        document.body.addEventListener('click', this.hideMobileMenu);
         if (window.location.pathname !== '/') {
             document.getElementById('top-search').classList.remove('hide-on-slider')
         }
+    }
+
+    componentWillUnmount() {
+        document.body.removeEventListener('click', this.hideMobileMenu);
     }
 
     render() {
