@@ -28,7 +28,7 @@ const Footer = () => (
                 <Link to="/" className="logo">
                     <img src="favicon.png" alt="favicon" />
                 </Link>
-                <span>© 2019 CommerceBlock Limited. All rights reserved.</span>
+                <span>© 2020 CommerceBlock Limited. All rights reserved.</span>
                 <div className="powered-by">
                     <span>Powered by </span>
                     <a href="https://www.securosys.com/en/"><img src="securosys.png" alt="logo" /></a>

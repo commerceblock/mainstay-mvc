@@ -1,0 +1,28 @@
+<svg id="Proof_Of_Existence_64" data-name="Proof Of Existence 64" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <rect id="Rectangle_388" data-name="Rectangle 388" width="64" height="64" fill="#fff" opacity="0"/>
+  <rect id="Rectangle_389" data-name="Rectangle 389" width="6" height="6" transform="translate(11 41)" fill="#fff"/>
+  <rect id="Rectangle_390" data-name="Rectangle 390" width="6" height="6" transform="translate(7 48)" fill="#fff"/>
+  <rect id="Rectangle_391" data-name="Rectangle 391" width="6" height="6" transform="translate(19 41)" fill="#fff"/>
+  <rect id="Rectangle_392" data-name="Rectangle 392" width="6" height="6" transform="translate(15 48)" fill="#fff"/>
+  <rect id="Rectangle_393" data-name="Rectangle 393" width="6" height="6" transform="translate(23 48)" fill="#fff"/>
+  <rect id="Rectangle_394" data-name="Rectangle 394" width="5" height="6" transform="translate(27 41)" fill="#fff"/>
+  <rect id="Rectangle_395" data-name="Rectangle 395" width="2" height="6" transform="translate(7 41)" fill="#fff"/>
+  <circle id="Ellipse_8" data-name="Ellipse 8" cx="14" cy="14" r="14" transform="translate(18 7)" fill="#fff"/>
+  <path id="Path_383" data-name="Path 383" d="M7,42H8v4H7v1H9V41H7Z" fill="#3d9155"/>
+  <path id="Path_384" data-name="Path 384" d="M17,47V41H11v6Zm-5-5h4v4H12Z" fill="#3d9155"/>
+  <path id="Path_385" data-name="Path 385" d="M25,41H19v6h6Zm-1,5H20V42h4Z" fill="#3d9155"/>
+  <rect id="Rectangle_396" data-name="Rectangle 396" width="6" height="6" transform="translate(35 41)" fill="#3d9155"/>
+  <rect id="Rectangle_397" data-name="Rectangle 397" width="6" height="6" transform="translate(43 41)" fill="#3d9155"/>
+  <rect id="Rectangle_398" data-name="Rectangle 398" width="6" height="6" transform="translate(51 41)" fill="#3d9155"/>
+  <path id="Path_386" data-name="Path 386" d="M7,48v6h6V48Zm5,5H8V49h4Z" fill="#3d9155"/>
+  <path id="Path_387" data-name="Path 387" d="M15,48v6h6V48Zm5,5H16V49h4Z" fill="#3d9155"/>
+  <path id="Path_388" data-name="Path 388" d="M23,48v6h6V48Zm5,5H24V49h4Z" fill="#3d9155"/>
+  <path id="Path_389" data-name="Path 389" d="M37,48H33V47h0V41h0V38H31v3H27v6h4V57h2V54h4Zm-9-6h3v4H28Z" fill="#3d9155"/>
+  <rect id="Rectangle_399" data-name="Rectangle 399" width="6" height="6" transform="translate(39 48)" fill="#3d9155"/>
+  <rect id="Rectangle_400" data-name="Rectangle 400" width="6" height="6" transform="translate(47 48)" fill="#3d9155"/>
+  <rect id="Rectangle_401" data-name="Rectangle 401" width="2" height="6" transform="translate(55 48)" fill="#3d9155"/>
+  <path id="Path_390" data-name="Path 390" d="M32,36A15,15,0,1,0,17,21,15,15,0,0,0,32,36ZM32,8A13,13,0,1,1,19,21,13,13,0,0,1,32,8Z" fill="#3d9155"/>
+  <path id="Path_391" data-name="Path 391" d="M34,21.5H44v-1H34A1.5,1.5,0,0,1,32.5,19V9h-1V19A2.5,2.5,0,0,0,34,21.5Z" fill="#3d9155"/>
+  <rect id="Rectangle_402" data-name="Rectangle 402" width="1" height="2" transform="translate(31.5 31)" fill="#3d9155"/>
+  <rect id="Rectangle_403" data-name="Rectangle 403" width="2" height="1" transform="translate(20 20.5)" fill="#3d9155"/>
+</svg>

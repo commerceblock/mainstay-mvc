@@ -22,7 +22,7 @@ const {
     reply_msg,
 } = require('../utils/controller_helpers');
 
-const DATE_FORMAT = 'HH:mm:ss L z';
+const DATE_FORMAT = 'HH:mm:ss L';
 
 module.exports = {
     ctrl_latest_attestation: async (req, res) => {
@@ -59,7 +59,7 @@ module.exports = {
                 txid: item.txid,
                 merkle_root: item.merkle_root,
                 confirmed: item.confirmed,
-                age: (now.toDateString() === item.inserted_at.toDateString()) ? moment.utc(item.inserted_at).format('HH:mm:ss z') : moment.utc(item.inserted_at).format(DATE_FORMAT)
+                age: (now.toDateString() === item.inserted_at.toDateString()) ? moment.utc(item.inserted_at).format('HH:mm:ss') : moment.utc(item.inserted_at).format(DATE_FORMAT)
             }));
 
             res.json(response);

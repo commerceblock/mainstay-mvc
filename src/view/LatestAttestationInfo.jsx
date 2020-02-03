@@ -45,16 +45,35 @@ class LatestAttestationInfo extends Component {
         if (!data) {
             return (
                 <>
-                    <tr>
-                        <td>
-                            <div className="mb-3 flex-table">
-                                <div className="d-flex justify-content-end header">
-                                    <span className="lh1rem mr-auto">Block Hash</span>
-                                    <span className="lh1rem text-right ml-1"></span>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
+                    <div className="overview-item">
+                        <div>
+                            <p>Block Hash</p>
+                            <Link to={'/'} className="truncate-hash">f072…e1c8</Link>
+                        </div>
+                    </div>
+                    <div className="overview-item">
+                        <div>
+                            <p>Latest Txid</p>
+                            <Link to={'/'} className="truncate-hash">f072…e1c8</Link>
+                        </div>
+                    </div>
+                    <div className="overview-item">
+                        <div>
+                            <p>Average Fee (BTC)</p>
+                            <strong>0.00003584 BTC</strong>
+                        </div>
+                    </div>
+                    <div className="overview-item">
+                        <div>
+                            <p>Average Fee (USD)</p>
+                            <strong>0.34 USD</strong>
+                        </div>
+                    </div>
+
+                    <div className="overview-item overview-item--time">
+                        <p>Time</p>
+                        <p>10:28:05 10/29/2019 UTC</p>
+                    </div>
                 </>
             );
         }
@@ -64,38 +83,51 @@ class LatestAttestationInfo extends Component {
 
         return (
             <>
-                <tr>
-                    <th className="align-end">BTC Price</th>
-                    <td colSpan="2">{this.props.priceBTC} $</td>
-                </tr>
-                <tr>
-                    <th className="align-end">Block Hash</th>
-                    <td colSpan="2">
-                        <Link to={getRoute(routes.block, {value: blockhash})}>
-                            <span className="hash truncate-hash">{blockhash}</span>
-                        </Link>
-                    </td>
-                </tr>
-                <tr>
-                    <th className="align-end">Latest Txid</th>
-                    <td colSpan="2">
-                        <Link to={getRoute(routes.transation, {value: txid})}>
-                            <span className="hash truncate-hash">{txid}</span>
-                        </Link>
-                    </td>
-                </tr>
-                <tr>
-                    <th className="align-end">Time</th>
-                    <td colSpan="2">{time}</td>
-                </tr>
-                <tr>
-                    <th className="align-end">Staychain Balance</th>
-                    <td colSpan="2">{amount / 100000000} BTC ({amountUsd} $)</td>
-                </tr>
-                <tr>
-                    <th className="align-end">Average Fee</th>
-                    <td colSpan="2">{(fee / 100000000).toFixed(8)} BTC ({feeUsd} $)</td>
-                </tr>
+                <div className="overview-item">
+                    <div>
+                        <p>Block Hash</p>
+                        <Link to={getRoute(routes.block, {value: blockhash})}
+                              className="truncate-hash">{blockhash.slice(0, 4)}...{blockhash.slice(-4)}</Link>
+                    </div>
+                </div>
+                <div className="overview-item">
+                    <div>
+                        <p>Latest Txid</p>
+                        <Link to={getRoute(routes.transation, {value: txid})}
+                              className="truncate-hash">{txid.slice(0, 4)}...{txid.slice(-4)}</Link>
+                    </div>
+                </div>
+                <div className="overview-item">
+                    <div>
+                        <p>Average Fee (BTC)</p>
+                        <strong>{(fee / 100000000).toFixed(8)} BTC</strong>
+                    </div>
+                </div>
+                <div className="overview-item">
+                    <div>
+                        <p>Average Fee (USD)</p>
+                        <strong>{feeUsd} USD</strong>
+                    </div>
+                </div>
+                <div className="overview-item">
+                    <div>
+                        <p>Time (UTC)</p>
+                        <strong>{time}</strong>
+                    </div>
+                </div>
+
+                {/*<div className="overview-item">*/}
+                {/*    <div>*/}
+                {/*        <p>BTC Price</p>*/}
+                {/*        <strong>{(this.props.priceBTC).toFixed(2)} USD</strong>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+                {/*<div className="overview-item">*/}
+                {/*    <div>*/}
+                {/*        <p>Staychain Balance</p>*/}
+                {/*        <strong>{amount / 100000000} BTC</strong>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
             </>
         );
     }

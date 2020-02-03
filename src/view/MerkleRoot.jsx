@@ -47,9 +47,9 @@ class MerkleRoot extends Component {
         return (
             <>
                 <div className="row">
-                    <div className="col-lg-7 col-sm-12" data-controller="homepageMempool">
+                    <div className="col-lg-7 col-sm-12 markleRoot" data-controller="homepageMempool">
                         <h4 className="p-2 m-t-30 m-b-15 m-l-15">Merkle Root</h4>
-                        <div className="flex-table">
+                        <div className="flex-table m-l-15">
                             <table width="100%" className="fw-500">
                                 <tbody>
                                 <tr>
@@ -87,7 +87,7 @@ class MerkleRoot extends Component {
                         <div className="commitments_title">
                             <h4 className="p-2 m-t-30 m-b-15 m-l-15">Commitments ({merkle_commitment.length})</h4>
                         </div>
-                        <div className="mb-4 flex-table">
+                        <div className="mb-4 flex-table m-l-15">
                             <table width="100%">
                                 <thead>
                                 <tr className="head-table-row">
