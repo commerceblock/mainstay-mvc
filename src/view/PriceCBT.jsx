@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import Sockette from 'sockette';
 import {Link} from 'react-router-dom';
 
-class PriceCBT extends Component {
+class PriceBTC extends Component {
   constructor() {
     super();
     this.state = {
       channel: 0,
-      priceCBT: 0,
+      priceBTC: 0,
       ws: new Sockette('wss://api-pub.bitfinex.com/ws/2', {
         timeout: 5e3,
         maxAttempts: 10,
@@ -30,10 +30,10 @@ class PriceCBT extends Component {
     if (Array.isArray(data)) {
       if (Array.isArray(data[1])) {
         if (data[0] === this.state.channel)
-          this.setState({priceCBT: data[1][0][3]});
+          this.setState({priceBTC: data[1][0][3]});
       } else if (data[1] === 'te' || data[1] === 'tu')
         if (data[0] === this.state.channel)
-          this.setState({priceCBT: data[2][3]});
+          this.setState({priceBTC: data[2][3]});
     }
   }
 
@@ -41,10 +41,10 @@ class PriceCBT extends Component {
     return (
       <div className="overview-item">
         <p>BTC Price</p>
-        <Link to={'/'}>{this.state.priceCBT} USD</Link>
+        <Link to={'/'}>{this.state.priceBTC} USD</Link>
       </div>
     );
   }
 }
 
-export default PriceCBT;
+export default PriceBTC;

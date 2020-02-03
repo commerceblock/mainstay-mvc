@@ -111,7 +111,7 @@ class LatestAttestationInfo extends Component {
                 </div>
                 <div className="overview-item">
                     <div>
-                        <p>Time</p>
+                        <p>Time (UTC)</p>
                         <strong>{time}</strong>
                     </div>
                 </div>

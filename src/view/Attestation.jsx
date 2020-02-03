@@ -61,7 +61,7 @@ class Attestation extends Component {
                             <th>Txid</th>
                             <th>Merkle Root</th>
                             <th>Confirmed</th>
-                            <th>Time UTC</th>
+                            <th>Time (UTC)</th>
                         </tr>
                         <tbody>
                         {data.map(({ txid, merkle_root, confirmed, age }) =>
