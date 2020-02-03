@@ -77,7 +77,7 @@ class Search extends Component {
                         placeholder="Search for position, commitment, txid, ..."
                         value={this.state.value} onChange={this.handleChange}
                     />
-                    <img src="search.png" alt="search" className="top-search-icon" />
+                    <img src="search.svg" alt="search" className="top-search-icon" />
                     {
                         isWrongSearchValue &&
                         <div className="search-tooltip ">
@@ -93,7 +93,7 @@ class Search extends Component {
     render() {
         return (
             <div className="search">
-                <div className="col pl-2 desktopSearch">
+                <div className="col px-0 desktopSearch">
                     {this.renderSearchForm()}
                 </div>
             </div>

@@ -46,7 +46,7 @@ class Transaction extends Component {
         const {attestation: {txid, merkle_root, confirmed, inserted_at}, attestationInfo: {amount, blockhash}} = data;
         return (
             <div className="row" data-controller="homepageMempool">
-                <div className="col-lg-7 col-sm-12">
+                <div className="col-lg-7 col-sm-12 txid">
                     <h4 className="p-2 m-t-30 m-b-15 m-l-15">Attestation</h4>
                     <div className="flex-table">
                         <table className="main-second-position-block" width="100%">
