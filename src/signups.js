@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const mongoose = require('mongoose');
 const env = require('../src/env');
+const models = require('../src/models/models');
 
 function connect_mongo() {
     let url = 'mongodb://';
