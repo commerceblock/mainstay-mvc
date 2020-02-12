@@ -73,7 +73,7 @@ const schemaClientSignup = new Schema({
     pubkey: String,
     status: {
         type: String,
-        enum: ['new', 'in_kyc', 'sent_kyc', 'kyc_ok'],
+        enum: ['new', 'start_kyc', 'sent_kyc', 'kyc_ok'],
         default: 'new'
     }
 }, {collection: 'ClientSignup'});
