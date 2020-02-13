@@ -38,6 +38,10 @@ module.exports = {
     sign_up: {
         admin_email: process.env.ADMIN_EMAIL
     },
+    kyc: {
+        url: process.env.KYC_URL,
+        token: process.env.KYC_TOKEN
+    },
     admin: {
         login: process.env.ADMIN_LOGIN,
         password: adminPassword
