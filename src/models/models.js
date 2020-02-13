@@ -70,7 +70,13 @@ const schemaClientSignup = new Schema({
     last_name: String,
     email: String,
     company: String,
-    pubkey: String
+    pubkey: String,
+    status: {
+        type: String,
+        enum: ['new', 'start_kyc', 'sent_kyc', 'kyc_ok'],
+        default: 'new'
+    },
+    kyc_id: String
 }, {collection: 'ClientSignup'});
 schemaClientSignup.index({'email': 1}, {unique: true});
 
