@@ -65,20 +65,25 @@ async function do_work() {
 
         // Then poll the clientSignup collection for new signups
         setInterval(async function() {
-            signup = await models.clientSignup.findOneAndUpdate(
-                { status: 'new' }, { status: 'start_kyc'});
-            if (signup) {
-                console.log('New signup found: ' + signup.first_name
-                    + ' ' + signup.last_name);
+            try {
+                signup = await models.clientSignup.findOneAndUpdate(
+                    { status: 'new' }, { status: 'start_kyc'});
+                if (signup) {
+                    console.log('New signup found: ' + signup.first_name
+                        + ' ' + signup.last_name);
 
-                kyc_id = await send_kyc(signup);
-                console.log('Kyc id: ' + kyc_id);
+                    kyc_id = await send_kyc(signup);
+                    console.log('KYC id: ' + kyc_id);
 
-                signup.status = 'sent_kyc';
-                signup.kyc_id = kyc_id;
-                await signup.save();
-                console.log(signup);
+                    signup.status = 'sent_kyc';
+                    signup.kyc_id = kyc_id;
+                    await signup.save();
+                }
+            } catch (error) {
+                console.error(error);
+                process.exit(1);
             }
+
         }, 1000);
     });
 }
