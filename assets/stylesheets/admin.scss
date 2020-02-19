@@ -16,3 +16,17 @@ h4 {
   margin-bottom: 7em;
   margin-top: 7em;
 }
+
+.client-signup-list {
+  .public-key-td {
+    max-width: 120px;
+    white-space: normal;
+    word-break: break-all;
+  }
+
+  .status-dropdown {
+    min-width: 100px !important;
+  }
+}
+
+

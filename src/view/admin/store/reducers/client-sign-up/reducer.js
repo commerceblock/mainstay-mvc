@@ -1,6 +1,9 @@
 import * as types from './types';
 
-const defaultState = {items: []};
+const defaultState = {
+    items: [],
+    statuses: []
+};
 
 function clientSignUp(state = defaultState, action) {
     switch (action.type) {
@@ -15,7 +18,8 @@ function clientSignUp(state = defaultState, action) {
             return {
                 ...state,
                 loading: false,
-                items: [...action.payload],
+                items: [...action.payload.clientSignups],
+                statuses: [...action.payload.statuses],
                 error: null
             };
 
@@ -24,6 +28,16 @@ function clientSignUp(state = defaultState, action) {
                 ...state,
                 loading: false,
                 items: [],
+                error: action.payload
+            };
+
+        case types.UPDATE_STATUS_DONE:
+            const item = state.items.find(item => item._id === action.payload._id);
+            item.status = action.payload.status;
+            return {
+                ...state,
+                loading: false,
+                items: [...state.items],
                 error: action.payload
             };
 
