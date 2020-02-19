@@ -75,6 +75,9 @@ class SendCommitmentModal extends React.PureComponent {
         }).then(res => {
             if (res.data?.error) {
                 if (this.props.onError) {
+                    if (res.status === 500){
+                        res.data.message = "Something went wrong. Please contact the Commerceblock support team.";
+                    }
                     this.props.onError(res);
                 }
             } else {

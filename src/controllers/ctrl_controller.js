@@ -183,7 +183,7 @@ module.exports = {
         } catch (error) {
             res.json({
                 error: 'api',
-                message: 'Something went wrong. Please contact the Commerceblock support team.'
+                message: error.message
             });
         }
     },
@@ -253,7 +253,7 @@ module.exports = {
         } catch (error) {
             return res.status(500).json({
                 error: 'api',
-                message: 'Something went wrong. Please contact the Commerceblock support team.'
+                message: error.message
             });
         }
     },
