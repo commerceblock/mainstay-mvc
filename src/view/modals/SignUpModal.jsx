@@ -87,6 +87,9 @@ class SignUpModal extends React.PureComponent {
             this.resetFormState();
         }).catch(error => {
             if (this.props.onError) {
+                if (error.status === 500){
+                    error.data.message = "Something went wrong. Please contact the Commerceblock support team.";
+                }
                 this.props.onError(error);
             }
         });
