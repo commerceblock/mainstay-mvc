@@ -5,7 +5,7 @@ const ec = new elliptic.ec('secp256k1');
 
 class ClientSignUpController {
 
-    list = async (req, res, next) => {
+    async list(req, res, next) {
         try {
             const list = await models.clientSignup.find();
             res.json({
@@ -19,7 +19,7 @@ class ClientSignUpController {
         }
     };
 
-    patch = async (req, res, next) => {
+    async patch(req, res, next) {
         const {id} = req.params;
         const {status} = req.body;
 
