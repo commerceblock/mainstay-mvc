@@ -44,7 +44,11 @@ class ClientSignUpList extends React.Component {
                 </Table.Header>
                 <Table.Body>
                     {items.map(item => (
-                        <Table.Row key={item._id} positive={item.status === 'kyc_ok'}>
+                        <Table.Row
+                            key={item._id}
+                            positive={item.status === 'kyc_ok'}
+                            warning={item.status === 'sent_kyc'}
+                        >
                             <Table.Cell>{item._id}</Table.Cell>
                             <Table.Cell>{item.first_name}</Table.Cell>
                             <Table.Cell>{item.last_name}</Table.Cell>
@@ -54,7 +58,7 @@ class ClientSignUpList extends React.Component {
                                 <span>{item.pubkey}</span>
                             </Table.Cell>
                             <Table.Cell>{item.kyc_id}</Table.Cell>
-                            <Table.Cell>
+                            <Table.Cell error={!!!item.status}>
                                 <Select
                                     compact
                                     className="status-dropdown"

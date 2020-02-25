@@ -7,7 +7,7 @@ class ClientSignUpController {
 
     async list(req, res, next) {
         try {
-            const list = await models.clientSignup.find();
+            const list = await models.clientSignup.find().lean(true);
             res.json({
                 data: {
                     clientSignups: list,
