@@ -15,18 +15,18 @@ import Auth from './pages/Auth';
 import '../../../assets/stylesheets/admin.scss';
 
 // this is the default behavior
-function getConfirmation (message, callback) {
+function getConfirmation(message, callback) {
     const allowTransition = window.confirm(message);
     callback(allowTransition);
 }
 
 class App extends React.Component {
 
-    constructor (props) {
+    constructor(props) {
         super(props);
     }
 
-    render () {
+    render() {
         const {isLoggedIn} = this.props;
 
         let routes;

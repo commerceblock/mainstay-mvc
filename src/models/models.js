@@ -65,6 +65,8 @@ schemaMerkleProof.index({
     'commitment': 1
 });
 
+const clientSignupStatuses = ['new', 'start_kyc', 'sent_kyc', 'kyc_ok'];
+
 const schemaClientSignup = new Schema({
     first_name: String,
     last_name: String,
@@ -73,7 +75,7 @@ const schemaClientSignup = new Schema({
     pubkey: String,
     status: {
         type: String,
-        enum: ['new', 'start_kyc', 'sent_kyc', 'kyc_ok'],
+        enum: clientSignupStatuses,
         default: 'new'
     },
     kyc_id: String
@@ -96,4 +98,5 @@ module.exports = {
     merkleCommitment,
     merkleProof,
     clientSignup,
+    clientSignupStatuses,
 };
