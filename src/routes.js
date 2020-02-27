@@ -96,6 +96,7 @@ function makeAdminRoutes(app) {
     router.put('/client_details', adminClientDetailsController.put);
 
     router.get('/client_sign_up', adminClientSignUpController.list);
+    router.patch('/client_sign_up/:id', adminClientSignUpController.patch);
 
     // error handler middleware
     router.use((error, req, res, next) => {

@@ -24,6 +24,13 @@ if (env.JWT_SECRET) {
     jwtSecret = fs.readFileSync(env.JWT_SECRET__FILE);
 }
 
+let kycToken = '';
+if (env.KYC_TOKEN) {
+    kycToken = env.KYC_TOKEN;
+} else if (env.KYC_TOKEN__FILE) {
+    kycToken = fs.readFileSync(env.KYC_TOKEN__FILE);
+}
+
 module.exports = {
     db: {
         user: process.env.DB_USER,
@@ -37,6 +44,10 @@ module.exports = {
     },
     sign_up: {
         admin_email: process.env.ADMIN_EMAIL
+    },
+    kyc: {
+        url: process.env.KYC_URL,
+        token: kycToken
     },
     admin: {
         login: process.env.ADMIN_LOGIN,

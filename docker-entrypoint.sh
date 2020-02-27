@@ -6,6 +6,11 @@ case "$1" in
             sleep 12
             node ./src/app.js
             ;;
+        signups)
+            echo "Running signups"
+            sleep 12
+            node ./src/signups.js
+            ;;
         webpack)
             echo "Running webpack dev server"
             ./node_modules/webpack-dev-server/bin/webpack-dev-server.js
