@@ -37,7 +37,7 @@ export const getList = () => (dispatch) => {
         }
     });
 };
-export const updateStatus = (id, status) => (dispatch) => {
+export const updateSignup = (id, data) => (dispatch) => {
     dispatch({
         type: types.UPDATE_STATUS_IN_PROGRESS,
         id: id,
@@ -46,7 +46,7 @@ export const updateStatus = (id, status) => (dispatch) => {
     return apiService.axiosClient({
         url: '/admin/client_sign_up/' + id,
         method: 'patch',
-        data: {status}
+        data: data
     }).then((response) => {
         dispatch({
             type: types.UPDATE_STATUS_DONE,

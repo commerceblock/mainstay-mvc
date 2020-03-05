@@ -1,31 +1,79 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Header, Select, Table} from 'semantic-ui-react';
+import {Header, Input, Select, Table} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
-import {getList, updateStatus} from '../store/reducers/client-sign-up/actions';
+import {getList, updateSignup} from '../store/reducers/client-sign-up/actions';
 
-class ClientSignUpList extends React.Component {
-
+class KycIdEditable extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            loadingIds: []
+            value: props.item.kyc_id,
+            initialValue: props.item.kyc_id,
+            loading: false
         };
     }
+
+    onChange = (e) => this.setState({value: e.target.value});
+
+    onSaveClick = () => {
+        this.setState({loading: true});
+        this.props.kycIdSaveHandler(this.state.value).then(() => {
+            this.setState({loading: false, initialValue:this.state.value});
+        });
+    };
+
+    render() {
+        return (<Input
+            error={this.state.value !== this.state.initialValue}
+            loading={this.state.loading}
+            action={!this.state.loading && {
+                icon: 'save',
+                onClick: this.onSaveClick
+            }}
+            onChange={this.onChange}
+            value={this.state.value || ''}
+        />);
+    }
+}
+
+class KycStatusSelect extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {loading: false};
+    }
+
+    onChange = (event, data) => {
+        this.setState({loading: true});
+        this.props.kycStatusSaveHandler(data.value).then(() => {
+            this.setState({loading: false});
+        });
+    };
+
+    render() {
+        const {item} = this.props;
+        return (<Select
+            compact
+            className="status-dropdown"
+            options={this.props.statusOptions}
+            placeholder="KYC status"
+            onChange={this.onChange}
+            loading={this.state.loading}
+            value={item.status}
+        />);
+    }
+}
+
+class ClientSignUpList extends React.Component {
 
     componentDidMount() {
         this.props.getListAction();
     }
 
-    getOnChangeHandler = (id) => (event, data) => {
-        this.setState({loadingIds: [...this.state.loadingIds, id]});
-        this.props.updateStatusAction(id, data.value).then(() => {
-            const loadingIds = [...this.state.loadingIds];
-            loadingIds.splice(loadingIds.indexOf(id), 1);
-            this.setState({loadingIds});
-        });
-    };
+    getOnSycStatusChangeHandler = (id) => (status) => this.props.updateSignupAction(id, {status: status});
+
+    getOnKycIdSaveHandler = (id) => (value) => this.props.updateSignupAction(id, {kyc_id: value});
 
     renderList = (items, statusOptions) => {
         return (
@@ -33,8 +81,7 @@ class ClientSignUpList extends React.Component {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Id</Table.HeaderCell>
-                        <Table.HeaderCell>First Name</Table.HeaderCell>
-                        <Table.HeaderCell>Last Name</Table.HeaderCell>
+                        <Table.HeaderCell>Name</Table.HeaderCell>
                         <Table.HeaderCell>Email</Table.HeaderCell>
                         <Table.HeaderCell>Company</Table.HeaderCell>
                         <Table.HeaderCell>Public Key</Table.HeaderCell>
@@ -43,30 +90,30 @@ class ClientSignUpList extends React.Component {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {items.map(item => (
+                    {items.map((item, index) => (
                         <Table.Row
                             key={item._id}
                             positive={item.status === 'kyc_ok'}
                             warning={item.status === 'sent_kyc'}
                         >
                             <Table.Cell>{item._id}</Table.Cell>
-                            <Table.Cell>{item.first_name}</Table.Cell>
-                            <Table.Cell>{item.last_name}</Table.Cell>
+                            <Table.Cell>{`${item.first_name} ${item.last_name}`}</Table.Cell>
                             <Table.Cell>{item.email}</Table.Cell>
                             <Table.Cell>{item.company}</Table.Cell>
                             <Table.Cell className="public-key-td">
                                 <span>{item.pubkey}</span>
                             </Table.Cell>
-                            <Table.Cell>{item.kyc_id}</Table.Cell>
+                            <Table.Cell>
+                                <KycIdEditable
+                                    item={item}
+                                    kycIdSaveHandler={this.getOnKycIdSaveHandler(item._id)}
+                                />
+                            </Table.Cell>
                             <Table.Cell error={!!!item.status}>
-                                <Select
-                                    compact
-                                    className="status-dropdown"
-                                    options={statusOptions}
-                                    placeholder="KYC status"
-                                    onChange={this.getOnChangeHandler(item._id)}
-                                    loading={this.state.loadingIds.includes(item._id)}
-                                    value={item.status}
+                                <KycStatusSelect
+                                    item={item}
+                                    statusOptions={statusOptions}
+                                    kycStatusSaveHandler={this.getOnSycStatusChangeHandler(item._id)}
                                 />
                             </Table.Cell>
                         </Table.Row>
@@ -92,7 +139,7 @@ ClientSignUpList.propTypes = {
     statusOptions: PropTypes.array.isRequired,
 
     getListAction: PropTypes.func.isRequired,
-    updateStatusAction: PropTypes.func.isRequired,
+    updateSignupAction: PropTypes.func.isRequired,
 
     loading: PropTypes.bool.isRequired,
 };
@@ -111,7 +158,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     getListAction: getList,
-    updateStatusAction: updateStatus
+    updateSignupAction: updateSignup,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClientSignUpList);
