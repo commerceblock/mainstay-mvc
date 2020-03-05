@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+const fs = require('fs');
+const nodemailer = require('nodemailer');
 const axios = require('axios');
 const mongoose = require('mongoose');
 const env = require('../src/env');
@@ -51,6 +53,46 @@ async function send_kyc(signup) {
     return id;
 }
 
+/**
+ * send email
+ * @param signup
+ * @returns {Promise<unknown>}
+ */
+function send_signup_email(signup) {
+    return new Promise((resolve, reject) => {
+        fs.readFile('./src/view/emails/sugnup/index.html', (error, html) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(html);
+            }
+        });
+    }).then((html) => {
+        return html.replace('$$NAME$$', signup.first_name + ' ' + signup.last_name);
+    }).then((html) => {
+        return new Promise((resolve, reject) => {
+            nodemailer.createTransport(env.mail_server.smtp).sendMail({
+                from: {
+                    name: 'Mainstay Support',
+                    address: 'support@mainstay.xyz'
+                },
+                to: signup.email,
+                subject: 'MainStay - Thank you for signing up! Here are the next steps',
+                html: html,
+            }, (error, info) => {
+                if (error) {
+                    return reject(error);
+                }
+                console.log('email sent to ' + signup.email);
+                resolve(info);
+            });
+        });
+    }).catch(error=>{
+        console.log('error while sending an email to ' + signup.email);
+        console.error(error);
+    });
+}
+
 async function do_work() {
     const db = connect_mongo();
     mongoose.set('debug', false);
@@ -71,6 +113,9 @@ async function do_work() {
 
                 if (signup) {
                     console.log('New signup found: ' + signup.first_name + ' ' + signup.last_name);
+
+                    // send email
+                    await send_signup_email(signup);
 
                     const kyc_id = await send_kyc(signup);
                     console.log('KYC id: ' + kyc_id);
