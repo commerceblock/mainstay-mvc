@@ -10,6 +10,7 @@ class KycIdEditable extends React.PureComponent {
         super(props);
         this.state = {
             value: props.item.kyc_id,
+            initialValue: props.item.kyc_id,
             loading: false
         };
     }
@@ -19,12 +20,13 @@ class KycIdEditable extends React.PureComponent {
     onSaveClick = () => {
         this.setState({loading: true});
         this.props.kycIdSaveHandler(this.state.value).then(() => {
-            this.setState({loading: false});
+            this.setState({loading: false, initialValue:this.state.value});
         });
     };
 
     render() {
         return (<Input
+            error={this.state.value !== this.state.initialValue}
             loading={this.state.loading}
             action={!this.state.loading && {
                 icon: 'save',
@@ -64,7 +66,7 @@ class KycStatusSelect extends React.PureComponent {
 }
 
 class ClientSignUpList extends React.Component {
-    
+
     componentDidMount() {
         this.props.getListAction();
     }
