@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const env = require('../src/env');
 const models = require('../src/models/models');
 
+mongoose.set('useFindAndModify', false);
+
 function connect_mongo() {
     let url = 'mongodb://';
     if (env.db.user && env.db.password) {
@@ -54,6 +56,14 @@ async function send_kyc(signup) {
 }
 
 /**
+ * create email transport
+ * @returns {*}
+ */
+function get_mail_transport() {
+    return nodemailer.createTransport(env.mail_server.smtp);
+}
+
+/**
  * send email
  * @param signup
  * @returns {Promise<unknown>}
@@ -71,7 +81,7 @@ function send_signup_email(signup) {
         return html.replace('$$NAME$$', signup.first_name + ' ' + signup.last_name);
     }).then((html) => {
         return new Promise((resolve, reject) => {
-            nodemailer.createTransport(env.mail_server.smtp).sendMail({
+            get_mail_transport().sendMail({
                 from: {
                     name: 'Mainstay Support',
                     address: 'support@mainstay.xyz'
@@ -90,6 +100,38 @@ function send_signup_email(signup) {
     }).catch(error=>{
         console.log('error while sending an email to ' + signup.email);
         console.error(error);
+    });
+}
+
+/**
+ * send email
+ * @param user
+ * @returns {Promise<unknown>}
+ */
+function send_new_signup_mail(user) {
+    const html = `
+        <b>First Name</b>: ${user.first_name}<br>
+        <b>Last Name</b>: ${user.last_name}<br>
+        <b>Email</b>: ${user.email}<br>
+        ${user.company ? `<b>Company</b>: ${user.company}<br>` : ''}
+        ${user.pubkey ? `<b>Public Key</b>: ${user.pubkey}<br>` : ''}
+    `;
+
+    return new Promise((resolve, reject) => {
+        get_mail_transport().sendMail({
+            from: {
+                name: env.mail_server.smtp.from_name,
+                address: env.mail_server.smtp.from_address
+            },
+            to: env.sign_up.admin_email,
+            subject: 'New SignUp',
+            html: html,
+        }, (error, info) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(info);
+        });
     });
 }
 
@@ -114,6 +156,8 @@ async function do_work() {
                 if (signup) {
                     console.log('New signup found: ' + signup.first_name + ' ' + signup.last_name);
 
+                    // send email to admin
+                    await send_new_signup_mail(signup);
                     // send email
                     await send_signup_email(signup);
 
