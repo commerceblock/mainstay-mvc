@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const fs = require('fs');
+const path = require('path');
 const nodemailer = require('nodemailer');
 const axios = require('axios');
 const mongoose = require('mongoose');
@@ -70,7 +71,7 @@ function get_mail_transport() {
  */
 function send_signup_email(signup) {
     return new Promise((resolve, reject) => {
-        fs.readFile('./src/view/emails/sugnup/index.html', (error, html) => {
+        fs.readFile(path.resolve(__dirname, './view/emails/signup/index.html'), 'utf8', (error, html) => {
             if (error) {
                 reject(error);
             } else {
@@ -97,7 +98,7 @@ function send_signup_email(signup) {
                 resolve(info);
             });
         });
-    }).catch(error=>{
+    }).catch(error => {
         console.log('error while sending an email to ' + signup.email);
         console.error(error);
     });
