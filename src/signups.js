@@ -9,6 +9,8 @@ const models = require('../src/models/models');
 
 mongoose.set('useFindAndModify', false);
 
+const IMAGES_HOST_NAME = 'https://mainstay.xyz';
+
 function connect_mongo() {
     let url = 'mongodb://';
     if (env.db.user && env.db.password) {
@@ -71,7 +73,7 @@ function get_mail_transport() {
  */
 function send_signup_email(signup) {
     return new Promise((resolve, reject) => {
-        fs.readFile(path.resolve(__dirname, './view/emails/signup/index.html'), 'utf8', (error, html) => {
+        fs.readFile(path.resolve(__dirname, './view/emails/signup/client.html'), 'utf8', (error, html) => {
             if (error) {
                 reject(error);
             } else {
@@ -79,8 +81,11 @@ function send_signup_email(signup) {
             }
         });
     }).then((html) => {
-        return html.replace('$$NAME$$', signup.first_name + ' ' + signup.last_name);
-    }).then((html) => {
+
+        html = html.replace('$$NAME$$', signup.first_name + ' ' + signup.last_name);
+        html = html.replace('$$COMMERCE-BLOCK-LOGO-URL$$', `${IMAGES_HOST_NAME}/logo-commerce-block.png`);
+        html = html.replace('$$MAIN-STAY-LOGO-URL$$', `${IMAGES_HOST_NAME}/logo-main-stay.png`);
+
         return new Promise((resolve, reject) => {
             get_mail_transport().sendMail({
                 from: {
