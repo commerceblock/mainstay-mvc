@@ -8,8 +8,7 @@ const env = require('../src/env');
 const models = require('../src/models/models');
 
 mongoose.set('useFindAndModify', false);
-
-const IMAGES_HOST_NAME = 'https://mainstay.xyz';
+mongoose.set('useUnifiedTopology', true);
 
 function connect_mongo() {
     let url = 'mongodb://';
@@ -82,9 +81,22 @@ function send_signup_email(signup) {
         });
     }).then((html) => {
 
+        const cbLogo = {
+            filename: 'logo-commerce-block',
+            path: path.resolve(__dirname, '../public/logo-commerce-block.png'),
+            cid: 'logo-commerce-block.png',
+            contentType: 'image/png'
+        };
+        const msLogo = {
+            filename: 'logo-main-stay',
+            path: path.resolve(__dirname, '../public/logo-main-stay.png'),
+            cid: 'logo-main-stay.png',
+            contentType: 'image/png'
+        };
+
         html = html.replace('$$NAME$$', signup.first_name + ' ' + signup.last_name);
-        html = html.replace('$$COMMERCE-BLOCK-LOGO-URL$$', `${IMAGES_HOST_NAME}/logo-commerce-block.png`);
-        html = html.replace('$$MAIN-STAY-LOGO-URL$$', `${IMAGES_HOST_NAME}/logo-main-stay.png`);
+        html = html.replace('$$COMMERCE-BLOCK-LOGO-URL$$', `cid:${cbLogo.cid}`);
+        html = html.replace('$$MAIN-STAY-LOGO-URL$$', `cid:${msLogo.cid}`);
 
         return new Promise((resolve, reject) => {
             get_mail_transport().sendMail({
@@ -95,6 +107,7 @@ function send_signup_email(signup) {
                 to: signup.email,
                 subject: 'MainStay - Thank you for signing up! Here are the next steps',
                 html: html,
+                attachments: [cbLogo, msLogo],
             }, (error, info) => {
                 if (error) {
                     return reject(error);
