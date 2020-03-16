@@ -21,9 +21,9 @@ class ClientSignUpController {
 
     async patch(req, res, next) {
         const {id} = req.params;
-        const {status} = req.body;
+        const {status, kyc_id} = req.body;
 
-        if (!models.clientSignupStatuses.includes(status)) {
+        if (status && !models.clientSignupStatuses.includes(status)) {
             return res.status(406).json({
                 error: {
                     code: 'wrong_params',
@@ -43,7 +43,9 @@ class ClientSignUpController {
                     }
                 });
             }
-            clientSignup.status = status;
+
+            status && (clientSignup.status = status);
+            kyc_id && (clientSignup.kyc_id = kyc_id);
             await clientSignup.save();
             res.json({
                 data: clientSignup.toJSON()

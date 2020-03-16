@@ -246,8 +246,6 @@ module.exports = {
                 company: payload.company,
                 pubkey: payload.pubkey,
             });
-
-            sendNewSignUpEmail(user);
             // send the response
             res.status(201).send({user});
         } catch (error) {
@@ -273,45 +271,6 @@ module.exports = {
 
 };
 
-/**
- * create email transport
- * @returns {*}
- */
-function getMailTransport() {
-    return nodemailer.createTransport(env.mail_server.smtp);
-}
-
-/**
- * send email
- * @param user
- * @returns {Promise<unknown>}
- */
-function sendNewSignUpEmail(user) {
-    const html = `
-        <b>First Name</b>: ${user.first_name}<br>
-        <b>Last Name</b>: ${user.last_name}<br>
-        <b>Email</b>: ${user.email}<br>
-        ${user.company ? `<b>Company</b>: ${user.company}<br>` : ''}
-        ${user.pubkey ? `<b>Public Key</b>: ${user.pubkey}<br>` : ''}
-    `;
-
-    return new Promise((resolve, reject) => {
-        getMailTransport().sendMail({
-            from: {
-                name: env.mail_server.smtp.from_name,
-                address: env.mail_server.smtp.from_address
-            },
-            to: env.sign_up.admin_email,
-            subject: 'New SignUp',
-            html: html,
-        }, (error, info) => {
-            if (error) {
-                return reject(error);
-            }
-            resolve(info);
-        });
-    });
-}
 
 async function find_type_hash(res, paramValue, startTime) {
     try {
