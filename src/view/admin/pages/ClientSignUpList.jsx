@@ -95,6 +95,7 @@ class ClientSignUpList extends React.Component {
                             key={item._id}
                             positive={item.status === 'kyc_ok'}
                             warning={item.status === 'sent_kyc'}
+                            error={item.status === 'kyc_fail'}
                         >
                             <Table.Cell>{item._id}</Table.Cell>
                             <Table.Cell>{`${item.first_name} ${item.last_name}`}</Table.Cell>

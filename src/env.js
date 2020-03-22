@@ -67,5 +67,10 @@ module.exports = {
             from_name: env.MS_SMTP_FROM_NAME,
             from_address: env.MS_SMTP_FROM_ADDRESS
         }
+    },
+    onfido: {
+        webhook: {
+            secret: env.ONFIDO_WEBHOOK_SECRET
+        }
     }
 };

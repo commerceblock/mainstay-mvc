@@ -51,3 +51,25 @@ Run Webpack dev server
 ```perl
 $ HOST_API="localhost" PORT_API="4000" PORT="80" webpack-dev-server
 ```
+
+
+## Onfido Webhook
+Copy secret token for onfido webhook from  
+[Onfido Dashboard ‘Webhook Management’ page](https://dashboard.onfido.com/api/webhook_management)
+and set ENV variable for `ONFIDO_WEBHOOK_SECRET`
+
+```perl
+$ export ONFIDO_WEBHOOK_SECRET=onfido-webhook-token
+```
+
+To test webhooks locally install ngrok
+
+```perl
+$ npm install --unsafe-perm -g ngrok
+```
+or see the instructions [here](https://ngrok.com/download).
+
+To start ngrok run:
+```
+$ ngrok http 4000
+```
