@@ -17,7 +17,8 @@ const ONFIDO_REQUEST_HEADERS = {
     'Accept': 'application/json'
 };
 const ONFIDO_URL = env.kyc.url;
-const CHECKS_INTERVAL = 1000;
+const START_KYC_INTERVAL = 1000;
+const CHECKS_INTERVAL = 5000;
 
 const getDb = (function() {
     let db = connect_mongo();
@@ -240,7 +241,7 @@ async function do_work() {
             console.error(error);
             process.exit(1);
         }
-    }, 1000);
+    }, START_KYC_INTERVAL);
 }
 
 async function do_applicant_checks() {
