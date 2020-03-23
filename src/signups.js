@@ -18,7 +18,7 @@ const ONFIDO_REQUEST_HEADERS = {
 };
 const ONFIDO_URL = env.kyc.url;
 const START_KYC_INTERVAL = 1000;
-const CHECKS_INTERVAL = 5000;
+const CHECKS_INTERVAL = 60000; // one minute
 
 const getDb = (function() {
     let db = connect_mongo();
