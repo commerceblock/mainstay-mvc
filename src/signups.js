@@ -263,4 +263,4 @@ async function do_applicant_checks() {
 }
 
 do_work();
-// do_applicant_checks();
+do_applicant_checks();
