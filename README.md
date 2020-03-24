@@ -56,7 +56,7 @@ $ HOST_API="localhost" PORT_API="4000" PORT="80" webpack-dev-server
 ## Onfido Webhook
 Copy secret token for onfido webhook from  
 [Onfido Dashboard ‘Webhook Management’ page](https://dashboard.onfido.com/api/webhook_management)
-and set ENV variable for `ONFIDO_WEBHOOK_SECRET`
+and set ENV variable for `ONFIDO_WEBHOOK_SECRET` (`ONFIDO_WEBHOOK_SECRET__FILE` for file)
 
 ```perl
 $ export ONFIDO_WEBHOOK_SECRET=onfido-webhook-token
