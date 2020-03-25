@@ -65,7 +65,7 @@ schemaMerkleProof.index({
     'commitment': 1
 });
 
-const clientSignupStatuses = ['new', 'start_kyc', 'sent_kyc', 'kyc_ok'];
+const clientSignupStatuses = ['new', 'start_kyc', 'sent_kyc', 'kyc_ok', 'kyc_fail'];
 
 const schemaClientSignup = new Schema({
     first_name: String,
@@ -81,6 +81,8 @@ const schemaClientSignup = new Schema({
     kyc_id: String
 }, {collection: 'ClientSignup'});
 schemaClientSignup.index({'email': 1}, {unique: true});
+schemaClientSignup.index({'status': 1});
+schemaClientSignup.index({'kyc_id': 1});
 
 const attestation = mongoose.model('Attestation', schemaAttestation);
 const attestationInfo = mongoose.model('AttestationInfo', schemaAttestationInfo);
