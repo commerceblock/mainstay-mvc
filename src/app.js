@@ -39,6 +39,7 @@ function __MAIN__ () {
 
         routes.makeApiRoutes(app);
         routes.makeCtrlRoutes(app);
+        routes.makeWebhookRoutes(app);
         routes.makeAdminRoutes(app);
 
         app.get('*', (req, res) => {

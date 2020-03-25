@@ -31,6 +31,13 @@ if (env.KYC_TOKEN) {
     kycToken = fs.readFileSync(env.KYC_TOKEN__FILE);
 }
 
+let onfidoWebhookSecret = '';
+if (env.ONFIDO_WEBHOOK_SECRET){
+    onfidoWebhookSecret = env.ONFIDO_WEBHOOK_SECRET;
+}else if (env.ONFIDO_WEBHOOK_SECRET__FILE){
+    onfidoWebhookSecret = fs.readFileSync(env.ONFIDO_WEBHOOK_SECRET__FILE, 'utf8')
+}
+
 module.exports = {
     db: {
         user: process.env.DB_USER,
@@ -66,6 +73,11 @@ module.exports = {
             },
             from_name: env.MS_SMTP_FROM_NAME,
             from_address: env.MS_SMTP_FROM_ADDRESS
+        }
+    },
+    onfido: {
+        webhook: {
+            secret: onfidoWebhookSecret
         }
     }
 };

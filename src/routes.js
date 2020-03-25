@@ -1,13 +1,15 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const apiController = require('./controllers/api_controller');
 const ctrlController = require('./controllers/ctrl_controller');
+const webhookController = require('./controllers/webhook_controller');
 const adminAuthController = require('./controllers/admin/auth.controller');
 const adminClientDetailsController = require('./controllers/admin/client-details.controller');
 const adminClientSignUpController = require('./controllers/admin/client-sign-up.controller');
 
-const {jwt: {secret: jwtSecret}} = require('./env');
+const {jwt: {secret: jwtSecret}, onfido: {webhook: {secret: onfidoWebhookSecret}}} = require('./env');
 
 function makeApiRoutes(app) {
     const router = express.Router();
@@ -120,8 +122,39 @@ function makeAdminRoutes(app) {
     app.use('/admin', router);
 }
 
+function makeWebhookRoutes(app) {
+    const router = express.Router();
+
+    // for parsing application/json
+    router.use(express.json());
+    // for parsing application/x-www-form-urlencoded
+    router.use(express.urlencoded({extended: true}));
+
+    router.use(verifyRequestSignature);
+    router.post('/', webhookController.index.bind(webhookController));
+
+    app.use('/onfido', router);
+}
+
+function verifyRequestSignature(req, res, next) {
+    const payload = JSON.stringify(req.body);
+    if (!payload) {
+        return next(new Error('Request body empty'));
+    }
+    const headerName = 'X-SHA2-Signature';
+    const sig = req.get(headerName) || '';
+    const hmac = crypto.createHmac('sha256', onfidoWebhookSecret);
+    const digest = Buffer.from(hmac.update(payload).digest('hex'), 'utf8');
+    const checksum = Buffer.from(sig, 'utf8');
+    if (checksum.length !== digest.length || !crypto.timingSafeEqual(digest, checksum)) {
+        return next(`Request body digest (${digest}) did not match ${headerName} (${checksum})`);
+    }
+    return next();
+}
+
 module.exports = {
     makeCtrlRoutes,
     makeApiRoutes,
+    makeWebhookRoutes,
     makeAdminRoutes,
 };
