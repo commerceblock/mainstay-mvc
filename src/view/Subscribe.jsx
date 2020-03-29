@@ -1,16 +1,16 @@
 import React from 'react';
+import {Redirect} from 'react-router-dom';
 
 class Subscribe extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.routeChange = this.routeChange.bind(this);
+        this.state = {navigateToHome: false};
     }
 
-    routeChange() {
-        let path = `home`;
-        this.props.history.push(path);
-    }
+    gotoHome = () => {
+        this.setState({navigateToHome: true});
+    };
 
     componentDidMount() {
         const el = document.createElement('script');
@@ -21,20 +21,20 @@ class Subscribe extends React.Component {
             window.Chargebee.registerAgain();
 
             const cbInstance = Chargebee.getInstance();
-            cbInstance.setCheckoutCallbacks(function(cart) {
+            cbInstance.setCheckoutCallbacks((cart) => {
                 // you can define a custom callbacks based on cart object
                 return {
-                    loaded: function() {
+                    loaded: () => {
                         console.log('checkout opened');
                     },
-                    error: function(){
-                        console.log('Error happened');
+                    error: () => {
+                        this.gotoHome();
                     },
-                    close: function() {
-                        console.log('checkout closed');
+                    close: () => {
+                        this.gotoHome();
                     },
-                    success: function(hostedPageId) {
-                        // todo something
+                    success: (hostedPageId) => {
+                        this.gotoHome();
                     }
                 };
             });
@@ -50,6 +50,9 @@ class Subscribe extends React.Component {
     }
 
     render() {
+        if (this.state.navigateToHome) {
+            return <Redirect to="/home" push={false} />;
+        }
         return null;
     }
 }
