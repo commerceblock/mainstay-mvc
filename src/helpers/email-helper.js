@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
 
-const env = require('../src/env');
+const env = require('../../src/env');
 
 function getMailTransport() {
     return nodemailer.createTransport(env.mail_server.smtp);
