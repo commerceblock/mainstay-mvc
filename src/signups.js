@@ -3,6 +3,7 @@ const axios = require('axios');
 const mongoose = require('mongoose');
 const env = require('../src/env');
 const models = require('../src/models/models');
+const EmailHelper = require('./helpers/email-helper');
 
 mongoose.set('useFindAndModify', false);
 mongoose.set('useUnifiedTopology', true);
@@ -100,6 +101,8 @@ async function check_kyc_status(signup) {
 
     if (check.result === 'clear') {
         signup.status = 'kyc_ok';
+        // send verification success email
+        await EmailHelper.sendOnfidoVerificationSuccessEmail(signup);
     }
     if (check.result === 'consider') {
         signup.status = 'kyc_fail';
