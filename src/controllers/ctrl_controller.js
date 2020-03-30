@@ -1,6 +1,5 @@
 const elliptic = require('elliptic');
 const moment = require('moment');
-const nodemailer = require('nodemailer');
 
 const models = require('../models/models');
 const {isValidEmail} = require('../utils/validators');

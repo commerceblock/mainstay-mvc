@@ -3,6 +3,7 @@ const url = require('url');
 
 const env = require('../../src/env');
 const models = require('../../src/models/models');
+const EmailHelper = require('../../src/helpers/email-helper');
 
 const ONFIDO_REQUEST_HEADERS = {
     'Authorization': 'Token token=' + env.kyc.token,
@@ -49,6 +50,7 @@ class WebhookController {
         }
         if (check.result === 'clear') {
             signup.status = 'kyc_ok';
+            await EmailHelper.sendOnfidoVerificationSuccessEmail(signup);
         }
         if (check.result === 'consider') {
             signup.status = 'kyc_fail';
