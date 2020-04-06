@@ -73,6 +73,7 @@ const schemaClientSignup = new Schema({
     email: String,
     company: String,
     pubkey: String,
+    code: String,
     status: {
         type: String,
         enum: clientSignupStatuses,
@@ -82,6 +83,7 @@ const schemaClientSignup = new Schema({
 }, {collection: 'ClientSignup'});
 schemaClientSignup.index({'email': 1}, {unique: true});
 schemaClientSignup.index({'status': 1});
+schemaClientSignup.index({'code': 1});
 schemaClientSignup.index({'kyc_id': 1});
 
 const attestation = mongoose.model('Attestation', schemaAttestation);

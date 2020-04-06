@@ -268,8 +268,26 @@ module.exports = {
         reply_err(res, TYPE_ERROR, startTime);
     },
 
-};
+    crtl_signupbycode: async (req, res) => {
+        const code = req.query.code;
+        if (!code) {
+            return res.status(400).json({
+                error: 'api',
+                message: 'code not provided.'
+            });
+        }
+        try {
+            const signup = await models.clientSignup.findOne({code});
+            res.send({signup});
+        } catch (error) {
+            return res.status(500).json({
+                error: 'api',
+                message: error.message
+            });
+        }
+    }
 
+};
 
 async function find_type_hash(res, paramValue, startTime) {
     try {

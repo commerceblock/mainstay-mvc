@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const axios = require('axios');
 const mongoose = require('mongoose');
+const uuidv4 = require('uuid/v4');
 const env = require('../src/env');
 const models = require('../src/models/models');
 const EmailHelper = require('./helpers/email-helper');
@@ -101,6 +102,7 @@ async function check_kyc_status(signup) {
 
     if (check.result === 'clear') {
         signup.status = 'kyc_ok';
+        signup.code = uuidv4();
         // send verification success email
         await EmailHelper.sendOnfidoVerificationSuccessEmail(signup);
     }

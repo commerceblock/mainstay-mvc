@@ -49,6 +49,7 @@ function makeCtrlRoutes(app) {
 
     router.post('/sendcommitment', ctrlController.ctrl_send_commitment);
     router.post('/usersignup', ctrlController.ctrl_client_signup);
+    router.get('/signupbycode', ctrlController.crtl_signupbycode);
 
     // error handler middleware
     router.use((error, req, res, next) => {

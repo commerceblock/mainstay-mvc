@@ -83,6 +83,7 @@ async function sendOnfidoVerificationSuccessEmail(signup) {
     const {cbLogo, msLogo} = getLogosCIDs();
     let html = await loadTemplate(path.resolve(__dirname, '../view/emails/signup/subscribe.html'));
     html = html.replace('$$NAME$$', signup.first_name + ' ' + signup.last_name);
+    html = html.replace('$$CODE$$', signup.code);
     html = html.replace('$$COMMERCE-BLOCK-LOGO-URL$$', `cid:${cbLogo.cid}`);
     html = html.replace('$$MAIN-STAY-LOGO-URL$$', `cid:${msLogo.cid}`);
 
