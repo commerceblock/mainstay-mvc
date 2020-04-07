@@ -285,6 +285,38 @@ module.exports = {
                 message: error.message
             });
         }
+    },
+
+    ctrl_chargebeesubscription: async (req, res) => {
+        const {hostedPageId, signupId} = req.body;
+
+        if (!hostedPageId || !signupId) {
+            return res.status(400).json({
+                error: 'api',
+                message: 'wrong params'
+            });
+        }
+
+        try {
+            const signup = await models.clientSignup.findOne({_id: signupId});
+            if (!signup){
+                return res.status(400).json({
+                    error: 'api',
+                    message: 'signup not found'
+                });
+            }
+            signup.status = 'payment_ok';
+            signup.hosted_page_id = hostedPageId;
+            signup.code = null;
+            signup.save();
+
+            res.send({signup});
+        } catch (error) {
+            return res.status(500).json({
+                error: 'api',
+                message: error.message
+            });
+        }
     }
 
 };
