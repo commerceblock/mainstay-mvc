@@ -307,8 +307,11 @@ module.exports = {
             }
             signup.status = 'payment_ok';
             signup.hosted_page_id = hostedPageId;
+            // set code to null to avoid double subscription
             signup.code = null;
             signup.save();
+
+            // TODO: create a slot
 
             res.send({signup});
         } catch (error) {
