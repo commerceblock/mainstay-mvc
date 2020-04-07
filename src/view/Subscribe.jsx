@@ -16,7 +16,13 @@ class Subscribe extends React.Component {
         this.setState({navigateToHome: true});
     };
 
+    /**
+     * send response from chargebee to our back-end
+     * and mark signup as `payment_ok`
+     * @param hostedPageId
+     */
     checkoutSuccess = (hostedPageId) => {
+        //TODO: not implemented yet
         apiService.axiosClient.post('/ctrl/savechargebee', {
             hostedPageId
         });
@@ -98,7 +104,7 @@ class Subscribe extends React.Component {
 
     render() {
         if (this.state.showLoading) {
-            return <div>Loading...</div>;
+            return <div>Loading...</div>; // todo simple loading state, WIP:
         }
         if (this.state.navigateToHome) {
             return <Redirect to="/home" push={false} />;
