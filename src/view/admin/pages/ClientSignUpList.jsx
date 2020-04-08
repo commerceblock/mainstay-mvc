@@ -20,7 +20,10 @@ class KycIdEditable extends React.PureComponent {
     onSaveClick = () => {
         this.setState({loading: true});
         this.props.kycIdSaveHandler(this.state.value).then(() => {
-            this.setState({loading: false, initialValue:this.state.value});
+            this.setState({
+                loading: false,
+                initialValue: this.state.value
+            });
         });
     };
 
@@ -86,6 +89,7 @@ class ClientSignUpList extends React.Component {
                         <Table.HeaderCell>Company</Table.HeaderCell>
                         <Table.HeaderCell>Public Key</Table.HeaderCell>
                         <Table.HeaderCell>KYC Id</Table.HeaderCell>
+                        <Table.HeaderCell>Chargebee Id</Table.HeaderCell>
                         <Table.HeaderCell>KYC Status</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
@@ -110,6 +114,7 @@ class ClientSignUpList extends React.Component {
                                     kycIdSaveHandler={this.getOnKycIdSaveHandler(item._id)}
                                 />
                             </Table.Cell>
+                            <Table.Cell><span>{item.hosted_page_id}</span></Table.Cell>
                             <Table.Cell error={!!!item.status}>
                                 <KycStatusSelect
                                     item={item}
@@ -127,7 +132,7 @@ class ClientSignUpList extends React.Component {
     render() {
         const {items, statusOptions} = this.props;
         return (
-            <div>
+            <div style={{paddingLeft: '2em', paddingRight: '2em'}}>
                 <Header as='h4'>Client Sign up</Header>
                 {this.renderList(items, statusOptions)}
             </div>

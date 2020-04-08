@@ -1,5 +1,6 @@
 const elliptic = require('elliptic');
 const moment = require('moment');
+const uuidv4 = require('uuid/v4');
 
 const models = require('../models/models');
 const {isValidEmail} = require('../utils/validators');
@@ -299,7 +300,7 @@ module.exports = {
 
         try {
             const signup = await models.clientSignup.findOne({_id: signupId});
-            if (!signup){
+            if (!signup) {
                 return res.status(400).json({
                     error: 'api',
                     message: 'signup not found'
@@ -308,12 +309,50 @@ module.exports = {
             signup.status = 'payment_ok';
             signup.hosted_page_id = hostedPageId;
             // set code to null to avoid double subscription
-            signup.code = null;
+            signup.code = undefined;
             signup.save();
 
-            // TODO: create a slot
+            // create a slot
 
-            res.send({signup});
+            // fetch item with max client_position
+            const maxPositionClientDetails = await models.clientDetails
+                .findOne()
+                .sort({client_position: -1})
+                .limit(1);
+
+            let nextClientPosition;
+            if (maxPositionClientDetails === null) {
+                nextClientPosition = 0;
+            } else {
+                nextClientPosition = maxPositionClientDetails.client_position + 1;
+            }
+            const publicKey = '';
+            // create new client-detail
+            const clientDetailsData = {
+                client_position: nextClientPosition,
+                auth_token: uuidv4(),
+                client_name: `${signup.first_name} ${signup.last_name}`,
+                pubkey: publicKey,
+            };
+            const clientDetails = new models.clientDetails(clientDetailsData);
+            await clientDetails.save();
+
+            // create client-commitment
+            const clientCommitmentData = {
+                client_position: clientDetails.client_position,
+                commitment: '0000000000000000000000000000000000000000000000000000000000000000'
+            };
+            const clientCommitment = new models.clientCommitment(clientCommitmentData);
+            await clientCommitment.save();
+
+            signup.status = 'slot_ok';
+            await signup.save();
+
+            res.send({
+                signup,
+                clientCommitment,
+                clientDetails
+            });
         } catch (error) {
             return res.status(500).json({
                 error: 'api',

@@ -13,7 +13,10 @@ class Subscribe extends React.Component {
     }
 
     gotoHome = () => {
-        this.setState({navigateToHome: true});
+        this.setState({
+            navigateToHome: true,
+            showLoading: false
+        });
     };
 
     /**
@@ -28,7 +31,7 @@ class Subscribe extends React.Component {
             signupId: signup._id
         }).then(() => {
             this.gotoHome();
-        }).catch(error=>{
+        }).catch(error => {
             // todo show some error
         });
     };
@@ -37,7 +40,10 @@ class Subscribe extends React.Component {
         return Promise.all([
             this.loadSignup(),
             this.loadChargebee()
-        ]).then(this.showCheckoutModal);
+        ]).then(this.showCheckoutModal).catch(error => {
+            console.log(error);
+            this.gotoHome();
+        });
     }
 
     loadSignup = () => {
@@ -49,11 +55,8 @@ class Subscribe extends React.Component {
             if (response.data && response.data.signup) {
                 return response.data.signup;
             } else {
-                return Promise.reject();
+                return Promise.reject('signup not found');
             }
-        }).catch(error => {
-            console.error(error);
-            throw error;
         });
     };
 

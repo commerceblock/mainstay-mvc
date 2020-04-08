@@ -142,6 +142,27 @@ async function sendNewSignupMail(user) {
     });
 }
 
+async function sendPaymentOkEmail(signup, clientCommitment, clientDetails) {
+    // TODO: not implemented
+    const html = `New email`;
+    return new Promise((resolve, reject) => {
+        getMailTransport().sendMail({
+            from: {
+                name: env.mail_server.smtp.from_name,
+                address: env.mail_server.smtp.from_address
+            },
+            to: env.sign_up.admin_email,
+            subject: '',
+            html: html,
+        }, (error, info) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(info);
+        });
+    });
+}
+
 module.exports = {
     sendSignupEmail,
     sendNewSignupMail,

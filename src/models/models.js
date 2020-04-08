@@ -39,7 +39,7 @@ const schemaClientDetails = new Schema({
     pubkey: String,
     client_name: String,
 }, {collection: 'ClientDetails'});
-schemaClientDetails.index({client_position: 1});
+schemaClientDetails.index({client_position: 1}, {unique: true});
 
 const schemaMerkleCommitment = new Schema({
     commitment: String,
@@ -65,7 +65,7 @@ schemaMerkleProof.index({
     'commitment': 1
 });
 
-const clientSignupStatuses = ['new', 'start_kyc', 'sent_kyc', 'kyc_ok', 'kyc_fail', 'payment_ok'];
+const clientSignupStatuses = ['new', 'start_kyc', 'sent_kyc', 'kyc_ok', 'kyc_fail', 'payment_ok', 'slot_ok'];
 
 const schemaClientSignup = new Schema({
     first_name: String,
