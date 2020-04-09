@@ -5,6 +5,7 @@ const uuidv4 = require('uuid/v4');
 const models = require('../models/models');
 const {isValidEmail} = require('../utils/validators');
 const env = require('../../src/env');
+const EmailHelper = require('../../src/helpers/email-helper');
 
 const ec = new elliptic.ec('secp256k1');
 
@@ -353,6 +354,8 @@ module.exports = {
                 clientCommitment,
                 clientDetails
             });
+
+            EmailHelper.sendPaymentOkEmail(signup, clientCommitment, clientDetails);
         } catch (error) {
             return res.status(500).json({
                 error: 'api',
