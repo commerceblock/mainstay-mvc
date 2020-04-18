@@ -65,7 +65,16 @@ schemaMerkleProof.index({
     'commitment': 1
 });
 
-const clientSignupStatuses = ['new', 'start_kyc', 'sent_kyc', 'kyc_ok', 'kyc_fail', 'payment_ok', 'slot_ok'];
+const clientSignupStatuses = [
+    'new',
+    'start_kyc',
+    'sent_kyc',
+    'kyc_ok',
+    'kyc_fail',
+    'payment_ok',
+    'start_slot',
+    'slot_ok'
+];
 
 const schemaClientSignup = new Schema({
     first_name: String,
