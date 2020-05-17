@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const axios = require('axios');
 const mongoose = require('mongoose');
+const uuidv4 = require('uuid/v4');
 const env = require('../src/env');
 const models = require('../src/models/models');
 const EmailHelper = require('./helpers/email-helper');
@@ -16,6 +17,7 @@ const ONFIDO_REQUEST_HEADERS = {
 };
 const ONFIDO_URL = env.kyc.url;
 const START_KYC_INTERVAL = 1000;
+const PAYMENT_OK_WORK_INTERVAL = 1000;
 const CHECKS_INTERVAL = 60000; // one minute
 
 const getDb = (function() {
@@ -101,6 +103,7 @@ async function check_kyc_status(signup) {
 
     if (check.result === 'clear') {
         signup.status = 'kyc_ok';
+        signup.code = uuidv4();
         // send verification success email
         await EmailHelper.sendOnfidoVerificationSuccessEmail(signup);
     }
@@ -126,6 +129,44 @@ async function start_kyc(signup) {
     signup.status = 'sent_kyc';
     signup.kyc_id = kycId;
     await signup.save();
+}
+
+async function create_slot(signup) {
+    // fetch item with max client_position
+    const maxPositionClientDetails = await models.clientDetails
+        .findOne()
+        .sort({client_position: -1})
+        .limit(1);
+
+    let nextClientPosition;
+    if (maxPositionClientDetails === null) {
+        nextClientPosition = 0;
+    } else {
+        nextClientPosition = maxPositionClientDetails.client_position + 1;
+    }
+    const publicKey = '';
+    // create new client-detail
+    const clientDetailsData = {
+        client_position: nextClientPosition,
+        auth_token: uuidv4(),
+        client_name: `${signup.first_name} ${signup.last_name}`,
+        pubkey: publicKey,
+    };
+    const clientDetails = new models.clientDetails(clientDetailsData);
+    await clientDetails.save();
+
+    // create client-commitment
+    const clientCommitmentData = {
+        client_position: clientDetails.client_position,
+        commitment: '0000000000000000000000000000000000000000000000000000000000000000'
+    };
+    const clientCommitment = new models.clientCommitment(clientCommitmentData);
+    await clientCommitment.save();
+
+    signup.status = 'slot_ok';
+    await signup.save();
+
+    await EmailHelper.sendPaymentOkEmail(signup, clientCommitment, clientDetails);
 }
 
 async function do_work() {
@@ -165,5 +206,20 @@ async function do_applicant_checks() {
     }, CHECKS_INTERVAL);
 }
 
+async function do_payment_ok_work() {
+    setInterval(async () => {
+        try {
+            const signup = await models.clientSignup.findOneAndUpdate({status: 'payment_ok'}, {status: 'start_slot'});
+            if (signup) {
+                await create_slot(signup);
+            }
+        } catch (error) {
+            console.error(error);
+            process.exit(1);
+        }
+    }, PAYMENT_OK_WORK_INTERVAL);
+}
+
 do_work();
 do_applicant_checks();
+do_payment_ok_work();

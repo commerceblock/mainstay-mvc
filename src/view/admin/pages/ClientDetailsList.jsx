@@ -1,21 +1,21 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {Button, Header, Icon, Loader, Table} from 'semantic-ui-react';
+import {Button, Container, Header, Icon, Loader, Table} from 'semantic-ui-react';
 
 import {addClient, getList, updateClient} from '../store/reducers/client-details/actions';
 import AddClientDetailsModal from '../components/modals/ClientDetailsModal';
 
 class ClientDetailsList extends React.Component {
 
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             showAddModal: false
         };
     }
 
-    componentDidMount () {
+    componentDidMount() {
         this.props.getListAction();
     }
 
@@ -52,39 +52,39 @@ class ClientDetailsList extends React.Component {
 
     renderList = (items) => {
         return (
-            <Table celled striped>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell>Id</Table.HeaderCell>
-                        <Table.HeaderCell>Position</Table.HeaderCell>
-                        <Table.HeaderCell>Client Name</Table.HeaderCell>
-                        <Table.HeaderCell>Auth Token</Table.HeaderCell>
-                        <Table.HeaderCell>Public Key</Table.HeaderCell>
-                        <Table.HeaderCell />
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {items.map(item => (
-                        <Table.Row key={item._id}>
-                            <Table.Cell>{item._id}</Table.Cell>
-                            <Table.Cell>{item.client_position}</Table.Cell>
-                            <Table.Cell>{item.client_name}</Table.Cell>
-                            <Table.Cell>{item.auth_token}</Table.Cell>
-                            <Table.Cell>{item.pubkey}</Table.Cell>
-                            <Table.Cell>
-                                <Button as="a" onClick={this.onEditClickHandler(item)}>Edit</Button>
-                            </Table.Cell>
+                <Table celled striped>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Id</Table.HeaderCell>
+                            <Table.HeaderCell>Position</Table.HeaderCell>
+                            <Table.HeaderCell>Client Name</Table.HeaderCell>
+                            <Table.HeaderCell>Auth Token</Table.HeaderCell>
+                            <Table.HeaderCell>Public Key</Table.HeaderCell>
+                            <Table.HeaderCell />
                         </Table.Row>
-                    ))}
-                </Table.Body>
-            </Table>
+                    </Table.Header>
+                    <Table.Body>
+                        {items.map(item => (
+                            <Table.Row key={item._id}>
+                                <Table.Cell>{item._id}</Table.Cell>
+                                <Table.Cell>{item.client_position}</Table.Cell>
+                                <Table.Cell>{item.client_name}</Table.Cell>
+                                <Table.Cell>{item.auth_token}</Table.Cell>
+                                <Table.Cell>{item.pubkey}</Table.Cell>
+                                <Table.Cell>
+                                    <Button as="a" onClick={this.onEditClickHandler(item)}>Edit</Button>
+                                </Table.Cell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table>
         );
     };
 
-    render () {
+    render() {
         const {items, maxClientPosition} = this.props;
         return (
-            <>
+            <Container>
                 <div>
                     <Header as='h4'>Client Details</Header>
 
@@ -102,7 +102,7 @@ class ClientDetailsList extends React.Component {
                     clientPosition={maxClientPosition + 1}
                     item={this.state.itemToEdit}
                 />}
-            </>
+            </Container>
         );
     }
 }

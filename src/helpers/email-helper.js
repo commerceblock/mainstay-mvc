@@ -83,6 +83,7 @@ async function sendOnfidoVerificationSuccessEmail(signup) {
     const {cbLogo, msLogo} = getLogosCIDs();
     let html = await loadTemplate(path.resolve(__dirname, '../view/emails/signup/subscribe.html'));
     html = html.replace('$$NAME$$', signup.first_name + ' ' + signup.last_name);
+    html = html.replace('$$CODE$$', signup.code);
     html = html.replace('$$COMMERCE-BLOCK-LOGO-URL$$', `cid:${cbLogo.cid}`);
     html = html.replace('$$MAIN-STAY-LOGO-URL$$', `cid:${msLogo.cid}`);
 
@@ -141,8 +142,41 @@ async function sendNewSignupMail(user) {
     });
 }
 
+async function sendPaymentOkEmail(signup, clientCommitment, clientDetails) {
+    const {cbLogo, msLogo} = getLogosCIDs();
+    let html = await loadTemplate(path.resolve(__dirname, '../view/emails/signup/payment_ok.html'));
+    html = html.replace('$$NAME$$', signup.first_name + ' ' + signup.last_name);
+    html = html.replace('$$AUTH_TOKEN$$', clientDetails.auth_token);
+    html = html.replace('$$SLOT_ID$$', clientCommitment.client_position);
+    html = html.replace('$$COMMERCE-BLOCK-LOGO-URL$$', `cid:${cbLogo.cid}`);
+    html = html.replace('$$MAIN-STAY-LOGO-URL$$', `cid:${msLogo.cid}`);
+
+    return new Promise((resolve, reject) => {
+        getMailTransport().sendMail({
+            from: {
+                name: 'Mainstay Support',
+                address: 'support@mainstay.xyz'
+            },
+            to: signup.email,
+            subject: 'MainStay - Subscription confirmed',
+            html: html,
+            attachments: [cbLogo, msLogo],
+        }, (error, info) => {
+            if (error) {
+                return reject(error);
+            }
+            console.log('email sent to ' + signup.email);
+            resolve(info);
+        });
+    }).catch(error => {
+        console.log('error while sending an email to ' + signup.email);
+        console.error(error);
+    });
+}
+
 module.exports = {
     sendSignupEmail,
     sendNewSignupMail,
-    sendOnfidoVerificationSuccessEmail
+    sendOnfidoVerificationSuccessEmail,
+    sendPaymentOkEmail
 };
