@@ -17,6 +17,6 @@ export const routes = {
     terms: '/terms',
     pricing: '/pricing',
     about: '/about',
-    subscribe: '/subscribe',
+    subscribe: '/subscribe/:code',
     notFound: '/not-found'
 };

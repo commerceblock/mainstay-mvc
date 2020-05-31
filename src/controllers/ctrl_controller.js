@@ -1,10 +1,7 @@
 const elliptic = require('elliptic');
 const moment = require('moment');
-const nodemailer = require('nodemailer');
-
 const models = require('../models/models');
 const {isValidEmail} = require('../utils/validators');
-const env = require('../../src/env');
 
 const ec = new elliptic.ec('secp256k1');
 
@@ -269,8 +266,59 @@ module.exports = {
         reply_err(res, TYPE_ERROR, startTime);
     },
 
-};
+    crtl_signupbycode: async (req, res) => {
+        const code = req.query.code;
+        if (!code) {
+            return res.status(400).json({
+                error: 'api',
+                message: 'code not provided.'
+            });
+        }
+        try {
+            const signup = await models.clientSignup.findOne({code});
+            res.send({signup});
+        } catch (error) {
+            return res.status(500).json({
+                error: 'api',
+                message: error.message
+            });
+        }
+    },
 
+    ctrl_chargebeesubscription: async (req, res) => {
+        const {hostedPageId, signupId} = req.body;
+
+        if (!hostedPageId || !signupId) {
+            return res.status(400).json({
+                error: 'api',
+                message: 'wrong params'
+            });
+        }
+
+        try {
+            const signup = await models.clientSignup.findOne({_id: signupId});
+            if (!signup) {
+                return res.status(400).json({
+                    error: 'api',
+                    message: 'signup not found'
+                });
+            }
+            signup.status = 'payment_ok';
+            signup.hosted_page_id = hostedPageId;
+            // set code to null to avoid double subscription
+            signup.code = undefined;
+            await signup.save();
+
+            res.send({signup});
+        } catch (error) {
+            return res.status(500).json({
+                error: 'api',
+                message: error.message
+            });
+        }
+    }
+
+};
 
 async function find_type_hash(res, paramValue, startTime) {
     try {

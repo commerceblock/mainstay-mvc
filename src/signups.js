@@ -1,11 +1,10 @@
 #!/usr/bin/env node
-const fs = require('fs');
-const path = require('path');
-const nodemailer = require('nodemailer');
 const axios = require('axios');
 const mongoose = require('mongoose');
+const uuidv4 = require('uuid/v4');
 const env = require('../src/env');
 const models = require('../src/models/models');
+const EmailHelper = require('./helpers/email-helper');
 
 mongoose.set('useFindAndModify', false);
 mongoose.set('useUnifiedTopology', true);
@@ -18,6 +17,7 @@ const ONFIDO_REQUEST_HEADERS = {
 };
 const ONFIDO_URL = env.kyc.url;
 const START_KYC_INTERVAL = 1000;
+const PAYMENT_OK_WORK_INTERVAL = 1000;
 const CHECKS_INTERVAL = 60000; // one minute
 
 const getDb = (function() {
@@ -103,6 +103,9 @@ async function check_kyc_status(signup) {
 
     if (check.result === 'clear') {
         signup.status = 'kyc_ok';
+        signup.code = uuidv4();
+        // send verification success email
+        await EmailHelper.sendOnfidoVerificationSuccessEmail(signup);
     }
     if (check.result === 'consider') {
         signup.status = 'kyc_fail';
@@ -110,110 +113,13 @@ async function check_kyc_status(signup) {
     return await signup.save();
 }
 
-/**
- * create email transport
- * @returns {*}
- */
-function get_mail_transport() {
-    return nodemailer.createTransport(env.mail_server.smtp);
-}
-
-/**
- * send email
- * @param signup
- * @returns {Promise<unknown>}
- */
-function send_signup_email(signup) {
-    return new Promise((resolve, reject) => {
-        fs.readFile(path.resolve(__dirname, './view/emails/signup/client.html'), 'utf8', (error, html) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(html);
-            }
-        });
-    }).then((html) => {
-
-        const cbLogo = {
-            filename: 'logo-commerce-block',
-            path: path.resolve(__dirname, '../public/logo-commerce-block.png'),
-            cid: 'logo-commerce-block.png',
-            contentType: 'image/png'
-        };
-        const msLogo = {
-            filename: 'logo-main-stay',
-            path: path.resolve(__dirname, '../public/logo-main-stay.png'),
-            cid: 'logo-main-stay.png',
-            contentType: 'image/png'
-        };
-
-        html = html.replace('$$NAME$$', signup.first_name + ' ' + signup.last_name);
-        html = html.replace('$$COMMERCE-BLOCK-LOGO-URL$$', `cid:${cbLogo.cid}`);
-        html = html.replace('$$MAIN-STAY-LOGO-URL$$', `cid:${msLogo.cid}`);
-
-        return new Promise((resolve, reject) => {
-            get_mail_transport().sendMail({
-                from: {
-                    name: 'Mainstay Support',
-                    address: 'support@mainstay.xyz'
-                },
-                to: signup.email,
-                subject: 'MainStay - Thank you for signing up! Here are the next steps',
-                html: html,
-                attachments: [cbLogo, msLogo],
-            }, (error, info) => {
-                if (error) {
-                    return reject(error);
-                }
-                console.log('email sent to ' + signup.email);
-                resolve(info);
-            });
-        });
-    }).catch(error => {
-        console.log('error while sending an email to ' + signup.email);
-        console.error(error);
-    });
-}
-
-/**
- * send email
- * @param user
- * @returns {Promise<unknown>}
- */
-function send_new_signup_mail(user) {
-    const html = `
-        <b>First Name</b>: ${user.first_name}<br>
-        <b>Last Name</b>: ${user.last_name}<br>
-        <b>Email</b>: ${user.email}<br>
-        ${user.company ? `<b>Company</b>: ${user.company}<br>` : ''}
-        ${user.pubkey ? `<b>Public Key</b>: ${user.pubkey}<br>` : ''}
-    `;
-
-    return new Promise((resolve, reject) => {
-        get_mail_transport().sendMail({
-            from: {
-                name: env.mail_server.smtp.from_name,
-                address: env.mail_server.smtp.from_address
-            },
-            to: env.sign_up.admin_email,
-            subject: 'New SignUp',
-            html: html,
-        }, (error, info) => {
-            if (error) {
-                return reject(error);
-            }
-            resolve(info);
-        });
-    });
-}
-
 async function start_kyc(signup) {
     console.log('New signup found: ' + signup.first_name + ' ' + signup.last_name);
 
     // send email to admin
-    await send_new_signup_mail(signup);
+    await EmailHelper.sendNewSignupMail(signup);
     // send email
-    await send_signup_email(signup);
+    await EmailHelper.sendSignupEmail(signup);
 
     const applicant = await send_kyc(signup);
     const kycId = applicant.id;
@@ -223,6 +129,44 @@ async function start_kyc(signup) {
     signup.status = 'sent_kyc';
     signup.kyc_id = kycId;
     await signup.save();
+}
+
+async function create_slot(signup) {
+    // fetch item with max client_position
+    const maxPositionClientDetails = await models.clientDetails
+        .findOne()
+        .sort({client_position: -1})
+        .limit(1);
+
+    let nextClientPosition;
+    if (maxPositionClientDetails === null) {
+        nextClientPosition = 0;
+    } else {
+        nextClientPosition = maxPositionClientDetails.client_position + 1;
+    }
+    const publicKey = '';
+    // create new client-detail
+    const clientDetailsData = {
+        client_position: nextClientPosition,
+        auth_token: uuidv4(),
+        client_name: `${signup.first_name} ${signup.last_name}`,
+        pubkey: publicKey,
+    };
+    const clientDetails = new models.clientDetails(clientDetailsData);
+    await clientDetails.save();
+
+    // create client-commitment
+    const clientCommitmentData = {
+        client_position: clientDetails.client_position,
+        commitment: '0000000000000000000000000000000000000000000000000000000000000000'
+    };
+    const clientCommitment = new models.clientCommitment(clientCommitmentData);
+    await clientCommitment.save();
+
+    signup.status = 'slot_ok';
+    await signup.save();
+
+    await EmailHelper.sendPaymentOkEmail(signup, clientCommitment, clientDetails);
 }
 
 async function do_work() {
@@ -262,5 +206,20 @@ async function do_applicant_checks() {
     }, CHECKS_INTERVAL);
 }
 
+async function do_payment_ok_work() {
+    setInterval(async () => {
+        try {
+            const signup = await models.clientSignup.findOneAndUpdate({status: 'payment_ok'}, {status: 'start_slot'});
+            if (signup) {
+                await create_slot(signup);
+            }
+        } catch (error) {
+            console.error(error);
+            process.exit(1);
+        }
+    }, PAYMENT_OK_WORK_INTERVAL);
+}
+
 do_work();
 do_applicant_checks();
+do_payment_ok_work();

@@ -55,7 +55,7 @@ class App extends React.Component {
             >
                 <>
                     {isLoggedIn && <Navigation />}
-                    <Container className='main-container'>
+                    <Container className='main-container' fluid>
                         {routes}
                     </Container>
                 </>
