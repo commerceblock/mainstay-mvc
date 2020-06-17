@@ -45,15 +45,16 @@ class LatestAttestationInfo extends Component {
         if (!data) {
             return (
                 <>
+
                     <div className="overview-item">
                         <div>
-                            <p>Block Hash</p>
+                            <p>Latest Transaction</p>
                             <Link to={'/'} className="truncate-hash">f072…e1c8</Link>
                         </div>
                     </div>
                     <div className="overview-item">
                         <div>
-                            <p>Latest Txid</p>
+                            <p>Latest Block Hash</p>
                             <Link to={'/'} className="truncate-hash">f072…e1c8</Link>
                         </div>
                     </div>

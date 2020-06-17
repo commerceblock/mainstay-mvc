@@ -1,6 +1,7 @@
 import React from 'react';
 import LatestAttestationInfo from './LatestAttestationInfo';
 import Sockette from 'sockette';
+import {getRoute, routes} from "./routes";
 
 class MainstayInfo extends React.PureComponent {
 
@@ -48,7 +49,10 @@ class MainstayInfo extends React.PureComponent {
         return (
             <div className="row">
                 <div className="col-12">
-                    <h4 className="table-title customTitleStyle">Overview</h4>
+                   <div className="col-9 row title">
+                       <h4 className="table-title customTitleStyle">Explore the Blockchain</h4>
+                       <a href={getRoute(routes.attestation, {value: null})}>View More →</a>
+                   </div>
                 </div>
                 <div className="col-12">
                     <div className="d-flex flex-wrap justify-content-between align-items-center">
