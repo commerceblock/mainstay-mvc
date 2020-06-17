@@ -1,13 +1,14 @@
 import LatestAttestation from './LatestAttestation';
 import LatestCommitment from './LatestCommitment';
 import MainstayInfo from './MainstayInfo';
-import Search from './search/search';
+
 import Flickity from 'react-flickity-component';
 import 'flickity/dist/flickity.min.css';
 import {Button} from 'reactstrap';
 import SignUpModal from './modals/SignUpModal';
 
 import React from 'react';
+import Login from "./Login";
 
 const flickityOptions = {
     initialIndex: 0,
@@ -64,8 +65,8 @@ class Home extends React.Component {
     render() {
         return (
             <div className="row mx-0 home-content" data-controller="homepageMempool">
-              <div className="col-12 col-lg-6 px-0 carousel-wrapper">
-                <div className="carousel-toggle" onClick={this.toggleSlider}><img src="icon-eye-close.svg" /></div>
+              <div className="col-12 col-lg-12 px-0 carousel-wrapper">
+             {/*   <div className="carousel-toggle" onClick={this.toggleSlider}><img src="icon-eye-close.svg" /></div>*/}
                 <Flickity flickityRef={c => this.flkty = c}
                   className={'carousel'} // default ''
                   elementType={'div'} // default 'div'
@@ -77,9 +78,11 @@ class Home extends React.Component {
                 >
                 <div className="carousel-cell">
                     <div className="carousel-image">
-                        <img src="slider.png"/>
+                        <img src="slider-first.svg"/>
+
                         <div className="carousel-image__overlay">
-                        <p>Sign-up to MainStay and <br/>start generating your data proofs</p>
+                            <p>Sign-up to MainStay   <br/> and start generating  <br/> Your data proofs</p>
+
                         <div className="carousel-image__buttons">
                             <Button color="success" onClick={this.toggleSignUpModal}>
                                 Sign Up
@@ -97,46 +100,60 @@ class Home extends React.Component {
                               <div className="col-6 col-md-4">
                                 <div className="carousel-box__item">
                                   <img src="icon-securing.svg" />
-                                  <p><strong>Securing Blockchains</strong></p>
-                                  <p>Secure any blockchain with asset, security tokens or other registry tokens.</p>
+                                    <div>
+                                        <p><strong>Securing Blockchains</strong></p>
+                                        <p>Secure any blockchain with asset, security tokens or other registry tokens.</p>
+                                    </div>
                                 </div>
                               </div>
                               <div className="col-6 col-md-4">
                                 <div className="carousel-box__item">
                                   <img src="icon-verifiable.svg" />
-                                  <p><strong>Verifiable Unique Ownership</strong></p>
-                                  <p>Prove that ownership of an asset or security is globally unique</p>
+                                  <div>
+                                      <p><strong>Verifiable Unique Ownership</strong></p>
+                                      <p>Prove that ownership of an asset or security is globally unique</p>
+                                  </div>
+
                                 </div>
                               </div>
                               <div className="col-6 col-md-4">
                                 <div className="carousel-box__item">
                                   <img src="icon-document-tracking.svg" />
-                                  <p><strong>Document History Tracking</strong></p>
-                                  <p>Keep track of a sequence of changes and prove that only a single version of history exists</p>
+                                  <div>
+                                      <p><strong>Document History Tracking</strong></p>
+                                      <p>Keep track of a sequence of changes and prove that only a single version of history exists</p>
+                                  </div>
+
                                 </div>
                               </div>
                               <div className="col-6 col-md-4">
                                 <div className="carousel-box__item">
                                   <img src="icon-proof-of-existence.svg" />
-                                  <p><strong>Proof Of Existence</strong></p>
-                                  <p>Trustless proof that data existed before a certain point in time</p>
+                                  <div>
+                                      <p><strong>Proof Of Existence</strong></p>
+                                      <p>Trustless proof that data existed before a certain point in time</p>
+                                  </div>
                                 </div>
                               </div>
                               <div className="col-6 col-md-4">
                                 <div className="carousel-box__item">
                                   <img src="icon-proof-of-publication.svg" />
-                                  <p><strong>Proof Of Publication</strong></p>
-                                  <p>Trustless proof that only one version of the data was notarised</p>
+                                 <div>
+                                     <p><strong>Proof Of Publication</strong></p>
+                                     <p>Trustless proof that only one version of the data was notarised</p>
+                                 </div>
                                 </div>
                               </div>
                               <div className="col-6 col-md-4">
                                 <div className="carousel-box__item">
-                                  <img src="icon-provenance.svg" />
-                                  <p><strong>Provenance/Supply Chain Tracking</strong></p>
-                                  <p>Verification of a single chain of custody and status changes</p>
+                                  <img src="icon-provenance.svg" />Latest Txid
+                                 <div>
+                                     <p><strong>Provenance/Supply Chain Tracking</strong></p>
+                                     <p>Verification of a single chain of custody and status changes</p>
+                                 </div>
                                 </div>
                               </div>
-                              <div className="carousel-image__overlay">
+                              <div className="carousel-image__overlay footer">
                                 <div className="carousel-image__buttons">
                                   <Button color="back" onClick={this.prevButton}>← Back</Button>
                                   <Button color="transparent" onClick={this.nextButton}>Learn how MainStay works →</Button>
@@ -167,7 +184,7 @@ class Home extends React.Component {
                               <div className="col-12 col-md-8">
                                 <img src="how-mainstay-works.png" className="w-100 mt-4 mt-md-0"/>
                               </div>
-                              <div className="carousel-image__overlay">
+                              <div className="carousel-image__overlay footer">
                                 <div className="carousel-image__buttons">
                                     <Button color="back" onClick={this.prevButton}>← Back</Button>
                                     <Button color="transparent" onClick={this.nextButton}>Pricing →</Button>
@@ -192,7 +209,7 @@ class Home extends React.Component {
                                     Sign Up
                                 </Button>
                               </div>
-                              <div className="carousel-image__overlay">
+                              <div className="carousel-image__overlay footer">
                                 <div className="carousel-image__buttons justify-content-center">
                                   <Button color="back" onClick={this.prevButton}>← Back</Button>
                                 </div>
@@ -203,16 +220,17 @@ class Home extends React.Component {
                 </div>
                 </Flickity>
               </div>
+                <div className="col-12 col-lg-6 login">
+
+                    <Login/>
+
+                </div>
               <div className="col-12 col-lg-6 mainstayinfo">
-                  <div className="block-on-slider"><Search/></div>
+
                   <MainstayInfo/>
               </div>
-              <div className="col-md-12 col-lg-7 m-t-15 latestattestation">
-                  <LatestAttestation />
-              </div>
-              <div className="col-md-12 col-lg-5 m-t-15 latestcommitment">
-                  <LatestCommitment />
-              </div>
+
+
               <SignUpModal
                   isOpen={this.state.modalLogin}
                   onModalClose={this.toggleSignUpModal}
