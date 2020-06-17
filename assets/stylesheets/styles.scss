@@ -853,7 +853,7 @@ body.darkBG .keynav-target {
 
 
 .container {
-  max-width: 100% !important;
+  max-width: 95% !important;
 }
 
 
@@ -1757,12 +1757,21 @@ th, th span {
   min-height: 76vh;
 }
 
-.container.main {
+.main {
   margin-bottom: 100px;
+  margin-top: 60px;
 
 }
 
+.navigation {
+  height: 100px;
+  background: #ffffff;
+  line-height: 60px;
+}
 
+.navbar-nav {
+  align-items: baseline;
+}
 .search-tooltip {
   font-size: 11px;
   position: absolute;
@@ -1773,6 +1782,127 @@ th, th span {
   margin-right: 0;
   text-align: left;
   color: #c24231;
+}
+
+
+.title {
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  a {
+    width: 120px;
+    border: 1px solid #31C366;
+    padding: 5px 10px;
+    text-align: center;
+    border-radius: 5px;
+    &:hover {
+      background-color: #DFF6E6;
+    }
+  }
+}
+.login {
+  margin-top: 60px;
+}
+.login-page {
+  h4 {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 29px;
+    margin-bottom: 20px;
+    margin-top: 50px;
+
+  }
+  .left {
+
+    .block {
+      display: flex;
+      -webkit-box-shadow: 0px 2px 5px #ccc;
+      -moz-box-shadow: 0px 2px 5px #ccc;
+      box-shadow: 0px 2px 5px #ccc;
+      padding: 15px 25px;
+      border-radius: 10px;
+      border: 1px solid #ffffff;
+      cursor: pointer;
+      margin-bottom: 15px;
+      img {
+
+      }
+      div {
+        margin-left: 10px;
+
+        .title {
+          display: block;
+          font-size: 15px;
+          font-weight: 500;
+          color: #1C1C1C;
+          margin-bottom: 0;
+
+        }
+        .desc {
+          display: block;
+          font-size: 15px;
+          color: #737373;
+
+        }
+      }
+      &:hover {
+        border: 1px solid #31C25A;
+        .title {
+          color: #3CBA60;
+
+        }
+      }
+      .oneDrive {
+        width: 37px;
+        height: 28px;
+      }
+    }
+  }
+  .right {
+    /* display: flex;
+     flex-wrap: wrap;
+     background-color: #F1F2F2;
+     padding: 80px 20px;*/
+    img {
+      width: 100%;
+    }
+    /*.block {
+      margin-bottom: 25px;
+      .images {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        img {
+          margin: 5px;
+        }
+
+      }
+      .content {
+        display: flex;
+        .number {
+          position: absolute;
+          color: #3D9155;
+          font-size: 25px;
+          width: 52px;
+          height: 52px;
+          text-align: center;
+          border: 1px solid #31C25A;
+          background-color: #CFEDD7;
+          border-radius: 50%;
+          padding: 8px;
+          line-height: 30px;
+          left: 0;
+        }
+        div {
+          padding-left: 60px;
+        }
+
+      }
+    }*/
+  }
+
+
 }
 
 .top-search.wrong-search {
@@ -1843,7 +1973,7 @@ th, th span {
 }
 
 .navbar-nav {
-  width: 100%;
+  width: 80%;
 }
 
 .navbar .nav-item {
@@ -2194,7 +2324,7 @@ th, th span {
   .sm-w151 {
     width: 151px;
   }
-  .container.main {
+  .main {
     margin: 0;
     padding: 0;
   }
@@ -2253,11 +2383,27 @@ th, th span {
 
   .collapse.show {
     display: block !important;
+    z-index: 1;
+    background-color: #Ffffff;
+    .navbar-nav {
+      box-shadow: 0px 6px 8px 1px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+
+
+  .navbar-toggler {
+    outline: none;
+    &:focus {
+      outline: none;
+    }
   }
   .navbar-brand {
 
     width: 75%;
   }
+
+
 
   .top-search-icon-mobile {
     display: block;
@@ -2613,6 +2759,15 @@ th, th span {
   padding: 5px 10px;
 }
 
+.overview-item.overview-item--time {
+  display: flex;
+  p {
+    &:last-child {
+      font-weight: 500;
+    }
+  }
+}
+
 .carousel-image {
   position: relative;
   height: 100%;
@@ -2624,10 +2779,19 @@ th, th span {
 
   &__overlay {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+    left: 60px;
+    width: 300px;
+    text-align: left;
+    top: 35%;
     padding: 0 20px;
+    &.footer  {
+      bottom: 50px;
+      left: 0;
+      top: inherit;
+      right: 0;
+      width: 100%;
+    }
+
 
     @media (min-width: 415px) {
       padding: 0;
@@ -2635,12 +2799,12 @@ th, th span {
 
     p {
       color: #1C1C1C;
-      font-size: 27px;
-      line-height: 35px;
-      text-align: left;
+      font-size: 32px;
+      line-height: 38px;
+      text-align: center;
 
       @media (min-width: 415px) {
-        text-align: center;
+        text-align: left;
       }
     }
   }
@@ -2659,7 +2823,7 @@ th, th span {
 
 .carousel-box {
   height: 100%;
-  background: #FAFAFA;
+  background: #F1F2F2;
   padding: 20px 0;
 
   @media (min-width: 768px) {
@@ -2672,7 +2836,7 @@ th, th span {
   }
 
   .container {
-    max-width: 100% !important;
+
 
     @media (min-width: 415px) and (max-width: 991px) {
       padding: 0 30px;
@@ -2701,25 +2865,29 @@ th, th span {
     }
 
     @media (min-width: 992px) {
-      padding-left: 5px;
-      padding-right: 5px;
-      margin-bottom: 10px;
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-bottom: 15px;
+
     }
   }
 
   &__item {
-    background: #F2F2F2;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
     padding: 10px;
     height: 100%;
 
     @media (min-width: 415px) {
-      padding: 20px 10px;
+      padding: 30px 20px;
     }
 
     img {
       width: 32px !important;
       height: 32px;
       margin-bottom: 10px;
+      margin-right: 20px;
 
       @media (min-width: 992px) {
         width: 50px !important;
@@ -2737,7 +2905,12 @@ th, th span {
       }
 
       &:last-child {
-        margin-bottom: 0;
+        margin-bottom: 10px;
+        font-size: 14px;
+      }
+      &:first-child {
+        margin-bottom: 10px;
+        font-size: 16px;
       }
     }
   }
@@ -2995,7 +3168,7 @@ th, th span {
   }
 }
 
-.container.main, .navigation .container {
+.main, .navigation .container {
   @media (min-width: 992px) {
     padding: 0 !important;
 
@@ -3075,6 +3248,8 @@ div#root {
 
 .carousel-box h1 {
   font-weight: bold;
+  font-size: 32px;
+  margin: 20px 0 40px 0;
 }
 
 .carousel-pricing__feature {
@@ -3085,4 +3260,18 @@ div#root {
 
 .error {
   padding-top: 80px;
+}
+
+.login {
+  font-size: 30px;
+}
+
+
+@media (max-width: 575px)  {
+  .carousel-image__overlay {
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    text-align: center;
+  }
 }

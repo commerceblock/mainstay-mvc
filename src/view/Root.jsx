@@ -50,13 +50,13 @@ class Root extends React.Component {
 
         return (
             <Router history={appHistory}>
-                <div className="top-nav">
+                <div className="top-nav ">
                     <div  className={this.state.isScrolled ? 'navigation scroll' : 'navigation'} id='nav' >
                         <div className="container">
                             <TopNavigation />
                         </div>
                     </div>
-                    <div className="container main" data-controller="main">
+                    <div className=" main" data-controller="main">
                         <Switch>
                             <Route path={routes.search} component={Search} />
                             <Route path={routes.search} component={Search} />

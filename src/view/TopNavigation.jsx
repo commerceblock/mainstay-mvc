@@ -137,24 +137,24 @@ class TopNavigation extends React.Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
 
         if (window.location.pathname !== '/') {
-            document.getElementById('top-search').classList.remove('hide-on-slider');
+           /* document.getElementById('top-search').classList.remove('hide-on-slider');*/
             document.getElementById('show-slider-btn').classList.remove('hide');
             document.getElementById('show-slider-btn').classList.add('hide')
 
 
         } else {
             document.getElementById('show-slider-btn').classList.remove('hide');
-            document.getElementById('top-search').classList.remove('hide-on-slider');
-            document.getElementById('top-search').classList.add('hide-on-slider')
+           /* document.getElementById('top-search').classList.remove('hide-on-slider');
+            document.getElementById('top-search').classList.add('hide-on-slider')*/
         }
     }
 
-    componentDidMount() {
+   /* componentDidMount() {
         document.body.addEventListener('click', this.hideMobileMenu);
         if (window.location.pathname !== '/') {
             document.getElementById('top-search').classList.remove('hide-on-slider')
         }
-    }
+    }*/
 
     componentWillUnmount() {
         document.body.removeEventListener('click', this.hideMobileMenu);
@@ -166,18 +166,20 @@ class TopNavigation extends React.Component {
                 <Navbar color="faded" light expand="lg">
                     <NavbarBrand className="mr-auto" href="/"><Logo/></NavbarBrand>
                     <NavbarToggler onClick={this.toggleNavbarHandler}/>
+
                     <Collapse isOpen={this.state.isNavbarOpened} navbar>
+
                         <Nav className="ml-auto d-flex justify-content-end" navbar>
-                            <NavItem className="search-item hide-on-slider" id="top-search">
+                            <NavItem className="search-item " id="top-search">
                                 <Search/>
                             </NavItem>
                             <NavItem className="hover-active">
                                 <Link className="nav-link"
-                                      to={getRoute(routes.attestation, {value: null})}>Attestations</Link>
+                                      to={getRoute(routes.attestation, {value: null})}>Explore</Link>
                             </NavItem>
-                            <NavItem className="hover-active">
-                                <Link className="nav-link" to={routes.client}>Clients</Link>
-                            </NavItem>
+                            {/*<NavItem className="hover-active">*/}
+                            {/*    <Link className="nav-link" to={routes.client}>Explore</Link>*/}
+                            {/*</NavItem>*/}
                             <NavItem className="hover-btn-active sendCommitment">
                                 <Button color="success" onClick={this.toggleCommitmentModal}>
                                     Send Commitment
