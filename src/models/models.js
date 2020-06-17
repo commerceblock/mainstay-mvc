@@ -65,6 +65,19 @@ schemaMerkleProof.index({
     'commitment': 1
 });
 
+const schemaCommitmentAdd = new Schema({
+    client_position: Number,
+    addition: String,
+    confirmed: Boolean,
+    commitment: String,
+    inserted_at: Date
+}, {collection: 'CommitmentAdd'});
+schemaCommitmentAdd.index({
+    client_position: 1,
+    addition: 1,
+    commitment: 1
+});
+
 const clientSignupStatuses = [
     'new',
     'start_kyc',
@@ -102,6 +115,7 @@ const clientCommitment = mongoose.model('ClientCommitment', schemaClientCommitme
 const clientDetails = mongoose.model('ClientDetails', schemaClientDetails);
 const merkleCommitment = mongoose.model('MerkleCommitment', schemaMerkleCommitment);
 const merkleProof = mongoose.model('MerkleProof', schemaMerkleProof);
+const commitmentAdd = mongoose.model('CommitmentAdd', schemaCommitmentAdd);
 const clientSignup = mongoose.model('ClientSignup', schemaClientSignup);
 
 module.exports = {
@@ -111,6 +125,7 @@ module.exports = {
     clientDetails,
     merkleCommitment,
     merkleProof,
+    commitmentAdd,
     clientSignup,
     clientSignupStatuses,
 };

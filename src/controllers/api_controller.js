@@ -4,6 +4,9 @@ const {base64decode} = require('nodejs-base64');
 const moment = require('moment');
 
 const ec = new elliptic.ec('secp256k1');
+const { MerkleTree } = require('merkletreejs')
+const SHA256 = require('crypto-js/sha256')
+var CryptoJS = require('crypto-js')
 
 const {
     VERSION_API_V1,
@@ -161,12 +164,27 @@ module.exports = {
             return;
         }
 
-        const commitment = get_commitment_arg(req, res, startTime);
+        var commitment = get_commitment_arg(req, res, startTime);
         if (res.headersSent) {
             return;
         }
 
         try {
+            //search added commitments first
+            const slotCommitment = await models.commitmentAdd.find({
+                client_position: position,
+                addition: commitment
+            });
+
+            //if commitment 
+            if (slotCommitment.length > 0) {
+                if (slotCommitment[0].confirmed) {
+                    commitment = slotCommitment[0];
+                } else {
+                    return reply_err(res, MERKLEROOT_UNKNOWN, startTime);
+                }
+            }
+
             const merkleCommitmentData = await models.merkleCommitment.find({
                 client_position: position,
                 commitment: commitment
@@ -330,17 +348,209 @@ module.exports = {
         });
     },
 
+    commitment_add: async (req, res) => {
+        const startTime = start_time();
+        let rawRequestData = '';
+        req.on('data', chunk => {
+            rawRequestData += chunk.toString();
+        });
+
+        req.on('end', async () => {
+            // test payload in base64 format and defined
+            let data;
+            let payload;
+            try {
+                data = JSON.parse(rawRequestData);
+                payload = JSON.parse(base64decode(data[MAINSTAY_PAYLOAD]));
+            } catch (e) {
+                return reply_err(res, BAD_ARG_PAYLOAD, startTime);
+            }
+
+            if (payload === undefined) {
+                return reply_err(res, MISSING_ARG_PAYLOAD, startTime);
+            }
+
+            // check payload components are defined
+            if (payload.commitment === undefined) {
+                return reply_err(res, MISSING_PAYLOAD_COMMITMENT, startTime);
+            }
+            if (payload.position === undefined) {
+                return reply_err(res, MISSING_PAYLOAD_POSITION, startTime);
+            }
+            if (payload.token === undefined) {
+                return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
+            }
+
+            const signatureCommitment = data[MAINSTAY_SIGNATURE];
+            try {
+                // try get client details
+                const data = await models.clientDetails.find({client_position: payload.position});
+                if (data.length === 0) {
+                    return reply_err(res, POSITION_UNKNOWN, startTime);
+                }
+                if (data[0].auth_token !== payload.token) {
+                    return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
+                }
+
+                if (data[0].pubkey && data[0].pubkey !== '') {
+                    if (signatureCommitment === undefined) {
+                        return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
+                    }
+
+                    try {
+                        // get pubkey hex
+                        const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
+
+                        // get base64 signature
+                        let sig = Buffer.from(signatureCommitment, 'base64');
+
+                        if (!ec.verify(payload.commitment, sig, pubkey)) {
+                            return reply_err(res, SIGNATURE_INVALID, startTime);
+                        }
+                    } catch (error) {
+                        return reply_err(res, SIGNATURE_INVALID, startTime);
+                    }
+                }
+
+                const repeatAdd = await models.commitmentAdd.findOne({client_position: payload.position}, {addition: payload.commitment})
+
+                if (repeatAdd) {
+                    reply_msg(res, 'repeat commitment: ignored', startTime);
+                } else {
+                    //add commitment (unconfirmed)
+                    await models.commitmentAdd.insertOne({client_position: payload.position}, {addition: payload.commitment}, {confirmed: false}, {commitment: ''}, {inserted_at: Date.now()});
+                    //update confirmed status of listed commitments
+
+                    //get all unconfirmed additions
+                    const unconfirmed = await models.commitmentAdd.find({client_position: payload.position}, {confirmed: false}).sort({inserted_at: 1}).exec();
+
+                    //get latest attestation
+                    const latest_atst = await models.attestation.find({}).sort({inserted_at: 1}).limit(1).exec();
+
+                    //go through list of unconfirmed additions to see which have been confirmed
+
+                    for (var i = 0; i < unconfirmed.length; i++) {
+                        leaves = [];
+                        for (var j = 0; j <= i; j++ ) {
+                            var leaf = CryptoJS.enc.Hex.parse(unconfirmed[j]);
+                            leaves.push(leaf)
+                        }
+                        const tree = new MerkleTree(leaves, SHA256);
+                        const root = tree.getRoot().toString('hex');
+
+                        if (root === latest_atst[0]) {
+                            for (var j = 0; j <= i; j++ ) {
+                                //update addition table to show confirmed
+                                await models.commitmentAdd.updateOne({addition: unconfirmed[j]}, {commitment: root, confirmed: true}, {upsert: true});
+                            }
+                            //commit the root to the ClientCommitment table
+                            await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: root}, {upsert: true});
+                            break;
+                        }
+                    }
+                }
+
+                reply_msg(res, 'feedback', startTime);
+
+            } catch (error) {
+                return reply_err(res, INTERNAL_ERROR_API, startTime);
+            }
+        });
+    },    
+
     commitment_commitment: async (req, res) => {
         const startTime = start_time();
-        const commitment = get_commitment_arg(req, res, startTime);
+        var commitment = get_commitment_arg(req, res, startTime);
         if (res.headersSent) {
             return;
         }
 
         try {
-            const merkleProofData = await models.merkleProof.find({commitment: commitment});
+            var addition = commitment;
+            var merkleProofData = await models.merkleProof.find({addition: addition});
             if (merkleProofData.length === 0) {
-                return reply_err(res, 'Not found', startTime);
+
+                //if no slot commitment, search added commitments
+                const slotCommitment = await models.commitmentAdd.find({
+                    addition: addition
+                });
+
+                //if added commitment 
+                if (slotCommitment.length > 0) {
+                    if (slotCommitment[0].confirmed) {
+                        commitment = slotCommitment[0].commitment;
+                    } else {
+                        return reply_err(res, 'Not found', startTime);
+                    }
+                } else {
+                    return reply_err(res, 'Not found', startTime);
+                }
+
+                merkleProofData = await models.merkleProof.find({commitment: commitment});
+
+                const response = merkleProofData[0]; // get earliest
+                const attestationData = await models.attestation.find({merkle_root: response.merkle_root});
+
+                if (attestationData.length === 0) {
+                    return reply_err(res, 'Not found', startTime);
+                }
+
+                let index = attestationData.findIndex((item) => item.confirmed === true);
+                if (index === -1) {
+                    index = attestationData.length - 1;
+                }
+                ;
+
+                //construct Merkle tree for additions
+                const additionList = await models.commitmentAdd.find({client_position: payload.position}, {commitment: commitment}).sort({inserted_at: 1}).exec();
+
+                leaves = [];
+                for (var i = 0; i < additionList.length; i++) {
+                    var leaf = CryptoJS.enc.Hex.parse(additionList[i].addition);
+                    leaves.push(leaf)
+                }
+                const tree = new MerkleTree(leaves, SHA256);
+                const root = tree.getRoot().toString('hex');
+
+                //verify root
+                if (root !== commitment) {
+                    return reply_err(res, INTERNAL_ERROR_API, startTime);
+                }
+
+                //get path for addition
+                const binpath = tree.getProof(addition);
+                const hexpath = tree.getHexProof(addition);
+
+                var addops = [];
+
+                for(var i = 0; i < binpath.length; i++) {
+                    var op = {};
+                    if(binpath[i].position == 'right') {
+                        op.append = true;
+                    } else {
+                        op.append = false;
+                    }
+                    op.commitment = hexpath[i].substring(2);
+                }
+
+                reply_msg(res, {
+                    attestation: {
+                        merkle_root: attestationData[index].merkle_root,
+                        txid: attestationData[index].txid,
+                        confirmed: attestationData[index].confirmed,
+                        inserted_at: moment.utc(attestationData[index].inserted_at).format(DATE_FORMAT)
+                    },
+                    merkleproof: {
+                        position: response.client_position,
+                        merkle_root: response.merkle_root,
+                        commitment: response.commitment,
+                        ops: response.ops
+                    },
+                    addproof: {
+                        addition: addition,
+                        ops: addops
+                    }
+                }, startTime);
             }
             const response = merkleProofData[0]; // get earliest
             const attestationData = await models.attestation.find({merkle_root: response.merkle_root});
@@ -480,6 +690,20 @@ module.exports = {
                         ops: data[itr].ops,
                         date: moment.utc(attestationData[index].inserted_at).format(DATE_FORMAT)
                     });
+
+                    const additionList = await models.commitmentAdd.find({client_position: position}, {commitment: data[itr].commitment}).sort({inserted_at: 1}).exec();
+
+                    if (additionList.length > 0) {
+                        additions = []
+                        for (var i = 0; i < additionList.length; i++) {
+                            additions.push({
+                                addition: additionList[i].addition,
+                                date: moment.utc(additionList[i].inserted_at).format(DATE_FORMAT)
+                                });
+                        }
+                        response['data'][-1].additions = additions;   
+                    }
+
                 }
             }
 
