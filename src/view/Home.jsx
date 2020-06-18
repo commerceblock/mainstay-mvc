@@ -146,7 +146,7 @@ class Home extends React.Component {
                               </div>
                               <div className="col-6 col-md-4">
                                 <div className="carousel-box__item">
-                                  <img src="icon-provenance.svg" />Latest Txid
+                                  <img src="icon-provenance.svg" />
                                  <div>
                                      <p><strong>Provenance/Supply Chain Tracking</strong></p>
                                      <p>Verification of a single chain of custody and status changes</p>
@@ -167,8 +167,9 @@ class Home extends React.Component {
                     <div className="carousel-how-it-works">
                         <div className="container px-0">
                             <div className="row no-gutters">
-                              <div className="col-12"><h1>How MainStay works?</h1></div>
+
                               <div className="col-12 col-md-4">
+                                  <h1>How MainStay works?</h1>
                                   <ol>
                                       <li><strong>Generate cryptographic hash</strong> of your data</li>
                                       <li><strong>Commit hash</strong> using your slot authentication</li>
@@ -181,8 +182,8 @@ class Home extends React.Component {
 
                                 <a href="https://commerceblock.readthedocs.io/en/latest/mainstay/index.html" target="_blank" className="carousel-how-it-works__button"><img src="icon-whitepaper.svg" /><span>Technical Documentation</span></a>
                               </div>
-                              <div className="col-12 col-md-8">
-                                <img src="how-mainstay-works.png" className="w-100 mt-4 mt-md-0"/>
+                              <div className="col-12 col-md-8 slide-3">
+                                <img src="how-mainstay-works.png" className="mt-4 mt-md-0"/>
                               </div>
                               <div className="carousel-image__overlay footer">
                                 <div className="carousel-image__buttons">
