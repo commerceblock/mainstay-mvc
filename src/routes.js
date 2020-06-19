@@ -28,6 +28,7 @@ function makeApiRoutes(app) {
     router.get('/attestation', apiController.attestation);
     router.get('/blockhash', apiController.blockhash);
     router.get('/clients', apiController.clients);
+    router.post('/commitment/add', apiController.commitment_add);
     router.post('/commitment/send', apiController.commitment_send);
 
     app.use('/api/v1', router);
