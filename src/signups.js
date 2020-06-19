@@ -163,6 +163,14 @@ async function create_slot(signup) {
     const clientCommitment = new models.clientCommitment(clientCommitmentData);
     await clientCommitment.save();
 
+    // create client-commitment
+    const clientAddData = {
+        client_position: clientDetails.client_position,
+        commitment: '0000000000000000000000000000000000000000000000000000000000000000'
+    };
+    const addCommitment = new models.commitmentAdd(clientAddData);
+    await commitmentAdd.save();
+
     signup.status = 'slot_ok';
     await signup.save();
 
