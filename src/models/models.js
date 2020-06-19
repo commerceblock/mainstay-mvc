@@ -71,7 +71,9 @@ const schemaCommitmentAdd = new Schema({
     confirmed: Boolean,
     commitment: String,
     inserted_at: Date
-}, {collection: 'CommitmentAdd'});
+}, {collection: 'CommitmentAdd',
+    versionKey: false
+    });
 schemaCommitmentAdd.index({
     client_position: 1,
     addition: 1,
