@@ -586,7 +586,7 @@ module.exports = {
                     if (slotCommitment[0].confirmed) {
                         commitment = slotCommitment[0].commitment;
                     } else {
-                        return reply_err(res, 'Not yet confirmed', startTime);
+                        return reply_err(res, 'Pending', startTime);
                     }
                 } else {
                     return reply_err(res, 'Not found', startTime);
