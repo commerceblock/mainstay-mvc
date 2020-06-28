@@ -1,6 +1,6 @@
 ## Documentation Mainstay API
 
-Short documentation for the public API offered on the Mainstay website at `https://testnet.mainstay.xyz/api/v1`.
+Short documentation for the public API offered on the Mainstay website at `https://mainstay.xyz/api/v1`.
 
 ### REST framework structure
 
@@ -20,7 +20,7 @@ allowance : time taken to respond in ns
 
 API index page.
 
-**request:** https://testnet.mainstay.xyz/api/v1
+**request:** https://mainstay.xyz/api/v1
 
 *response*
 ```
@@ -38,7 +38,7 @@ API index page.
 
 Provide information on latest attestation.
 
-**request:** https://testnet.mainstay.xyz/api/v1/latestattestation
+**request:** https://mainstay.xyz/api/v1/latestattestation
 
 *response*
 ```
@@ -58,9 +58,9 @@ Provide information on latest attestation.
 
 #### Latest Commitment
 
-Provide information on latest commitment for a specific position.
+Provide information on latest commitment for a specific position, and the component additions (if present). 
 
-**request:** https://testnet.mainstay.xyz/api/v1/latestcommitment?position=3
+**request:** https://mainstay.xyz/api/v1/latestcommitment?position=3
 
 *response*
 ```
@@ -70,6 +70,12 @@ Provide information on latest commitment for a specific position.
         "commitment": "d235db29356bb02f37e16712c4d34a724282fd81134fbfda61407b3009755a9e",
         "merkle_root": "f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b",
         "txid": "38fa2c6e103673925aaec50e5aadcbb6fd0bf1677c5c88e27a9e4b0229197b13"
+        "additions": [
+                {
+                "addition": "2bdc4576bf1c6045bd295e11633a1c73d32ebbecd1f8f2831f5ec78c39803228",
+                "date": "20:51:59 06/22/2020 UTC"
+                },
+            ]
     },
     "timestamp": 1548329166363,
     "allowance":
@@ -81,9 +87,9 @@ Provide information on latest commitment for a specific position.
 
 #### Commitment
 
-Fetch commitment information for a specific position and merkle_root.
+Fetch commitment information for a specific position and merkle_root, and the component additions (if present). 
 
-**request:** https://testnet.mainstay.xyz/api/v1/commitment?position=3&merkle_root=f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b
+**request:** https://mainstay.xyz/api/v1/commitment?position=3&merkle_root=f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b
 
 *response*
 ```
@@ -92,6 +98,12 @@ Fetch commitment information for a specific position and merkle_root.
     {
         "commitment": "d235db29356bb02f37e16712c4d34a724282fd81134fbfda61407b3009755a9e",
         "merkle_root": "f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b"
+        "additions": [
+                {
+                "addition": "2bdc4576bf1c6045bd295e11633a1c73d32ebbecd1f8f2831f5ec78c39803228",
+                "date": "20:51:59 06/22/2020 UTC"
+                },
+            ]
     },
     "timestamp": 1548329204516,
     "allowance":
@@ -105,7 +117,7 @@ Fetch commitment information for a specific position and merkle_root.
 
 Fetch latest commitment proof for a specific position.
 
-**request:** https://testnet.mainstay.xyz/api/v1/commitment/latestproof?position=1
+**request:** https://mainstay.xyz/api/v1/commitment/latestproof?position=1
 
 *response*
 ```
@@ -139,16 +151,17 @@ Fetch latest commitment proof for a specific position.
 
 #### Commitment Verify
 
-Check if a commitment for a specific position is included in an attestation.
+Check if a commitment or addition for a specific position is included in an attestation (and return the earliest confirmed time and date).
 
-**request:** https://testnet.mainstay.xyz/api/v1/commitment/verify?position=1&commitment=5555c29bc4ac63ad3aa4377d82d40460440a67f6249b463453ca6b451c94e053
+**request:** https://mainstay.xyz/api/v1/commitment/verify?position=1&commitment=5555c29bc4ac63ad3aa4377d82d40460440a67f6249b463453ca6b451c94e053
 
 *response*
 ```
 {
     "response":
     {
-        "confirmed": true
+        "confirmed": true,
+        "date": "20:51:59 06/22/2020 UTC"
     },
     "timestamp": 1548329867868,
     "allowance":
@@ -162,7 +175,7 @@ Check if a commitment for a specific position is included in an attestation.
 
 Get the merkle commitment proof for a specific position and merkle root.
 
-**request:** https://testnet.mainstay.xyz/api/v1/commitment/proof?position=1&merkle_root=f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b
+**request:** https://mainstay.xyz/api/v1/commitment/proof?position=1&merkle_root=f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b
 
 *response*
 ```
@@ -195,9 +208,9 @@ Get the merkle commitment proof for a specific position and merkle root.
 
 #### Commitment Commitment
 
-Get information on a specific commitment.
+Get information on a specific commitment, including the Merkle path proof and attestation transaction. If the query is an addition, the slot commitment is returned, along with the addition path proof. 
 
-**request:** https://testnet.mainstay.xyz/api/v1/commitment/commitment?commitment=5555c29bc4ac63ad3aa4377d82d40460440a67f6249b463453ca6b451c94e053
+**request:** https://mainstay.xyz/api/v1/commitment/commitment?commitment=5555c29bc4ac63ad3aa4377d82d40460440a67f6249b463453ca6b451c94e053
 
 *response*
 ```
@@ -230,6 +243,23 @@ Get information on a specific commitment.
                 "commitment": "406ab5d975ae922753fad4db83c3716ed4d2d1c6a0191f8336c76000962f63ba"
             }]
         }
+        "addproof": {
+            "addition": "7505fcfd0071fc43047a6793393862b36a6e62c1e45fd8a31bd52691a768f181",
+            "ops": [
+                {
+                "append": false,
+                "commitment": "2bdc4576bf1c6045bd295e11633a1c73d32ebbecd1f8f2831f5ec78c39803228"
+                },
+                {
+                "append": true,
+                "commitment": "a8c0b3269e2a61c7c606219e97d97523de2c22ce1486490dca964eb07239dbb5"
+                },
+                {
+                "append": true,
+                "commitment": "7ab39f3aba257213243acb30118d4922fcc4aa9b7926580a2c2843033b550f3c"
+                }
+            ]
+        }
     },
     "timestamp": 1548330505898,
     "allowance":
@@ -243,7 +273,7 @@ Get information on a specific commitment.
 
 Get information on an attested merkle root.
 
-**request:** https://testnet.mainstay.xyz/api/v1/merkleroot?merkle_root=f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b
+**request:** https://mainstay.xyz/api/v1/merkleroot?merkle_root=f46a58a0cc796fade0c7854f169eb86a06797ac493ea35f28dbe35efee62399b
 
 *response*
 ```
@@ -291,7 +321,7 @@ Get information on an attested merkle root.
 
 Get information on a client position.
 
-**request:** https://testnet.mainstay.xyz/api/v1/position?position=1
+**request:** https://mainstay.xyz/api/v1/position?position=1
 
 *response*
 ```
@@ -315,7 +345,22 @@ Get information on a client position.
             {
                 "append": true,
                 "commitment": "406ab5d975ae922753fad4db83c3716ed4d2d1c6a0191f8336c76000962f63ba"
-            }]
+            }],
+            "date": "19:54:59 06/28/2020 UTC",
+            "additions": [
+            {
+                "addition": "2bdc4576bf1c6045bd295e11633a1c73d32ebbecd1f8f2831f5ec78c39803228",
+                "date": "20:51:59 06/22/2020 UTC"
+            },
+            {
+                "addition": "7505fcfd0071fc43047a6793393862b36a6e62c1e45fd8a31bd52691a768f181",
+                "date": "20:52:23 06/22/2020 UTC"
+            },
+            {
+                "addition": "2dec195a510dc14f5825e995b25e9bb02a83f0f7e367695a94df487e76be17bd",
+                "date": "20:52:35 06/22/2020 UTC"
+            }],
+
         },
         {
             "position": 1,
@@ -333,7 +378,22 @@ Get information on a client position.
             {
                 "append": true,
                 "commitment": "406ab5d975ae922753fad4db83c3716ed4d2d1c6a0191f8336c76000962f63ba"
-            }]
+            }],
+            "date": "19:54:59 06/28/2020 UTC",
+            "additions": [
+            {
+                "addition": "2bdc4576bf1c6045bd295e11633a1c73d32ebbecd1f8f2831f5ec78c39803228",
+                "date": "20:51:59 06/22/2020 UTC"
+            },
+            {
+                "addition": "7505fcfd0071fc43047a6793393862b36a6e62c1e45fd8a31bd52691a768f181",
+                "date": "20:52:23 06/22/2020 UTC"
+            },
+            {
+                "addition": "2dec195a510dc14f5825e995b25e9bb02a83f0f7e367695a94df487e76be17bd",
+                "date": "20:52:35 06/22/2020 UTC"
+            }],
+
         }, ]
     },
     "timestamp": 1548330579389,
@@ -348,7 +408,7 @@ Get information on a client position.
 
 Get information on an attestation.
 
-**request:** https://testnet.mainstay.xyz/api/v1/attestation?txid=38fa2c6e103673925aaec50e5aadcbb6fd0bf1677c5c88e27a9e4b0229197b13
+**request:** https://mainstay.xyz/api/v1/attestation?txid=38fa2c6e103673925aaec50e5aadcbb6fd0bf1677c5c88e27a9e4b0229197b13
 
 *response*
 ```
@@ -382,7 +442,7 @@ Get information on an attestation.
 
 Get the merkle commitment proof for a specific position and attestation txid.
 
-**request:** https://testnet.mainstay.xyz/api/v1/attestation/proof?position=1&txid=2042562f90a5f8905f9af9931e6274deaa2cce70028821bd4bf3c176bc08f460
+**request:** https://mainstay.xyz/api/v1/attestation/proof?position=1&txid=2042562f90a5f8905f9af9931e6274deaa2cce70028821bd4bf3c176bc08f460
 
 *response*
 ```
@@ -421,7 +481,7 @@ Get the merkle commitment proof for a specific position and attestation txid.
 
 Get information on a bitcoin block if it contains a mainstay attestation.
 
-**request:** https://testnet.mainstay.xyz/api/v1/blockhash?hash=3c50145441751dfb8f01cd05f21a24d0763005334667daa734bbf4147eeabe14
+**request:** https://mainstay.xyz/api/v1/blockhash?hash=3c50145441751dfb8f01cd05f21a24d0763005334667daa734bbf4147eeabe14
 
 *response*
 ```
@@ -448,6 +508,8 @@ Get information on a bitcoin block if it contains a mainstay attestation.
 
 #### Commitment Send
 
+Commitments write directly into the client slot which is attested once per hour. Each send overwrites the previous commitment. 
+
 **Node.js example**
 
 ```js
@@ -455,7 +517,7 @@ const request = require('request');
 let elliptic = require('elliptic');
 let ec = new elliptic.ec('secp256k1');
 
-const url = "https://testnet.mainstay.xyz/api/v1";
+const url = "https://mainstay.xyz/api/v1";
 const route = '/commitment/send'
 const pubKey = '1CsSceq9GWnmozaky3DGa24UER6gRDgibf';
 const pvtKey =
@@ -502,3 +564,64 @@ curl --header "Content-Type: application/json" --request POST --data '{"X-MAINST
 ```perl
 {"response":"feedback","timestamp":1541761540171,"allowance":{"cost":4832691}}
 ```
+
+#### Addition Send
+
+Additions are accumulated and compressed to a single commitment for each attestation. 
+
+**Node.js example**
+
+```js
+const request = require('request');
+let elliptic = require('elliptic');
+let ec = new elliptic.ec('secp256k1');
+
+const url = "https://mainstay.xyz/api/v1";
+const route = '/commitment/add'
+const pubKey = '1CsSceq9GWnmozaky3DGa24UER6gRDgibf';
+const pvtKey =
+    'bac52bbea2194e7ea1cd3da6585b66d28f1a7a3683eca91af4ba6373d323d24f';
+const commitment =
+    'F01111111111111111111111111111111111111111111111111111111111110F';
+
+
+let keyPair = ec.keyFromPrivate("97ddae0f3a25b92268175400149d65d6887b9cefaf28ea2c078e05cdc15a3c0a");
+let privKey = keyPair.getPrivate("hex");
+let pubKey = keyPair.getPublic();
+
+let signature = ec.sign(commitment, privKey, "hex", {canonical: true}).toDER('base64');
+
+var payload = {
+  commitment: commitment,
+  position: 0,
+  token: '4c8c006d-4cee-4fef-8e06-bb8112db6314',
+};
+
+payload = new Buffer(JSON.stringify(payload)).toString('base64');
+
+const options = {
+  url: url + route,
+  headers: {
+    'X-MAINSTAY-PAYLOAD': payload,
+    'X-MAINSTAY-SIGNATURE': signature
+  }
+};
+
+request.post(options, (error, response, body) => {
+  if (error)
+    return console.log(error);
+  ...
+});
+```
+
+**Curl example**
+```perl
+curl --header "Content-Type: application/json" --request POST --data '{"X-MAINSTAY-PLAYLOAD":"eyJwb3NpdGlvbiI6MCwiY29tbWl0bWVudCI6IkYwMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMEYifQ==","X-MAINSTAY-SIGNATURE":"IJbqe50XtfZbQ1b0jr+J1tswSPfZlWwZugXCpYbwYMPuRl+htqSb7wTLYY9RtQ6Bw9Ym5dw0vMNRaDwR8pked2Y="}' http://localhost:9000/api/v1/commitment/add
+```
+
+*response*
+```perl
+{"response":"feedback","timestamp":1541761540171,"allowance":{"cost":4832691}}
+```
+
+

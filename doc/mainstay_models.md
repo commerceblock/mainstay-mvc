@@ -13,7 +13,6 @@ txid1 | 22345... | true | 2018-11-03 16:59:19.000
 txid2 | 32345... | true | 2018-11-04 16:59:19.000
 txid3 | 42345... | false | 2018-11-05 16:59:19.000
 
-
 #### columns
 
 - txid: 64 char String
@@ -113,6 +112,31 @@ client_position | commitment
 #### permissions
 *read/write*
 
+### CommtimentAdd
+
+#### sample table
+client_position | addition | confirmed | commitment | inserted_at 
+--- | --- | --- | ---
+0 | 12345... | true | 9abcd... | 2018-11-02 16:59:19.000
+0 | 22345... | true | 1abcd... | 2018-11-03 16:59:19.000
+0 | 32345... | true | 4abcd... | 2018-11-04 16:59:19.000
+0 | 42345... | false | ... | 2018-11-05 16:59:19.000
+1 | 12345... | true | c9bc1... | 2018-11-02 16:59:19.000
+1 | 22345... | true | e2b4d... | 2018-11-03 16:59:19.000
+1 | 32345... | true | 8e4cd... | 2018-11-04 16:59:19.000
+1 | 42345... | false | ... | 2018-11-05 16:59:19.000
+
+#### columns
+
+- client_position: Int32
+- addition:  64 char String
+- confirmed: Boolean
+- commitment: 64 char String
+- inserted_at: Date
+
+#### permissions
+*read/write*
+
 ### ClientDetails (API READ ONLY)
 
 #### sample table
@@ -180,5 +204,15 @@ client_position | auth_token | pubkey
 *authentication*: authenticate client
 
 *write*: update commitment for client on ClientCommitment
+
+*return*: acknowledgement
+
+- **/api/commitment/add POST**
+
+*body parameters*: client_token or id or signature, addition
+
+*authentication*: authenticate client
+
+*write*: update addition in CommitmentAdd and commitment for client on ClientCommitment
 
 *return*: acknowledgement
