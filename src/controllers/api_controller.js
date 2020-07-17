@@ -28,6 +28,13 @@ const {
 } = require('../utils/constants');
 
 const {
+    FREE,
+    BASIC,
+    INTERMEDIATE,
+    ENTERPRISE
+} = require('../utils/levels');
+
+const {
     get_hash_arg,
     get_txid_arg,
     get_commitment_arg,
@@ -392,8 +399,22 @@ module.exports = {
                     }
                 }
 
-                await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
-                reply_msg(res, 'Commitment added', startTime);
+                if (data[0].service_level == 'free') {
+
+                    latest_com = await models.clientCommitment.find({client_position: payload.position});
+                    let today = new Date().toLocaleDateString()
+
+                    if (latest_com.date == today) {
+                        return reply_err(res, FREE_TIER_LIMIT, startTime);
+                    } else {
+                        await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment, date: today}, {upsert: true});
+                        reply_msg(res, 'Commitment added', startTime);                        
+                    }
+                }
+                else {
+                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
+                    reply_msg(res, 'Commitment added', startTime);
+                }
 
             } catch (error) {
                 return reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -438,6 +459,11 @@ module.exports = {
             try {
                 // try get client details
                 const data = await models.clientDetails.find({client_position: payload.position});
+
+                if (data[0].service_level == 'free' ||  data[0].service_level == 'basic') {
+                    return reply_err(res, NO_ADDITIONS, startTime);
+                }
+
                 if (data.length === 0) {
                     return reply_err(res, POSITION_UNKNOWN, startTime);
                 }
@@ -465,11 +491,24 @@ module.exports = {
                     }
                 }
 
+                client_status = await models.clientCommitment.find({client_position: payload.position});
+
+                if (data[0].service_level == 'intermediate') {
+                    if (client_status.count >= INTERMEDIATE) {
+                        return reply_err(res, LIMIT_ADDITIONS, startTime);
+                    }
+                } else if (data[0].service_level == 'enterprise') {
+                    if (client_status.count >= ENTERPRISE) {
+                        return reply_err(res, LIMIT_ADDITIONS, startTime);
+                    }
+                }
+
                 const repeatAdd = await models.commitmentAdd.findOne({client_position: payload.position, addition: payload.commitment})
 
                 if (repeatAdd) {
                     return reply_err(res, 'repeat addition: ignored', startTime);
                 } else {
+
                     //add commitment (unconfirmed)
                     message = await models.commitmentAdd.findOneAndUpdate({client_position: payload.position, addition: payload.commitment, confirmed: false, commitment: '', inserted_at: Date.now()},{client_position: payload.position, addition: payload.commitment, confirmed: false, commitment: '', inserted_at: Date.now()},{upsert: true});
                     //update confirmed status of listed commitments
@@ -500,6 +539,8 @@ module.exports = {
                                 //update addition table to show confirmed and update slot commitment
                                 await models.commitmentAdd.findOneAndUpdate({client_position: payload.position, addition: unconfirmed[j].addition}, {$set: {commitment: root, confirmed: true}});
                             }
+                            //reset the addition count
+                            await models.clientCommitment.findOneAndUpdate({client_position: payload.position},{$set: {count: 0}});
                             break;
                         }
                     }

@@ -8,6 +8,8 @@ const constants = {
     BAD_LENGTH_COMMITMENT: 'commitment string parameter must contain 64 characters',
     BAD_TYPE_POSITION: 'position expects a int',
     COMMITMENT_POSITION_UNKNOWN: 'your commitment or position is unknown to us',
+    AWAITING_ATTESTATION: 'Slot activated: awaiting first attestation',
+    FREE_TIER_LIMIT: 'Daily commitment limit reached',
     INTERNAL_ERROR_API: 'an error occurred in the API',
     MERKLEROOT_UNKNOWN: 'your merkle root is unknown to us',
     MISSING_ARG_TXID: 'missing txid parameter',

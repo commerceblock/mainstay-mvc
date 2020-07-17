@@ -145,12 +145,14 @@ async function create_slot(signup) {
         nextClientPosition = maxPositionClientDetails.client_position + 1;
     }
     const publicKey = '';
+    const level = '';
     // create new client-detail
     const clientDetailsData = {
         client_position: nextClientPosition,
         auth_token: uuidv4(),
         client_name: `${signup.first_name} ${signup.last_name}`,
         pubkey: publicKey,
+        service_level: level
     };
     const clientDetails = new models.clientDetails(clientDetailsData);
     await clientDetails.save();
@@ -158,18 +160,11 @@ async function create_slot(signup) {
     // create client-commitment
     const clientCommitmentData = {
         client_position: clientDetails.client_position,
-        commitment: '0000000000000000000000000000000000000000000000000000000000000000'
+        commitment: '0000000000000000000000000000000000000000000000000000000000000000',
+        count: 0
     };
     const clientCommitment = new models.clientCommitment(clientCommitmentData);
     await clientCommitment.save();
-
-    // create client-commitment
-    const clientAddData = {
-        client_position: clientDetails.client_position,
-        commitment: '0000000000000000000000000000000000000000000000000000000000000000'
-    };
-    const addCommitment = new models.commitmentAdd(clientAddData);
-    await commitmentAdd.save();
 
     signup.status = 'slot_ok';
     await signup.save();
