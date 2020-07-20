@@ -179,7 +179,7 @@ module.exports = {
                 latest_com = await models.clientCommitment.find({client_position: payload.position});
                 let today = new Date().toLocaleDateString()
 
-                if (latest_com.date == today) {
+                if (latest_com[0].date == today) {
                     return res.json({
                         error: FREE_TIER_LIMIT,
                         message: error.message

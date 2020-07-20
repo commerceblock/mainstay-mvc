@@ -84,6 +84,10 @@ schemaCommitmentAdd.index({
 
 const clientSignupStatuses = [
     'new',
+    'start_kyc',
+    'sent_kyc',
+    'kyc_ok',
+    'kyc_fail',
     'email_confirmed',
     'payment_ok',
     'start_slot',
