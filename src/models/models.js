@@ -26,7 +26,8 @@ schemaAttestationInfo.index({
 
 const schemaClientCommitment = new Schema({
     commitment: String,
-    client_position: Number
+    client_position: Number,
+    date: String
 }, {
     collection: 'ClientCommitment',
     versionKey: false
@@ -38,6 +39,7 @@ const schemaClientDetails = new Schema({
     auth_token: String,
     pubkey: String,
     client_name: String,
+    service_level: String
 }, {collection: 'ClientDetails'});
 schemaClientDetails.index({client_position: 1}, {unique: true});
 
@@ -86,6 +88,7 @@ const clientSignupStatuses = [
     'sent_kyc',
     'kyc_ok',
     'kyc_fail',
+    'email_confirmed',
     'payment_ok',
     'start_slot',
     'slot_ok'
@@ -100,6 +103,7 @@ const schemaClientSignup = new Schema({
     kyc_id: String,
     hosted_page_id: String,
     code: String,
+    service_level: String,
     status: {
         type: String,
         enum: clientSignupStatuses,

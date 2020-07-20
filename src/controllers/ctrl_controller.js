@@ -174,6 +174,26 @@ module.exports = {
                 }
             }
 
+            if (data[0].service_level == 'free') {
+
+                latest_com = await models.clientCommitment.find({client_position: payload.position});
+                let today = new Date().toLocaleDateString()
+
+                if (latest_com[0].date == today) {
+                    return res.json({
+                        error: FREE_TIER_LIMIT,
+                        message: error.message
+                    });
+                } else {
+                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment, date: today}, {upsert: true});
+                    return res.send();                     
+                }
+            }
+            else {
+                await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
+                return res.send();
+            }
+
             await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
             return res.send();
 

@@ -124,12 +124,10 @@ class SignUpModal extends React.PureComponent {
                 >
                     <ModalBody>
                         <p>1. Please provide your details below</p>
-                        <p>2. You will receive an email confirmation with a link to KYC verification</p>
-                        <p>3. Perform KYC verification via OnFido</p>
-                        <p>4. You will receive a confirmation email with a link to the payment setup</p>
-                        <p>5. Please provide your payment details</p>
-                        <p>6. You will received your attestation slot via email</p>
-                        <p>7. Start securing your data!</p>
+                        <p>2. You will then recieve an email to confirm your address</p>
+                        <p>3. If you selected a paid service tier, you will then receive instructions with a link to the payment setup</p>
+                        <p>4. Once confirmed, you will receive the slot ID and attestation token via email</p>
+                        <p>5. The slot then becomes active and you can start securing your data!</p>
                         <Row form>
                             <Col md={6}>
                                 <FormGroup>

@@ -24,8 +24,18 @@ const {
     MISSING_PAYLOAD_TOKEN,
     PAYLOAD_TOKEN_ERROR,
     SIGNATURE_INVALID,
-    TXID_UNKNOWN
+    TXID_UNKNOWN,
+    FREE_TIER_LIMIT,
+    NO_ADDITIONS,
+    LIMIT_ADDITIONS
 } = require('../utils/constants');
+
+const {
+    FREE,
+    BASIC,
+    INTERMEDIATE,
+    ENTERPRISE
+} = require('../utils/levels');
 
 const {
     get_hash_arg,
@@ -392,8 +402,22 @@ module.exports = {
                     }
                 }
 
-                await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
-                reply_msg(res, 'Commitment added', startTime);
+                if (data[0].service_level == 'free') {
+
+                    latest_com = await models.clientCommitment.find({client_position: payload.position});
+                    let today = new Date().toLocaleDateString()
+
+                    if (latest_com[0].date == today) {
+                        return reply_err(res, FREE_TIER_LIMIT, startTime);
+                    } else {
+                        await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment, date: today}, {upsert: true});
+                        reply_msg(res, 'Commitment added', startTime);
+                    }
+                }
+                else {
+                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
+                    reply_msg(res, 'Commitment added', startTime);
+                }
 
             } catch (error) {
                 return reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -438,11 +462,16 @@ module.exports = {
             try {
                 // try get client details
                 const data = await models.clientDetails.find({client_position: payload.position});
+
                 if (data.length === 0) {
                     return reply_err(res, POSITION_UNKNOWN, startTime);
                 }
                 if (data[0].auth_token !== payload.token) {
                     return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
+                }
+
+                if (data[0].service_level == 'free' ||  data[0].service_level == 'basic') {
+                    return reply_err(res, NO_ADDITIONS, startTime);
                 }
 
                 if (data[0].pubkey && data[0].pubkey !== '') {
@@ -465,13 +494,28 @@ module.exports = {
                     }
                 }
 
+                //get all unconfirmed additions
+                const addunconfirmed = await models.commitmentAdd.find({client_position: payload.position, confirmed: false});
+
+                if (data[0].service_level == 'intermediate') {
+                    if (addunconfirmed.length >= INTERMEDIATE) {
+                        return reply_err(res, LIMIT_ADDITIONS, startTime);
+                    }
+                } else if (data[0].service_level == 'enterprise') {
+                    if (addunconfirmed.length >= ENTERPRISE) {
+                        return reply_err(res, LIMIT_ADDITIONS, startTime);
+                    }
+                }
+
                 const repeatAdd = await models.commitmentAdd.findOne({client_position: payload.position, addition: payload.commitment})
 
                 if (repeatAdd) {
                     return reply_err(res, 'repeat addition: ignored', startTime);
                 } else {
+
                     //add commitment (unconfirmed)
                     message = await models.commitmentAdd.findOneAndUpdate({client_position: payload.position, addition: payload.commitment, confirmed: false, commitment: '', inserted_at: Date.now()},{client_position: payload.position, addition: payload.commitment, confirmed: false, commitment: '', inserted_at: Date.now()},{upsert: true});
+
                     //update confirmed status of listed commitments
 
                     //get all unconfirmed additions
@@ -500,6 +544,8 @@ module.exports = {
                                 //update addition table to show confirmed and update slot commitment
                                 await models.commitmentAdd.findOneAndUpdate({client_position: payload.position, addition: unconfirmed[j].addition}, {$set: {commitment: root, confirmed: true}});
                             }
+                            //reset the addition count
+                            await models.clientCommitment.findOneAndUpdate({client_position: payload.position},{$set: {count: 0}});
                             break;
                         }
                     }
@@ -514,7 +560,6 @@ module.exports = {
                     }
                     const tree = new MerkleTree(leaves, SHA256,{isBitcoinTree : true});
                     const root = tree.getRoot().toString('hex');
-
 
                     await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: root}, {upsert: true});
                 }
