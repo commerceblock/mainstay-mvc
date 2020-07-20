@@ -145,7 +145,10 @@ async function create_slot(signup) {
         nextClientPosition = maxPositionClientDetails.client_position + 1;
     }
     const publicKey = '';
+
+    // service level can be one of: 'free', 'basic', 'intermediate' and 'enterprise'
     const level = '';
+
     // create new client-detail
     const clientDetailsData = {
         client_position: nextClientPosition,
@@ -160,8 +163,7 @@ async function create_slot(signup) {
     // create client-commitment
     const clientCommitmentData = {
         client_position: clientDetails.client_position,
-        commitment: '0000000000000000000000000000000000000000000000000000000000000000',
-        count: 0
+        commitment: '0000000000000000000000000000000000000000000000000000000000000000'
     };
     const clientCommitment = new models.clientCommitment(clientCommitmentData);
     await clientCommitment.save();

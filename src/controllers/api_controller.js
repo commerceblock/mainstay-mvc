@@ -24,7 +24,10 @@ const {
     MISSING_PAYLOAD_TOKEN,
     PAYLOAD_TOKEN_ERROR,
     SIGNATURE_INVALID,
-    TXID_UNKNOWN
+    TXID_UNKNOWN,
+    FREE_TIER_LIMIT,
+    NO_ADDITIONS,
+    LIMIT_ADDITIONS
 } = require('../utils/constants');
 
 const {
@@ -404,11 +407,11 @@ module.exports = {
                     latest_com = await models.clientCommitment.find({client_position: payload.position});
                     let today = new Date().toLocaleDateString()
 
-                    if (latest_com.date == today) {
+                    if (latest_com[0].date == today) {
                         return reply_err(res, FREE_TIER_LIMIT, startTime);
                     } else {
                         await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment, date: today}, {upsert: true});
-                        reply_msg(res, 'Commitment added', startTime);                        
+                        reply_msg(res, 'Commitment added', startTime);
                     }
                 }
                 else {
@@ -460,15 +463,15 @@ module.exports = {
                 // try get client details
                 const data = await models.clientDetails.find({client_position: payload.position});
 
-                if (data[0].service_level == 'free' ||  data[0].service_level == 'basic') {
-                    return reply_err(res, NO_ADDITIONS, startTime);
-                }
-
                 if (data.length === 0) {
                     return reply_err(res, POSITION_UNKNOWN, startTime);
                 }
                 if (data[0].auth_token !== payload.token) {
                     return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
+                }
+
+                if (data[0].service_level == 'free' ||  data[0].service_level == 'basic') {
+                    return reply_err(res, NO_ADDITIONS, startTime);
                 }
 
                 if (data[0].pubkey && data[0].pubkey !== '') {
@@ -491,14 +494,15 @@ module.exports = {
                     }
                 }
 
-                client_status = await models.clientCommitment.find({client_position: payload.position});
+                //get all unconfirmed additions
+                const addunconfirmed = await models.commitmentAdd.find({client_position: payload.position, confirmed: false});
 
                 if (data[0].service_level == 'intermediate') {
-                    if (client_status.count >= INTERMEDIATE) {
+                    if (addunconfirmed.length >= INTERMEDIATE) {
                         return reply_err(res, LIMIT_ADDITIONS, startTime);
                     }
                 } else if (data[0].service_level == 'enterprise') {
-                    if (client_status.count >= ENTERPRISE) {
+                    if (addunconfirmed.length >= ENTERPRISE) {
                         return reply_err(res, LIMIT_ADDITIONS, startTime);
                     }
                 }
@@ -511,6 +515,7 @@ module.exports = {
 
                     //add commitment (unconfirmed)
                     message = await models.commitmentAdd.findOneAndUpdate({client_position: payload.position, addition: payload.commitment, confirmed: false, commitment: '', inserted_at: Date.now()},{client_position: payload.position, addition: payload.commitment, confirmed: false, commitment: '', inserted_at: Date.now()},{upsert: true});
+
                     //update confirmed status of listed commitments
 
                     //get all unconfirmed additions
@@ -555,7 +560,6 @@ module.exports = {
                     }
                     const tree = new MerkleTree(leaves, SHA256,{isBitcoinTree : true});
                     const root = tree.getRoot().toString('hex');
-
 
                     await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: root}, {upsert: true});
                 }

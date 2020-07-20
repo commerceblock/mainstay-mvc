@@ -27,8 +27,7 @@ schemaAttestationInfo.index({
 const schemaClientCommitment = new Schema({
     commitment: String,
     client_position: Number,
-    date: String,
-    count: Number
+    date: String
 }, {
     collection: 'ClientCommitment',
     versionKey: false
@@ -100,6 +99,7 @@ const schemaClientSignup = new Schema({
     kyc_id: String,
     hosted_page_id: String,
     code: String,
+    service_level: String,
     status: {
         type: String,
         enum: clientSignupStatuses,
