@@ -4,7 +4,10 @@
         "es6": true,
         "node": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
@@ -20,7 +23,10 @@
         "react"
     ],
     "rules": {
-        "eqeqeq": ["error", "always"],
+        "eqeqeq": [
+            "error",
+            "always"
+        ],
         "indent": [
             "error",
             4
@@ -37,6 +43,11 @@
             "error",
             "always"
         ],
-        "no-unused-vars": ["error", { "varsIgnorePattern": "[iI]gnored" }]
+        "no-unused-vars": [
+            "error",
+            {
+                "varsIgnorePattern": "[iI]gnored"
+            }
+        ]
     }
 }
