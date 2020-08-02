@@ -12,7 +12,7 @@ const ONFIDO_REQUEST_HEADERS = {
 };
 
 class WebhookController {
-    async index(req, res, next) {
+    async index(req, res) {
         const {resource_type, action, object} = req.body.payload;
         console.log(action, object.id, object.href);
         if (resource_type === 'check') {
