@@ -27,7 +27,8 @@ const {
     TXID_UNKNOWN,
     FREE_TIER_LIMIT,
     NO_ADDITIONS,
-    LIMIT_ADDITIONS
+    LIMIT_ADDITIONS,
+    AWAITING_ATTEST
 } = require('../utils/constants');
 
 const {
@@ -94,7 +95,15 @@ module.exports = {
                 merkle_root: merkle_root
             });
             if (merkleCommitmentData.length === 0) {
-                return reply_err(res, POSITION_UNKNOWN, startTime);
+
+                const clientdata = await models.clientCommitment.find({client_position: position});
+
+                if (clientdata.length === 0) {
+                    return reply_err(res, POSITION_UNKNOWN, startTime);
+                }
+                else {
+                    return reply_err(res, AWAITING_ATTEST, startTime);
+                }
             }
 
             //return additions if present
@@ -174,7 +183,15 @@ module.exports = {
                 merkle_root: merkle_root
             });
             if (merkleProofData.length === 0) {
-                return reply_err(res, POSITION_UNKNOWN, startTime);
+
+                const clientdata = await models.clientCommitment.find({client_position: position});
+
+                if (clientdata.length === 0) {
+                    return reply_err(res, POSITION_UNKNOWN, startTime);
+                }
+                else {
+                    return reply_err(res, AWAITING_ATTEST, startTime);
+                }
             }
             reply_msg(res, {
                 txid: txid,
@@ -288,7 +305,14 @@ module.exports = {
                 merkle_root: merkle_root
             });
             if (data.length === 0) {
-                return reply_err(res, POSITION_UNKNOWN, startTime);
+                const clientdata = await models.clientCommitment.find({client_position: position});
+
+                if (clientdata.length === 0) {
+                    return reply_err(res, POSITION_UNKNOWN, startTime);
+                }
+                else {
+                    return reply_err(res, AWAITING_ATTEST, startTime);
+                }
             }
             reply_msg(res, {
                 merkle_root: merkle_root,
@@ -325,7 +349,14 @@ module.exports = {
                 merkle_root: merkle_root
             });
             if (!merkleProof) {
-                return reply_err(res, POSITION_UNKNOWN, startTime);
+                const clientdata = await models.clientCommitment.find({client_position: position});
+
+                if (clientdata.length === 0) {
+                    return reply_err(res, POSITION_UNKNOWN, startTime);
+                }
+                else {
+                    return reply_err(res, AWAITING_ATTEST, startTime);
+                }
             }
             reply_msg(res, {
                 txid: txid,
@@ -852,7 +883,14 @@ module.exports = {
                 .exec();
 
             if (data.length === 0) {
-                return reply_err(res, 'No data found for position provided', startTime);
+                const clientdata = await models.clientCommitment.find({client_position: position});
+
+                if (clientdata.length === 0) {
+                    return reply_err(res, 'No data found for position provided', startTime);
+                }
+                else {
+                    return reply_err(res, AWAITING_ATTEST, startTime);
+                }
             }
 
             for (let itr = 0; itr < data.length; ++itr) {
