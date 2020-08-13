@@ -190,8 +190,7 @@ module.exports = {
                     await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment, date: today}, {upsert: true});
                     return res.send();
                 }
-            }
-            else {
+            } else {
                 await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
                 return res.send();
             }
@@ -215,6 +214,9 @@ module.exports = {
         }
         if (!payload.email || !payload.email.trim() && !isValidEmail(payload.email.trim())) {
             return res.status(400).json({error: 'email'});
+        }
+        if (!payload.service_level || !models.serviceLevels.includes(payload.service_level)) {
+            return res.status(400).json({error: 'service_level'});
         }
 
         payload.first_name = payload.first_name.trim();
@@ -258,6 +260,7 @@ module.exports = {
                 first_name: payload.first_name,
                 last_name: payload.last_name,
                 email: payload.email,
+                service_level: payload.service_level,
                 company: payload.company,
                 pubkey: payload.pubkey,
             });

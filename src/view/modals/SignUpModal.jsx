@@ -17,6 +17,7 @@ class SignUpModal extends React.PureComponent {
                 first_name: '',
                 last_name: '',
                 email: '',
+                service_level: 'free',
                 company: '',
                 pubkey: '',
             },
@@ -49,7 +50,7 @@ class SignUpModal extends React.PureComponent {
     handleSubmitLogin = (event) => {
         event.preventDefault();
 
-        const {first_name, last_name, email, company, pubkey} = this.state.inputs;
+        const {first_name, last_name, email, service_level, company, pubkey} = this.state.inputs;
 
         if (!first_name || !first_name.trim()) {
             return this.showErrorAlert('First Name is empty');
@@ -63,6 +64,10 @@ class SignUpModal extends React.PureComponent {
             return this.showErrorAlert('Email is empty');
         }
 
+        if (!service_level) {
+            return this.showErrorAlert('Service Level is empty');
+        }
+
         if (!isValidEmail(email)) {
             return this.showErrorAlert('Email is no valid.');
         }
@@ -71,6 +76,7 @@ class SignUpModal extends React.PureComponent {
             first_name,
             last_name,
             email,
+            service_level,
             company,
             pubkey
         };
@@ -87,8 +93,8 @@ class SignUpModal extends React.PureComponent {
             this.resetFormState();
         }).catch(error => {
             if (this.props.onError) {
-                if (error.status === 500){
-                    error.data.message = "Something went wrong. Please contact the Commerceblock support team.";
+                if (error.status === 500) {
+                    error.data.message = 'Something went wrong. Please contact the Commerceblock support team.';
                 }
                 this.props.onError(error);
             }
@@ -148,6 +154,15 @@ class SignUpModal extends React.PureComponent {
                                 </FormGroup>
                             </Col>
                         </Row>
+                        <FormGroup>
+                            <Label className="f-bold fs14">Service Level*</Label>
+                            <Input type="select" name="service_level" onChange={this.handleChange}>
+                                <option value="free" selected>Free</option>
+                                <option value="basic">Basic</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="enterprise">Enterprise</option>
+                            </Input>
+                        </FormGroup>
                         <FormGroup>
                             <Label className="f-bold fs14">Email*</Label>
                             <Input
