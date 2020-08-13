@@ -11,8 +11,8 @@ const {
     TYPE_ERROR,
     INTERNAL_ERROR_API,
     TYPE_UNKNOWN,
-    FREE_TIER_LIMIT,
-    SIGNATURE_INVALID
+    SIGNATURE_INVALID,
+    FREE_TIER_LIMIT
 } = require('../utils/constants');
 
 const {
@@ -184,23 +184,16 @@ module.exports = {
                 if (latest_com[0].date === today) {
                     return res.json({
                         error: FREE_TIER_LIMIT,
-                        message: error.message
+                        message: 'Free tier limit exceeded.'
                     });
                 } else {
-                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {
-                        commitment: payload.commitment,
-                        date: today
-                    }, {upsert: true});
+                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment, date: today}, {upsert: true});
                     return res.send();
                 }
             } else {
                 await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
                 return res.send();
             }
-
-            await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
-            return res.send();
-
         } catch (error) {
             res.json({
                 error: 'api',
