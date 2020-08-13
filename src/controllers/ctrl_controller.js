@@ -10,7 +10,9 @@ const {
     PARAM_UNDEFINED,
     TYPE_ERROR,
     INTERNAL_ERROR_API,
-    TYPE_UNKNOWN
+    TYPE_UNKNOWN,
+    FREE_TIER_LIMIT,
+    SIGNATURE_INVALID
 } = require('../utils/constants');
 
 const {
@@ -174,22 +176,24 @@ module.exports = {
                 }
             }
 
-            if (data[0].service_level == 'free') {
+            if (data[0].service_level === 'free') {
 
-                latest_com = await models.clientCommitment.find({client_position: payload.position});
-                let today = new Date().toLocaleDateString()
+                const latest_com = await models.clientCommitment.find({client_position: payload.position});
+                const today = new Date().toLocaleDateString();
 
-                if (latest_com[0].date == today) {
+                if (latest_com[0].date === today) {
                     return res.json({
                         error: FREE_TIER_LIMIT,
                         message: error.message
                     });
                 } else {
-                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment, date: today}, {upsert: true});
-                    return res.send();                     
+                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {
+                        commitment: payload.commitment,
+                        date: today
+                    }, {upsert: true});
+                    return res.send();
                 }
-            }
-            else {
+            } else {
                 await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
                 return res.send();
             }
@@ -217,6 +221,9 @@ module.exports = {
         }
         if (!payload.email || !payload.email.trim() && !isValidEmail(payload.email.trim())) {
             return res.status(400).json({error: 'email'});
+        }
+        if (!payload.service_level || !models.serviceLevels.includes(payload.service_level)) {
+            return res.status(400).json({error: 'service_level'});
         }
 
         payload.first_name = payload.first_name.trim();
@@ -260,6 +267,7 @@ module.exports = {
                 first_name: payload.first_name,
                 last_name: payload.last_name,
                 email: payload.email,
+                service_level: payload.service_level,
                 company: payload.company,
                 pubkey: payload.pubkey,
             });

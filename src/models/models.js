@@ -94,6 +94,13 @@ const clientSignupStatuses = [
     'slot_ok'
 ];
 
+const serviceLevels = [
+    'free',
+    'basic',
+    'intermediate',
+    'enterprise'
+];
+
 const schemaClientSignup = new Schema({
     first_name: String,
     last_name: String,
@@ -103,7 +110,10 @@ const schemaClientSignup = new Schema({
     kyc_id: String,
     hosted_page_id: String,
     code: String,
-    service_level: String,
+    service_level: {
+        type: String,
+        enum: serviceLevels,
+    },
     status: {
         type: String,
         enum: clientSignupStatuses,
@@ -134,4 +144,5 @@ module.exports = {
     commitmentAdd,
     clientSignup,
     clientSignupStatuses,
+    serviceLevels
 };
