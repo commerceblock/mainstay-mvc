@@ -13,6 +13,7 @@ const constants = {
     INTERNAL_ERROR_API: 'an error occurred in the API',
     NO_ADDITIONS: 'additions not supported at this service tier',
     LIMIT_ADDITIONS: 'addition limit per attestation reached',
+    AWAITING_ATTEST: 'Slot allocated: awating first attestation',
     MERKLEROOT_UNKNOWN: 'your merkle root is unknown to us',
     MISSING_ARG_TXID: 'missing txid parameter',
     MISSING_ARG_HASH: 'missing hash parameter',
