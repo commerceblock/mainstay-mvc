@@ -17,6 +17,7 @@ import Home from './Home';
 import Subscribe from './Subscribe';
 import About from './About';
 import appHistory from './app.history';
+import VerifyEmail from './VerifyEmail';
 
 class Root extends React.Component {
     constructor() {
@@ -72,6 +73,7 @@ class Root extends React.Component {
                             {/*<Route path={routes.pricing} component={Pricing} />*/}
                             <Route path={routes.about} component={About} />
                             <Route path={routes.subscribe} component={Subscribe} />
+                            <Route path={routes.userSignupVerify} component={VerifyEmail} />
                             <Route exact path={routes.app} component={Home} />
                             <Redirect from="*" to={routes.app} />
                         </Switch>

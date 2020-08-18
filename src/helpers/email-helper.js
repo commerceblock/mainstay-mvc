@@ -74,6 +74,37 @@ async function sendSignupEmail(signup) {
     });
 }
 
+async function sendConformationEmail(signup) {
+    const {cbLogo, msLogo} = getLogosCIDs();
+    let html = await loadTemplate(path.resolve(__dirname, '../view/emails/signup/email_confirmation.html'));
+    html = html.replace('$$NAME$$', signup.first_name + ' ' + signup.last_name);
+    html = html.replace('$$COMMERCE-BLOCK-LOGO-URL$$', `cid:${cbLogo.cid}`);
+    html = html.replace('$$MAIN-STAY-LOGO-URL$$', `cid:${msLogo.cid}`);
+    html = html.replace('$$REDIRECT_URL$$', `http://localhost:8080/usersignup/verify/${signup.verify_code}`);
+
+    return new Promise((resolve, reject) => {
+        getMailTransport().sendMail({
+            from: {
+                name: 'Mainstay Support',
+                address: 'support@mainstay.xyz'
+            },
+            to: signup.email,
+            subject: 'MainStay - Thank you for signing up! Please verify you email address.',
+            html: html,
+            attachments: [cbLogo, msLogo],
+        }, (error, info) => {
+            if (error) {
+                return reject(error);
+            }
+            console.log('email sent to ' + signup.email);
+            resolve(info);
+        });
+    }).catch(error => {
+        console.log('error while sending an email to ' + signup.email);
+        console.error(error);
+    });
+}
+
 /**
  * send this email after success onfido check
  * @param signup
@@ -176,6 +207,7 @@ async function sendPaymentOkEmail(signup, clientCommitment, clientDetails) {
 
 module.exports = {
     sendSignupEmail,
+    sendConformationEmail,
     sendNewSignupMail,
     sendOnfidoVerificationSuccessEmail,
     sendPaymentOkEmail

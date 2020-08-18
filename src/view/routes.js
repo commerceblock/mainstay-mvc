@@ -18,5 +18,6 @@ export const routes = {
     pricing: '/pricing',
     about: '/about',
     subscribe: '/subscribe/:code',
+    userSignupVerify: '/usersignup/verify/:code',
     notFound: '/not-found'
 };
