@@ -106,7 +106,7 @@ async function check_kyc_status(signup) {
         signup.status = 'kyc_ok';
         signup.code = uuidv4();
         // send verification success email
-        await EmailHelper.sendOnfidoVerificationSuccessEmail(signup);
+        await EmailHelper.sendSubscribeEmail(signup);
     }
     if (check.result === 'consider') {
         signup.status = 'kyc_fail';

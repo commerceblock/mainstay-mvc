@@ -110,7 +110,7 @@ async function sendConformationEmail(signup) {
  * @param signup
  * @returns {Promise<T>}
  */
-async function sendOnfidoVerificationSuccessEmail(signup) {
+async function sendSubscribeEmail(signup) {
     const {cbLogo, msLogo} = getLogosCIDs();
     let html = await loadTemplate(path.resolve(__dirname, '../view/emails/signup/subscribe.html'));
     html = html.replace('$$NAME$$', signup.first_name + ' ' + signup.last_name);
@@ -209,6 +209,6 @@ module.exports = {
     sendSignupEmail,
     sendConformationEmail,
     sendNewSignupMail,
-    sendOnfidoVerificationSuccessEmail,
+    sendSubscribeEmail,
     sendPaymentOkEmail
 };

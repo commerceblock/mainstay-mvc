@@ -5,7 +5,7 @@ const models = require('../models/models');
 
 const {create_slot} = require('../helpers/signup-helper');
 const {isValidEmail} = require('../utils/validators');
-const {sendConformationEmail, sendOnfidoVerificationSuccessEmail} = require('../helpers/email-helper');
+const {sendConformationEmail, sendSubscribeEmail} = require('../helpers/email-helper');
 
 const ec = new elliptic.ec('secp256k1');
 
@@ -227,7 +227,7 @@ module.exports = {
         if (signup.service_level === 'free') {
             await create_slot(signup);
         } else {
-            await sendOnfidoVerificationSuccessEmail(signup);
+            await sendSubscribeEmail(signup);
         }
         res.json({signup});
     },
