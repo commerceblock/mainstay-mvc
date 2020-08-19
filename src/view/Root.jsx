@@ -20,14 +20,14 @@ import appHistory from './app.history';
 import VerifyEmail from './VerifyEmail';
 
 class Root extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             isScrolled: false
         };
     }
 
-    handleScroll = (event) => {
+    handleScroll = (eventIgnored) => {
         if (window.pageYOffset >= 5) {
 
             this.setState({
@@ -40,19 +40,20 @@ class Root extends React.Component {
         }
     };
 
-    componentDidMount ()  {
+    componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
-    };
+    }
 
     componentWillUnmount() {
         window.removeEventListener('scroll', this.handleScroll);
     }
+
     render() {
 
         return (
             <Router history={appHistory}>
                 <div className="top-nav ">
-                    <div  className={this.state.isScrolled ? 'navigation scroll' : 'navigation'} id='nav' >
+                    <div className={this.state.isScrolled ? 'navigation scroll' : 'navigation'} id='nav'>
                         <div className="container">
                             <TopNavigation />
                         </div>
@@ -84,6 +85,5 @@ class Root extends React.Component {
         );
     }
 }
-
 
 export default Root;

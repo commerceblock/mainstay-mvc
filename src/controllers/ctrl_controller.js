@@ -2,8 +2,10 @@ const elliptic = require('elliptic');
 const moment = require('moment');
 const uuidv4 = require('uuid/v4');
 const models = require('../models/models');
+
+const {create_slot} = require('../helpers/signup-helper');
 const {isValidEmail} = require('../utils/validators');
-const {sendConformationEmail} = require('../helpers/email-helper');
+const {sendConformationEmail, sendOnfidoVerificationSuccessEmail} = require('../helpers/email-helper');
 
 const ec = new elliptic.ec('secp256k1');
 
@@ -222,6 +224,11 @@ module.exports = {
         signup.status = 'email_confirmed';
         await signup.save();
 
+        if (signup.service_level === 'free') {
+            await create_slot(signup);
+        } else {
+            await sendOnfidoVerificationSuccessEmail(signup);
+        }
         res.json({signup});
     },
 

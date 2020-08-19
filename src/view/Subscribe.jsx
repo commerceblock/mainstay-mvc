@@ -31,7 +31,7 @@ class Subscribe extends React.Component {
             signupId: signup._id
         }).then(() => {
             this.gotoHome();
-        }).catch(error => {
+        }).catch(errorIgnored => {
             // todo show some error
         });
     };
@@ -76,8 +76,8 @@ class Subscribe extends React.Component {
         });
         window.Chargebee.registerAgain();
 
-        const cbInstance = Chargebee.getInstance();
-        cbInstance.setCheckoutCallbacks((cart) => {
+        const cbInstance = window.Chargebee.getInstance();
+        cbInstance.setCheckoutCallbacks(cartIgnored => {
             // you can define a custom callbacks based on cart object
             return {
                 loaded: () => {
