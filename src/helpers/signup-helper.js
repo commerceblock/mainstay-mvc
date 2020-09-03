@@ -1,6 +1,6 @@
 const uuidv4 = require('uuid/v4');
-const models = require('../src/models/models');
-const EmailHelper = require('./helpers/email-helper');
+const EmailHelper = require('./email-helper');
+const models = require('../models/models');
 
 module.exports.create_slot  = async function create_slot(signup) {
     // fetch item with max client_position
