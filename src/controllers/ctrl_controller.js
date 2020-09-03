@@ -227,6 +227,8 @@ module.exports = {
         if (signup.service_level === 'free') {
             await create_slot(signup);
         } else {
+            signup.code = uuidv4();
+            await signup.save();
             await sendSubscribeEmail(signup);
         }
         res.json({signup});

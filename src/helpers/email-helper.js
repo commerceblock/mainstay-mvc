@@ -80,7 +80,7 @@ async function sendConformationEmail(signup) {
     html = html.replace('$$NAME$$', signup.first_name + ' ' + signup.last_name);
     html = html.replace('$$COMMERCE-BLOCK-LOGO-URL$$', `cid:${cbLogo.cid}`);
     html = html.replace('$$MAIN-STAY-LOGO-URL$$', `cid:${msLogo.cid}`);
-    html = html.replace('$$REDIRECT_URL$$', `http://localhost:8080/usersignup/verify/${signup.verify_code}`);
+    html = html.replace('$$REDIRECT_URL$$', `https://mainstay.xyz/usersignup/verify/${signup.verify_code}`);
 
     return new Promise((resolve, reject) => {
         getMailTransport().sendMail({
@@ -117,7 +117,7 @@ async function sendSubscribeEmail(signup) {
     html = html.replace('$$CODE$$', signup.code);
     html = html.replace('$$COMMERCE-BLOCK-LOGO-URL$$', `cid:${cbLogo.cid}`);
     html = html.replace('$$MAIN-STAY-LOGO-URL$$', `cid:${msLogo.cid}`);
-
+    html = html.replace('$$REDIRECT_URL$$', `https://mainstay.xyz/subscribe/${signup.code}`);
     return new Promise((resolve, reject) => {
         getMailTransport().sendMail({
             from: {
