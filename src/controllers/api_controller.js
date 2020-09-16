@@ -4,9 +4,9 @@ const {base64decode} = require('nodejs-base64');
 const moment = require('moment');
 
 const ec = new elliptic.ec('secp256k1');
-const { MerkleTree } = require('merkletreejs')
-const SHA256 = require('crypto-js/sha256')
-var CryptoJS = require('crypto-js')
+const {MerkleTree} = require('merkletreejs');
+const SHA256 = require('crypto-js/sha256');
+const CryptoJS = require('crypto-js');
 
 const {
     VERSION_API_V1,
@@ -24,8 +24,17 @@ const {
     MISSING_PAYLOAD_TOKEN,
     PAYLOAD_TOKEN_ERROR,
     SIGNATURE_INVALID,
-    TXID_UNKNOWN
+    TXID_UNKNOWN,
+    FREE_TIER_LIMIT,
+    NO_ADDITIONS,
+    LIMIT_ADDITIONS,
+    AWAITING_ATTEST
 } = require('../utils/constants');
+
+const {
+    INTERMEDIATE,
+    ENTERPRISE
+} = require('../utils/levels');
 
 const {
     get_hash_arg,
@@ -78,25 +87,35 @@ module.exports = {
             const txid = attestationData[0].txid;
             const merkle_root = attestationData[0].merkle_root;
 
-
             const merkleCommitmentData = await models.merkleCommitment.find({
                 client_position: position,
                 merkle_root: merkle_root
             });
             if (merkleCommitmentData.length === 0) {
-                return reply_err(res, POSITION_UNKNOWN, startTime);
+
+                const clientdata = await models.clientCommitment.find({client_position: position});
+
+                if (clientdata.length === 0) {
+                    return reply_err(res, POSITION_UNKNOWN, startTime);
+                }
+                else {
+                    return reply_err(res, AWAITING_ATTEST, startTime);
+                }
             }
 
             //return additions if present
-            const additionList = await models.commitmentAdd.find({client_position: position, commitment: merkleCommitmentData[0].commitment}).sort({inserted_at: 1}).exec();
+            const additionList = await models.commitmentAdd.find({
+                client_position: position,
+                commitment: merkleCommitmentData[0].commitment
+            }).sort({inserted_at: 1}).exec();
 
             if (additionList.length > 0) {
-                additions = []
-                for (var i = 0; i < additionList.length; i++) {
+                const additions = [];
+                for (let i = 0; i < additionList.length; i++) {
                     additions.push({
                         addition: additionList[i].addition,
                         date: moment.utc(additionList[i].inserted_at).format(DATE_FORMAT)
-                        });
+                    });
                 }
                 reply_msg(res, {
                     commitment: merkleCommitmentData[0].commitment,
@@ -164,7 +183,15 @@ module.exports = {
                 merkle_root: merkle_root
             });
             if (merkleProofData.length === 0) {
-                return reply_err(res, POSITION_UNKNOWN, startTime);
+
+                const clientdata = await models.clientCommitment.find({client_position: position});
+
+                if (clientdata.length === 0) {
+                    return reply_err(res, POSITION_UNKNOWN, startTime);
+                }
+                else {
+                    return reply_err(res, AWAITING_ATTEST, startTime);
+                }
             }
             reply_msg(res, {
                 txid: txid,
@@ -191,31 +218,45 @@ module.exports = {
 
         //update confirmed status of addition list
         //get all unconfirmed additions
-        const unconfirmed = await models.commitmentAdd.find({client_position: position, confirmed: false}).sort({inserted_at: 1}).exec();
+        const unconfirmed = await models.commitmentAdd.find({
+            client_position: position,
+            confirmed: false
+        }).sort({inserted_at: 1}).exec();
 
-        if(unconfirmed.length > 0) {
+        if (unconfirmed.length > 0) {
             //get latest attestation
             const latest_atst = await models.attestation.find({}).sort({inserted_at: -1}).limit(1).exec();
 
             //get the corresponding commitment
-            const latest_com = await models.merkleCommitment.find({client_position: position, merkle_root: latest_atst[0].merkle_root});
+            const latest_com = await models.merkleCommitment.find({
+                client_position: position,
+                merkle_root: latest_atst[0].merkle_root
+            });
 
             //go through list of unconfirmed additions to see which have been confirmed
 
-            for (var i = 0; i < unconfirmed.length; i++) {
-                leaves = [];
-                for (var j = 0; j <= i; j++ ) {
-                    var leaf = CryptoJS.enc.Hex.parse(unconfirmed[j].addition);
-                    leaves.push(leaf)
-                }                      
+            for (let i = 0; i < unconfirmed.length; i++) {
+                const leaves = [];
+                for (let j = 0; j <= i; j++) {
+                    const leaf = CryptoJS.enc.Hex.parse(unconfirmed[j].addition);
+                    leaves.push(leaf);
+                }
 
-                const tree = new MerkleTree(leaves, SHA256,{isBitcoinTree : true});
+                const tree = new MerkleTree(leaves, SHA256, {isBitcoinTree: true});
                 const root = tree.getRoot().toString('hex');
 
-                if (root == latest_com[0].commitment) {
-                    for (var j = 0; j <= i; j++ ) {
+                if (root === latest_com[0].commitment) {
+                    for (let j = 0; j <= i; j++) {
                         //update addition table to show confirmed and update slot commitment
-                        await models.commitmentAdd.findOneAndUpdate({client_position: position, addition: unconfirmed[j].addition}, {$set: {commitment: root, confirmed: true}});
+                        await models.commitmentAdd.findOneAndUpdate({
+                            client_position: position,
+                            addition: unconfirmed[j].addition
+                        }, {
+                            $set: {
+                                commitment: root,
+                                confirmed: true
+                            }
+                        });
                     }
                     break;
                 }
@@ -229,7 +270,7 @@ module.exports = {
                 addition: commitment
             });
 
-            //if commitment 
+            //if commitment
             if (slotCommitment.length > 0) {
                 if (slotCommitment[0].confirmed) {
                     commitment = slotCommitment[0].commitment;
@@ -253,7 +294,10 @@ module.exports = {
                 return reply_err(res, MERKLEROOT_UNKNOWN, startTime);
             }
 
-            reply_msg(res, {confirmed: attestationData[0].confirmed, date: moment.utc(attestationData[0].inserted_at).format(DATE_FORMAT)}, startTime);
+            reply_msg(res, {
+                confirmed: attestationData[0].confirmed,
+                date: moment.utc(attestationData[0].inserted_at).format(DATE_FORMAT)
+            }, startTime);
 
         } catch (error) {
             return reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -278,7 +322,14 @@ module.exports = {
                 merkle_root: merkle_root
             });
             if (data.length === 0) {
-                return reply_err(res, POSITION_UNKNOWN, startTime);
+                const clientdata = await models.clientCommitment.find({client_position: position});
+
+                if (clientdata.length === 0) {
+                    return reply_err(res, POSITION_UNKNOWN, startTime);
+                }
+                else {
+                    return reply_err(res, AWAITING_ATTEST, startTime);
+                }
             }
             reply_msg(res, {
                 merkle_root: merkle_root,
@@ -315,7 +366,14 @@ module.exports = {
                 merkle_root: merkle_root
             });
             if (!merkleProof) {
-                return reply_err(res, POSITION_UNKNOWN, startTime);
+                const clientdata = await models.clientCommitment.find({client_position: position});
+
+                if (clientdata.length === 0) {
+                    return reply_err(res, POSITION_UNKNOWN, startTime);
+                }
+                else {
+                    return reply_err(res, AWAITING_ATTEST, startTime);
+                }
             }
             reply_msg(res, {
                 txid: txid,
@@ -392,8 +450,24 @@ module.exports = {
                     }
                 }
 
-                await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
-                reply_msg(res, 'Commitment added', startTime);
+                if (data[0].service_level === 'free') {
+
+                    const latest_com = await models.clientCommitment.find({client_position: payload.position});
+                    let today = new Date().toLocaleDateString();
+
+                    if (latest_com[0].date === today) {
+                        return reply_err(res, FREE_TIER_LIMIT, startTime);
+                    } else {
+                        await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {
+                            commitment: payload.commitment,
+                            date: today
+                        }, {upsert: true});
+                        reply_msg(res, 'Commitment added', startTime);
+                    }
+                } else {
+                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
+                    reply_msg(res, 'Commitment added', startTime);
+                }
 
             } catch (error) {
                 return reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -438,11 +512,16 @@ module.exports = {
             try {
                 // try get client details
                 const data = await models.clientDetails.find({client_position: payload.position});
+
                 if (data.length === 0) {
                     return reply_err(res, POSITION_UNKNOWN, startTime);
                 }
                 if (data[0].auth_token !== payload.token) {
                     return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
+                }
+
+                if (data[0].service_level === 'free' || data[0].service_level === 'basic') {
+                    return reply_err(res, NO_ADDITIONS, startTime);
                 }
 
                 if (data[0].pubkey && data[0].pubkey !== '') {
@@ -465,56 +544,107 @@ module.exports = {
                     }
                 }
 
-                const repeatAdd = await models.commitmentAdd.findOne({client_position: payload.position, addition: payload.commitment})
+                //get all unconfirmed additions
+                const addunconfirmed = await models.commitmentAdd.find({
+                    client_position: payload.position,
+                    confirmed: false
+                });
+
+                if (data[0].service_level === 'intermediate') {
+                    if (addunconfirmed.length >= INTERMEDIATE) {
+                        return reply_err(res, LIMIT_ADDITIONS, startTime);
+                    }
+                } else if (data[0].service_level === 'enterprise') {
+                    if (addunconfirmed.length >= ENTERPRISE) {
+                        return reply_err(res, LIMIT_ADDITIONS, startTime);
+                    }
+                }
+
+                const repeatAdd = await models.commitmentAdd.findOne({
+                    client_position: payload.position,
+                    addition: payload.commitment
+                });
 
                 if (repeatAdd) {
                     return reply_err(res, 'repeat addition: ignored', startTime);
                 } else {
-                    //add commitment (unconfirmed)
-                    message = await models.commitmentAdd.findOneAndUpdate({client_position: payload.position, addition: payload.commitment, confirmed: false, commitment: '', inserted_at: Date.now()},{client_position: payload.position, addition: payload.commitment, confirmed: false, commitment: '', inserted_at: Date.now()},{upsert: true});
+
+                    // add commitment (unconfirmed)
+                    await models.commitmentAdd.findOneAndUpdate({
+                        client_position: payload.position,
+                        addition: payload.commitment,
+                        confirmed: false,
+                        commitment: '',
+                        inserted_at: Date.now()
+                    }, {
+                        client_position: payload.position,
+                        addition: payload.commitment,
+                        confirmed: false,
+                        commitment: '',
+                        inserted_at: Date.now()
+                    }, {upsert: true});
+
                     //update confirmed status of listed commitments
 
                     //get all unconfirmed additions
-                    const unconfirmed = await models.commitmentAdd.find({client_position: payload.position, confirmed: false}).sort({inserted_at: 1}).exec();
+                    const unconfirmed = await models.commitmentAdd.find({
+                        client_position: payload.position,
+                        confirmed: false
+                    }).sort({inserted_at: 1}).exec();
 
                     //get latest attestation
                     const latest_atst = await models.attestation.find({}).sort({inserted_at: -1}).limit(1).exec();
 
                     //get the corresponding commitment
-                    const latest_com = await models.merkleCommitment.find({client_position: payload.position, merkle_root: latest_atst[0].merkle_root});
+                    const latest_com = await models.merkleCommitment.find({
+                        client_position: payload.position,
+                        merkle_root: latest_atst[0].merkle_root
+                    });
 
                     //go through list of unconfirmed additions to see which have been confirmed
 
-                    for (var i = 0; i < unconfirmed.length; i++) {
-                        leaves = [];
-                        for (var j = 0; j <= i; j++ ) {
-                            var leaf = CryptoJS.enc.Hex.parse(unconfirmed[j].addition);
-                            leaves.push(leaf)
-                        }                      
+                    for (let i = 0; i < unconfirmed.length; i++) {
+                        const leaves = [];
+                        for (let j = 0; j <= i; j++) {
+                            let leaf = CryptoJS.enc.Hex.parse(unconfirmed[j].addition);
+                            leaves.push(leaf);
+                        }
 
-                        const tree = new MerkleTree(leaves, SHA256,{isBitcoinTree : true});
+                        const tree = new MerkleTree(leaves, SHA256, {isBitcoinTree: true});
                         const root = tree.getRoot().toString('hex');
 
-                        if (root == latest_com[0].commitment) {
-                            for (var j = 0; j <= i; j++ ) {
+                        if (root === latest_com[0].commitment) {
+                            for (let j = 0; j <= i; j++) {
                                 //update addition table to show confirmed and update slot commitment
-                                await models.commitmentAdd.findOneAndUpdate({client_position: payload.position, addition: unconfirmed[j].addition}, {$set: {commitment: root, confirmed: true}});
+                                await models.commitmentAdd.findOneAndUpdate({
+                                    client_position: payload.position,
+                                    addition: unconfirmed[j].addition
+                                }, {
+                                    $set: {
+                                        commitment: root,
+                                        confirmed: true
+                                    }
+                                });
                             }
+                            //reset the addition count
+                            await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {$set: {count: 0}});
                             break;
                         }
                     }
 
                     // commit the root of unconfirmed additions to the ClientCommitment table
 
-                    const ud_unconfirmed = await models.commitmentAdd.find({client_position: payload.position, confirmed: false}).sort({inserted_at: 1}).exec();
-                    leaves = [];
+                    const ud_unconfirmed = await models.commitmentAdd.find({
+                        client_position: payload.position,
+                        confirmed: false
+                    }).sort({inserted_at: 1}).exec();
+                    const leaves = [];
                     for (var i = 0; i < ud_unconfirmed.length; i++) {
                         var leaf = CryptoJS.enc.Hex.parse(ud_unconfirmed[i].addition);
-                        leaves.push(leaf)
+                        leaves.push(leaf);
                     }
-                    const tree = new MerkleTree(leaves, SHA256,{isBitcoinTree : true});
+                    const tree = new MerkleTree(leaves, SHA256, {isBitcoinTree: true});
                     const root = tree.getRoot().toString('hex');
-
 
                     await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: root}, {upsert: true});
                 }
@@ -525,7 +655,7 @@ module.exports = {
                 return reply_err(res, INTERNAL_ERROR_API, startTime);
             }
         });
-    },    
+    },
 
     commitment_commitment: async (req, res) => {
         const startTime = start_time();
@@ -535,8 +665,10 @@ module.exports = {
         }
 
         try {
-            var addition = commitment;
-            var merkleProofData = await models.merkleProof.find({commitment: commitment});
+            let addition = commitment;
+            let merkleProofData = await models.merkleProof.find({commitment: commitment});
+
+            let response_msg;
 
             if (merkleProofData.length === 0) {
 
@@ -545,42 +677,57 @@ module.exports = {
                     addition: addition
                 }).sort({inserted_at: 1}).exec();
 
-                //if added commitment 
+                //if added commitment
                 if (slotCommitment.length > 0) {
 
-                    position = slotCommitment[0].position
+                    const position = slotCommitment[0].position;
 
                     //update confirmed status of addition list
                     //get all unconfirmed additions
-                    const unconfirmed = await models.commitmentAdd.find({client_position: position, confirmed: false}).sort({inserted_at: 1}).exec();
+                    const unconfirmed = await models.commitmentAdd.find({
+                        client_position: position,
+                        confirmed: false
+                    }).sort({inserted_at: 1}).exec();
 
-                    if(unconfirmed.length > 0) {
+                    if (unconfirmed.length > 0) {
                         //get latest attestation
                         const latest_atst = await models.attestation.find({}).sort({inserted_at: -1}).limit(1).exec();
 
                         //get the corresponding commitment
-                        const latest_com = await models.merkleCommitment.find({client_position: position, merkle_root: latest_atst[0].merkle_root});
+                        const latest_com = await models.merkleCommitment.find({
+                            client_position: position,
+                            merkle_root: latest_atst[0].merkle_root
+                        });
 
                         //go through list of unconfirmed additions to see which have been confirmed
-                        for (var i = 0; i < unconfirmed.length; i++) {
-                            leaves = [];
-                            for (var j = 0; j <= i; j++ ) {
-                                var leaf = CryptoJS.enc.Hex.parse(unconfirmed[j].addition);
-                                leaves.push(leaf)
-                            }                      
-                            const tree = new MerkleTree(leaves, SHA256,{isBitcoinTree : true});
+                        for (let i = 0; i < unconfirmed.length; i++) {
+                            const leaves = [];
+                            for (let j = 0; j <= i; j++) {
+                                const leaf = CryptoJS.enc.Hex.parse(unconfirmed[j].addition);
+                                leaves.push(leaf);
+                            }
+                            const tree = new MerkleTree(leaves, SHA256, {isBitcoinTree: true});
                             const root = tree.getRoot().toString('hex');
 
-                            if (root == latest_com[0].commitment) {
-                                for (var j = 0; j <= i; j++ ) {
+                            if (root === latest_com[0].commitment) {
+                                for (let j = 0; j <= i; j++) {
                                     //update addition table to show confirmed and update slot commitment
-                                    await models.commitmentAdd.findOneAndUpdate({client_position: position, addition: unconfirmed[j].addition}, {$set: {commitment: root, confirmed: true}});
+                                    await models.commitmentAdd.findOneAndUpdate({
+                                        client_position: position,
+                                        addition: unconfirmed[j].addition
+                                    }, {
+                                        $set: {
+                                            commitment: root,
+                                            confirmed: true
+                                        }
+                                    });
                                 }
                                 break;
                             }
                         }
-                        const slotCommitment = await models.commitmentAdd.find({
-                            addition: addition}).sort({inserted_at: 1}).exec();
+                        const slotCommitmentIgnored = await models.commitmentAdd.find({
+                            addition: addition
+                        }).sort({inserted_at: 1}).exec();
                     }
 
                     if (slotCommitment[0].confirmed) {
@@ -605,17 +752,16 @@ module.exports = {
                 if (index === -1) {
                     index = attestationData.length - 1;
                 }
-                ;
 
                 //construct Merkle tree for additions
                 const additionList = await models.commitmentAdd.find({commitment: commitment}).sort({inserted_at: 1}).exec();
 
-                leaves = [];
-                for (var i = 0; i < additionList.length; i++) {
-                    var leaf = CryptoJS.enc.Hex.parse(additionList[i].addition);
-                    leaves.push(leaf)
+                const leaves = [];
+                for (let i = 0; i < additionList.length; i++) {
+                    let leaf = CryptoJS.enc.Hex.parse(additionList[i].addition);
+                    leaves.push(leaf);
                 }
-                const tree = new MerkleTree(leaves, SHA256,{isBitcoinTree : true});
+                const tree = new MerkleTree(leaves, SHA256, {isBitcoinTree: true});
                 const root = tree.getRoot().toString('hex');
 
                 //verify root
@@ -627,15 +773,11 @@ module.exports = {
                 const binpath = tree.getProof(addition);
                 const hexpath = tree.getHexProof(addition);
 
-                var addops = [];
+                const addops = [];
 
-                for(var i = 0; i < binpath.length; i++) {
-                    var op = {};
-                    if(binpath[i].position == 'right') {
-                        op.append = true;
-                    } else {
-                        op.append = false;
-                    }
+                for (let i = 0; i < binpath.length; i++) {
+                    const op = {};
+                    op.append = binpath[i].position === 'right';
                     op.commitment = hexpath[i].substring(2);
                     addops.push(op);
                 }
@@ -671,7 +813,6 @@ module.exports = {
                 if (index === -1) {
                     index = attestationData.length - 1;
                 }
-                ;
 
                 response_msg = {
                     attestation: {
@@ -724,7 +865,6 @@ module.exports = {
             if (index === -1) {
                 index = attestationData.length - 1;
             }
-            ;
 
             reply_msg(res, {
                 attestation: {
@@ -763,30 +903,44 @@ module.exports = {
 
         //update confirmed status of addition list
         //get all unconfirmed additions
-        const unconfirmed = await models.commitmentAdd.find({client_position: position, confirmed: false}).sort({inserted_at: 1}).exec();
+        const unconfirmed = await models.commitmentAdd.find({
+            client_position: position,
+            confirmed: false
+        }).sort({inserted_at: 1}).exec();
 
-        if(unconfirmed.length > 0) {
+        if (unconfirmed.length > 0) {
             //get latest attestation
             const latest_atst = await models.attestation.find({}).sort({inserted_at: -1}).limit(1).exec();
 
             //get the corresponding commitment
-            const latest_com = await models.merkleCommitment.find({client_position: position, merkle_root: latest_atst[0].merkle_root});
+            const latest_com = await models.merkleCommitment.find({
+                client_position: position,
+                merkle_root: latest_atst[0].merkle_root
+            });
 
             //go through list of unconfirmed additions to see which have been confirmed
-            for (var i = 0; i < unconfirmed.length; i++) {
-                leaves = [];
-                for (var j = 0; j <= i; j++ ) {
-                    var leaf = CryptoJS.enc.Hex.parse(unconfirmed[j].addition);
-                    leaves.push(leaf)
+            for (let i = 0; i < unconfirmed.length; i++) {
+                const leaves = [];
+                for (let j = 0; j <= i; j++) {
+                    const leaf = CryptoJS.enc.Hex.parse(unconfirmed[j].addition);
+                    leaves.push(leaf);
                 }
 
-                const tree = new MerkleTree(leaves, SHA256,{isBitcoinTree : true});
+                const tree = new MerkleTree(leaves, SHA256, {isBitcoinTree: true});
                 const root = tree.getRoot().toString('hex');
 
-                if (root == latest_com[0].commitment) {
-                    for (var j = 0; j <= i; j++ ) {
+                if (root === latest_com[0].commitment) {
+                    for (let j = 0; j <= i; j++) {
                         //update addition table to show confirmed and update slot commitment
-                        await models.commitmentAdd.findOneAndUpdate({client_position: position, addition: unconfirmed[j].addition}, {$set: {commitment: root, confirmed: true}});
+                        await models.commitmentAdd.findOneAndUpdate({
+                            client_position: position,
+                            addition: unconfirmed[j].addition
+                        }, {
+                            $set: {
+                                commitment: root,
+                                confirmed: true
+                            }
+                        });
                     }
                     break;
                 }
@@ -807,7 +961,14 @@ module.exports = {
                 .exec();
 
             if (data.length === 0) {
-                return reply_err(res, 'No data found for position provided', startTime);
+                const clientdata = await models.clientCommitment.find({client_position: position});
+
+                if (clientdata.length === 0) {
+                    return reply_err(res, 'No data found for position provided', startTime);
+                }
+                else {
+                    return reply_err(res, AWAITING_ATTEST, startTime);
+                }
             }
 
             for (let itr = 0; itr < data.length; ++itr) {
@@ -822,17 +983,19 @@ module.exports = {
                     if (index === -1) {
                         index = attestationData.length - 1;
                     }
-                    ;
 
-                    const additionList = await models.commitmentAdd.find({client_position: position, commitment: data[itr].commitment}).sort({inserted_at: 1}).exec();
+                    const additionList = await models.commitmentAdd.find({
+                        client_position: position,
+                        commitment: data[itr].commitment
+                    }).sort({inserted_at: 1}).exec();
 
                     if (additionList.length > 0) {
-                        additions = []
+                        const additions = [];
                         for (var i = 0; i < additionList.length; i++) {
                             additions.push({
                                 addition: additionList[i].addition,
                                 date: moment.utc(additionList[i].inserted_at).format(DATE_FORMAT)
-                                });
+                            });
                         }
                         response['data'].push({
                             commitment: data[itr].commitment,
@@ -842,7 +1005,7 @@ module.exports = {
                             ops: data[itr].ops,
                             date: moment.utc(attestationData[index].inserted_at).format(DATE_FORMAT),
                             additions: additions
-                        });                        
+                        });
                     } else {
 
                         response['data'].push({

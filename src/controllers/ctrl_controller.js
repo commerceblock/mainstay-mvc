@@ -1,7 +1,11 @@
 const elliptic = require('elliptic');
 const moment = require('moment');
+const uuidv4 = require('uuid/v4');
 const models = require('../models/models');
+
+const {create_slot} = require('../helpers/signup-helper');
 const {isValidEmail} = require('../utils/validators');
+const {sendConformationEmail, sendSubscribeEmail} = require('../helpers/email-helper');
 
 const ec = new elliptic.ec('secp256k1');
 
@@ -10,7 +14,9 @@ const {
     PARAM_UNDEFINED,
     TYPE_ERROR,
     INTERNAL_ERROR_API,
-    TYPE_UNKNOWN
+    TYPE_UNKNOWN,
+    SIGNATURE_INVALID,
+    FREE_TIER_LIMIT
 } = require('../utils/constants');
 
 const {
@@ -174,15 +180,58 @@ module.exports = {
                 }
             }
 
-            await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
-            return res.send();
+            if (data[0].service_level === 'free') {
 
+                const latest_com = await models.clientCommitment.find({client_position: payload.position});
+                const today = new Date().toLocaleDateString();
+
+                if (latest_com[0].date === today) {
+                    return res.json({
+                        error: FREE_TIER_LIMIT,
+                        message: 'Free tier limit exceeded.'
+                    });
+                } else {
+                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {
+                        commitment: payload.commitment,
+                        date: today
+                    }, {upsert: true});
+                    return res.send();
+                }
+            } else {
+                await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
+                return res.send();
+            }
         } catch (error) {
             res.json({
                 error: 'api',
                 message: error.message
             });
         }
+    },
+
+    ctrl_client_signup_verify: async (req, res) => {
+        const {code} = req.query;
+        const {clientSignup} = models;
+        const signup = await clientSignup.findOne({verify_code: code});
+        if (!signup) {
+            return res.status(404).json({
+                error: 'api',
+                message: 'User not found'
+            });
+        }
+
+        signup.verify_code = undefined;
+        signup.status = 'email_confirmed';
+        await signup.save();
+
+        if (signup.service_level === 'free') {
+            await create_slot(signup);
+        } else {
+            signup.code = uuidv4();
+            await signup.save();
+            await sendSubscribeEmail(signup);
+        }
+        res.json({signup});
     },
 
     ctrl_client_signup: async (req, res) => {
@@ -197,6 +246,9 @@ module.exports = {
         }
         if (!payload.email || !payload.email.trim() && !isValidEmail(payload.email.trim())) {
             return res.status(400).json({error: 'email'});
+        }
+        if (!payload.service_level || !models.serviceLevels.includes(payload.service_level)) {
+            return res.status(400).json({error: 'service_level'});
         }
 
         payload.first_name = payload.first_name.trim();
@@ -235,16 +287,21 @@ module.exports = {
                     message: 'A user with this email already exists.'
                 });
             }
+
             // save user
             const user = await models.clientSignup.create({
                 first_name: payload.first_name,
                 last_name: payload.last_name,
                 email: payload.email,
+                service_level: payload.service_level,
                 company: payload.company,
                 pubkey: payload.pubkey,
+                verify_code: uuidv4(),
             });
             // send the response
-            res.status(201).send({user});
+            res.status(201).json({user});
+
+            await sendConformationEmail(user);
         } catch (error) {
             return res.status(500).json({
                 error: 'api',

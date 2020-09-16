@@ -31,7 +31,7 @@ class Subscribe extends React.Component {
             signupId: signup._id
         }).then(() => {
             this.gotoHome();
-        }).catch(error => {
+        }).catch(errorIgnored => {
             // todo show some error
         });
     };
@@ -71,13 +71,16 @@ class Subscribe extends React.Component {
 
     showCheckoutModal = ([signup]) => {
         this.setState({showLoading: false});
+        if (signup.service_level === 'free') {
+            return this.gotoHome();
+        }
         window.Chargebee.init({
             'site': 'mainstay-test'
         });
         window.Chargebee.registerAgain();
 
-        const cbInstance = Chargebee.getInstance();
-        cbInstance.setCheckoutCallbacks((cart) => {
+        const cbInstance = window.Chargebee.getInstance();
+        cbInstance.setCheckoutCallbacks(cartIgnored => {
             // you can define a custom callbacks based on cart object
             return {
                 loaded: () => {
@@ -103,7 +106,22 @@ class Subscribe extends React.Component {
         };
         cart.setCustomer(customer);
 
-        const product = cbInstance.initializeProduct('mainstay-standard');
+        let chargebeeProduct;
+        switch (signup.service_level) {
+        case 'basic':
+            chargebeeProduct = 'mainstay-standard';
+            break;
+        case 'intermediate':
+            chargebeeProduct = 'mainstay-intermediate';
+            break;
+        case 'enterprise':
+            chargebeeProduct = 'mainstay-enterprise';
+            break;
+        default:
+            break;
+        }
+
+        const product = cbInstance.initializeProduct(chargebeeProduct);
         cart.replaceProduct(product);
 
         // Simulating drop in script functionality

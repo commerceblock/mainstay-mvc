@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const env = require('../../env');
 
 class AuthController {
-    async login(req, res, next) {
+    async login(req, res) {
         const adminCredentials = env.admin;
         const jwtSecret = env.jwt.secret;
 

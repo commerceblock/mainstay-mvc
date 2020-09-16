@@ -17,16 +17,17 @@ import Home from './Home';
 import Subscribe from './Subscribe';
 import About from './About';
 import appHistory from './app.history';
+import VerifyEmail from './VerifyEmail';
 
 class Root extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             isScrolled: false
         };
     }
 
-    handleScroll = (event) => {
+    handleScroll = (eventIgnored) => {
         if (window.pageYOffset >= 5) {
 
             this.setState({
@@ -39,19 +40,20 @@ class Root extends React.Component {
         }
     };
 
-    componentDidMount ()  {
+    componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
-    };
+    }
 
     componentWillUnmount() {
         window.removeEventListener('scroll', this.handleScroll);
     }
+
     render() {
 
         return (
             <Router history={appHistory}>
                 <div className="top-nav ">
-                    <div  className={this.state.isScrolled ? 'navigation scroll' : 'navigation'} id='nav' >
+                    <div className={this.state.isScrolled ? 'navigation scroll' : 'navigation'} id='nav'>
                         <div className="container">
                             <TopNavigation />
                         </div>
@@ -72,6 +74,7 @@ class Root extends React.Component {
                             {/*<Route path={routes.pricing} component={Pricing} />*/}
                             <Route path={routes.about} component={About} />
                             <Route path={routes.subscribe} component={Subscribe} />
+                            <Route path={routes.userSignupVerify} component={VerifyEmail} />
                             <Route exact path={routes.app} component={Home} />
                             <Redirect from="*" to={routes.app} />
                         </Switch>
@@ -82,6 +85,5 @@ class Root extends React.Component {
         );
     }
 }
-
 
 export default Root;
