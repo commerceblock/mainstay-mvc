@@ -199,22 +199,61 @@ class Home extends React.Component {
                     <div className="carousel-pricing">
                         <div className="container px-0">
                             <div className="row no-gutters">
-                              <div className="col-12"><h1>Sign-up to MainStay and start<br/> generating your data proofs</h1></div>
-                              <div className="col-12 carousel-pricing__price">
-                                <p><p>Flat fee</p><span>£</span><span>20</span><span>/Month</span></p>
+                              <div className="col"><h1>Sign-up to MainStay and start<br/> generating your data proofs</h1></div>
+                            </div>
+                            <div className="row no-gutters">
+                              <div className="col">
+                              <div className="row carousel-pricing__price">
+                                <p><p>Free tier</p><span>£</span><span>0</span><span>/Month</span></p>
                               </div>
-                              <div className="col-12 text-center mb-1 mt-3">
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Unlimited attestations</span></p>
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Unlimited "proofs"  </span></p>
+                              <div className="col text-center mb-1 mt-3">
+                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Allocated slot ID</span></p>
+                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>One attestation per day</span></p>
                                 <Button color="success" onClick={this.toggleSignUpModal}>
                                     Sign Up
                                 </Button>
                               </div>
-                              <div className="carousel-image__overlay footer">
-                                <div className="carousel-image__buttons justify-content-center">
-                                  <Button color="back" onClick={this.prevButton}>← Back</Button>
-                                </div>
                               </div>
+
+                              <div className="col">
+                              <div className="row carousel-pricing__price">
+                                <p><p>Standard</p><span>£</span><span>20</span><span>/Month</span></p>
+                              </div>
+                              <div className="col text-center mb-1 mt-3">
+                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Allocated slot ID</span></p>
+                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Hourly attestations</span></p>
+                                <Button color="success" onClick={this.toggleSignUpModal}>
+                                    Sign Up
+                                </Button>
+                              </div>
+                              </div>
+
+                              <div className="col">
+                              <div className="row carousel-pricing__price">
+                                <p><p>Intermediate</p><span>£</span><span>40</span><span>/Month</span></p>
+                              </div>
+                              <div className="col text-center mb-1 mt-3">
+                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Hourly attestations</span></p>
+                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>10 additions per hour</span></p>
+                                <Button color="success" onClick={this.toggleSignUpModal}>
+                                    Sign Up
+                                </Button>
+                              </div>
+                              </div>
+
+                              <div className="col">
+                              <div className="row carousel-pricing__price">
+                                <p><p>Enterprise</p><span>£</span><span>80</span><span>/Month</span></p>
+                              </div>
+                              <div className="col text-center mb-1 mt-3">
+                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Hourly attestations</span></p>
+                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>1000 additions per hour</span></p>
+                                <Button color="success" onClick={this.toggleSignUpModal}>
+                                    Sign Up
+                                </Button>
+                              </div>
+                              </div>
+
                             </div>
                         </div>
                     </div>
