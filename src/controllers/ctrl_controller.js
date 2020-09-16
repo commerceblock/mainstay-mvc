@@ -1,7 +1,11 @@
 const elliptic = require('elliptic');
 const moment = require('moment');
+const uuidv4 = require('uuid/v4');
 const models = require('../models/models');
+
+const {create_slot} = require('../helpers/signup-helper');
 const {isValidEmail} = require('../utils/validators');
+const {sendConformationEmail, sendSubscribeEmail} = require('../helpers/email-helper');
 
 const ec = new elliptic.ec('secp256k1');
 
@@ -187,7 +191,10 @@ module.exports = {
                         message: 'Free tier limit exceeded.'
                     });
                 } else {
-                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment, date: today}, {upsert: true});
+                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {
+                        commitment: payload.commitment,
+                        date: today
+                    }, {upsert: true});
                     return res.send();
                 }
             } else {
@@ -200,6 +207,31 @@ module.exports = {
                 message: error.message
             });
         }
+    },
+
+    ctrl_client_signup_verify: async (req, res) => {
+        const {code} = req.query;
+        const {clientSignup} = models;
+        const signup = await clientSignup.findOne({verify_code: code});
+        if (!signup) {
+            return res.status(404).json({
+                error: 'api',
+                message: 'User not found'
+            });
+        }
+
+        signup.verify_code = undefined;
+        signup.status = 'email_confirmed';
+        await signup.save();
+
+        if (signup.service_level === 'free') {
+            await create_slot(signup);
+        } else {
+            signup.code = uuidv4();
+            await signup.save();
+            await sendSubscribeEmail(signup);
+        }
+        res.json({signup});
     },
 
     ctrl_client_signup: async (req, res) => {
@@ -255,6 +287,7 @@ module.exports = {
                     message: 'A user with this email already exists.'
                 });
             }
+
             // save user
             const user = await models.clientSignup.create({
                 first_name: payload.first_name,
@@ -263,9 +296,12 @@ module.exports = {
                 service_level: payload.service_level,
                 company: payload.company,
                 pubkey: payload.pubkey,
+                verify_code: uuidv4(),
             });
             // send the response
-            res.status(201).send({user});
+            res.status(201).json({user});
+
+            await sendConformationEmail(user);
         } catch (error) {
             return res.status(500).json({
                 error: 'api',

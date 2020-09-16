@@ -12,11 +12,14 @@
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
     },
+    "parser": "babel-eslint",
     "parserOptions": {
         "ecmaFeatures": {
-            "jsx": true
+            "jsx": true,
+            "experimentalObjectRestSpread": true,
+            "arrowFunctions": true
         },
-        "ecmaVersion": 2018,
+        "ecmaVersion": 2020,
         "sourceType": "module"
     },
     "plugins": [
@@ -46,7 +49,8 @@
         "no-unused-vars": [
             "error",
             {
-                "varsIgnorePattern": "[iI]gnored"
+                "varsIgnorePattern": "[iI]gnored",
+                "argsIgnorePattern": "[iI]gnored"
             }
         ]
     }

@@ -5,6 +5,7 @@ const uuidv4 = require('uuid/v4');
 const env = require('../src/env');
 const models = require('../src/models/models');
 const EmailHelper = require('./helpers/email-helper');
+const {create_slot} = require('./helpers/signup-helper');
 
 mongoose.set('useFindAndModify', false);
 mongoose.set('useUnifiedTopology', true);
@@ -20,7 +21,7 @@ const START_KYC_INTERVAL = 1000;
 const PAYMENT_OK_WORK_INTERVAL = 1000;
 const CHECKS_INTERVAL = 60000; // one minute
 
-const getDb = (function() {
+const getDbIgnored = (function() {
     let db = connect_mongo();
     return () => {
         return db;
@@ -39,7 +40,7 @@ function connect_mongo() {
     url = url + '@' + env.db.address + ':' + env.db.port + '/' + env.db.database;
     mongoose.connect(url, {useNewUrlParser: true});
     const db = mongoose.connection;
-    db.on('disconnected', (ref) => {
+    db.on('disconnected', (refIgnored) => {
         console.log('Connection with database lost');
         process.exit(1);
     });
@@ -105,7 +106,7 @@ async function check_kyc_status(signup) {
         signup.status = 'kyc_ok';
         signup.code = uuidv4();
         // send verification success email
-        await EmailHelper.sendOnfidoVerificationSuccessEmail(signup);
+        await EmailHelper.sendSubscribeEmail(signup);
     }
     if (check.result === 'consider') {
         signup.status = 'kyc_fail';
@@ -131,48 +132,6 @@ async function start_kyc(signup) {
     await signup.save();
 }
 
-async function create_slot(signup) {
-    // fetch item with max client_position
-    const maxPositionClientDetails = await models.clientDetails
-        .findOne()
-        .sort({client_position: -1})
-        .limit(1);
-
-    let nextClientPosition;
-    if (maxPositionClientDetails === null) {
-        nextClientPosition = 0;
-    } else {
-        nextClientPosition = maxPositionClientDetails.client_position + 1;
-    }
-    const publicKey = '';
-
-    // service level can be one of: 'free', 'basic', 'intermediate' and 'enterprise'
-    const level = '';
-
-    // create new client-detail
-    const clientDetailsData = {
-        client_position: nextClientPosition,
-        auth_token: uuidv4(),
-        client_name: `${signup.first_name} ${signup.last_name}`,
-        pubkey: publicKey,
-        service_level: level
-    };
-    const clientDetails = new models.clientDetails(clientDetailsData);
-    await clientDetails.save();
-
-    // create client-commitment
-    const clientCommitmentData = {
-        client_position: clientDetails.client_position,
-        commitment: '0000000000000000000000000000000000000000000000000000000000000000'
-    };
-    const clientCommitment = new models.clientCommitment(clientCommitmentData);
-    await clientCommitment.save();
-
-    signup.status = 'slot_ok';
-    await signup.save();
-
-    await EmailHelper.sendPaymentOkEmail(signup, clientCommitment, clientDetails);
-}
 
 async function do_work() {
     // First process and client signups stuck on "start_kyc"
@@ -225,6 +184,6 @@ async function do_payment_ok_work() {
     }, PAYMENT_OK_WORK_INTERVAL);
 }
 
-do_work();
-do_applicant_checks();
+// do_work();
+// do_applicant_checks();
 do_payment_ok_work();

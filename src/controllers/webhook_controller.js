@@ -50,7 +50,7 @@ class WebhookController {
         }
         if (check.result === 'clear') {
             signup.status = 'kyc_ok';
-            await EmailHelper.sendOnfidoVerificationSuccessEmail(signup);
+            await EmailHelper.sendSubscribeEmail(signup);
         }
         if (check.result === 'consider') {
             signup.status = 'kyc_fail';

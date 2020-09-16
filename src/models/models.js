@@ -73,9 +73,10 @@ const schemaCommitmentAdd = new Schema({
     confirmed: Boolean,
     commitment: String,
     inserted_at: Date
-}, {collection: 'CommitmentAdd',
+}, {
+    collection: 'CommitmentAdd',
     versionKey: false
-    });
+});
 schemaCommitmentAdd.index({
     client_position: 1,
     addition: 1,
@@ -110,6 +111,7 @@ const schemaClientSignup = new Schema({
     kyc_id: String,
     hosted_page_id: String,
     code: String,
+    verify_code: String,
     service_level: {
         type: String,
         enum: serviceLevels,
@@ -124,6 +126,7 @@ schemaClientSignup.index({'email': 1}, {unique: true});
 schemaClientSignup.index({'status': 1});
 schemaClientSignup.index({'code': 1});
 schemaClientSignup.index({'kyc_id': 1});
+schemaClientSignup.index({'verify_code': 1});
 
 const attestation = mongoose.model('Attestation', schemaAttestation);
 const attestationInfo = mongoose.model('AttestationInfo', schemaAttestationInfo);
