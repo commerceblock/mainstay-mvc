@@ -17,6 +17,7 @@ class SignUpModal extends React.PureComponent {
                 first_name: '',
                 last_name: '',
                 email: '',
+                service_level: 'free',
                 company: '',
                 pubkey: '',
             },
@@ -49,7 +50,7 @@ class SignUpModal extends React.PureComponent {
     handleSubmitLogin = (event) => {
         event.preventDefault();
 
-        const {first_name, last_name, email, company, pubkey} = this.state.inputs;
+        const {first_name, last_name, email, service_level, company, pubkey} = this.state.inputs;
 
         if (!first_name || !first_name.trim()) {
             return this.showErrorAlert('First Name is empty');
@@ -63,6 +64,10 @@ class SignUpModal extends React.PureComponent {
             return this.showErrorAlert('Email is empty');
         }
 
+        if (!service_level) {
+            return this.showErrorAlert('Service Level is empty');
+        }
+
         if (!isValidEmail(email)) {
             return this.showErrorAlert('Email is no valid.');
         }
@@ -71,6 +76,7 @@ class SignUpModal extends React.PureComponent {
             first_name,
             last_name,
             email,
+            service_level,
             company,
             pubkey
         };
@@ -87,8 +93,8 @@ class SignUpModal extends React.PureComponent {
             this.resetFormState();
         }).catch(error => {
             if (this.props.onError) {
-                if (error.status === 500){
-                    error.data.message = "Something went wrong. Please contact the Commerceblock support team.";
+                if (error.status === 500) {
+                    error.data.message = 'Something went wrong. Please contact the Commerceblock support team.';
                 }
                 this.props.onError(error);
             }
@@ -124,12 +130,10 @@ class SignUpModal extends React.PureComponent {
                 >
                     <ModalBody>
                         <p>1. Please provide your details below</p>
-                        <p>2. You will receive an email confirmation with a link to KYC verification</p>
-                        <p>3. Perform KYC verification via OnFido</p>
-                        <p>4. You will receive a confirmation email with a link to the payment setup</p>
-                        <p>5. Please provide your payment details</p>
-                        <p>6. You will received your attestation slot via email</p>
-                        <p>7. Start securing your data!</p>
+                        <p>2. You will then recieve an email to confirm your address</p>
+                        <p>3. If you selected a paid service tier, you will then receive instructions with a link to the payment setup</p>
+                        <p>4. Once confirmed, you will receive the slot ID and attestation token via email</p>
+                        <p>5. The slot then becomes active and you can start securing your data!</p>
                         <Row form>
                             <Col md={6}>
                                 <FormGroup>
@@ -150,6 +154,15 @@ class SignUpModal extends React.PureComponent {
                                 </FormGroup>
                             </Col>
                         </Row>
+                        <FormGroup>
+                            <Label className="f-bold fs14">Service Level*</Label>
+                            <Input type="select" name="service_level" onChange={this.handleChange}>
+                                <option value="free" selected>Free</option>
+                                <option value="basic">Basic</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="enterprise">Enterprise</option>
+                            </Input>
+                        </FormGroup>
                         <FormGroup>
                             <Label className="f-bold fs14">Email*</Label>
                             <Input

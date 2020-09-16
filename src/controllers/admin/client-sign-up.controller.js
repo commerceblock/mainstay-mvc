@@ -1,7 +1,4 @@
-const elliptic = require('elliptic');
-
 const models = require('../../models/models');
-const ec = new elliptic.ec('secp256k1');
 
 class ClientSignUpController {
 
@@ -17,7 +14,7 @@ class ClientSignUpController {
         } catch (error) {
             next(error);
         }
-    };
+    }
 
     async patch(req, res, next) {
         const {id} = req.params;
@@ -39,7 +36,7 @@ class ClientSignUpController {
                 return res.status(404).json({
                     error: {
                         code: 'not_found',
-                        message: error.message
+                        message: 'Client signup not found'
                     }
                 });
             }
@@ -53,7 +50,7 @@ class ClientSignUpController {
         } catch (error) {
             next(error);
         }
-    };
+    }
 }
 
 module.exports = new ClientSignUpController();

@@ -12,7 +12,7 @@ const ONFIDO_REQUEST_HEADERS = {
 };
 
 class WebhookController {
-    async index(req, res, next) {
+    async index(req, res) {
         const {resource_type, action, object} = req.body.payload;
         console.log(action, object.id, object.href);
         if (resource_type === 'check') {
@@ -50,7 +50,7 @@ class WebhookController {
         }
         if (check.result === 'clear') {
             signup.status = 'kyc_ok';
-            await EmailHelper.sendOnfidoVerificationSuccessEmail(signup);
+            await EmailHelper.sendSubscribeEmail(signup);
         }
         if (check.result === 'consider') {
             signup.status = 'kyc_fail';
