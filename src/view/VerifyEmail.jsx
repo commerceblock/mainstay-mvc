@@ -1,6 +1,7 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 import apiService from '../helpers/api-service';
+import swal from 'sweetalert';
 
 class VerifyEmail extends React.Component {
 
@@ -13,12 +14,29 @@ class VerifyEmail extends React.Component {
     }
 
     componentDidMount() {
-        return this.loadSignup().then((response) => {
-            console.log('-----------------------response', response);
-            alert('Your email is verified.');
-        }).catch((error => {
-            console.error(error);
-            alert('Something went wrong.');
+        return this.loadSignup().then((signup) => {
+            if (signup.service_level !== 'free') {
+                return swal({
+                    text: 'Email successfully verified. You will shortly receive another email with instructions for setting up monthly payments to activate the service.',
+                    icon: 'success',
+                    className: 'success',
+                    closeOnClickOutside: false
+                });
+            } else {
+                return swal({
+                    text: 'Email successfully verified. You will shortly receive another email containing your Mainstay slot ID allocation and API access token.',
+                    icon: 'success',
+                    className: 'success',
+                    closeOnClickOutside: false
+                });
+            }
+        }).catch((errorIgnored => {
+            return swal({
+                text: 'Something went wrong.',
+                icon: 'error',
+                className: 'error',
+                closeOnClickOutside: false
+            });
         })).finally(this.gotoHome);
     }
 
