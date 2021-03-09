@@ -9,7 +9,7 @@
     "crypto-js": "^4.0.0",
     "dateformat": "^3.0.3",
     "dotenv": "^8.1.0",
-    "elliptic": "^6.5.0",
+    "elliptic": "^6.5.4",
     "express": "^4.16.4",
     "file-type": "^12.1.0",
     "flickity": "^2.2.1",
