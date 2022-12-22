@@ -17,7 +17,7 @@
     "history": "^4.9.0",
     "imports-loader": "^1.1.0",
     "js-sha3": "^0.8.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "merkletreejs": "^0.2.8",
     "moment": "^2.24.0",
     "mongoose": "^5.10.0",
