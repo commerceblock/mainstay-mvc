@@ -13,7 +13,7 @@ case "$1" in
             ;;
         webpack)
             echo "Running webpack dev server"
-            ./node_modules/webpack-dev-server/bin/webpack-dev-server.js
+            ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --https --cert ./cert.pem --key ./key.pem
             ;;
         shell)
             bash

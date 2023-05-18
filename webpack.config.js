@@ -4,6 +4,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const htmlWebPackPlugin = require('html-webpack-plugin');
+const fs = require('fs');
 
 module.exports = () => {
     const serverHost = process.env.HOST_API || 'localhost';
@@ -65,7 +66,7 @@ module.exports = () => {
             ]
         },
         resolve: {
-            extensions: ['*', '.js', '.jsx']
+            extensions: ['.js', '.jsx']
         },
         plugins: [
             new MiniCssExtractPlugin({filename: '[name].styles.[hash].css'}),
