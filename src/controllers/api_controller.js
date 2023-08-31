@@ -7,6 +7,9 @@ const ec = new elliptic.ec('secp256k1');
 const {MerkleTree} = require('merkletreejs');
 const SHA256 = require('crypto-js/sha256');
 const CryptoJS = require('crypto-js');
+const env = require('../env');
+const axios = require('axios');
+const uuidv4 = require('uuid/v4');
 
 const {
     VERSION_API_V1,
@@ -45,9 +48,19 @@ const {
     start_time,
     reply_err,
     reply_msg,
+    get_value_arg,
 } = require('../utils/controller_helpers');
 
 const DATE_FORMAT = 'HH:mm:ss L z';
+
+const C_LIGHTNING_URL = env.c_lightning.url;
+const MACAROON_HEX = env.c_lightning.macaroon_hex;
+const INVOICE_DESCRIPTION = 'Invoice for Mainstay token';
+const C_LIGHTNING_REQUEST_HEADERS = { 
+    'encodingtype': 'hex',
+    'macaroon': MACAROON_HEX,
+    'Content-Type': 'application/json'
+};
 
 module.exports = {
     index: (req, res) => {
@@ -1147,6 +1160,35 @@ module.exports = {
                 error: INTERNAL_ERROR_API,
                 timestamp: new Date().getTime(),
             });
+        }
+    },
+
+    token_init: async (req, res) => {
+        const startTime = start_time();
+        const amount = get_value_arg(req, res, startTime);
+        const token_id = uuidv4();
+        try {
+            const invoice = axios.post(C_LIGHTNING_URL + '/v1/invoice/genInvoice', {
+                amount: amount,
+                label: token_id,
+                description: INVOICE_DESCRIPTION
+            }, {
+                headers: C_LIGHTNING_REQUEST_HEADERS
+            });
+
+            if (invoice) {
+                reply_msg(res, {
+                    "lightning_invoice": {
+                        "bolt11": invoice.bolt11,
+                        "expires_at": invoice.expires_at,
+                        "payment_hash": invoice.payment_hash
+                    },
+                    "token_id": token_id,
+                    "value": amount
+                }, startTime);
+            }
+        } catch (error) {
+            reply_err(res, INTERNAL_ERROR_API, startTime);
         }
     },
 };

@@ -17,6 +17,9 @@ const {
     MISSING_ARG_POSITION,
     BAD_TYPE_POSITION,
     NS_PER_SEC,
+    ARG_VALUE,
+    MISSING_ARG_VALUE,
+    BAD_TYPE_VALUE,
 } = require('./constants');
 
 function get_hash_arg(req, res, startTime) {
@@ -75,6 +78,18 @@ function get_position_arg(req, res, startTime) {
     return position;
 }
 
+function get_value_arg(req, res, startTime) {
+    const paramValue = req.query[ARG_VALUE];
+    if (paramValue === undefined) {
+        return reply_err(res, MISSING_ARG_VALUE, startTime);
+    }
+    const value = parseInt(paramValue, 10);
+    if (isNaN(value)) {
+        return reply_err(res, BAD_TYPE_VALUE, startTime);
+    }
+    return value;
+}
+
 /**
  * @see https://nodejs.org/docs/latest-v10.x/api/process.html#process_process_hrtime_time
  *
@@ -112,6 +127,7 @@ module.exports = {
     get_commitment_arg,
     get_merkle_root_arg,
     get_position_arg,
+    get_value_arg,
     start_time,
     reply_err,
     reply_msg,
