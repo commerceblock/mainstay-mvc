@@ -1177,6 +1177,12 @@ module.exports = {
             });
 
             if (invoice) {
+                const tokenDetailsData = {
+                    token_id: token_id,
+                    payment_status_paid: false
+                };
+                const tokenDetails = new models.tokenDetails(tokenDetailsData);
+                await tokenDetails.save();
                 reply_msg(res, {
                     "lightning_invoice": {
                         "bolt11": invoice.bolt11,
