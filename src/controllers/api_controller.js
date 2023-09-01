@@ -45,10 +45,11 @@ const {
     get_commitment_arg,
     get_merkle_root_arg,
     get_position_arg,
+    get_value_arg,
+    get_token_id_arg,
     start_time,
     reply_err,
     reply_msg,
-    get_value_arg,
 } = require('../utils/controller_helpers');
 
 const DATE_FORMAT = 'HH:mm:ss L z';
@@ -1168,7 +1169,7 @@ module.exports = {
         const amount = get_value_arg(req, res, startTime);
         const token_id = uuidv4();
         try {
-            const invoice = axios.post(C_LIGHTNING_URL + '/v1/invoice/genInvoice', {
+            const invoice = await axios.post(C_LIGHTNING_URL + '/v1/invoice/genInvoice', {
                 amount: amount,
                 label: token_id,
                 description: INVOICE_DESCRIPTION
@@ -1193,6 +1194,31 @@ module.exports = {
                     "value": amount
                 }, startTime);
             }
+        } catch (error) {
+            reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
+    },
+
+    token_verify: async (req, res) => {
+        const startTime = start_time();
+        const token_id = get_token_id_arg(req, res, startTime);
+        try {
+            const response = await axios.get(C_LIGHTNING_URL + '/v1/invoice/listInvoices?label=' + token_id, 
+            {
+                headers: C_LIGHTNING_REQUEST_HEADERS
+            });
+            const invoice = response.data.invoices[0];
+            let invoice_paid = false;
+            if (invoice && invoice.status === "paid") {
+                const tokenDetails = await models.tokenDetails.findOne({token_id: token_id});
+                tokenDetails.payment_status_paid = true;
+                await tokenDetails.save();
+                invoice_paid = true;
+            }
+            reply_msg(res, {
+                amount: invoice.msatoshi,
+                confirmed: invoice_paid
+            }, startTime);
         } catch (error) {
             reply_err(res, INTERNAL_ERROR_API, startTime);
         }
