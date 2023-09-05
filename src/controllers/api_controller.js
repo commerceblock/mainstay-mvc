@@ -1180,7 +1180,9 @@ module.exports = {
             if (invoice) {
                 const tokenDetailsData = {
                     token_id: token_id,
-                    payment_status_paid: false
+                    value: amount,
+                    confirmed: false,
+                    amount: 0
                 };
                 const tokenDetails = new models.tokenDetails(tokenDetailsData);
                 await tokenDetails.save();
@@ -1211,7 +1213,8 @@ module.exports = {
             let invoice_paid = false;
             if (invoice && invoice.status === "paid") {
                 const tokenDetails = await models.tokenDetails.findOne({token_id: token_id});
-                tokenDetails.payment_status_paid = true;
+                tokenDetails.confirmed = true;
+                tokenDetails.amount = invoice.msatoshi;
                 await tokenDetails.save();
                 invoice_paid = true;
             }
@@ -1220,6 +1223,7 @@ module.exports = {
                 confirmed: invoice_paid
             }, startTime);
         } catch (error) {
+            console.log(error)
             reply_err(res, INTERNAL_ERROR_API, startTime);
         }
     },
