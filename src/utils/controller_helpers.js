@@ -21,7 +21,9 @@ const {
     MISSING_ARG_VALUE,
     BAD_TYPE_VALUE,
     ARG_TOKEN_ID,
-    MISSING_ARG_TOKEN_ID
+    MISSING_ARG_TOKEN_ID,
+    ARG_SLOT_ID,
+    MISSING_ARG_SLOT_ID
 } = require('./constants');
 
 function get_hash_arg(req, res, startTime) {
@@ -100,6 +102,14 @@ function get_token_id_arg(req, res, startTime) {
     return paramTokenId;
 }
 
+function get_slot_id_arg(req, res, startTime) {
+    const paramSlotId = req.query[ARG_SLOT_ID];
+    if (paramSlotId === undefined) {
+        return reply_err(res, MISSING_ARG_SLOT_ID, startTime);
+    }
+    return paramSlotId;
+}
+
 /**
  * @see https://nodejs.org/docs/latest-v10.x/api/process.html#process_process_hrtime_time
  *
@@ -139,6 +149,7 @@ module.exports = {
     get_position_arg,
     get_value_arg,
     get_token_id_arg,
+    get_slot_id_arg,
     start_time,
     reply_err,
     reply_msg,

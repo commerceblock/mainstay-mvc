@@ -50,6 +50,7 @@ const {
     get_position_arg,
     get_value_arg,
     get_token_id_arg,
+    get_slot_id_arg,
     start_time,
     reply_err,
     reply_msg,
@@ -1225,6 +1226,19 @@ module.exports = {
             reply_msg(res, {
                 amount: invoice.msatoshi,
                 confirmed: invoice_paid
+            }, startTime);
+        } catch (error) {
+            reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
+    },
+
+    slot_expiry: async (req, res) => {
+        const startTime = start_time();
+        const slot_id = get_slot_id_arg(req, res, startTime);
+        try {
+            const clientDetailsData = await models.clientDetails.findOne({client_position: slot_id});
+            reply_msg(res, {
+                expiry_date: clientDetailsData.expiry_date
             }, startTime);
         } catch (error) {
             reply_err(res, INTERNAL_ERROR_API, startTime);
