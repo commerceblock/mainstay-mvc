@@ -10,6 +10,7 @@ const CryptoJS = require('crypto-js');
 const env = require('../env');
 const axios = require('axios');
 const uuidv4 = require('uuid/v4');
+const { create_slot_with_token, update_slot_with_token } = require('../utils/slot_utils');
 
 const {
     VERSION_API_V1,
@@ -31,7 +32,9 @@ const {
     FREE_TIER_LIMIT,
     NO_ADDITIONS,
     LIMIT_ADDITIONS,
-    AWAITING_ATTEST
+    AWAITING_ATTEST,
+    ARG_TOKEN_ID,
+    ARG_SLOT_ID
 } = require('../utils/constants');
 
 const {
@@ -56,6 +59,7 @@ const DATE_FORMAT = 'HH:mm:ss L z';
 
 const C_LIGHTNING_URL = env.c_lightning.url;
 const MACAROON_HEX = env.c_lightning.macaroon_hex;
+const FEE_RATE_PER_DAY_IN_MSAT = env.c_lightning.fee_rate_per_day_in_msat;
 const INVOICE_DESCRIPTION = 'Invoice for Mainstay token';
 const C_LIGHTNING_REQUEST_HEADERS = { 
     'encodingtype': 'hex',
@@ -1223,8 +1227,46 @@ module.exports = {
                 confirmed: invoice_paid
             }, startTime);
         } catch (error) {
-            console.log(error)
             reply_err(res, INTERNAL_ERROR_API, startTime);
         }
     },
+
+    spend_token: async (req, res) => {
+        const startTime = start_time();
+        let rawRequestData = '';
+        req.on('data', chunk => {
+            rawRequestData += chunk.toString();
+        });
+
+        req.on('end', async () => {
+            try {
+                const data = JSON.parse(rawRequestData);
+                const token_id = data[ARG_TOKEN_ID];
+                const slot_id = data[ARG_SLOT_ID];
+                const tokenDetails = await models.tokenDetails.findOne({token_id: token_id});
+                if (tokenDetails.amount >= FEE_RATE_PER_DAY_IN_MSAT) {
+                    const days = tokenDetails.amount / FEE_RATE_PER_DAY_IN_MSAT;
+                    const current_date = new Date();
+                    const expiry_date = new Date(current_date.getTime() + days * 24 * 60 * 60 * 1000);
+                    if (slot_id === 0) {
+                        const clientDetailsData = await create_slot_with_token(expiry_date);
+                        reply_msg(res, {
+                            slot_id: clientDetailsData.client_position,
+                            expiry_date: clientDetailsData.expiry_date
+                        }, startTime);
+                    } else {
+                        const clientDetailsData = await update_slot_with_token(slot_id, expiry_date);
+                        reply_msg(res, {
+                            slot_id: clientDetailsData.client_position,
+                            expiry_date: clientDetailsData.expiry_date
+                        }, startTime);
+                    }
+                } else {
+                    reply_err(res, 'Token contains insufficient balance', startTime);
+                }
+            } catch (error) {
+                reply_err(res, INTERNAL_ERROR_API, startTime);
+            }
+        });
+    }
 };

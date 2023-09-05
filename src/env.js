@@ -83,6 +83,6 @@ module.exports = {
     c_lightning: {
         url: env.C_LIGHTNING_URL,
         macaroon_hex: env.MACAROON_HEX,
-        amount_in_msat: env.AMOUNT_IN_MSAT
+        fee_rate_per_day_in_msat: env.FEE_RATE_PER_DAY_IN_MSAT
     }
 };
