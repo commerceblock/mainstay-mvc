@@ -34,7 +34,8 @@ const {
     LIMIT_ADDITIONS,
     AWAITING_ATTEST,
     ARG_TOKEN_ID,
-    ARG_SLOT_ID
+    ARG_SLOT_ID,
+    EXPIRY_DATE_ERROR
 } = require('../utils/constants');
 
 const {
@@ -447,6 +448,9 @@ module.exports = {
                 }
                 if (data[0].auth_token !== payload.token) {
                     return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
+                }
+                if (data[0].expiry_date && new Date(data[0].expiry_date) < new Date()) {
+                    return reply_err(res, EXPIRY_DATE_ERROR, startTime);
                 }
 
                 if (data[0].pubkey && data[0].pubkey !== '') {

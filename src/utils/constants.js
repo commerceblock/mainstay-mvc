@@ -36,6 +36,7 @@ const constants = {
     NS_PER_SEC: 1000000000,
     PARAM_UNDEFINED: 'parameter undefined',
     PAYLOAD_TOKEN_ERROR: 'your token is wrong',
+    EXPIRY_DATE_ERROR: 'your slot got expired, recharge with a new token',
     POSITION_UNKNOWN: 'your position is unknown to us',
     SIGNATURE_INVALID: 'your signature is incorrect',
     SIZE_TXID: 64,
