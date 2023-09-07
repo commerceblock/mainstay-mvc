@@ -64,3 +64,15 @@ If `slot_id` is an existing slot, the row in `ClientDetails` will be updated wit
 `GET /slotexpiry/{slot_id}`
 
 This will return the `expiry_date` for the specified `slot_id`. 
+
+# Website 
+
+The 'Sign Up' button on the main mainstay.xyz site to be replaced with 'Join'
+
+This will open a pop-up (as it does currently) with the title 'Create slot'. Below this will be the text: "Pay with lightning to reserve a unique proof-of-publication slot for fee_rate a month". 
+Then there will be a drop down menu for '1 month', '2 months', '3 months' and custom. Custom will allow user to enter any number of months. 
+Once the time is selected the value is calculated from this and fee_rate. 
+`GET /token/init/{value}` is then called, and the bolt11 invoice is displayed. 
+
+At the bottom of the pop-up, there is a 'Verify' button. This calls `GET /token/verify/{token_id}`. If `"confirmed": false` then then pop-up will remain open, and 'Payment not received' message displayed. If `"confirmed": true`, then a new pop-up will appear with the slot details. `POST /spendtoken` is called, and the `token_id` and `slot_id` is displayed. `GET /slotexpiry/{slot_id}` is called and the expiry date is displayed. 
+The text below this: "Save these details to commit data and generate proofs" with a 'Close' button to close the pop-up. 
