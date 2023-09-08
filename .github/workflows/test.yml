@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.13.0]
-        mongodb-version: [7.0.0]
+        node-version: [12]
+        mongodb-version: [4.1.6]
 
     steps:
     - name: Git checkout
@@ -22,7 +22,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
-      run: npm install --force
+      run: yarn
 
     - name: Start MongoDB Replica Set
       run: |
@@ -43,4 +43,4 @@ jobs:
         node ./src/app.js
 
     - name: Run tests
-      run: npm test
+      run: yarn test
