@@ -68,6 +68,16 @@ beforeAll(async () => {
         }
     ];
     await models.clientDetails.insertMany(testDataClientDetails);
+
+    const testDataTokenDetails = [
+        {
+            token_id: 'e1fb930a-23ed-4e0e-abb5-2ada8fe77e8a',
+            value: 10000,
+            confirmed: true,
+            amount: 10000
+        }
+    ];
+    await models.tokenDetails.insertMany(testDataTokenDetails);
 });
 
 afterAll(async () => {
@@ -276,5 +286,21 @@ describe('Test Api Controllers', () => {
         await controllers.slot_expiry(req, res);
         const json = JSON.parse(res._getData());
         assert(json.error === 'missing slot_id parameter');
+    });
+
+    it('Route: /api/v1/spend_token', () => {
+        const slot_id = 0;
+        const req = mockHttp.createRequest(
+            {
+                method: 'POST',
+                url: '/api/v1/spend_token',
+                body: {
+                    'token_id': 'e1fb930a-23ed-4e0e-abb5-2ada8fe77e8a',
+                    'slot_id': slot_id
+                }
+            });
+        
+        const res = mockHttp.createResponse();
+        controllers.spend_token(req, res);
     });
 });
