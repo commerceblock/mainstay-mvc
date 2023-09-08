@@ -27,16 +27,12 @@ jobs:
     - name: Install dependencies
       run: yarn
 
-    - name: Install MongoDB
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y mongodb
-
-    - name: Start MongoDB Replica Set
-      run: |
-        sudo mongod --replSet "rs" &
-        sleep 5
-        mongo --eval "rs.initiate()"
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.10.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
+        mongodb-replica-set: rs
+        mongodb-port: 27017
 
     - name: Restore MongoDB Test Data
       run: mongorestore -d "mainstayX" ./dbTest
