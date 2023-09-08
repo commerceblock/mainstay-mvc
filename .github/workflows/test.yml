@@ -1,0 +1,38 @@
+name: Run tests
+
+on:
+  push:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.17.0]
+        mongodb-version: [4.1.6]
+
+    steps:
+    - name: Git checkout
+      uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Setup node-gyp
+      run: yarn global add node-gyp@latest
+
+    - name: Install dependencies
+      run: yarn
+
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.10.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
+        mongodb-replica-set: rs
+        mongodb-port: 27017
+
+    - name: Run tests
+      run: yarn test -- controllers.test.js
