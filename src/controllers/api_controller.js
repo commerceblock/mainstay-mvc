@@ -1176,6 +1176,9 @@ module.exports = {
     token_init: async (req, res) => {
         const startTime = start_time();
         const amount = get_value_arg(req, res, startTime);
+        if (res.headersSent) {
+            return;
+        }
         const token_id = uuidv4();
         try {
             const invoice = await axios.post(C_LIGHTNING_URL + '/v1/invoice/genInvoice', {
@@ -1213,6 +1216,9 @@ module.exports = {
     token_verify: async (req, res) => {
         const startTime = start_time();
         const token_id = get_token_id_arg(req, res, startTime);
+        if (res.headersSent) {
+            return;
+        }
         try {
             const response = await axios.get(C_LIGHTNING_URL + '/v1/invoice/listInvoices?label=' + token_id, 
             {
@@ -1239,8 +1245,14 @@ module.exports = {
     slot_expiry: async (req, res) => {
         const startTime = start_time();
         const slot_id = get_slot_id_arg(req, res, startTime);
+        if (res.headersSent) {
+            return;
+        }
         try {
             const clientDetailsData = await models.clientDetails.findOne({client_position: slot_id});
+            if (clientDetailsData === null) {
+                return reply_err(res, POSITION_UNKNOWN, startTime);
+            }
             reply_msg(res, {
                 expiry_date: clientDetailsData.expiry_date
             }, startTime);
