@@ -22,10 +22,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Setup node-gyp
-      run: yarn global add node-gyp@latest
+      run: npm install -g node-gyp@latest
 
     - name: Install dependencies
-      run: yarn
+      run: npm install
 
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@1.10.0
@@ -35,4 +35,4 @@ jobs:
         mongodb-port: 27017
 
     - name: Run tests
-      run: yarn test
+      run: npm run test
