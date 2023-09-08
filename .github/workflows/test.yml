@@ -1,12 +1,5 @@
 name: Run tests
 
-env:
-  JWT_SECRET: "dhe?3wfje;wf1"
-  DB_NAME: "mainstayX"
-  DB_PORT: "27017"
-  DB_HOST: "127.0.0.1"
-  LISTEN_API: "4000"
-
 on:
   push:
     branches: [ main, develop ]
@@ -40,9 +33,6 @@ jobs:
         mongodb-version: ${{ matrix.mongodb-version }}
         mongodb-replica-set: rs
         mongodb-port: 27017
-
-    - name: Start App
-      run: node ./src/app.js
 
     - name: Run tests
       run: yarn test
