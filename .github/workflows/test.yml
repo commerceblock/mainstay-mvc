@@ -34,9 +34,6 @@ jobs:
         mongodb-replica-set: rs
         mongodb-port: 27017
 
-    - name: Restore MongoDB Test Data
-      run: mongorestore -d "mainstayX" ./dbTest
-
     - name: Start App
       run: |
         JWT_SECRET="dhe?3wfje;wf1" \
