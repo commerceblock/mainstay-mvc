@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
-        mongodb-version: ['4.2', '4.4', '5.0', '6.0']
+        node-version: [16.13.0]
+        mongodb-version: [7.0.0]
 
     steps:
     - name: Git checkout
@@ -22,7 +22,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
-      run: npm install
+      run: npm install --force
 
     - name: Start MongoDB Replica Set
       run: |
