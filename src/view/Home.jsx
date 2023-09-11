@@ -195,74 +195,11 @@ class Home extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="carousel-cell">
-                    <div className="carousel-pricing">
-                        <div className="container px-0">
-                            <div className="row no-gutters">
-                              <div className="col"><h1>Sign-up to MainStay and start<br/> generating your data proofs</h1></div>
-                            </div>
-                            <div className="row no-gutters">
-                              <div className="col">
-                              <div className="row carousel-pricing__price">
-                                <p><p>Free tier</p><span>£</span><span>0</span><span>/Month</span></p>
-                              </div>
-                              <div className="col text-center mb-1 mt-3">
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Allocated slot ID</span></p>
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>One attestation per day</span></p>
-                                <Button color="success" onClick={this.toggleSignUpModal}>
-                                    Sign Up
-                                </Button>
-                              </div>
-                              </div>
-
-                              <div className="col">
-                              <div className="row carousel-pricing__price">
-                                <p><p>Standard</p><span>£</span><span>20</span><span>/Month</span></p>
-                              </div>
-                              <div className="col text-center mb-1 mt-3">
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Allocated slot ID</span></p>
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Hourly attestations</span></p>
-                                <Button color="success" onClick={this.toggleSignUpModal}>
-                                    Sign Up
-                                </Button>
-                              </div>
-                              </div>
-
-                              <div className="col">
-                              <div className="row carousel-pricing__price">
-                                <p><p>Intermediate</p><span>£</span><span>40</span><span>/Month</span></p>
-                              </div>
-                              <div className="col text-center mb-1 mt-3">
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Hourly attestations</span></p>
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>10 additions per hour</span></p>
-                                <Button color="success" onClick={this.toggleSignUpModal}>
-                                    Sign Up
-                                </Button>
-                              </div>
-                              </div>
-
-                              <div className="col">
-                              <div className="row carousel-pricing__price">
-                                <p><p>Enterprise</p><span>£</span><span>80</span><span>/Month</span></p>
-                              </div>
-                              <div className="col text-center mb-1 mt-3">
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Hourly attestations</span></p>
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>1000 additions per hour</span></p>
-                                <Button color="success" onClick={this.toggleSignUpModal}>
-                                    Sign Up
-                                </Button>
-                              </div>
-                              </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 </Flickity>
               </div>
                 <div className="col-12 col-lg-6 login">
 
-                    <Login/>
+                    {/* <Login/> */}
 
                 </div>
               <div className="col-12 col-lg-6 mainstayinfo">
