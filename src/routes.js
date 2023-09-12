@@ -28,6 +28,10 @@ function makeApiRoutes(app) {
     router.get('/attestation', apiController.attestation);
     router.get('/blockhash', apiController.blockhash);
     router.get('/clients', apiController.clients);
+    router.get('/token/init', apiController.token_init);
+    router.get('/token/verify', apiController.token_verify);
+    router.get('/slotexpiry', apiController.slot_expiry);
+    router.get('/feerate', apiController.feerate);
     router.post('/commitment/add', apiController.commitment_add);
     router.post('/commitment/send', apiController.commitment_send);
 
