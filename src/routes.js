@@ -34,6 +34,7 @@ function makeApiRoutes(app) {
     router.get('/feerate', apiController.feerate);
     router.post('/commitment/add', apiController.commitment_add);
     router.post('/commitment/send', apiController.commitment_send);
+    router.post('/spendtoken', apiController.spend_token);
 
     app.use('/api/v1', router);
 }

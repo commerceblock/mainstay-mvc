@@ -7,6 +7,10 @@ const ec = new elliptic.ec('secp256k1');
 const {MerkleTree} = require('merkletreejs');
 const SHA256 = require('crypto-js/sha256');
 const CryptoJS = require('crypto-js');
+const env = require('../env');
+const axios = require('axios');
+const uuidv4 = require('uuid/v4');
+const { create_slot_with_token, update_slot_with_token } = require('../utils/slot_utils');
 
 const {
     VERSION_API_V1,
@@ -28,7 +32,10 @@ const {
     FREE_TIER_LIMIT,
     NO_ADDITIONS,
     LIMIT_ADDITIONS,
-    AWAITING_ATTEST
+    AWAITING_ATTEST,
+    ARG_TOKEN_ID,
+    ARG_SLOT_ID,
+    EXPIRY_DATE_ERROR
 } = require('../utils/constants');
 
 const {
@@ -42,6 +49,9 @@ const {
     get_commitment_arg,
     get_merkle_root_arg,
     get_position_arg,
+    get_value_arg,
+    get_token_id_arg,
+    get_slot_id_arg,
     start_time,
     reply_err,
     reply_msg,
@@ -438,6 +448,9 @@ module.exports = {
                 }
                 if (data[0].auth_token !== payload.token) {
                     return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
+                }
+                if (data[0].expiry_date && new Date(data[0].expiry_date) < new Date()) {
+                    return reply_err(res, EXPIRY_DATE_ERROR, startTime);
                 }
 
                 if (data[0].pubkey && data[0].pubkey !== '') {
@@ -1272,6 +1285,7 @@ module.exports = {
                 const token_id = data[ARG_TOKEN_ID];
                 const slot_id = data[ARG_SLOT_ID];
                 const tokenDetails = await models.tokenDetails.findOne({token_id: token_id});
+
                 if (tokenDetails.amount >= FEE_RATE_PER_MONTH_IN_MSAT) {
                     const months = tokenDetails.amount / FEE_RATE_PER_MONTH_IN_MSAT;
                     const current_date = new Date();

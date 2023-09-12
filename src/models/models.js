@@ -39,7 +39,8 @@ const schemaClientDetails = new Schema({
     auth_token: String,
     pubkey: String,
     client_name: String,
-    service_level: String
+    service_level: String,
+    expiry_date: Date
 }, {collection: 'ClientDetails'});
 schemaClientDetails.index({client_position: 1}, {unique: true});
 
@@ -128,6 +129,18 @@ schemaClientSignup.index({'code': 1});
 schemaClientSignup.index({'kyc_id': 1});
 schemaClientSignup.index({'verify_code': 1});
 
+const schemaTokenDetails = new Schema({
+    token_id: String,
+    value: Number,
+    confirmed: Boolean,
+    amount: Number
+}, {
+    collection: 'TokenDetails'
+});
+schemaTokenDetails.index({
+    payment_status_paid: 1
+});
+
 const attestation = mongoose.model('Attestation', schemaAttestation);
 const attestationInfo = mongoose.model('AttestationInfo', schemaAttestationInfo);
 const clientCommitment = mongoose.model('ClientCommitment', schemaClientCommitment);
@@ -136,6 +149,7 @@ const merkleCommitment = mongoose.model('MerkleCommitment', schemaMerkleCommitme
 const merkleProof = mongoose.model('MerkleProof', schemaMerkleProof);
 const commitmentAdd = mongoose.model('CommitmentAdd', schemaCommitmentAdd);
 const clientSignup = mongoose.model('ClientSignup', schemaClientSignup);
+const tokenDetails = mongoose.model('TokenDetails', schemaTokenDetails);
 
 module.exports = {
     attestation,
@@ -146,6 +160,7 @@ module.exports = {
     merkleProof,
     commitmentAdd,
     clientSignup,
+    tokenDetails,
     clientSignupStatuses,
     serviceLevels
 };
