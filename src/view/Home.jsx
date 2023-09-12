@@ -5,7 +5,7 @@ import MainstayInfo from './MainstayInfo';
 import Flickity from 'react-flickity-component';
 import 'flickity/dist/flickity.min.css';
 import {Button} from 'reactstrap';
-import SignUpModal from './modals/SignUpModal';
+import CreateSlotModal from './modals/CreateSlotModal';
 
 import React from 'react';
 import Login from "./Login";
@@ -20,12 +20,12 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            modalLogin: false
+            modalCreateSlot: false
         };
     }
 
-    toggleSignUpModal = () => {
-        this.setState({modalLogin: !this.state.modalLogin});
+    toggleCreateSlotModal = () => {
+        this.setState({modalCreateSlot: !this.state.modalCreateSlot});
     };
 
     toggleSlider = () => {
@@ -36,16 +36,16 @@ class Home extends React.Component {
         }
     };
 
-    onSignUpSuccess = (res) => {
-        this.setState({modalLogin: false});
+    onCreateSlotSuccess = (res) => {
+        this.setState({modalCreateSlot: false});
         swal({
-            text: 'Thank you!\nYou will shortly receive an email asking you to confirm your email address.',
+            text: 'Thank you! for creating slot',
             icon: 'success',
             className: 'success',
             closeOnClickOutside: true
         });
     };
-    onSignUpError = (error) => {
+    onCreateSlotError = (error) => {
         swal({
             text: error.response.data.message || 'Something went wrong',
             icon: 'error',
@@ -81,11 +81,11 @@ class Home extends React.Component {
                         <img src="slider-first.svg"/>
 
                         <div className="carousel-image__overlay">
-                            <p>Sign-up to MainStay   <br/> and start generating  <br/> Your data proofs</p>
+                            <p>Join MainStay   <br/> and start generating  <br/> Your data proofs</p>
 
                         <div className="carousel-image__buttons">
-                            <Button color="success" onClick={this.toggleSignUpModal}>
-                                Sign Up
+                            <Button color="success" onClick={this.toggleCreateSlotModal}>
+                                Join
                             </Button>
                             <Button color="transparent" onClick={this.nextButton}>Learn how MainStay works →</Button>
                         </div>
@@ -208,11 +208,11 @@ class Home extends React.Component {
               </div>
 
 
-              <SignUpModal
-                  isOpen={this.state.modalLogin}
-                  onModalClose={this.toggleSignUpModal}
-                  onSuccess={this.onSignUpSuccess}
-                  onError={this.onSignUpError}
+              <CreateSlotModal
+                  isOpen={this.state.modalCreateSlot}
+                  onModalClose={this.toggleCreateSlotModal}
+                  onSuccess={this.onCreateSlotSuccess}
+                  onError={this.onCreateSlotError}
               />
             </div>
         );

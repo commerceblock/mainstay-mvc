@@ -1181,13 +1181,14 @@ module.exports = {
         }
         const token_id = uuidv4();
         try {
-            const invoice = await axios.post(C_LIGHTNING_URL + '/v1/invoice/genInvoice', {
+            const response = await axios.post(C_LIGHTNING_URL + '/v1/invoice/genInvoice', {
                 amount: amount,
                 label: token_id,
                 description: INVOICE_DESCRIPTION
             }, {
                 headers: C_LIGHTNING_REQUEST_HEADERS
             });
+            const invoice = response.data;
 
             if (invoice) {
                 const tokenDetailsData = {
