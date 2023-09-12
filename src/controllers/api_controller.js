@@ -7,6 +7,10 @@ const ec = new elliptic.ec('secp256k1');
 const {MerkleTree} = require('merkletreejs');
 const SHA256 = require('crypto-js/sha256');
 const CryptoJS = require('crypto-js');
+const env = require('../env');
+const axios = require('axios');
+const uuidv4 = require('uuid/v4');
+const { create_slot_with_token, update_slot_with_token } = require('../utils/slot_utils');
 
 const {
     VERSION_API_V1,
@@ -28,7 +32,10 @@ const {
     FREE_TIER_LIMIT,
     NO_ADDITIONS,
     LIMIT_ADDITIONS,
-    AWAITING_ATTEST
+    AWAITING_ATTEST,
+    ARG_TOKEN_ID,
+    ARG_SLOT_ID,
+    EXPIRY_DATE_ERROR
 } = require('../utils/constants');
 
 const {
@@ -42,12 +49,25 @@ const {
     get_commitment_arg,
     get_merkle_root_arg,
     get_position_arg,
+    get_value_arg,
+    get_token_id_arg,
+    get_slot_id_arg,
     start_time,
     reply_err,
     reply_msg,
 } = require('../utils/controller_helpers');
 
 const DATE_FORMAT = 'HH:mm:ss L z';
+
+const C_LIGHTNING_URL = env.c_lightning.url;
+const MACAROON_HEX = env.c_lightning.macaroon_hex;
+const FEE_RATE_PER_DAY_IN_MSAT = env.c_lightning.fee_rate_per_day_in_msat;
+const INVOICE_DESCRIPTION = 'Invoice for Mainstay token';
+const C_LIGHTNING_REQUEST_HEADERS = { 
+    'encodingtype': 'hex',
+    'macaroon': MACAROON_HEX,
+    'Content-Type': 'application/json'
+};
 
 module.exports = {
     index: (req, res) => {
@@ -428,6 +448,9 @@ module.exports = {
                 }
                 if (data[0].auth_token !== payload.token) {
                     return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
+                }
+                if (data[0].expiry_date && new Date(data[0].expiry_date) < new Date()) {
+                    return reply_err(res, EXPIRY_DATE_ERROR, startTime);
                 }
 
                 if (data[0].pubkey && data[0].pubkey !== '') {
@@ -1149,4 +1172,131 @@ module.exports = {
             });
         }
     },
+
+    token_init: async (req, res) => {
+        const startTime = start_time();
+        const amount = get_value_arg(req, res, startTime);
+        if (res.headersSent) {
+            return;
+        }
+        const token_id = uuidv4();
+        try {
+            const invoice = await axios.post(C_LIGHTNING_URL + '/v1/invoice/genInvoice', {
+                amount: amount,
+                label: token_id,
+                description: INVOICE_DESCRIPTION
+            }, {
+                headers: C_LIGHTNING_REQUEST_HEADERS
+            });
+
+            if (invoice) {
+                const tokenDetailsData = {
+                    token_id: token_id,
+                    value: amount,
+                    confirmed: false,
+                    amount: 0
+                };
+                const tokenDetails = new models.tokenDetails(tokenDetailsData);
+                await tokenDetails.save();
+                reply_msg(res, {
+                    "lightning_invoice": {
+                        "bolt11": invoice.bolt11,
+                        "expires_at": invoice.expires_at,
+                        "payment_hash": invoice.payment_hash
+                    },
+                    "token_id": token_id,
+                    "value": amount
+                }, startTime);
+            }
+        } catch (error) {
+            reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
+    },
+
+    token_verify: async (req, res) => {
+        const startTime = start_time();
+        const token_id = get_token_id_arg(req, res, startTime);
+        if (res.headersSent) {
+            return;
+        }
+        try {
+            const response = await axios.get(C_LIGHTNING_URL + '/v1/invoice/listInvoices?label=' + token_id, 
+            {
+                headers: C_LIGHTNING_REQUEST_HEADERS
+            });
+            const invoice = response.data.invoices[0];
+            let invoice_paid = false;
+            if (invoice && invoice.status === "paid") {
+                const tokenDetails = await models.tokenDetails.findOne({token_id: token_id});
+                tokenDetails.confirmed = true;
+                tokenDetails.amount = invoice.msatoshi;
+                await tokenDetails.save();
+                invoice_paid = true;
+            }
+            reply_msg(res, {
+                amount: invoice.msatoshi,
+                confirmed: invoice_paid
+            }, startTime);
+        } catch (error) {
+            reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
+    },
+
+    slot_expiry: async (req, res) => {
+        const startTime = start_time();
+        const slot_id = get_slot_id_arg(req, res, startTime);
+        if (res.headersSent) {
+            return;
+        }
+        try {
+            const clientDetailsData = await models.clientDetails.findOne({client_position: slot_id});
+            if (clientDetailsData === null) {
+                return reply_err(res, POSITION_UNKNOWN, startTime);
+            }
+            reply_msg(res, {
+                expiry_date: clientDetailsData.expiry_date
+            }, startTime);
+        } catch (error) {
+            reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
+    },
+
+    spend_token: async (req, res) => {
+        const startTime = start_time();
+        let rawRequestData = '';
+        req.on('data', chunk => {
+            rawRequestData += chunk.toString();
+        });
+
+        req.on('end', async () => {
+            try {
+                const data = JSON.parse(rawRequestData);
+                const token_id = data[ARG_TOKEN_ID];
+                const slot_id = data[ARG_SLOT_ID];
+                const tokenDetails = await models.tokenDetails.findOne({token_id: token_id});
+                if (tokenDetails.amount >= FEE_RATE_PER_DAY_IN_MSAT) {
+                    const days = tokenDetails.amount / FEE_RATE_PER_DAY_IN_MSAT;
+                    const current_date = new Date();
+                    const expiry_date = new Date(current_date.getTime() + days * 24 * 60 * 60 * 1000);
+                    if (slot_id === 0) {
+                        const clientDetailsData = await create_slot_with_token(expiry_date);
+                        reply_msg(res, {
+                            slot_id: clientDetailsData.client_position,
+                            expiry_date: clientDetailsData.expiry_date
+                        }, startTime);
+                    } else {
+                        const clientDetailsData = await update_slot_with_token(slot_id, expiry_date);
+                        reply_msg(res, {
+                            slot_id: clientDetailsData.client_position,
+                            expiry_date: clientDetailsData.expiry_date
+                        }, startTime);
+                    }
+                } else {
+                    reply_err(res, 'Token contains insufficient balance', startTime);
+                }
+            } catch (error) {
+                reply_err(res, INTERNAL_ERROR_API, startTime);
+            }
+        });
+    }
 };
