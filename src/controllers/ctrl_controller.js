@@ -158,6 +158,9 @@ module.exports = {
             if (data[0].auth_token !== payload.token) {
                 return res.json({error: 'token'});
             }
+            if (data[0].expiry_date && new Date(data[0].expiry_date) < new Date()) {
+                return res.json({error: 'expired token'});
+            }
             if (data[0].pubkey && data[0].pubkey !== '') {
                 if (payload.signature === undefined) {
                     return res.json({error: 'signature'});

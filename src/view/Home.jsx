@@ -24,7 +24,7 @@ class Home extends React.Component {
             modalCreateSlot: false,
             modalSlotDetails: false,
             slot_details: {
-              token_id: '',
+              auth_token: '',
               slot_id: '',
               expiry_date: '',
             },

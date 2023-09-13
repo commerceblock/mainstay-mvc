@@ -109,6 +109,7 @@ class CreateSlotModal extends React.PureComponent {
             slot_id: 0,
         }).then(res => {
             if (res.data) {
+                this.props.setSlotDetails('auth_token', res.data.response.auth_token);
                 this.props.setSlotDetails('slot_id', res.data.response.slot_id);
                 this.props.setSlotDetails('expiry_date', (new Date(res.data.response.expiry_date)).toString());
             } else {

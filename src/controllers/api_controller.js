@@ -1294,12 +1294,14 @@ module.exports = {
                     if (slot_id === 0) {
                         const clientDetailsData = await create_slot_with_token(expiry_date);
                         reply_msg(res, {
+                            auth_token: clientDetailsData.auth_token,
                             slot_id: clientDetailsData.client_position,
                             expiry_date: clientDetailsData.expiry_date
                         }, startTime);
                     } else {
                         const clientDetailsData = await update_slot_with_token(slot_id, expiry_date);
                         reply_msg(res, {
+                            auth_token: clientDetailsData.auth_token,
                             slot_id: clientDetailsData.client_position,
                             expiry_date: clientDetailsData.expiry_date
                         }, startTime);
