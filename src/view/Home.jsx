@@ -9,6 +9,7 @@ import CreateSlotModal from './modals/CreateSlotModal';
 
 import React from 'react';
 import Login from "./Login";
+import SlotDetailsModal from './modals/SlotDetailsModal';
 
 const flickityOptions = {
     initialIndex: 0,
@@ -20,12 +21,31 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            modalCreateSlot: false
+            modalCreateSlot: false,
+            modalSlotDetails: false,
+            slot_details: {
+              token_id: '',
+              slot_id: '',
+              expiry_date: '',
+            },
         };
     }
 
     toggleCreateSlotModal = () => {
         this.setState({modalCreateSlot: !this.state.modalCreateSlot});
+    };
+
+    toggleSlotDetailsModal = () => {
+        this.setState({modalSlotDetails: !this.state.modalSlotDetails});
+    };
+
+    setSlotDetails = (key, value) => {
+        this.setState({
+            slot_details: {
+                ...this.state.slot_details,
+                [key]: value,
+            }
+        });
     };
 
     toggleSlider = () => {
@@ -46,6 +66,15 @@ class Home extends React.Component {
         });
     };
     onCreateSlotError = (error) => {
+        swal({
+            text: error.response.data.message || 'Something went wrong',
+            icon: 'error',
+            className: 'error',
+            closeOnClickOutside: true
+        });
+    };
+
+    onSlotDetailsError = (error) => {
         swal({
             text: error.response.data.message || 'Something went wrong',
             icon: 'error',
@@ -213,6 +242,16 @@ class Home extends React.Component {
                   onModalClose={this.toggleCreateSlotModal}
                   onSuccess={this.onCreateSlotSuccess}
                   onError={this.onCreateSlotError}
+                  slotDetails={this.state.slot_details}
+                  setSlotDetails={this.setSlotDetails}
+                  toggleSlotDetailsModal={this.toggleSlotDetailsModal}
+              />
+
+              <SlotDetailsModal
+                  isOpen={this.state.modalSlotDetails}
+                  onModalClose={this.toggleSlotDetailsModal}
+                  onError={this.onSlotDetailsError}
+                  slotDetails={this.state.slot_details}
               />
             </div>
         );

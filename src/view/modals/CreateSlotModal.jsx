@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import swal from 'sweetalert';
-import {Button, Col, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row, InputGroup, InputGroupAddon} from 'reactstrap';
+import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, InputGroup, InputGroupAddon} from 'reactstrap';
 
-import {isValidEmail} from '../../utils/validators';
 import apiService from '../../helpers/api-service';
 
 function milliSatsToSats(milliSats) {
@@ -30,7 +29,7 @@ class CreateSlotModal extends React.PureComponent {
     }
 
     componentDidMount() {
-        apiService.axiosClient.get(`/api/v1/feerate`)
+        apiService.axiosClient.get('/api/v1/feerate')
             .then(({ data, error }) => {
                 if (data?.response) {
                     this.setState({ fee_rate_per_month_in_msat: data.response.fee_rate });
@@ -47,6 +46,7 @@ class CreateSlotModal extends React.PureComponent {
                 [name]: value
             }
         });
+        this.setState({invoice: ''});
     };
 
     showErrorAlert = (message) => {
@@ -66,13 +66,6 @@ class CreateSlotModal extends React.PureComponent {
             return this.showErrorAlert('Months field is empty');
         }
 
-        apiService.axiosClient.get(`/api/v1/fee_rate`)
-            .then(({data, error}) => {
-                if (data?.response) {
-                    this.setState({fee_rate_per_month_in_msat: data.response.fee_rate});
-                }
-            });
-
         const fee_rate = this.state.fee_rate_per_month_in_msat;
         const amount = fee_rate * months;
 
@@ -80,7 +73,7 @@ class CreateSlotModal extends React.PureComponent {
             .then(({ data, error }) => {
                 if (data?.response) {
                     this.setState({invoice: data.response.lightning_invoice.bolt11});
-                    this.setState({token_id: data.response.token_id});
+                    this.props.setSlotDetails('token_id', data.response.token_id);
                 }
             });
     };
@@ -94,23 +87,46 @@ class CreateSlotModal extends React.PureComponent {
 
     handleVerifyInvoice = (event) => {
         event.preventDefault();
-        const token_id = this.state.token_id;
+        const token_id = this.props.slotDetails.token_id;
 
         apiService.axiosClient.get(`api/v1/token/verify/?token_id=${token_id}`)
             .then(({ data, error }) => {
                 if (data?.response) {
                     this.setState({confirmed: data.response.confirmed});
                 }
+                if (this.state.confirmed) {
+                    this.handleTokenForSpend(token_id);
+                    this.props.toggleSlotDetailsModal();
+                } else {
+                    this.showErrorAlert('Payment not received yet');
+                }
             });
-
-        if (!this.state.confirmed) {
-            this.showErrorAlert('Payment not received yet');
-        }
     };
+
+    handleTokenForSpend = (tokenId) => {
+        apiService.axiosClient.post('api/v1/spendtoken', {
+            token_id: tokenId,
+            slot_id: 0,
+        }).then(res => {
+            if (res.data) {
+                this.props.setSlotDetails('slot_id', res.data.response.slot_id);
+                this.props.setSlotDetails('expiry_date', (new Date(res.data.response.expiry_date)).toString());
+            } else {
+                this.showErrorAlert('Something went wrong in slot allocation');
+            }
+        });
+    }
 
     resetFormState = () => {
         this.formRef.current.reset();
-        this.setState({inputs: {}});
+        this.setState({
+            inputs: {
+                months: 1,
+            },
+            invoice: '',
+            copied: false,
+            confirmed: false,
+        });
     };
 
     handleModalClose = () => {
@@ -131,11 +147,10 @@ class CreateSlotModal extends React.PureComponent {
 
                 <Form
                     innerRef={this.formRef}
-                    onSubmit={this.handleSubmitLogin}
                     encType="multipart/form-data"
                 >
                     <ModalBody>
-                        <p>Pay with lightning to reserve a unique proof-of-publication slot for {milliSatsToSats(this.state.fee_rate_per_month_in_msat)} sats a month</p>
+                        <h6>Pay with lightning to reserve a unique proof-of-publication slot for {milliSatsToSats(this.state.fee_rate_per_month_in_msat)} sats a month</h6>
                         <FormGroup>
                             <Label className="f-bold fs14">Months</Label>
                             <Input type="select" name="months" onChange={this.handleChange}>
@@ -195,7 +210,10 @@ CreateSlotModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onModalClose: PropTypes.func.isRequired,
     onSuccess: PropTypes.func,
-    onError: PropTypes.func
+    onError: PropTypes.func,
+    slotDetails: PropTypes.object,
+    setSlotDetails: PropTypes.func,
+    toggleSlotDetailsModal: PropTypes.func,
 };
 
 export default CreateSlotModal;

@@ -1227,7 +1227,7 @@ module.exports = {
             });
             const invoice = response.data.invoices[0];
             let invoice_paid = false;
-            if (invoice && invoice.status === "paid") {
+            if (invoice && invoice.status !== "paid") {
                 const tokenDetails = await models.tokenDetails.findOne({token_id: token_id});
                 tokenDetails.confirmed = true;
                 tokenDetails.amount = invoice.msatoshi;
