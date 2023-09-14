@@ -47,6 +47,11 @@ class SlotDetailsModal extends React.PureComponent {
                     encType="multipart/form-data"
                 >
                     <ModalBody>
+                        {this.props.slotDetails.new_slot ?
+                            <h5>Slot created successfuly with slot details :-</h5>
+                            :
+                            <h5>Slot number {this.props.slotDetails.slot_id} updated successfuly with slot details :-</h5>
+                        }
                         <h6><b>Token :</b> {this.props.slotDetails.auth_token}</h6>
                         <h6><b>Slot :</b> {this.props.slotDetails.slot_id}</h6>
                         <h6><b>Expiry Date:</b> {this.props.slotDetails.expiry_date}</h6>

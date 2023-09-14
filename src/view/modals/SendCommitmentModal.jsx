@@ -67,6 +67,8 @@ class SendCommitmentModal extends React.PureComponent {
             return this.showErrorAlert('Commitment is empty');
         }
 
+        this.props.setSlotDetails('slot_id', position);
+
         apiService.axiosClient.post('/ctrl/sendcommitment', {
             position,
             token,
@@ -133,6 +135,7 @@ SendCommitmentModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onModalClose: PropTypes.func.isRequired,
     onSuccess: PropTypes.func,
-    onError: PropTypes.func
+    onError: PropTypes.func,
+    setSlotDetails: PropTypes.func,
 };
 export default SendCommitmentModal;

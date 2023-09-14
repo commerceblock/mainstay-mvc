@@ -104,9 +104,10 @@ class CreateSlotModal extends React.PureComponent {
     };
 
     handleTokenForSpend = (tokenId) => {
+        const slot_id = this.props.slotDetails.slot_id === '' ? 0 : this.props.slotDetails.slot_id;
         apiService.axiosClient.post('api/v1/spendtoken', {
             token_id: tokenId,
-            slot_id: 0,
+            slot_id,
         }).then(res => {
             if (res.data) {
                 this.props.setSlotDetails('auth_token', res.data.response.auth_token);
@@ -144,14 +145,18 @@ class CreateSlotModal extends React.PureComponent {
         return (
             <Modal isOpen={isOpen} toggle={this.handleModalClose} className="signup-modal">
 
-                <ModalHeader toggle={this.handleModalClose}>Create Slot</ModalHeader>
+                <ModalHeader toggle={this.handleModalClose}>{this.props.slotDetails.new_slot ? 'Create Slot' : 'Pay for existing Slot'}</ModalHeader>
 
                 <Form
                     innerRef={this.formRef}
                     encType="multipart/form-data"
                 >
                     <ModalBody>
-                        <h6>Pay with lightning to reserve a unique proof-of-publication slot for {milliSatsToSats(this.state.fee_rate_per_month_in_msat)} sats a month</h6>
+                        {this.props.slotDetails.new_slot ?
+                            <h6>Pay with lightning to reserve a unique proof-of-publication slot for {milliSatsToSats(this.state.fee_rate_per_month_in_msat)} sats a month</h6>
+                            : 
+                            <h6>Pay with lightning to keep using slot number {this.props.slotDetails.slot_id} for {milliSatsToSats(this.state.fee_rate_per_month_in_msat)} sats a month</h6>
+                        }
                         <FormGroup>
                             <Label className="f-bold fs14">Months</Label>
                             <Input type="select" name="months" onChange={this.handleChange}>

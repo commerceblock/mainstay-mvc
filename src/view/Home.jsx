@@ -27,6 +27,7 @@ class Home extends React.Component {
               auth_token: '',
               slot_id: '',
               expiry_date: '',
+              new_slot: true,
             },
         };
     }

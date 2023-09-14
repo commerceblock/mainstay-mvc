@@ -142,24 +142,24 @@ module.exports = {
         try {
             const payload = req.body;
             if (payload.position === undefined) {
-                return res.json({error: 'position'});
+                return res.json({error: 'Incorrect position'});
             }
             if (payload.token === undefined) {
-                return res.json({error: 'token'});
+                return res.json({error: 'Incorrect token'});
             }
             if (payload.commitment === undefined) {
-                return res.json({error: 'commitment'});
+                return res.json({error: 'Incorrect commitment'});
             }
 
             const data = await models.clientDetails.find({client_position: payload.position});
             if (data.length === 0) {
-                return res.json({error: 'position'});
+                return res.json({error: 'Incorrect position'});
             }
             if (data[0].auth_token !== payload.token) {
-                return res.json({error: 'token'});
+                return res.json({error: 'Incorrect token'});
             }
             if (data[0].expiry_date && new Date(data[0].expiry_date) < new Date()) {
-                return res.json({error: 'expired token'});
+                return res.json({error: 'Expired token, renew it by paying for slot'});
             }
             if (data[0].pubkey && data[0].pubkey !== '') {
                 if (payload.signature === undefined) {
