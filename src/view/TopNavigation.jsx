@@ -124,7 +124,7 @@ class TopNavigation extends React.Component {
         const errorMessage = res.data.error === 'undefined'
             ? 'Something went wrong'
             : `${res.data.error}`;
-        if (errorMessage.includes('expired token')) {
+        if (errorMessage.includes('Expired token')) {
             this.setState({modalPayForSlot: true});
         }
         swal({

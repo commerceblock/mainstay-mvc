@@ -1227,7 +1227,7 @@ module.exports = {
             });
             const invoice = response.data.invoices[0];
             let invoice_paid = false;
-            if (invoice && invoice.status === "paid") {
+            if (invoice && invoice.status !== "paid") {
                 const tokenDetails = await models.tokenDetails.findOne({token_id: token_id});
                 tokenDetails.confirmed = true;
                 tokenDetails.amount = invoice.msatoshi;
@@ -1289,17 +1289,15 @@ module.exports = {
 
                 if (tokenDetails.amount >= FEE_RATE_PER_MONTH_IN_MSAT) {
                     const months = tokenDetails.amount / FEE_RATE_PER_MONTH_IN_MSAT;
-                    const current_date = new Date();
-                    const expiry_date = new Date(current_date.getTime() + months * 30 * 24 * 60 * 60 * 1000);
                     if (slot_id === 0) {
-                        const clientDetailsData = await create_slot_with_token(expiry_date);
+                        const clientDetailsData = await create_slot_with_token(months);
                         reply_msg(res, {
                             auth_token: clientDetailsData.auth_token,
                             slot_id: clientDetailsData.client_position,
                             expiry_date: clientDetailsData.expiry_date
                         }, startTime);
                     } else {
-                        const clientDetailsData = await update_slot_with_token(slot_id, expiry_date);
+                        const clientDetailsData = await update_slot_with_token(slot_id, months);
                         reply_msg(res, {
                             auth_token: clientDetailsData.auth_token,
                             slot_id: clientDetailsData.client_position,
