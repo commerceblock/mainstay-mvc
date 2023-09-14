@@ -97,6 +97,7 @@ class CreateSlotModal extends React.PureComponent {
                 if (this.state.confirmed) {
                     this.handleTokenForSpend(token_id);
                     this.props.toggleSlotDetailsModal();
+                    this.handleModalClose();
                 } else {
                     this.showErrorAlert('Payment not received yet');
                 }
