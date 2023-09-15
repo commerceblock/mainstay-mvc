@@ -65,6 +65,12 @@ If `slot_id` is an existing slot, the row in `ClientDetails` will be updated wit
 
 This will return the `expiry_date` for the specified `slot_id`. 
 
+## Check Fee rate
+
+`GET /feerate`
+
+This will return the `fee_rate_per_month_in_msat`.
+
 # Website 
 
 The 'Sign Up' button on the main mainstay.xyz site to be replaced with 'Join'
@@ -75,4 +81,6 @@ Once the time is selected the value is calculated from this and fee_rate.
 `GET /token/init/{value}` is then called, and the bolt11 invoice is displayed. 
 
 At the bottom of the pop-up, there is a 'Verify' button. This calls `GET /token/verify/{token_id}`. If `"confirmed": false` then then pop-up will remain open, and 'Payment not received' message displayed. If `"confirmed": true`, then a new pop-up will appear with the slot details. `POST /spendtoken` is called, and the `token_id` and `slot_id` is displayed. `GET /slotexpiry/{slot_id}` is called and the expiry date is displayed. 
-The text below this: "Save these details to commit data and generate proofs" with a 'Close' button to close the pop-up. 
+The text below this: "Save these details to commit data and generate proofs" with a 'Close' button to close the pop-up.
+
+When trying to send the commitment, if the slot's expiration date precedes the current date, a pop-up will appear, displaying the message 'Token has expired, renew it by making a payment for the slot.' Additionally, a modal window titled 'Pay for existing slot' will appear, featuring a dropdown menu for selecting the number of months. Upon choosing a duration, the invoice will be presented for payment. After completing the payment, the expiration date will be extended, allowing the user to proceed with sending the commitment.
