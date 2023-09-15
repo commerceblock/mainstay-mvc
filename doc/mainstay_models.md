@@ -230,7 +230,7 @@ token_id | value | confirmed | amount
 
 - **/api/spendtoken POST**
 
-*params*: token_id, slot_id
+*body parameters*: token_id, slot_id
 
 *write*: add new record for ClientDetails / update expiry_date for given slot_id in ClientDetails
 
