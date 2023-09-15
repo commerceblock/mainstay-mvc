@@ -14,7 +14,7 @@ txid2 | 32345... | true | 2018-11-04 16:59:19.000
 txid3 | 42345... | false | 2018-11-05 16:59:19.000
 
 
-#### columns
+#### columns
 
 - txid: 64 char String
 - merkle_root: 64 char String
@@ -42,7 +42,7 @@ txid3 | 42345... | 97 | 1542121296
 - amount: Int64
 - time: Int64
 
-#### permissions
+#### permissions
 *read only*
 
 ### MerkleCommitment
@@ -66,7 +66,7 @@ merkle_root | client_position | commitment
 - client_position: int32
 - commitment: 64 char string
 
-#### permissions
+#### permissions
 *read only*
 
 ### MerkleProof
@@ -84,7 +84,7 @@ merkle_root | client_position | commitment | ops
 22345... | 2 | ... | ...
 22345... | 3 | ... | ...
 
-#### columns
+#### columns
 
 - merkle_root: 64 char String
 - client_position: Int32
@@ -97,7 +97,7 @@ merkle_root | client_position | commitment | ops
 
 ### ClientCommitment
 
-#### sample table
+#### sample table
 client_position | commitment
 --- | ---
 0 | 9abcd...
@@ -113,24 +113,45 @@ client_position | commitment
 #### permissions
 *read/write*
 
-### ClientDetails (API READ ONLY)
+### ClientDetails
 
 #### sample table
-client_position | auth_token | pubkey
---- | --- | ---
-0 | ... | ...
-1 | ... | ...
-2 | ... | ...
-3 | ... | ...
+client_position | auth_token | pubkey | expiry_date
+--- | --- | --- | ---
+0 | ... | ... | ...
+1 | ... | ... | ...
+2 | ... | ... | ...
+3 | ... | ... | ...
 
 #### columns
 
 - client_position: Int32
 - auth_token: base64 String
 - pubkey: 66 char String (compressed), 130 char String (uncompressed)
+- expiry_date: Date
 
 #### permissions
-*read only*
+*read/write*
+
+### TokenDetails
+
+#### sample table
+token_id | value | confirmed | amount
+--- | --- | --- | ---
+0 | ... | ... | ...
+1 | ... | ... | ...
+2 | ... | ... | ...
+3 | ... | ... | ...
+
+#### columns
+
+- token_id: base64 String
+- value: Number
+- confirmed: Boolean
+- amount: Number
+
+#### permissions
+*read/write*
 
 ## API Routes
 - **/api/latestcommitment GET**
@@ -182,3 +203,35 @@ client_position | auth_token | pubkey
 *write*: update commitment for client on ClientCommitment
 
 *return*: acknowledgement
+
+- **/api/token/init GET**
+
+*params*: value
+
+*write*: add new record for TokenDetails
+
+*return*: lightning_invoice, token_id, value
+
+- **/api/token/verify GET**
+
+*params*: token_id
+
+*write*: update confirmed, amount for TokenDetails
+
+*return*: amount, confirmed
+
+- **/api/slotexpiry GET**
+
+*params*: slot_id
+
+*read*: ClientDetails
+
+*return*: expiry_date
+
+- **/api/spendtoken POST**
+
+*params*: token_id, slot_id
+
+*write*: add new record for ClientDetails / update expiry_date for given slot_id in ClientDetails
+
+*return*: auth_token, slot_id, expiry_date
