@@ -444,6 +444,118 @@ Get information on a bitcoin block if it contains a mainstay attestation.
 }
 ```
 
+#### Token Init
+
+Initialize new token and generate lightning invoice.
+
+**request:** https://testnet.mainstay.xyz/api/v1/token/init/?value=10000000
+
+*response*
+```
+{
+    "response": {
+        "lightning_invoice": {
+            "bolt11": "lnbc100u1pjssz64sp5m78l2pm5rr8xxxmnzztn7gpxpgrpxcmgepel5g5zg780h8h7f5kqpp5kqx2u9ypaxgy96r66h047cht6czp2xlyqy9wh42sv6awvv2xg6vsdp2f9h8vmmfvdjjqen0wgsy6ctfdeehgcteyp6x76m9dcxqyjw5qcqpj9qyysgq4hv3lnl8vt7jhjwqnkfw46ke7jpl725t75q2rs0du2tamku5ufe56887zramp47ada68ydterts63y7qz5lfdfujgees5ssjp07ma3cqpzy2j4",
+            "expires_at": 1695630805,
+            "payment_hash": "b00cae1481e99042e87ad5df5f62ebd604151be4010aebd55066bae631464699"
+        },
+        "token_id": "1ea3ee4e-1737-48bb-8de5-41d0a0b579de",
+        "value": 10000000
+    },
+    "timestamp": 1695026007572,
+    "allowance": {
+        "cost": 1639793800
+    }
+}
+```
+
+#### Token Verify
+
+Verify token and lightning invoice if paid or not.
+
+**request:** https://testnet.mainstay.xyz/api/v1/token/verify/?token_id=1ea3ee4e-1737-48bb-8de5-41d0a0b579de
+
+*response*
+```
+{
+    "response": {
+        "amount": 10000000,
+        "confirmed": true
+    },
+    "timestamp": 1695026490040,
+    "allowance": {
+        "cost": 357857200
+    }
+}
+```
+
+#### Spend Token
+
+Use token to pay for an access slot.
+
+**request:** https://testnet.mainstay.xyz/api/v1/spendtoken
+
+*body*
+```
+{
+  "token_id": "1ea3ee4e-1737-48bb-8de5-41d0a0b579de",
+  "slot_id": 0
+}
+```
+
+*response*
+```
+{
+    "response": {
+        "auth_token": "3efe751a-4468-400e-93bf-c5eb558f03d7",
+        "slot_id": 36,
+        "expiry_date": "2023-10-18T08:46:54.777Z"
+    },
+    "timestamp": 1695026814957,
+    "allowance": {
+        "cost": 1197231300
+    }
+}
+```
+
+#### Check Expiry Date
+
+Get expiry date for the specified slot.
+
+**request:** https://testnet.mainstay.xyz/api/v1/slotexpiry?slot_id=36
+
+*response*
+```
+{
+    "response": {
+        "expiry_date": "2023-10-18T08:46:54.777Z"
+    },
+    "timestamp": 1695027125978,
+    "allowance": {
+        "cost": 2972300
+    }
+}
+```
+
+#### Check Fee Rate
+
+Get Fee rate per month in msats.
+
+**request:** https://testnet.mainstay.xyz/api/v1/feerate
+
+*response*
+```
+{
+    "response": {
+        "fee_rate": "100000000"
+    },
+    "timestamp": 1695027322869,
+    "allowance": {
+        "cost": 12600
+    }
+}
+```
+
 ### Authenticated Endpoints
 
 #### Commitment Send
