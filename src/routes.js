@@ -31,6 +31,7 @@ function makeApiRoutes(app) {
     router.get('/token/init', apiController.token_init);
     router.get('/token/verify', apiController.token_verify);
     router.get('/slotexpiry', apiController.slot_expiry);
+    router.get('/feerate', apiController.feerate);
     router.post('/commitment/add', apiController.commitment_add);
     router.post('/commitment/send', apiController.commitment_send);
     router.post('/spendtoken', apiController.spend_token);

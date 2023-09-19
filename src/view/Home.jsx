@@ -5,10 +5,11 @@ import MainstayInfo from './MainstayInfo';
 import Flickity from 'react-flickity-component';
 import 'flickity/dist/flickity.min.css';
 import {Button} from 'reactstrap';
-import SignUpModal from './modals/SignUpModal';
+import CreateSlotModal from './modals/CreateSlotModal';
 
 import React from 'react';
 import Login from "./Login";
+import SlotDetailsModal from './modals/SlotDetailsModal';
 
 const flickityOptions = {
     initialIndex: 0,
@@ -20,12 +21,38 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            modalLogin: false
+            modalCreateSlot: false,
+            modalSlotDetails: false,
+            slot_details: {
+              auth_token: '',
+              slot_id: '',
+              expiry_date: '',
+              new_slot: true,
+            },
         };
     }
 
-    toggleSignUpModal = () => {
-        this.setState({modalLogin: !this.state.modalLogin});
+    toggleCreateSlotModal = () => {
+        this.setState({modalCreateSlot: !this.state.modalCreateSlot});
+    };
+
+    toggleSlotDetailsModal = () => {
+        this.setState({modalSlotDetails: !this.state.modalSlotDetails});
+        this.setState({slot_details: {
+          auth_token: '',
+          slot_id: '',
+          expiry_date: '',
+          new_slot: true,
+        }});
+    };
+
+    setSlotDetails = (key, value) => {
+        this.setState({
+            slot_details: {
+                ...this.state.slot_details,
+                [key]: value,
+            }
+        });
     };
 
     toggleSlider = () => {
@@ -36,16 +63,25 @@ class Home extends React.Component {
         }
     };
 
-    onSignUpSuccess = (res) => {
-        this.setState({modalLogin: false});
+    onCreateSlotSuccess = (res) => {
+        this.setState({modalCreateSlot: false});
         swal({
-            text: 'Thank you!\nYou will shortly receive an email asking you to confirm your email address.',
+            text: 'Thank you! for creating slot',
             icon: 'success',
             className: 'success',
             closeOnClickOutside: true
         });
     };
-    onSignUpError = (error) => {
+    onCreateSlotError = (error) => {
+        swal({
+            text: error.response.data.message || 'Something went wrong',
+            icon: 'error',
+            className: 'error',
+            closeOnClickOutside: true
+        });
+    };
+
+    onSlotDetailsError = (error) => {
         swal({
             text: error.response.data.message || 'Something went wrong',
             icon: 'error',
@@ -81,11 +117,11 @@ class Home extends React.Component {
                         <img src="slider-first.svg"/>
 
                         <div className="carousel-image__overlay">
-                            <p>Sign-up to MainStay   <br/> and start generating  <br/> Your data proofs</p>
+                            <p>Join MainStay   <br/> and start generating  <br/> Your data proofs</p>
 
                         <div className="carousel-image__buttons">
-                            <Button color="success" onClick={this.toggleSignUpModal}>
-                                Sign Up
+                            <Button color="success" onClick={this.toggleCreateSlotModal}>
+                                Join
                             </Button>
                             <Button color="transparent" onClick={this.nextButton}>Learn how MainStay works →</Button>
                         </div>
@@ -195,74 +231,11 @@ class Home extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="carousel-cell">
-                    <div className="carousel-pricing">
-                        <div className="container px-0">
-                            <div className="row no-gutters">
-                              <div className="col"><h1>Sign-up to MainStay and start<br/> generating your data proofs</h1></div>
-                            </div>
-                            <div className="row no-gutters">
-                              <div className="col">
-                              <div className="row carousel-pricing__price">
-                                <p><p>Free tier</p><span>£</span><span>0</span><span>/Month</span></p>
-                              </div>
-                              <div className="col text-center mb-1 mt-3">
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Allocated slot ID</span></p>
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>One attestation per day</span></p>
-                                <Button color="success" onClick={this.toggleSignUpModal}>
-                                    Sign Up
-                                </Button>
-                              </div>
-                              </div>
-
-                              <div className="col">
-                              <div className="row carousel-pricing__price">
-                                <p><p>Standard</p><span>£</span><span>20</span><span>/Month</span></p>
-                              </div>
-                              <div className="col text-center mb-1 mt-3">
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Allocated slot ID</span></p>
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Hourly attestations</span></p>
-                                <Button color="success" onClick={this.toggleSignUpModal}>
-                                    Sign Up
-                                </Button>
-                              </div>
-                              </div>
-
-                              <div className="col">
-                              <div className="row carousel-pricing__price">
-                                <p><p>Intermediate</p><span>£</span><span>40</span><span>/Month</span></p>
-                              </div>
-                              <div className="col text-center mb-1 mt-3">
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Hourly attestations</span></p>
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>10 additions per hour</span></p>
-                                <Button color="success" onClick={this.toggleSignUpModal}>
-                                    Sign Up
-                                </Button>
-                              </div>
-                              </div>
-
-                              <div className="col">
-                              <div className="row carousel-pricing__price">
-                                <p><p>Enterprise</p><span>£</span><span>80</span><span>/Month</span></p>
-                              </div>
-                              <div className="col text-center mb-1 mt-3">
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>Hourly attestations</span></p>
-                                <p className="carousel-pricing__feature"><img src="icon-check.svg" /><span>1000 additions per hour</span></p>
-                                <Button color="success" onClick={this.toggleSignUpModal}>
-                                    Sign Up
-                                </Button>
-                              </div>
-                              </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 </Flickity>
               </div>
                 <div className="col-12 col-lg-6 login">
 
-                    <Login/>
+                    {/* <Login/> */}
 
                 </div>
               <div className="col-12 col-lg-6 mainstayinfo">
@@ -271,11 +244,21 @@ class Home extends React.Component {
               </div>
 
 
-              <SignUpModal
-                  isOpen={this.state.modalLogin}
-                  onModalClose={this.toggleSignUpModal}
-                  onSuccess={this.onSignUpSuccess}
-                  onError={this.onSignUpError}
+              <CreateSlotModal
+                  isOpen={this.state.modalCreateSlot}
+                  onModalClose={this.toggleCreateSlotModal}
+                  onSuccess={this.onCreateSlotSuccess}
+                  onError={this.onCreateSlotError}
+                  slotDetails={this.state.slot_details}
+                  setSlotDetails={this.setSlotDetails}
+                  toggleSlotDetailsModal={this.toggleSlotDetailsModal}
+              />
+
+              <SlotDetailsModal
+                  isOpen={this.state.modalSlotDetails}
+                  onModalClose={this.toggleSlotDetailsModal}
+                  onError={this.onSlotDetailsError}
+                  slotDetails={this.state.slot_details}
               />
             </div>
         );

@@ -10,6 +10,8 @@ import SendCommitmentModal from './modals/SendCommitmentModal';
 import {Link} from 'react-router-dom';
 import Logo from './Logo';
 import Search from './search/search';
+import CreateSlotModal from './modals/CreateSlotModal';
+import SlotDetailsModal from './modals/SlotDetailsModal';
 
 class TopNavigation extends React.Component {
     constructor(props) {
@@ -17,9 +19,17 @@ class TopNavigation extends React.Component {
         this.state = {
             modal: false,
             modalLogin: false,
+            modalPayForSlot: false,
+            modalSlotDetails: false,
             isNavbarOpened: false,
             darkMode: false,
-            theme_name: false
+            theme_name: false,
+            slot_details: {
+                auth_token: '',
+                slot_id: '',
+                expiry_date: '',
+                new_slot: false,
+            },
         };
     }
 
@@ -113,7 +123,10 @@ class TopNavigation extends React.Component {
     onSendCommitmentError = (res) => {
         const errorMessage = res.data.error === 'undefined'
             ? 'Something went wrong'
-            : `Incorrect ${res.data.error}`;
+            : `${res.data.error}`;
+        if (errorMessage.includes('Expired token')) {
+            this.setState({modalPayForSlot: true});
+        }
         swal({
             text: errorMessage,
             icon: 'error',
@@ -131,6 +144,50 @@ class TopNavigation extends React.Component {
     hideMobileMenu = (event) => {
         this.setState({
             isNavbarOpened: false
+        });
+    };
+
+    togglePayForSlotModal = () => {
+        this.setState({modalPayForSlot: !this.state.modalPayForSlot});
+    };
+
+    toggleSlotDetailsModal = () => {
+        this.setState({modalSlotDetails: !this.state.modalSlotDetails});
+    };
+
+    setSlotDetails = (key, value) => {
+        this.setState({
+            slot_details: {
+                ...this.state.slot_details,
+                [key]: value,
+            }
+        });
+    };
+
+    onPayForSlotSuccess = (res) => {
+        this.setState({modalPayForSlot: false});
+        swal({
+            text: 'Thank you! for creating slot',
+            icon: 'success',
+            className: 'success',
+            closeOnClickOutside: true
+        });
+    };
+    onPayForSlotError = (error) => {
+        swal({
+            text: error.response.data.message || 'Something went wrong',
+            icon: 'error',
+            className: 'error',
+            closeOnClickOutside: true
+        });
+    };
+
+    onSlotDetailsError = (error) => {
+        swal({
+            text: error.response.data.message || 'Something went wrong',
+            icon: 'error',
+            className: 'error',
+            closeOnClickOutside: true
         });
     };
 
@@ -222,6 +279,7 @@ class TopNavigation extends React.Component {
                     onModalClose={this.toggleCommitmentModal}
                     onSuccess={this.onSendCommitmentSuccess}
                     onError={this.onSendCommitmentError}
+                    setSlotDetails={this.setSlotDetails}
                 />
 
                 <SignUpModal
@@ -229,6 +287,23 @@ class TopNavigation extends React.Component {
                     onModalClose={this.toggleSignUpModal}
                     onSuccess={this.onSignUpSuccess}
                     onError={this.onSignUpError}
+                />
+
+                <CreateSlotModal
+                  isOpen={this.state.modalPayForSlot}
+                  onModalClose={this.togglePayForSlotModal}
+                  onSuccess={this.onPayForSlotSuccess}
+                  onError={this.onPayForSlotError}
+                  slotDetails={this.state.slot_details}
+                  setSlotDetails={this.setSlotDetails}
+                  toggleSlotDetailsModal={this.toggleSlotDetailsModal}
+                />
+
+                <SlotDetailsModal
+                  isOpen={this.state.modalSlotDetails}
+                  onModalClose={this.toggleSlotDetailsModal}
+                  onError={this.onSlotDetailsError}
+                  slotDetails={this.state.slot_details}
                 />
             </>
         );
