@@ -1289,7 +1289,7 @@ module.exports = {
 
                 if (tokenDetails.amount >= FEE_RATE_PER_MONTH_IN_MSAT) {
                     const months = tokenDetails.amount / FEE_RATE_PER_MONTH_IN_MSAT;
-                    if (slot_id === 0) {
+                    if (!isNaN(slot_id) && Number(slot_id) === 0) {
                         const clientDetailsData = await create_slot_with_token(months);
                         reply_msg(res, {
                             auth_token: clientDetailsData.auth_token,
@@ -1304,6 +1304,8 @@ module.exports = {
                             expiry_date: clientDetailsData.expiry_date
                         }, startTime);
                     }
+                    tokenDetails.amount = 0;
+                    await tokenDetails.save();
                 } else {
                     reply_err(res, 'Token contains insufficient balance', startTime);
                 }
