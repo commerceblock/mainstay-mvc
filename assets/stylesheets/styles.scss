@@ -3267,6 +3267,13 @@ div#root {
   font-size: 30px;
 }
 
+.qr-code {
+  display: flex;
+  margin-inline: auto;
+  margin-bottom: 30px;
+  height: 160px !important;
+  width: 160px !important;
+}
 
 @media (max-width: 575px)  {
   .carousel-image__overlay {
