@@ -14,6 +14,7 @@ module.exports = () => {
     const devServerPort = parseInt(process.env.PORT) || 80;
 
     return {
+        mode: 'development',
         entry: {
             main: './src/main.jsx',
             admin: './src/admin.jsx',
@@ -23,7 +24,7 @@ module.exports = () => {
             filename: './[name].bundle.[hash].js'
         },
         optimization: {
-            namedModules: true,
+            moduleIds: 'named',
             minimizer: [new UglifyJsPlugin()],
         },
         module: {
@@ -84,8 +85,11 @@ module.exports = () => {
             new webpack.ProgressPlugin()
         ],
         devServer: {
-            contentBase: './public',
-            disableHostCheck: true,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },
+            static: './dist',
+            allowedHosts: 'all',
             historyApiFallback: {
                 rewrites: [
                     {
@@ -94,9 +98,7 @@ module.exports = () => {
                     }
                 ]
             },
-            inline: true,
             open: false,
-            writeToDisk: true,
             hot: true,
             host: devServerHost,
             port: devServerPort,
