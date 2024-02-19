@@ -131,6 +131,7 @@ schemaClientSignup.index({'verify_code': 1});
 
 const schemaTokenDetails = new Schema({
     token_id: String,
+    pp_id: String,
     value: Number,
     confirmed: Boolean,
     amount: Number

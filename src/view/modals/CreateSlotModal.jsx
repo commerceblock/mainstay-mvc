@@ -6,10 +6,6 @@ import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, Mo
 
 import apiService from '../../helpers/api-service';
 
-function milliSatsToSats(milliSats) {
-    return milliSats / 1000;
-}
-
 class CreateSlotModal extends React.PureComponent {
 
     constructor(props) {
@@ -19,7 +15,7 @@ class CreateSlotModal extends React.PureComponent {
             inputs: {
                 months: 1,
             },
-            fee_rate_per_month_in_msat: '',
+            fee_rate_per_month_in_eur: '',
             invoice: '',
             copied: false,
             confirmed: false,
@@ -32,7 +28,7 @@ class CreateSlotModal extends React.PureComponent {
         apiService.axiosClient.get('/api/v1/feerate')
             .then(({ data, error }) => {
                 if (data?.response) {
-                    this.setState({ fee_rate_per_month_in_msat: data.response.fee_rate });
+                    this.setState({ fee_rate_per_month_in_eur: data.response.fee_rate });
                 }
             });
     }
@@ -66,7 +62,7 @@ class CreateSlotModal extends React.PureComponent {
             return this.showErrorAlert('Months field is empty');
         }
 
-        const fee_rate = this.state.fee_rate_per_month_in_msat;
+        const fee_rate = this.state.fee_rate_per_month_in_eur;
         const amount = fee_rate * months;
 
         apiService.axiosClient.get(`/api/v1/token/init/?value=${amount}`)
@@ -154,9 +150,9 @@ class CreateSlotModal extends React.PureComponent {
                 >
                     <ModalBody>
                         {this.props.slotDetails.new_slot ?
-                            <h6>Pay with lightning to reserve a unique proof-of-publication slot for {milliSatsToSats(this.state.fee_rate_per_month_in_msat)} sats a month</h6>
+                            <h6>Pay with lightning to reserve a unique proof-of-publication slot for {this.state.fee_rate_per_month_in_eur} EUR a month</h6>
                             : 
-                            <h6>Pay with lightning to keep using slot number {this.props.slotDetails.slot_id} for {milliSatsToSats(this.state.fee_rate_per_month_in_msat)} sats a month</h6>
+                            <h6>Pay with lightning to keep using slot number {this.props.slotDetails.slot_id} for {this.state.fee_rate_per_month_in_eur} EUR a month</h6>
                         }
                         <FormGroup>
                             <Label className="f-bold fs14">Months</Label>

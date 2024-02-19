@@ -35,7 +35,8 @@ const {
     AWAITING_ATTEST,
     ARG_TOKEN_ID,
     ARG_SLOT_ID,
-    EXPIRY_DATE_ERROR
+    EXPIRY_DATE_ERROR,
+    BAD_COMMITMENT
 } = require('../utils/constants');
 
 const {
@@ -59,13 +60,12 @@ const {
 
 const DATE_FORMAT = 'HH:mm:ss L z';
 
-const C_LIGHTNING_URL = env.c_lightning.url;
-const MACAROON_HEX = env.c_lightning.macaroon_hex;
-const FEE_RATE_PER_MONTH_IN_MSAT = env.c_lightning.fee_rate_per_month_in_msat;
+const LIGHTNING_URL = env.lightning.url;
+const API_KEY = env.lightning.api_key;
+const FEE_RATE_PER_MONTH_IN_EUR = env.lightning.fee_rate_per_month_in_eur;
 const INVOICE_DESCRIPTION = 'Invoice for Mainstay token';
-const C_LIGHTNING_REQUEST_HEADERS = { 
-    'encodingtype': 'hex',
-    'macaroon': MACAROON_HEX,
+const LIGHTNING_REQUEST_HEADERS = { 
+    'Api-Key': API_KEY,
     'Content-Type': 'application/json'
 };
 
@@ -438,6 +438,15 @@ module.exports = {
             if (payload.token === undefined) {
                 return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
             }
+
+
+            if (payload.commitment.length !== 64) {
+                return reply_err(res, BAD_COMMITMENT, startTime);
+            }
+            if (payload.commitment.split('').every(c => '0123456789ABCDEFabcdef'.indexOf(c) !== -1)) {
+                return reply_err(res, BAD_COMMITMENT, startTime);
+            }
+
 
             const signatureCommitment = data[MAINSTAY_SIGNATURE];
             try {
@@ -1181,18 +1190,27 @@ module.exports = {
         }
         const token_id = uuidv4();
         try {
-            const response = await axios.post(C_LIGHTNING_URL + '/v1/invoice/genInvoice', {
-                amount: amount,
-                label: token_id,
-                description: INVOICE_DESCRIPTION
+            const response = await axios.post(LIGHTNING_URL + '/checkout', {
+                title: token_id,
+                description: INVOICE_DESCRIPTION,
+		amount: amount,
+                unit: "EUR",
+                redirectAfterPaid: "",
+                email: "",
+                emailLanguage: "en",
+                onChain: true,
+                delay: 60,
+                extra: {
+                    tag: "invoice-web"
+                }
             }, {
-                headers: C_LIGHTNING_REQUEST_HEADERS
+                headers: LIGHTNING_REQUEST_HEADERS
             });
             const invoice = response.data;
-
             if (invoice) {
                 const tokenDetailsData = {
                     token_id: token_id,
+                    pp_id: invoice.id,
                     value: amount,
                     confirmed: false,
                     amount: 0
@@ -1201,15 +1219,15 @@ module.exports = {
                 await tokenDetails.save();
                 reply_msg(res, {
                     "lightning_invoice": {
-                        "bolt11": invoice.bolt11,
-                        "expires_at": invoice.expires_at,
-                        "payment_hash": invoice.payment_hash
+                        "bolt11": invoice.pr,
                     },
                     "token_id": token_id,
-                    "value": amount
+                    "value": amount,
+	            "bitcoin_address": invoice.onChainAddr,
                 }, startTime);
             }
         } catch (error) {
+		console.log(error);
             reply_err(res, INTERNAL_ERROR_API, startTime);
         }
     },
@@ -1221,21 +1239,22 @@ module.exports = {
             return;
         }
         try {
-            const response = await axios.get(C_LIGHTNING_URL + '/v1/invoice/listInvoices?label=' + token_id, 
+            const tokenDetails = await models.tokenDetails.findOne({token_id: token_id});
+            const response = await axios.get(LIGHTNING_URL + '/checkout/' + tokenDetails.pp_id, 
             {
-                headers: C_LIGHTNING_REQUEST_HEADERS
+                headers: LIGHTNING_REQUEST_HEADERS
             });
-            const invoice = response.data.invoices[0];
+	console.log(response);
+            const pp_response = response.data;
             let invoice_paid = false;
-            if (invoice && invoice.status === "paid") {
-                const tokenDetails = await models.tokenDetails.findOne({token_id: token_id});
+            if (pp_response.isPaid) {
                 tokenDetails.confirmed = true;
-                tokenDetails.amount = invoice.msatoshi;
+                tokenDetails.amount = pp_response.fiatAmount;
                 await tokenDetails.save();
                 invoice_paid = true;
             }
             reply_msg(res, {
-                amount: invoice.msatoshi,
+                amount: pp_response.amount,
                 confirmed: invoice_paid
             }, startTime);
         } catch (error) {
@@ -1266,7 +1285,7 @@ module.exports = {
         const startTime = start_time();
         try {
             reply_msg(res, {
-                fee_rate: FEE_RATE_PER_MONTH_IN_MSAT
+                fee_rate: FEE_RATE_PER_MONTH_IN_EUR
             }, startTime);
         } catch (error) {
             reply_err(res, INTERNAL_ERROR_API, startTime);
@@ -1287,8 +1306,8 @@ module.exports = {
                 const slot_id = data[ARG_SLOT_ID];
                 const tokenDetails = await models.tokenDetails.findOne({token_id: token_id});
 
-                if (tokenDetails.amount >= FEE_RATE_PER_MONTH_IN_MSAT) {
-                    const months = tokenDetails.amount / FEE_RATE_PER_MONTH_IN_MSAT;
+                if (tokenDetails.amount >= FEE_RATE_PER_MONTH_IN_EUR) {
+                    const months = tokenDetails.amount / FEE_RATE_PER_MONTH_IN_EUR;
                     if (slot_id === 0) {
                         const clientDetailsData = await create_slot_with_token(months);
                         reply_msg(res, {

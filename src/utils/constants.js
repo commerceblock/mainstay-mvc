@@ -9,6 +9,7 @@ const constants = {
     ARG_SLOT_ID: 'slot_id',
     BAD_LENGTH_TXID: 'txid string parameter must contain 64 characters',
     BAD_LENGTH_COMMITMENT: 'commitment string parameter must contain 64 characters',
+    BAD_COMMITMENT: 'commitment is not a valid hex string',
     BAD_TYPE_POSITION: 'position expects a int',
     BAD_TYPE_VALUE: 'value expects an int',
     COMMITMENT_POSITION_UNKNOWN: 'your commitment or position is unknown to us',
