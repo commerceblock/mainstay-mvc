@@ -5,6 +5,7 @@ import swal from 'sweetalert';
 import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, InputGroup, InputGroupAddon} from 'reactstrap';
 
 import apiService from '../../helpers/api-service';
+import QRCode from "qrcode.react";
 
 class CreateSlotModal extends React.PureComponent {
 
@@ -176,7 +177,8 @@ class CreateSlotModal extends React.PureComponent {
                         ) : null}
                         {this.state.invoice !== '' ? (
                         <FormGroup>
-                            <Label className="f-bold fs14">Invoice</Label>
+                            <Label className="f-bold fs14">Invoice: </Label>
+                            <QRCode className="qr-code" value={this.state.invoice} />
                             <InputGroup>
                             <Input
                                 type="textarea"
