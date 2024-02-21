@@ -80,9 +80,9 @@ module.exports = {
             secret: onfidoWebhookSecret
         }
     },
-    c_lightning: {
-        url: env.C_LIGHTNING_URL,
-        macaroon_hex: env.MACAROON_HEX,
-        fee_rate_per_month_in_msat: env.FEE_RATE_PER_MONTH_IN_MSAT
+    lightning: {
+        url: env.LIGHTNING_URL,
+        api_key: env.API_KEY,
+        fee_rate_per_month_in_eur: env.FEE_RATE_PER_MONTH_IN_EUR
     }
 };
