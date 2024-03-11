@@ -1304,6 +1304,16 @@ module.exports = {
                 const data = JSON.parse(rawRequestData);
                 const token_id = data[ARG_TOKEN_ID];
                 const slot_id = data[ARG_SLOT_ID];
+
+                if (token_id === undefined || token_id === '') {
+                    const months = 12; // an year
+                    const clientDetailsData = await create_slot_with_token(months);
+                    reply_msg(res, {
+                        auth_token: clientDetailsData.auth_token,
+                        slot_id: clientDetailsData.client_position,
+                        expiry_date: clientDetailsData.expiry_date
+                    }, startTime);
+                }
                 const tokenDetails = await models.tokenDetails.findOne({token_id: token_id});
 
                 if (tokenDetails.amount >= FEE_RATE_PER_MONTH_IN_EUR) {

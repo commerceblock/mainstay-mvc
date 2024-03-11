@@ -2,7 +2,7 @@
   "name": "mainstay-mvc",
   "scripts": {
     "start": "HOST_API='localhost' PORT_API='4000' PORT='80' webpack-dev-server",
-    "dev": "HOST_API='localhost' PORT_API='4000' PORT='8080' webpack-dev-server",
+    "dev": "HOST_API='localhost' PORT_API='4000' PORT='8080' TESTNET='true' && webpack-dev-server",
     "test": "jest"
   },
   "dependencies": {

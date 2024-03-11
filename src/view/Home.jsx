@@ -38,12 +38,14 @@ class Home extends React.Component {
 
     toggleSlotDetailsModal = () => {
         this.setState({modalSlotDetails: !this.state.modalSlotDetails});
-        this.setState({slot_details: {
-          auth_token: '',
-          slot_id: '',
-          expiry_date: '',
-          new_slot: true,
-        }});
+        if (this.state.modalSlotDetails) {
+          this.setState({slot_details: {
+            auth_token: '',
+            slot_id: '',
+            expiry_date: '',
+            new_slot: true,
+          }});
+        }
     };
 
     setSlotDetails = (key, value) => {
