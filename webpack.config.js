@@ -12,7 +12,7 @@ module.exports = () => {
 
     const devServerHost = process.env.HOST || '0.0.0.0';
     const devServerPort = parseInt(process.env.PORT) || 80;
-    const devServerTestnet = process.env.TESTNET || 'true';
+    const devServerTestnet = process.env.TESTNET || 'false';
 
     return {
         mode: 'development',
