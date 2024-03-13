@@ -164,27 +164,6 @@ module.exports = {
             if (data[0].expiry_date && new Date(data[0].expiry_date) < new Date()) {
                 return res.json({error: 'Expired token, renew it by paying for slot'});
             }
-            if (data[0].pubkey && data[0].pubkey !== '') {
-                if (payload.signature === undefined) {
-                    return res.json({error: 'signature'});
-                }
-                try {
-                    // get pubkey hex
-                    const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
-
-                    // get base64 signature
-                    const sig = Buffer.from(payload.signature, 'base64');
-                    if (!ec.verify(payload.commitment, sig, pubkey)) {
-                        return res.json({error: 'signature'});
-                    }
-
-                } catch (error) {
-                    return res.json({
-                        error: SIGNATURE_INVALID,
-                        message: error.message
-                    });
-                }
-            }
 
             if (data[0].service_level === 'free') {
 

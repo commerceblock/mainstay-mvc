@@ -16,7 +16,6 @@ const options = [
     {label: 'Position', name: 'position'},
     {label: 'Token', name: 'token'},
     {label: 'Commitment', name: 'commitment'},
-    {label: 'signature', name: 'signature'},
 ];
 
 class Menu extends Component {
@@ -27,7 +26,6 @@ class Menu extends Component {
             position: undefined,
             token: undefined,
             commitment: undefined,
-            signature: undefined,
             isMenuOpened: false,
         };
     }
@@ -38,12 +36,11 @@ class Menu extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        const {position, token, commitment, signature} = this.state;
+        const {position, token, commitment} = this.state;
         apiService.axiosClient.post('/ctrl/sendcommitment', {
             position,
             token,
             commitment,
-            signature,
         }).then(res => {
             if (res.data?.error) {
                 const errorMessage = res.data.error === 'undefined'

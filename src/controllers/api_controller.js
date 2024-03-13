@@ -443,8 +443,6 @@ module.exports = {
                 return reply_err(res, BAD_COMMITMENT, startTime);
             }
 
-
-            const signatureCommitment = data[MAINSTAY_SIGNATURE];
             try {
                 // try get client details
                 const data = await models.clientDetails.find({client_position: payload.position});
@@ -456,26 +454,6 @@ module.exports = {
                 }
                 if (data[0].expiry_date && new Date(data[0].expiry_date) < new Date()) {
                     return reply_err(res, EXPIRY_DATE_ERROR, startTime);
-                }
-
-                if (data[0].pubkey && data[0].pubkey !== '') {
-                    if (signatureCommitment === undefined) {
-                        return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
-                    }
-
-                    try {
-                        // get pubkey hex
-                        const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
-
-                        // get base64 signature
-                        let sig = Buffer.from(signatureCommitment, 'base64');
-
-                        if (!ec.verify(payload.commitment, sig, pubkey)) {
-                            return reply_err(res, SIGNATURE_INVALID, startTime);
-                        }
-                    } catch (error) {
-                        return reply_err(res, SIGNATURE_INVALID, startTime);
-                    }
                 }
 
                 if (data[0].service_level === 'free') {
@@ -536,7 +514,6 @@ module.exports = {
                 return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
             }
 
-            const signatureCommitment = data[MAINSTAY_SIGNATURE];
             try {
                 // try get client details
                 const data = await models.clientDetails.find({client_position: payload.position});
@@ -550,26 +527,6 @@ module.exports = {
 
                 if (data[0].service_level === 'free' || data[0].service_level === 'basic') {
                     return reply_err(res, NO_ADDITIONS, startTime);
-                }
-
-                if (data[0].pubkey && data[0].pubkey !== '') {
-                    if (signatureCommitment === undefined) {
-                        return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
-                    }
-
-                    try {
-                        // get pubkey hex
-                        const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
-
-                        // get base64 signature
-                        let sig = Buffer.from(signatureCommitment, 'base64');
-
-                        if (!ec.verify(payload.commitment, sig, pubkey)) {
-                            return reply_err(res, SIGNATURE_INVALID, startTime);
-                        }
-                    } catch (error) {
-                        return reply_err(res, SIGNATURE_INVALID, startTime);
-                    }
                 }
 
                 //get all unconfirmed additions

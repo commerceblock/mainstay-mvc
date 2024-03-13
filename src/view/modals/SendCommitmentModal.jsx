@@ -9,7 +9,6 @@ const options = [
     {label: 'Position*', name: 'position'},
     {label: 'Token*', name: 'token'},
     {label: 'Commitment*', name: 'commitment'},
-    {label: 'Signature (optional)', name: 'signature'},
 ];
 
 class SendCommitmentModal extends React.PureComponent {
@@ -21,7 +20,6 @@ class SendCommitmentModal extends React.PureComponent {
                 position: undefined,
                 token: undefined,
                 commitment: undefined,
-                signature: undefined,
             }
         };
         this.formRef = React.createRef();
@@ -50,7 +48,7 @@ class SendCommitmentModal extends React.PureComponent {
     handleSubmit = (event) => {
         event.preventDefault();
 
-        const {position, token, commitment, signature} = this.state.inputs;
+        const {position, token, commitment} = this.state.inputs;
 
         if (!position || !position.trim()) {
             return this.showErrorAlert('Position is empty');
@@ -73,7 +71,6 @@ class SendCommitmentModal extends React.PureComponent {
             position,
             token,
             commitment,
-            signature,
         }).then(res => {
             if (res.data?.error) {
                 if (this.props.onError) {
