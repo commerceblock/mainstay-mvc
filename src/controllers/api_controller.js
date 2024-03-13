@@ -408,77 +408,63 @@ module.exports = {
 
     commitment_send: async (req, res) => {
         const startTime = start_time();
-        let rawRequestData = '';
-        req.on('data', chunk => {
-            rawRequestData += chunk.toString();
-        });
 
-        req.on('end', async () => {
-            // test payload in base64 format and defined
-            let data;
-            let payload;
-            try {
-                data = JSON.parse(rawRequestData);
-                payload = JSON.parse(base64decode(data[MAINSTAY_PAYLOAD]));
-            } catch (e) {
-                return reply_err(res, BAD_ARG_PAYLOAD, startTime);
+        const payload = req.body;
+
+        if (payload === undefined) {
+            return reply_err(res, MISSING_ARG_PAYLOAD, startTime);
+        }
+
+        // check payload components are defined
+        if (payload.commitment === undefined) {
+            return reply_err(res, MISSING_PAYLOAD_COMMITMENT, startTime);
+        }
+        if (payload.position === undefined) {
+            return reply_err(res, MISSING_PAYLOAD_POSITION, startTime);
+        }
+        if (payload.token === undefined) {
+            return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
+        }
+
+        if (/[0-9A-Fa-f]{64}/g.test(payload.commitment) === false) {
+            return reply_err(res, BAD_COMMITMENT, startTime);
+        }
+
+        try {
+            // try get client details
+            const data = await models.clientDetails.find({client_position: payload.position});
+            if (data.length === 0) {
+                return reply_err(res, POSITION_UNKNOWN, startTime);
+            }
+            if (data[0].auth_token !== payload.token) {
+                return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
+            }
+            if (data[0].expiry_date && new Date(data[0].expiry_date) < new Date()) {
+                return reply_err(res, EXPIRY_DATE_ERROR, startTime);
             }
 
-            if (payload === undefined) {
-                return reply_err(res, MISSING_ARG_PAYLOAD, startTime);
-            }
+            if (data[0].service_level === 'free') {
 
-            // check payload components are defined
-            if (payload.commitment === undefined) {
-                return reply_err(res, MISSING_PAYLOAD_COMMITMENT, startTime);
-            }
-            if (payload.position === undefined) {
-                return reply_err(res, MISSING_PAYLOAD_POSITION, startTime);
-            }
-            if (payload.token === undefined) {
-                return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
-            }
+                const latest_com = await models.clientCommitment.find({client_position: payload.position});
+                let today = new Date().toLocaleDateString();
 
-            if (/[0-9A-Fa-f]{64}/g.test(payload.commitment) === false) {
-                return reply_err(res, BAD_COMMITMENT, startTime);
-            }
-
-            try {
-                // try get client details
-                const data = await models.clientDetails.find({client_position: payload.position});
-                if (data.length === 0) {
-                    return reply_err(res, POSITION_UNKNOWN, startTime);
-                }
-                if (data[0].auth_token !== payload.token) {
-                    return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
-                }
-                if (data[0].expiry_date && new Date(data[0].expiry_date) < new Date()) {
-                    return reply_err(res, EXPIRY_DATE_ERROR, startTime);
-                }
-
-                if (data[0].service_level === 'free') {
-
-                    const latest_com = await models.clientCommitment.find({client_position: payload.position});
-                    let today = new Date().toLocaleDateString();
-
-                    if (latest_com[0].date === today) {
-                        return reply_err(res, FREE_TIER_LIMIT, startTime);
-                    } else {
-                        await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {
-                            commitment: payload.commitment,
-                            date: today
-                        }, {upsert: true});
-                        reply_msg(res, 'Commitment added', startTime);
-                    }
+                if (latest_com[0].date === today) {
+                    return reply_err(res, FREE_TIER_LIMIT, startTime);
                 } else {
-                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
+                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {
+                        commitment: payload.commitment,
+                        date: today
+                    }, {upsert: true});
                     reply_msg(res, 'Commitment added', startTime);
                 }
-
-            } catch (error) {
-                return reply_err(res, INTERNAL_ERROR_API, startTime);
+            } else {
+                await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
+                reply_msg(res, 'Commitment added', startTime);
             }
-        });
+
+        } catch (error) {
+            return reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
     },
 
     commitment_add: async (req, res) => {
