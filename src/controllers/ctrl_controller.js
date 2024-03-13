@@ -150,6 +150,9 @@ module.exports = {
             if (payload.commitment === undefined) {
                 return res.json({error: 'Incorrect commitment'});
             }
+            if (/[0-9A-Fa-f]{64}/g.test(payload.commitment) === false) {
+                return res.json({error: 'Non hex or non 64 byte commitment'});
+            }
 
             const data = await models.clientDetails.find({client_position: payload.position});
             if (data.length === 0) {

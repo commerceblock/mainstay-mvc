@@ -57,6 +57,7 @@ const {
     reply_err,
     reply_msg,
 } = require('../utils/controller_helpers');
+const { createParenthesizedType } = require('typescript');
 
 const DATE_FORMAT = 'HH:mm:ss L z';
 
@@ -439,11 +440,7 @@ module.exports = {
                 return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
             }
 
-
-            if (payload.commitment.length !== 64) {
-                return reply_err(res, BAD_COMMITMENT, startTime);
-            }
-            if (payload.commitment.split('').every(c => '0123456789ABCDEFabcdef'.indexOf(c) !== -1)) {
+            if (/[0-9A-Fa-f]{64}/g.test(payload.commitment) === false) {
                 return reply_err(res, BAD_COMMITMENT, startTime);
             }
 

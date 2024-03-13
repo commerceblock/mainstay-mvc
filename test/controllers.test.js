@@ -3,6 +3,7 @@ const assert = require('assert');
 const mockHttp = require('node-mocks-http');
 const mongoose = require('mongoose');
 const controllers = require('../src/controllers/api_controller');
+const ctrlControllers = require('../src/controllers/ctrl_controller');
 const models = require('../src/models/models');
 ////////////////////////////////////////////////////////////////////////////////
 /// Connect to MongoBD fot Test                                              ///
@@ -260,6 +261,42 @@ describe('Test Api Controllers', () => {
             });
         const res = mockHttp.createResponse();
         controllers.commitment_send(req, res);
+    });
+
+    // non 64 byte string
+    it('Route: /api/v1/commitment/send', () => {
+        const req = mockHttp.createRequest(
+            {
+                method: 'POST',
+                url: '/api/v1/commitment/send',
+                body: {
+                    position: 0,
+                    token: '4c8c006d-4cee-4fef-8e06-bb8112db6314',
+                    commitment: '1',
+                }
+            });
+        const res = mockHttp.createResponse();
+        ctrlControllers.ctrl_send_commitment(req, res);
+        const json = JSON.parse(res._getData());
+        assert(json.error === 'Non hex or non 64 byte commitment');
+    });
+
+    // non hex string
+    it('Route: /api/v1/commitment/send', () => {
+        const req = mockHttp.createRequest(
+            {
+                method: 'POST',
+                url: '/api/v1/commitment/send',
+                body: {
+                    position: 0,
+                    token: '4c8c006d-4cee-4fef-8e06-bb8112db6314',
+                    commitment: 'f3d424bf830dbd59eebc3f0a23491a266b7158635188e47b0e2abf7dbcc8*&/',
+                }
+            });
+        const res = mockHttp.createResponse();
+        ctrlControllers.ctrl_send_commitment(req, res);
+        const json = JSON.parse(res._getData());
+        assert(json.error === 'Non hex or non 64 byte commitment');
     });
 
     it('Route: /api/v1/slotexpiry?slot_id=0', async () => {
