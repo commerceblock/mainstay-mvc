@@ -57,7 +57,6 @@ const {
     reply_err,
     reply_msg,
 } = require('../utils/controller_helpers');
-const { createParenthesizedType } = require('typescript');
 
 const DATE_FORMAT = 'HH:mm:ss L z';
 
