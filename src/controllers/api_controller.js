@@ -408,103 +408,63 @@ module.exports = {
 
     commitment_send: async (req, res) => {
         const startTime = start_time();
-        let rawRequestData = '';
-        req.on('data', chunk => {
-            rawRequestData += chunk.toString();
-        });
 
-        req.on('end', async () => {
-            // test payload in base64 format and defined
-            let data;
-            let payload;
-            try {
-                data = JSON.parse(rawRequestData);
-                payload = JSON.parse(base64decode(data[MAINSTAY_PAYLOAD]));
-            } catch (e) {
-                return reply_err(res, BAD_ARG_PAYLOAD, startTime);
+        const payload = req.body;
+
+        if (payload === undefined) {
+            return reply_err(res, MISSING_ARG_PAYLOAD, startTime);
+        }
+
+        // check payload components are defined
+        if (payload.commitment === undefined) {
+            return reply_err(res, MISSING_PAYLOAD_COMMITMENT, startTime);
+        }
+        if (payload.position === undefined) {
+            return reply_err(res, MISSING_PAYLOAD_POSITION, startTime);
+        }
+        if (payload.token === undefined) {
+            return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
+        }
+
+        if (/[0-9A-Fa-f]{64}/g.test(payload.commitment) === false) {
+            return reply_err(res, BAD_COMMITMENT, startTime);
+        }
+
+        try {
+            // try get client details
+            const data = await models.clientDetails.find({client_position: payload.position});
+            if (data.length === 0) {
+                return reply_err(res, POSITION_UNKNOWN, startTime);
+            }
+            if (data[0].auth_token !== payload.token) {
+                return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
+            }
+            if (data[0].expiry_date && new Date(data[0].expiry_date) < new Date()) {
+                return reply_err(res, EXPIRY_DATE_ERROR, startTime);
             }
 
-            if (payload === undefined) {
-                return reply_err(res, MISSING_ARG_PAYLOAD, startTime);
-            }
+            if (data[0].service_level === 'free') {
 
-            // check payload components are defined
-            if (payload.commitment === undefined) {
-                return reply_err(res, MISSING_PAYLOAD_COMMITMENT, startTime);
-            }
-            if (payload.position === undefined) {
-                return reply_err(res, MISSING_PAYLOAD_POSITION, startTime);
-            }
-            if (payload.token === undefined) {
-                return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
-            }
+                const latest_com = await models.clientCommitment.find({client_position: payload.position});
+                let today = new Date().toLocaleDateString();
 
-
-            if (payload.commitment.length !== 64) {
-                return reply_err(res, BAD_COMMITMENT, startTime);
-            }
-            if (payload.commitment.split('').every(c => '0123456789ABCDEFabcdef'.indexOf(c) !== -1)) {
-                return reply_err(res, BAD_COMMITMENT, startTime);
-            }
-
-
-            const signatureCommitment = data[MAINSTAY_SIGNATURE];
-            try {
-                // try get client details
-                const data = await models.clientDetails.find({client_position: payload.position});
-                if (data.length === 0) {
-                    return reply_err(res, POSITION_UNKNOWN, startTime);
-                }
-                if (data[0].auth_token !== payload.token) {
-                    return reply_err(res, PAYLOAD_TOKEN_ERROR, startTime);
-                }
-                if (data[0].expiry_date && new Date(data[0].expiry_date) < new Date()) {
-                    return reply_err(res, EXPIRY_DATE_ERROR, startTime);
-                }
-
-                if (data[0].pubkey && data[0].pubkey !== '') {
-                    if (signatureCommitment === undefined) {
-                        return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
-                    }
-
-                    try {
-                        // get pubkey hex
-                        const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
-
-                        // get base64 signature
-                        let sig = Buffer.from(signatureCommitment, 'base64');
-
-                        if (!ec.verify(payload.commitment, sig, pubkey)) {
-                            return reply_err(res, SIGNATURE_INVALID, startTime);
-                        }
-                    } catch (error) {
-                        return reply_err(res, SIGNATURE_INVALID, startTime);
-                    }
-                }
-
-                if (data[0].service_level === 'free') {
-
-                    const latest_com = await models.clientCommitment.find({client_position: payload.position});
-                    let today = new Date().toLocaleDateString();
-
-                    if (latest_com[0].date === today) {
-                        return reply_err(res, FREE_TIER_LIMIT, startTime);
-                    } else {
-                        await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {
-                            commitment: payload.commitment,
-                            date: today
-                        }, {upsert: true});
-                        reply_msg(res, 'Commitment added', startTime);
-                    }
+                if (latest_com[0].date === today) {
+                    return reply_err(res, FREE_TIER_LIMIT, startTime);
                 } else {
-                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
+                    await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {
+                        commitment: payload.commitment,
+                        date: today
+                    }, {upsert: true});
                     reply_msg(res, 'Commitment added', startTime);
                 }
-
-            } catch (error) {
-                return reply_err(res, INTERNAL_ERROR_API, startTime);
+            } else {
+                await models.clientCommitment.findOneAndUpdate({client_position: payload.position}, {commitment: payload.commitment}, {upsert: true});
+                reply_msg(res, 'Commitment added', startTime);
             }
-        });
+
+        } catch (error) {
+            return reply_err(res, INTERNAL_ERROR_API, startTime);
+        }
     },
 
     commitment_add: async (req, res) => {
@@ -540,7 +500,6 @@ module.exports = {
                 return reply_err(res, MISSING_PAYLOAD_TOKEN, startTime);
             }
 
-            const signatureCommitment = data[MAINSTAY_SIGNATURE];
             try {
                 // try get client details
                 const data = await models.clientDetails.find({client_position: payload.position});
@@ -554,26 +513,6 @@ module.exports = {
 
                 if (data[0].service_level === 'free' || data[0].service_level === 'basic') {
                     return reply_err(res, NO_ADDITIONS, startTime);
-                }
-
-                if (data[0].pubkey && data[0].pubkey !== '') {
-                    if (signatureCommitment === undefined) {
-                        return reply_err(res, MISSING_ARG_SIGNATURE, startTime);
-                    }
-
-                    try {
-                        // get pubkey hex
-                        const pubkey = ec.keyFromPublic(data[0].pubkey, 'hex');
-
-                        // get base64 signature
-                        let sig = Buffer.from(signatureCommitment, 'base64');
-
-                        if (!ec.verify(payload.commitment, sig, pubkey)) {
-                            return reply_err(res, SIGNATURE_INVALID, startTime);
-                        }
-                    } catch (error) {
-                        return reply_err(res, SIGNATURE_INVALID, startTime);
-                    }
                 }
 
                 //get all unconfirmed additions
@@ -1304,6 +1243,16 @@ module.exports = {
                 const data = JSON.parse(rawRequestData);
                 const token_id = data[ARG_TOKEN_ID];
                 const slot_id = data[ARG_SLOT_ID];
+
+                if (token_id === undefined || token_id === '') {
+                    const months = 12; // an year
+                    const clientDetailsData = await create_slot_with_token(months);
+                    reply_msg(res, {
+                        auth_token: clientDetailsData.auth_token,
+                        slot_id: clientDetailsData.client_position,
+                        expiry_date: clientDetailsData.expiry_date
+                    }, startTime);
+                }
                 const tokenDetails = await models.tokenDetails.findOne({token_id: token_id});
 
                 if (tokenDetails.amount >= FEE_RATE_PER_MONTH_IN_EUR) {

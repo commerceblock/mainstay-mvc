@@ -575,27 +575,15 @@ const pvtKey =
 const commitment =
     'F01111111111111111111111111111111111111111111111111111111111110F';
 
-
-let keyPair = ec.keyFromPrivate("97ddae0f3a25b92268175400149d65d6887b9cefaf28ea2c078e05cdc15a3c0a");
-let privKey = keyPair.getPrivate("hex");
-let pubKey = keyPair.getPublic();
-
-let signature = ec.sign(commitment, privKey, "hex", {canonical: true}).toDER('base64');
-
 var payload = {
   commitment: commitment,
   position: 0,
   token: '4c8c006d-4cee-4fef-8e06-bb8112db6314',
 };
 
-payload = new Buffer(JSON.stringify(payload)).toString('base64');
-
 const options = {
   url: url + route,
-  headers: {
-    'X-MAINSTAY-PAYLOAD': payload,
-    'X-MAINSTAY-SIGNATURE': signature
-  }
+  body: payload
 };
 
 request.post(options, (error, response, body) => {
@@ -607,7 +595,11 @@ request.post(options, (error, response, body) => {
 
 **Curl example**
 ```perl
-curl --header "Content-Type: application/json" --request POST --data '{"X-MAINSTAY-PLAYLOAD":"eyJwb3NpdGlvbiI6MCwiY29tbWl0bWVudCI6IkYwMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMEYifQ==","X-MAINSTAY-SIGNATURE":"IJbqe50XtfZbQ1b0jr+J1tswSPfZlWwZugXCpYbwYMPuRl+htqSb7wTLYY9RtQ6Bw9Ym5dw0vMNRaDwR8pked2Y="}' http://localhost:9000/api/v1/commitment/send
+curl --header "Content-Type: application/json" --request POST --data '{
+    "position": "0",
+    "token": "4c8c006d-4cee-4fef-8e06-bb8112db6314",
+    "commitment": "f3d424bf830dbd59eebc3f0a23491a266b7158635188e47b0e2abf7dbcc8931",
+}' http://localhost:9000/api/v1/commitment/send
 ```
 
 *response*

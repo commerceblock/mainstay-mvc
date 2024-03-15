@@ -117,6 +117,14 @@ class CreateSlotModal extends React.PureComponent {
         });
     }
 
+    handleTokenForTestnet = (event) => {
+        event.preventDefault();
+        const token_id = this.props.slotDetails.token_id;
+        this.handleTokenForSpend(token_id);
+        this.props.toggleSlotDetailsModal();
+        this.handleModalClose();
+    };
+
     resetFormState = () => {
         this.formRef.current.reset();
         this.setState({
@@ -199,10 +207,17 @@ class CreateSlotModal extends React.PureComponent {
                         ) : null}
                     </ModalBody>
                     <ModalFooter>
-                        {this.state.invoice === '' ? (
-                            <Button color="success" type="submit" onClick={this.handleGenerateInvoice}>Generate Invoice</Button>
-                        ) : (
-                            <Button color="success" type="submit" onClick={this.handleVerifyInvoice}>Verify</Button>
+                        {process.env.TESTNET === 'true' && (
+                            <Button color="success" type="submit" onClick={this.handleTokenForTestnet}>
+                                Create Slot
+                            </Button>
+                        )}
+                        {process.env.TESTNET !== 'true' && (
+                            this.state.invoice === '' ? (
+                                <Button color="success" type="submit" onClick={this.handleGenerateInvoice}>Generate Invoice</Button>
+                            ) : (
+                                <Button color="success" type="submit" onClick={this.handleVerifyInvoice}>Verify</Button>
+                            )
                         )}
                     </ModalFooter>
                 </Form>

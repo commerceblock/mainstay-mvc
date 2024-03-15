@@ -12,6 +12,7 @@ module.exports = () => {
 
     const devServerHost = process.env.HOST || '0.0.0.0';
     const devServerPort = parseInt(process.env.PORT) || 80;
+    const devServerTestnet = process.env.TESTNET || 'false';
 
     return {
         mode: 'development',
@@ -79,6 +80,9 @@ module.exports = () => {
                 template: './src/admin.html',
                 filename: './admin.html',
                 chunks: ['admin']
+            }),
+            new webpack.DefinePlugin({
+                'process.env.TESTNET': JSON.stringify(devServerTestnet)
             }),
             new webpack.HotModuleReplacementPlugin(),
             new webpack.ProgressPlugin()
