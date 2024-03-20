@@ -1,6 +1,6 @@
 FROM centos:7.5.1804
 
-ENV NODEURL https://rpm.nodesource.com/setup_10.x
+ENV NODEURL https://rpm.nodesource.com/setup_16.x
 ENV YARNURL https://dl.yarnpkg.com/rpm/yarn.repo
 
 # Setup required packages
