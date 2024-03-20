@@ -251,7 +251,7 @@ describe('Test Api Controllers', () => {
     /// pvtKey = bac52bbea2194e7ea1cd3da6585b66d28f1a7a3683eca91af4ba6373d323d24f
     ///
 
-    // non 64 byte string
+    // non 32 byte string
     it('Route: /api/v1/commitment/send', () => {
         const req = mockHttp.createRequest(
             {
@@ -269,6 +269,7 @@ describe('Test Api Controllers', () => {
         assert(json.error === BAD_COMMITMENT);
     });
 
+    // non hex string
     it('Route: /api/v1/commitment/send', () => {
         const req = mockHttp.createRequest(
             {
@@ -277,7 +278,7 @@ describe('Test Api Controllers', () => {
                 body: {
                     position: 0,
                     token: '4c8c006d-4cee-4fef-8e06-bb8112db6314',
-                    commitment: 'f3d424bf830dbd59eebc3f0a23491a266b7158635188e47b0e2abf7dbcc8*&/',
+                    commitment: 'f3d424bf830dbd59eebc3f0a23491a266b7158635188e47b0e2a2bf7dbcc8*&$',
                 }
             });
         const res = mockHttp.createResponse();
@@ -286,7 +287,7 @@ describe('Test Api Controllers', () => {
         assert(json.error === BAD_COMMITMENT);
     });
 
-    // non 64 byte string
+    // non 32 byte string
     it('Route: /ctrl/sendcommitment', () => {
         const req = mockHttp.createRequest(
             {
@@ -301,7 +302,7 @@ describe('Test Api Controllers', () => {
         const res = mockHttp.createResponse();
         ctrlControllers.ctrl_send_commitment(req, res);
         const json = JSON.parse(res._getData());
-        assert(json.error === 'Non hex or non 64 byte commitment');
+        assert(json.error === 'Non hex or non 32 byte commitment');
     });
 
     // non hex string
@@ -313,13 +314,13 @@ describe('Test Api Controllers', () => {
                 body: {
                     position: 0,
                     token: '4c8c006d-4cee-4fef-8e06-bb8112db6314',
-                    commitment: 'f3d424bf830dbd59eebc3f0a23491a266b7158635188e47b0e2abf7dbcc8*&/',
+                    commitment: 'f3d424bf830dbd59eebc3f0a23491a266b7158635188e47b0e2a2bf7dbcc82*&$',
                 }
             });
         const res = mockHttp.createResponse();
         ctrlControllers.ctrl_send_commitment(req, res);
         const json = JSON.parse(res._getData());
-        assert(json.error === 'Non hex or non 64 byte commitment');
+        assert(json.error === 'Non hex or non 32 byte commitment');
     });
 
     it('Route: /api/v1/slotexpiry?slot_id=0', async () => {

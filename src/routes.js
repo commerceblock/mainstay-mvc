@@ -14,6 +14,11 @@ const {jwt: {secret: jwtSecret}, onfido: {webhook: {secret: onfidoWebhookSecret}
 function makeApiRoutes(app) {
     const router = express.Router();
 
+    // for parsing application/json
+    router.use(express.json());
+    // for parsing application/x-www-form-urlencoded
+    router.use(express.urlencoded({extended: true}));
+
     router.get('/', apiController.index);
     router.get('/latestattestation', apiController.latest_attestation);
     router.get('/latestcommitment', apiController.latest_commitment);

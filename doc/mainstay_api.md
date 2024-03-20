@@ -598,8 +598,8 @@ request.post(options, (error, response, body) => {
 curl --header "Content-Type: application/json" --request POST --data '{
     "position": "0",
     "token": "4c8c006d-4cee-4fef-8e06-bb8112db6314",
-    "commitment": "f3d424bf830dbd59eebc3f0a23491a266b7158635188e47b0e2abf7dbcc8931",
-}' http://localhost:9000/api/v1/commitment/send
+    "commitment": "f3d424bf830dbd59eebc3f0a23491a266b7158635188e47b0e2a2bf7dbcc8931"
+}' https://testnet.mainstay.xyz/api/v1/commitment/send
 ```
 
 *response*
